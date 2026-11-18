@@ -338,6 +338,11 @@ class VisualPrefs {
   /// Touch/tilt-reactive toggle — particles respond to device tilt.
   final bool particleTouch;
 
+  /// Tap sparkles — the pointer-down burst of theme-colored particles
+  /// spawned by ThemeOverlay. Independent of [particlesEnabled] so users
+  /// can keep ambient particles but kill the tap burst (or vice versa).
+  final bool tapSparkles;
+
   /// Whether ambient fragment shaders (Q3) are enabled. Off by default —
   /// shaders are GPU-intensive and opt-in. See [shaderPreset].
   final bool shaderEnabled;
@@ -463,6 +468,7 @@ class VisualPrefs {
     this.particleSchemaIndex = 0,
     this.particleChaos = false,
     this.particleTouch = true,
+    this.tapSparkles = true,
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
   });
@@ -501,6 +507,7 @@ class VisualPrefs {
   static const _kParticleSchemaIdx = 'vp.particle_schema_idx_v1';
   static const _kParticleChaos = 'vp.particle_chaos_v1';
   static const _kParticleTouch = 'vp.particle_touch_v1';
+  static const _kTapSparkles = 'vp.tap_sparkles_v1';
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
 
@@ -640,6 +647,7 @@ class VisualPrefs {
         ),
         particleChaos: p.getBool(_kParticleChaos) ?? false,
         particleTouch: p.getBool(_kParticleTouch) ?? true,
+        tapSparkles: p.getBool(_kTapSparkles) ?? true,
         shaderEnabled: shaderEnabled,
         shaderPreset: shaderPreset,
       );
@@ -813,6 +821,11 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setTapSparkles(bool v) async {
+    notifier.value = notifier.value._with(tapSparkles: v);
+    _persist();
+  }
+
   static Future<void> setParticleSpeed(ParticleSpeed v) async {
     notifier.value = notifier.value._with(particleSpeed: v);
     _persist();
@@ -893,6 +906,7 @@ class VisualPrefs {
       await p.setInt(_kParticleSchemaIdx, v.particleSchemaIndex);
       await p.setBool(_kParticleChaos, v.particleChaos);
       await p.setBool(_kParticleTouch, v.particleTouch);
+      await p.setBool(_kTapSparkles, v.tapSparkles);
       await p.setBool(_kShaderEnabled, v.shaderEnabled);
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
     } catch (e) {
@@ -932,6 +946,7 @@ class VisualPrefs {
     int? particleSchemaIndex,
     bool? particleChaos,
     bool? particleTouch,
+    bool? tapSparkles,
     bool? shaderEnabled,
     ShaderPreset? shaderPreset,
   }) => VisualPrefs(
@@ -969,6 +984,7 @@ class VisualPrefs {
     particleSchemaIndex: particleSchemaIndex ?? this.particleSchemaIndex,
     particleChaos: particleChaos ?? this.particleChaos,
     particleTouch: particleTouch ?? this.particleTouch,
+    tapSparkles: tapSparkles ?? this.tapSparkles,
     shaderEnabled: shaderEnabled ?? this.shaderEnabled,
     shaderPreset: shaderPreset ?? this.shaderPreset,
   );
@@ -1003,6 +1019,7 @@ class VisualPrefs {
     'particleSpeed': particleSpeed.index,
     'shaderEnabled': shaderEnabled,
     'shaderPreset': shaderPreset.index,
+    'tapSparkles': tapSparkles,
   };
 
   /// Deserialize from JSON for custom theme restoration.
@@ -1041,6 +1058,7 @@ class VisualPrefs {
       particleSpeed: ParticleSpeed.values[(j['particleSpeed'] as int?) ?? 2],
       shaderEnabled: j['shaderEnabled'] as bool? ?? false,
       shaderPreset: ShaderPreset.values[(j['shaderPreset'] as int?) ?? 0],
+      tapSparkles: j['tapSparkles'] as bool? ?? true,
     );
   }
 }

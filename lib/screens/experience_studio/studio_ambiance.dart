@@ -98,10 +98,110 @@ class _AmbianceStep extends StatelessWidget {
                     ),
                 ],
               ),
+              const SizedBox(height: 18),
+              _StepLabel('TAP FX'),
+              const SizedBox(height: 8),
+              // Sparkles are a VisualPrefs pick (saved with the preset);
+              // haptics is a device-level Haptics.intensity — the row
+              // owns its own rebuild for that one.
+              Row(
+                children: [
+                  Expanded(
+                    child: _ShaderChip(
+                      label: 'SPARKLES',
+                      on: prefs.tapSparkles,
+                      onTap: () {
+                        VisualPrefs.setTapSparkles(!prefs.tapSparkles);
+                        Haptics.selection();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Expanded(child: _HapticsChips()),
+                ],
+              ),
+              const SizedBox(height: 6),
+              GoopText(
+                'sparkles = tap particle burst · haptics = vibration',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+/// Haptics intensity chips — OFF / LIGHT / FULL. Reads the static
+/// [Haptics.intensity] (persisted under its own prefs key, not part of
+/// VisualPrefs) and setStates locally so the highlight tracks taps.
+class _HapticsChips extends StatefulWidget {
+  const _HapticsChips();
+
+  @override
+  State<_HapticsChips> createState() => _HapticsChipsState();
+}
+
+class _HapticsChipsState extends State<_HapticsChips> {
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final current = Haptics.intensity;
+    return Row(
+      children: [
+        for (final (label, level) in [
+          ('OFF', HapticsIntensity.off),
+          ('LITE', HapticsIntensity.light),
+          ('FULL', HapticsIntensity.full),
+        ])
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Haptics.setIntensity(level);
+                  setState(() {});
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color:
+                        level == current
+                            ? flair.primary.withValues(alpha: 0.16)
+                            : Colors.white.withValues(alpha: 0.04),
+                    borderRadius: const BorderRadius.all(Radii.sm),
+                    border: Border.all(
+                      color:
+                          level == current
+                              ? flair.primary
+                              : Colors.white.withValues(alpha: 0.15),
+                      width: level == current ? 1.4 : 0.8,
+                    ),
+                  ),
+                  child: Center(
+                    child: GoopText(
+                      label,
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color:
+                            level == current
+                                ? flair.primary
+                                : Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

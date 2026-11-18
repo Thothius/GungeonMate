@@ -113,7 +113,12 @@ class _ThemeOverlayState extends State<ThemeOverlay>
   }
 
   void _spawnTouchSparkles(Offset globalPosition, VisualPrefs prefs) {
-    if (_reduceMotion || !prefs.particlesEnabled || AppTheme.isSkeuo) return;
+    if (_reduceMotion ||
+        !prefs.particlesEnabled ||
+        !prefs.tapSparkles ||
+        AppTheme.isSkeuo) {
+      return;
+    }
     final box = context.findRenderObject() as RenderBox?;
     if (box != null) {
       final localPos = box.globalToLocal(globalPosition);

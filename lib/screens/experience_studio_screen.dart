@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../theme/tokens.dart';
 
@@ -13,17 +12,16 @@ import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
-import 'palette_maker_screen.dart';
 import '../widgets/theme_overlay.dart';
 import '../widgets/backgrounds/custom_wallpaper.dart';
 import '../widgets/particles/ambient_glow.dart';
-import '../utils/fast_route.dart';
+import '../utils/asset_paths.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
-part 'experience_studio/studio_palette.dart';
 part 'experience_studio/studio_particles.dart';
 part 'experience_studio/studio_typography.dart';
 part 'experience_studio/studio_ambiance.dart';
 part 'experience_studio/studio_widgets.dart';
+part 'experience_studio/studio_flow.dart';
 
 /// Customization — the unified theme hub. One layout for every entry
 /// point: sticky BACK · PREVIEW · APPLY action bar, a 5-tab strip
@@ -49,10 +47,21 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   int _hubTab = 0;
   double _liveLookH = 0.22;
 
+  // ── Pick-or-create flow ────────────────────────────────────
+  // choose → gallery | source → wizard. Deep links (initialTab>0)
+  // land straight in the wizard.
+  _StudioStage _stage = _StudioStage.choose;
+  final PageController _galleryCtrl = PageController();
+  int _galleryIndex = 0;
+  bool _gallerySelect = false; // gallery doubles as copy-source picker
+  bool _cameFromFlow = false; // wizard entered via NEW PRESET
+  String _presetName = '';
+
   @override
   void initState() {
     super.initState();
-    _hubTab = widget.initialTab.clamp(0, 4);
+    _stage = widget.initialTab <= 0 ? _StudioStage.choose : _StudioStage.wizard;
+    _hubTab = widget.initialTab.clamp(0, _hubTabs.length - 1);
     _previewMode = AppTheme.mode;
     _originalMode = AppTheme.mode;
     _originalPrefs = VisualPrefs.notifier.value;
@@ -62,6 +71,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 
   @override
   void dispose() {
+    _galleryCtrl.dispose();
     AppTheme.previewNotifier.value = null;
     super.dispose();
   }
@@ -172,7 +182,12 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               // ── Theme background — skins with the PREVIEW theme, not the
               // actual app theme, so the whole screen updates on tap ──
               _buildPreviewBackground(),
-              _buildHub(),
+              switch (_stage) {
+                _StudioStage.choose => _buildChoose(),
+                _StudioStage.gallery => _buildGallery(),
+                _StudioStage.source => _buildSource(),
+                _StudioStage.wizard => _buildHub(),
+              },
             ],
           ),
         ),
@@ -230,13 +245,15 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 
   // ── Unified Customization hub ──────────────────────────────
   // One layout for every entry point: sticky BACK · PREVIEW · APPLY
-  // bar, 5-tab strip, draggable LIVE LOOK pane, scrollable options.
+  // bar, tab strip, draggable LIVE LOOK pane, scrollable options.
+  // Tabs: DETAILS / COLORS & BG / TYPE / PARTICLES / AMBIANCE / SAVE.
   static const _hubTabs = [
-    'PRESETS',
-    'CUSTOM',
-    'FONTS',
+    'DETAILS',
+    'COLORS & BG',
+    'TYPE',
     'PARTICLES',
     'AMBIANCE',
+    'SAVE',
   ];
 
   Widget _buildHub() {
@@ -267,7 +284,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       ),
       child: Row(
         children: [
-          _ghostBarButton('BACK', Icons.arrow_back_ios_new_rounded, _onBack),
+          _ghostBarButton('BACK', Icons.arrow_back_ios_new_rounded, _onFlowBack),
 
           const SizedBox(width: 10),
           Expanded(
@@ -715,71 +732,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  /// PRESETS — picker themes + saved customs as compact palette panels.
-  Widget _buildPaletteList() {
-    final activeMode = AppTheme.mode;
-    return ValueListenableBuilder<List<SavedCustomTheme>>(
-      valueListenable: CustomThemeStore.notifier,
-      builder: (context, saved, _) {
-        return GridView.count(
-          padding: const EdgeInsets.fromLTRB(
-            Insets.lg,
-            Insets.sm,
-            Insets.lg,
-            Insets.sm,
-          ),
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 1.3,
-          children: [
-            for (final m in kPickerThemes)
-              () {
-                final f = AppTheme.flairFor(m);
-                return _PalettePanel(
-                  name: m.label,
-                  subtitle: '${m.vibe} · ${m.elem}',
-                  colors: [
-                    f.scaffold,
-                    f.card,
-                    f.primary,
-                    f.secondary,
-                    f.headlineStat,
-                  ],
-                  nameColor: f.primary,
-                  isActive: m == activeMode,
-                  isPreview: m == _previewMode,
-                  onTap: () => _previewTheme(m),
-                );
-              }(),
-            for (final t in saved) _buildSavedPanel(t),
-          ],
-        );
-      },
-    );
-  }
-
-  /// Saved user palette — tap applies it via the custom theme path.
-  Widget _buildSavedPanel(SavedCustomTheme t) {
-    final d = t.customData ?? CustomThemeData.defaultTheme;
-    return _PalettePanel(
-      name: t.name,
-      subtitle: 'SAVED PALETTE',
-      colors: [d.scaffold, d.card, d.primary, d.secondary, d.headlineStat],
-      nameColor: d.primary,
-      isActive: false,
-      isPreview: _previewMode == AppThemeMode.custom,
-      onTap: () {
-        AppTheme.saveCustomThemeData(d);
-        _previewTheme(AppThemeMode.custom);
-      },
-    );
-  }
-
   Widget _buildHubContent() {
     switch (_hubTab) {
       case 0:
-        return _buildPaletteList();
+        return _buildDetailsStep();
       case 1:
         return _buildCustomTab();
       case 2:
@@ -788,8 +744,977 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         return const _ParticlesStep();
       case 4:
         return const _AmbianceStep();
+      case 5:
+        return _buildSaveStep();
       default:
-        return _buildPaletteList();
+        return _buildDetailsStep();
+    }
+  }
+
+  // ── Pick-or-create flow stages ─────────────────────────────
+
+  /// CHOOSE — the two doors: browse ready-made presets or build one.
+  Widget _buildChoose() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.xl,
+        Insets.xl,
+        Insets.xl,
+        Insets.lg,
+      ),
+      children: [
+        GoopText(
+          'CUSTOMIZE',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2.0,
+            color: flair.primary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        GoopText(
+          'pick a look or build your own',
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.5),
+          ),
+        ),
+        const SizedBox(height: 22),
+        _FlowCard(
+          icon: Icons.auto_awesome_rounded,
+          title: 'BROWSE PRESETS',
+          subtitle: 'swipe through every ready-made theme and saved preset',
+          accent: flair.primary,
+          onTap: () {
+            Haptics.selection();
+            setState(() {
+              _stage = _StudioStage.gallery;
+              _gallerySelect = false;
+              _galleryIndex = 0;
+            });
+            // PageView isn't attached until the gallery builds — jump
+            // post-frame or PageController throws.
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
+            });
+          },
+        ),
+        const SizedBox(height: 14),
+        _FlowCard(
+          icon: Icons.edit_note_rounded,
+          title: 'NEW PRESET',
+          subtitle: 'name it, copy an existing preset or start blank',
+          accent: flair.secondary,
+          onTap: _onNewPreset,
+        ),
+      ],
+    );
+  }
+
+  /// NEW PRESET — name first, then pick a source.
+  Future<void> _onNewPreset() async {
+    Haptics.selection();
+    final name = await _promptPresetName();
+    if (name == null || !mounted) return;
+    setState(() {
+      _presetName = name;
+      _stage = _StudioStage.source;
+      _cameFromFlow = true;
+    });
+  }
+
+  /// Name dialog for a new preset — validates empty + duplicates.
+  Future<String?> _promptPresetName() {
+    final nameCtrl = TextEditingController(text: _presetName);
+    String? error;
+    final flair = AppTheme.flairFor(_previewMode);
+    return showDialog<String>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          backgroundColor: flair.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: flair.primary.withValues(alpha: 0.4)),
+          ),
+          title: GoopText(
+            'NAME YOUR PRESET',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.2,
+              color: flair.primary,
+            ),
+          ),
+          content: TextField(
+            controller: nameCtrl,
+            autofocus: true,
+            maxLength: 24,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: 'e.g. Neon Cat',
+              counterText: '',
+              errorText: error,
+              filled: true,
+              fillColor: Colors.white.withValues(alpha: 0.06),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: flair.primary.withValues(alpha: 0.3),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: flair.primary.withValues(alpha: 0.7),
+                ),
+              ),
+            ),
+            onChanged: (_) {
+              if (error != null) setDialogState(() => error = null);
+            },
+            onSubmitted:
+                (v) => _submitPresetName(
+                  ctx,
+                  v,
+                  (e) => setDialogState(() => error = e),
+                ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const GoopText(
+                'CANCEL',
+                style: TextStyle(color: Colors.white54),
+              ),
+            ),
+            ScaleButton(
+              onTap:
+                  () => _submitPresetName(
+                    ctx,
+                    nameCtrl.text,
+                    (e) => setDialogState(() => error = e),
+                  ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: GoopText(
+                  'NEXT',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color:
+                        flair.primary.computeLuminance() > 0.5
+                            ? Colors.black87
+                            : Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).then((v) {
+      nameCtrl.dispose();
+      return v;
+    });
+  }
+
+  void _submitPresetName(
+    BuildContext ctx,
+    String raw,
+    void Function(String?) setErr,
+  ) {
+    final name = raw.trim();
+    String? err;
+    if (name.isEmpty) {
+      err = 'Name cannot be empty';
+    } else if (CustomThemeStore.themes.any(
+      (t) => t.name.toLowerCase() == name.toLowerCase(),
+    )) {
+      err = 'A preset named "$name" exists';
+    }
+    if (err != null) {
+      setErr(err);
+      return;
+    }
+    Navigator.of(ctx).pop(name);
+  }
+
+  /// SOURCE — copy an existing preset's settings or start blank.
+  Widget _buildSource() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.xl,
+        Insets.xl,
+        Insets.xl,
+        Insets.lg,
+      ),
+      children: [
+        GoopText(
+          'START FROM',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2.0,
+            color: flair.primary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        GoopText(
+          '"$_presetName" — pick a starting point',
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.5),
+          ),
+        ),
+        const SizedBox(height: 22),
+        _FlowCard(
+          icon: Icons.copy_rounded,
+          title: 'COPY EXISTING',
+          subtitle: 'start from any preset — all settings copied, then tweak',
+          accent: flair.primary,
+          onTap: () {
+            Haptics.selection();
+            setState(() {
+              _stage = _StudioStage.gallery;
+              _gallerySelect = true;
+              _galleryIndex = 0;
+            });
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
+            });
+          },
+        ),
+        const SizedBox(height: 14),
+        _FlowCard(
+          icon: Icons.blur_on_rounded,
+          title: 'START FROM SCRATCH',
+          subtitle: 'blank canvas — pick every color, particle and effect',
+          accent: flair.secondary,
+          onTap: _seedScratch,
+        ),
+      ],
+    );
+  }
+
+  /// Gallery entries — premade picker themes first, then saved customs.
+  List<_PresetEntry> _presetEntries() {
+    return [
+      for (final m in kPickerThemes)
+        _PresetEntry(
+          name: m.label,
+          subtitle: '${m.vibe} · ${m.elem}',
+          colors: [
+            AppTheme.flairFor(m).scaffold,
+            AppTheme.flairFor(m).card,
+            AppTheme.flairFor(m).primary,
+            AppTheme.flairFor(m).secondary,
+            AppTheme.flairFor(m).headlineStat,
+          ],
+          mode: m,
+          splash: m.splashSlug.isEmpty ? null : m.splashSlug,
+        ),
+      for (final t in CustomThemeStore.themes)
+        _PresetEntry(
+          name: t.name,
+          subtitle: 'SAVED PRESET',
+          colors: _savedColors(t),
+          saved: t,
+        ),
+    ];
+  }
+
+  List<Color> _savedColors(SavedCustomTheme t) {
+    final d =
+        t.customData ??
+        _customDataFromFlair(AppTheme.flairFor(t.baseMode), name: t.name);
+    return [d.scaffold, d.card, d.primary, d.secondary, d.headlineStat];
+  }
+
+  /// Seed the wizard draft from a premade theme's flair.
+  CustomThemeData _customDataFromFlair(ThemeFlair f, {required String name}) {
+    return CustomThemeData(
+      name: name,
+      scaffold: f.scaffold,
+      card: f.card,
+      primary: f.primary,
+      secondary: f.secondary,
+      headlineStat: f.headlineStat,
+      bulletColor: f.bulletColor,
+      auraStyle: f.auraStyle,
+      font: VisualPrefs.notifier.value.font,
+    );
+  }
+
+  /// GALLERY — swipeable preset cards + bottom pick button. In
+  /// [_gallerySelect] mode the pick seeds the wizard instead.
+  Widget _buildGallery() {
+    final entries = _presetEntries();
+    final flair = AppTheme.flairFor(_previewMode);
+    final idx = _galleryIndex.clamp(0, entries.length - 1);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Insets.lg,
+            Insets.sm,
+            Insets.lg,
+            0,
+          ),
+          child: Row(
+            children: [
+              _ghostBarButton(
+                'BACK',
+                Icons.arrow_back_ios_new_rounded,
+                _onFlowBack,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GoopText(
+                  _gallerySelect ? 'COPY FROM' : 'PRESETS',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.4,
+                    color: flair.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Expanded(
+          child: PageView.builder(
+            controller: _galleryCtrl,
+            onPageChanged: (i) {
+              setState(() => _galleryIndex = i);
+              _previewGalleryEntry(entries[i]);
+            },
+            itemCount: entries.length,
+            itemBuilder: (ctx, i) {
+              final e = entries[i];
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 8,
+                ),
+                child: _presetCard(e, i == idx, i),
+              );
+            },
+          ),
+        ),
+        // Page dots
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < entries.length; i++)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                  width: i == idx ? 16 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color:
+                        i == idx
+                            ? flair.primary
+                            : Colors.white.withValues(alpha: 0.25),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        // Bottom pick bar
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Insets.lg,
+            0,
+            Insets.lg,
+            Insets.lg,
+          ),
+          child: ScaleButton(
+            onTap: () => _onGalleryPick(entries[idx]),
+            child: Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: flair.primary,
+                borderRadius: BorderRadius.all(Radii.md),
+                boxShadow: [
+                  BoxShadow(
+                    color: flair.primary.withValues(alpha: 0.5),
+                    blurRadius: 16,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _gallerySelect ? Icons.copy_rounded : Icons.check_rounded,
+                    size: 16,
+                    color:
+                        flair.primary.computeLuminance() > 0.5
+                            ? Colors.black87
+                            : Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  GoopText(
+                    _gallerySelect ? 'USE AS BASE' : 'PICK PRESET',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0,
+                      color:
+                          flair.primary.computeLuminance() > 0.5
+                              ? Colors.black87
+                              : Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// One gallery card — splash art when available, else a palette
+  /// gradient; name + vibe strip at the bottom.
+  Widget _presetCard(_PresetEntry e, bool isCurrent, int index) {
+    final flair = AppTheme.flairFor(_previewMode);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Haptics.selection();
+        _galleryCtrl.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color:
+                isCurrent
+                    ? flair.primary.withValues(alpha: 0.8)
+                    : Colors.white.withValues(alpha: 0.15),
+            width: isCurrent ? 2 : 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.4),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (e.splash != null)
+                Image.asset(
+                  'assets/images/themes/splash/${e.splash}.jpg',
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => _presetCardBg(e),
+                )
+              else
+                _presetCardBg(e),
+              // Bottom info panel
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(14, 22, 14, 14),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: 0.82),
+                      ],
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GoopText(
+                        e.name.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      GoopText(
+                        e.subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white.withValues(alpha: 0.65),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          for (final c in e.colors)
+                            Expanded(
+                              child: Container(
+                                height: 6,
+                                margin: const EdgeInsets.only(right: 4),
+                                decoration: BoxDecoration(
+                                  color: c,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _presetCardBg(_PresetEntry e) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [e.colors[0], e.colors[1], e.colors[2]],
+        ),
+      ),
+    );
+  }
+
+  /// Live-preview the gallery entry under the finger.
+  void _previewGalleryEntry(_PresetEntry e) {
+    if (e.mode != null) {
+      _previewTheme(e.mode!);
+    } else if (e.saved != null) {
+      final d =
+          e.saved!.customData ??
+          _customDataFromFlair(
+            AppTheme.flairFor(e.saved!.baseMode),
+            name: e.saved!.name,
+          );
+      AppTheme.saveCustomThemeData(d);
+      _previewTheme(AppThemeMode.custom);
+    }
+  }
+
+  /// Bottom pick — apply & close (browse) or seed wizard (copy).
+  Future<void> _onGalleryPick(_PresetEntry e) async {
+    Haptics.success();
+    if (_gallerySelect) {
+      await _seedFromEntry(e);
+      return;
+    }
+    if (e.mode != null) {
+      await AppTheme.setMode(e.mode!);
+    } else if (e.saved != null) {
+      final s = e.saved!;
+      final d =
+          s.customData ??
+          _customDataFromFlair(AppTheme.flairFor(s.baseMode), name: s.name);
+      await VisualPrefs.replaceAndPersist(s.prefs);
+      await AppTheme.saveCustomThemeData(d);
+      await AppTheme.setMode(AppThemeMode.custom);
+    }
+    AppTheme.previewNotifier.value = null;
+    if (mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
+  }
+
+  /// Seed the wizard from a gallery entry (copy-existing path).
+  Future<void> _seedFromEntry(_PresetEntry e) async {
+    Haptics.success();
+    if (e.mode != null) {
+      final curation = kThemeCuration[e.mode!];
+      if (curation != null) await VisualPrefs.applyCuration(curation);
+      setState(() {
+        _draft = _customDataFromFlair(
+          AppTheme.flairFor(e.mode!),
+          name: _presetName,
+        );
+        _previewMode = AppThemeMode.custom;
+        _stage = _StudioStage.wizard;
+        _hubTab = 0;
+        _gallerySelect = false;
+      });
+    } else if (e.saved != null) {
+      final s = e.saved!;
+      await VisualPrefs.replaceAndPersist(s.prefs);
+      setState(() {
+        _draft =
+            s.customData ??
+            _customDataFromFlair(
+              AppTheme.flairFor(s.baseMode),
+              name: _presetName,
+            );
+        _previewMode = AppThemeMode.custom;
+        _stage = _StudioStage.wizard;
+        _hubTab = 0;
+        _gallerySelect = false;
+      });
+    }
+    await AppTheme.saveCustomThemeData(_draft);
+    AppTheme.previewNotifier.value = _previewMode;
+  }
+
+  /// Scratch — blank custom draft, keep current visual prefs.
+  Future<void> _seedScratch() async {
+    Haptics.success();
+    setState(() {
+      _draft = CustomThemeData.defaultTheme.copyWith(name: _presetName);
+      _previewMode = AppThemeMode.custom;
+      _stage = _StudioStage.wizard;
+      _hubTab = 0;
+      _cameFromFlow = true;
+    });
+    await AppTheme.saveCustomThemeData(_draft);
+    AppTheme.previewNotifier.value = _previewMode;
+  }
+
+  /// DETAILS tab — compact summary of every pick + fullscreen preview.
+  Widget _buildDetailsStep() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return ValueListenableBuilder<VisualPrefs>(
+      valueListenable: VisualPrefs.notifier,
+      builder: (_, prefs, _) {
+        final wp = AppTheme.cachedCustomTheme?.wallpaper;
+        Widget chip(String label, String value, {Color? dot}) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 74,
+                child: GoopText(
+                  label,
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.0,
+                    color: Colors.white.withValues(alpha: 0.45),
+                  ),
+                ),
+              ),
+              if (dot != null) ...[
+                Container(
+                  width: 12,
+                  height: 12,
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    color: dot,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                  ),
+                ),
+              ],
+              Expanded(
+                child: GoopText(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+        String hex(Color c) =>
+            '#${c.toARGB32().toRadixString(16).substring(2).toUpperCase()}';
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(
+            Insets.lg,
+            0,
+            Insets.lg,
+            Insets.lg,
+          ),
+          children: [
+            GoopText(
+              _presetName.isEmpty ? 'CURRENT LOOK' : 'PRESET: $_presetName',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: flair.primary,
+              ),
+            ),
+            const SizedBox(height: 14),
+            // Palette strip — the six color roles at a glance.
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              ),
+              child: Row(
+                children: [
+                  for (final c in [
+                    _draft.scaffold,
+                    _draft.card,
+                    _draft.primary,
+                    _draft.secondary,
+                    _draft.headlineStat,
+                    _draft.bulletColor,
+                  ])
+                    Expanded(
+                      child: Container(
+                        height: 26,
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          color: c,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.25),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            chip(
+              'CANVAS',
+              wp != null ? 'WALLPAPER ${wp.toUpperCase()}' : 'SOLID',
+            ),
+            chip('PANEL', hex(_draft.card)),
+            chip('PRIME', hex(_draft.primary), dot: _draft.primary),
+            chip('SECOND', hex(_draft.secondary), dot: _draft.secondary),
+            chip('STAT', hex(_draft.headlineStat), dot: _draft.headlineStat),
+            chip('PARTICLES', prefs.particlePreset.label),
+            chip('FONT', prefs.font.label),
+            chip('GLOW', '${(prefs.glowIntensity * 100).round()}%'),
+            chip(
+              'SHADER',
+              prefs.shaderEnabled ? prefs.shaderPreset.name : 'OFF',
+            ),
+            const SizedBox(height: 10),
+            ScaleButton(
+              onTap: _openMockPreview,
+              child: Container(
+                height: 46,
+                decoration: BoxDecoration(
+                  color: flair.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: flair.primary.withValues(alpha: 0.6),
+                    width: 1.4,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.preview_rounded, size: 16, color: flair.primary),
+                    const SizedBox(width: 8),
+                    GoopText(
+                      'FULLSCREEN PREVIEW',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: flair.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            GoopText(
+              'mock run + gun detail — swipe inside preview',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 9.5,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _openMockPreview() {
+    Haptics.selection();
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const _MockPreviewScreen()),
+    );
+  }
+
+  /// SAVE tab — review + persist the preset, then apply & close.
+  Widget _buildSaveStep() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.lg,
+        0,
+        Insets.lg,
+        Insets.lg,
+      ),
+      children: [
+        GoopText(
+          'SAVE PRESET',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.4,
+            color: flair.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GoopText(
+          _presetName.isEmpty
+              ? 'this look will be saved under a name you pick'
+              : '"$_presetName" joins your preset gallery',
+          style: TextStyle(
+            fontSize: 11,
+            height: 1.4,
+            color: Colors.white.withValues(alpha: 0.55),
+          ),
+        ),
+        const SizedBox(height: 20),
+        ScaleButton(
+          onTap: _onSavePreset,
+          child: Container(
+            height: 52,
+            decoration: BoxDecoration(
+              color: flair.primary,
+              borderRadius: BorderRadius.all(Radii.md),
+              boxShadow: [
+                BoxShadow(
+                  color: flair.primary.withValues(alpha: 0.5),
+                  blurRadius: 18,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.bookmark_added_rounded,
+                  size: 18,
+                  color:
+                      flair.primary.computeLuminance() > 0.5
+                          ? Colors.black87
+                          : Colors.white,
+                ),
+                const SizedBox(width: 10),
+                GoopText(
+                  'SAVE & APPLY',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                    color:
+                        flair.primary.computeLuminance() > 0.5
+                            ? Colors.black87
+                            : Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        GoopText(
+          'saving keeps every pick — colors, wallpaper, particles, glow, font',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 9.5,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Persist the staged look as a [SavedCustomTheme], apply it, close.
+  Future<void> _onSavePreset() async {
+    var name = _presetName;
+    if (name.isEmpty) {
+      final picked = await _promptPresetName();
+      if (picked == null || !mounted) return;
+      name = picked;
+      _presetName = name;
+    }
+    Haptics.success();
+    final isCustom = _previewMode == AppThemeMode.custom;
+    final theme = SavedCustomTheme(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      splashSlug: isCustom ? 'custom' : _previewMode.splashSlug,
+      baseMode: _previewMode,
+      prefs: VisualPrefs.notifier.value,
+      customData: isCustom ? _draft.copyWith(name: name) : null,
+    );
+    await CustomThemeStore.save(theme);
+    if (isCustom) {
+      await AppTheme.saveCustomThemeData(_draft.copyWith(name: name));
+    }
+    await AppTheme.setMode(_previewMode);
+    AppTheme.previewNotifier.value = null;
+    if (mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
+  }
+
+  /// Stage-aware BACK — walk the flow backwards; at CHOOSE it does
+  /// the hard restore-and-pop.
+  void _onFlowBack() {
+    Haptics.selection();
+    switch (_stage) {
+      case _StudioStage.wizard:
+        if (_cameFromFlow) {
+          setState(() => _stage = _StudioStage.source);
+        } else {
+          _onBack();
+        }
+      case _StudioStage.gallery:
+        setState(
+          () => _stage =
+              _gallerySelect ? _StudioStage.source : _StudioStage.choose,
+        );
+      case _StudioStage.source:
+        setState(() => _stage = _StudioStage.choose);
+      case _StudioStage.choose:
+        _onBack();
     }
   }
 
@@ -862,29 +1787,12 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         if (_previewMode == AppThemeMode.unicorn) _buildUnicornStrip(),
         ...rows,
         const SizedBox(height: 14),
-        ScaleButton(
-          onTap: _showSaveThemeDialog,
-          child: Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: _draft.primary.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: _draft.primary.withValues(alpha: 0.6),
-                width: 1.4,
-              ),
-            ),
-            child: Center(
-              child: GoopText(
-                'SAVE THEME',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.4,
-                  color: _draft.primary,
-                ),
-              ),
-            ),
+        GoopText(
+          'save your finished preset from the SAVE tab',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 9.5,
+            color: Colors.white.withValues(alpha: 0.4),
           ),
         ),
       ],
@@ -1247,282 +2155,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  void _showSaveThemeDialog() {
-    Haptics.selection();
-    final nameCtrl = TextEditingController(text: 'My Theme');
-    String selectedSplash =
-        _previewMode == AppThemeMode.custom
-            ? kPickerThemes.first.splashSlug
-            : _previewMode.splashSlug;
-    String? validationError;
-
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            final onSurface = Theme.of(ctx).colorScheme.onSurface;
-            final flair = AppTheme.flair;
-            return AlertDialog(
-              backgroundColor: flair.scaffold,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radii.lg),
-              ),
-              title: GoopText(
-                'Save Theme',
-                style: TextStyle(
-                  fontSize: FontSizes.titleSmall,
-                  fontWeight: FontWeight.w900,
-                  color: flair.primary,
-                ),
-              ),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GoopText(
-                      'Theme Name',
-                      style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w700,
-                        color: onSurface.withValues(alpha: 0.5),
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: nameCtrl,
-                      autofocus: true,
-                      maxLength: 24,
-                      style: TextStyle(
-                        color: onSurface,
-                        fontSize: FontSizes.bodyMedium,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Enter theme name...',
-                        hintStyle: TextStyle(
-                          color: onSurface.withValues(alpha: 0.3),
-                        ),
-                        filled: true,
-                        fillColor: onSurface.withValues(alpha: 0.06),
-                        counterText: '',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: flair.primary.withValues(alpha: 0.3),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: flair.primary.withValues(alpha: 0.7),
-                          ),
-                        ),
-                        errorText: validationError,
-                      ),
-                      onChanged: (value) {
-                        if (validationError != null) {
-                          setDialogState(() => validationError = null);
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    GoopText(
-                      'Select Graphic',
-                      style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w700,
-                        color: onSurface.withValues(alpha: 0.5),
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    SizedBox(
-                      height: 200,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        itemCount: kPickerThemes.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 0.75,
-                              crossAxisSpacing: 6,
-                              mainAxisSpacing: 6,
-                            ),
-                        itemBuilder: (ctx, i) {
-                          final mode = kPickerThemes[i];
-                          final slug = mode.splashSlug;
-                          final isSelected = slug == selectedSplash;
-                          return GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              Haptics.selection();
-                              setDialogState(() => selectedSplash = slug);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radii.sm),
-                                border: Border.all(
-                                  color:
-                                      isSelected
-                                          ? flair.primary
-                                          : onSurface.withValues(alpha: 0.1),
-                                  width: isSelected ? 2 : 1,
-                                ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(7),
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/themes/splash/$slug.jpg',
-                                      fit: BoxFit.cover,
-                                      cacheWidth: 200,
-                                      cacheHeight: 266,
-                                      errorBuilder:
-                                          (_, _, _) => Container(
-                                            color: flair.card,
-                                            child: Icon(
-                                              Icons.image,
-                                              size: 24,
-                                              color: onSurface.withValues(
-                                                alpha: 0.3,
-                                              ),
-                                            ),
-                                          ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 2,
-                                          horizontal: 4,
-                                        ),
-                                        color: Colors.black.withValues(
-                                          alpha: 0.6,
-                                        ),
-                                        child: GoopText(
-                                          mode.label,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: FontSizes.labelSmall,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(),
-                  child: GoopText(
-                    'CANCEL',
-                    style: TextStyle(
-                      fontSize: FontSizes.labelMedium,
-                      fontWeight: FontWeight.w700,
-                      color: onSurface.withValues(alpha: 0.5),
-                    ),
-                  ),
-                ),
-                ScaleButton(
-                  onTap: () async {
-                    final name = nameCtrl.text.trim();
-                    if (name.isEmpty) {
-                      setDialogState(
-                        () => validationError = 'Name cannot be empty',
-                      );
-                      return;
-                    }
-                    // Check for duplicates
-                    final existing =
-                        CustomThemeStore.themes
-                            .where(
-                              (t) => t.name.toLowerCase() == name.toLowerCase(),
-                            )
-                            .toList();
-                    if (existing.isNotEmpty) {
-                      setDialogState(
-                        () =>
-                            validationError =
-                                'A theme named "$name" already exists',
-                      );
-                      return;
-                    }
-                    Haptics.success();
-                    final theme = SavedCustomTheme(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: name,
-                      splashSlug: selectedSplash,
-                      baseMode: _previewMode,
-                      prefs: VisualPrefs.notifier.value,
-                      // Capture custom palette data if saving from CUSTOM mode
-                      customData:
-                          _previewMode == AppThemeMode.custom
-                              ? (AppTheme.cachedCustomTheme ??
-                                      CustomThemeData.defaultTheme)
-                                  .copyWith(name: name)
-                              : null,
-                    );
-                    await CustomThemeStore.save(theme);
-                    if (!ctx.mounted) return;
-                    Navigator.of(ctx).pop();
-                    // Show confirmation snackbar
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: GoopText('Theme "$name" saved!'),
-                          duration: const Duration(seconds: 2),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Insets.lg,
-                      vertical: Insets.sm,
-                    ),
-                    decoration: BoxDecoration(
-                      color: flair.primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: GoopText(
-                      'SAVE',
-                      style: TextStyle(
-                        fontSize: FontSizes.labelMedium,
-                        fontWeight: FontWeight.w900,
-                        color:
-                            flair.primary.computeLuminance() > 0.5
-                                ? Colors.black87
-                                : Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    ).then((_) => nameCtrl.dispose());
-  }
 }
 
 /// A single color field row for the custom palette editor.
