@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../models/synergy.dart';
 import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
@@ -49,10 +50,7 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
     super.dispose();
   }
 
-  List<SynergyStatus> _statusesFor(
-    RunProvider p,
-    List<String> ownedNames,
-  ) {
+  List<SynergyStatus> _statusesFor(RunProvider p, List<String> ownedNames) {
     final ownedLower = ownedNames.map((n) => n.toLowerCase()).toSet();
     return p
         .getSynergiesFor(widget.currentName)
@@ -142,10 +140,9 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
         return _LebPage(currentName: widget.currentName);
       case 'P1':
       case 'P2':
-        final owned =
-            key == 'P1'
-                ? p.runState.main.allItemNames
-                : (p.runState.coop?.allItemNames ?? const <String>[]);
+        final owned = key == 'P1'
+            ? p.runState.main.allItemNames
+            : (p.runState.coop?.allItemNames ?? const <String>[]);
         if (owned.isEmpty) {
           return _EmptyPlayerNote(label: key);
         }
@@ -203,8 +200,9 @@ class _PageChips extends StatelessWidget {
 
   Widget _chip(String label, bool active, VoidCallback onTap) {
     final leb = label == 'LEB';
-    final color =
-        leb ? const Color(0xFFB388FF) : (active ? Colors.white : Colors.white54);
+    final color = leb
+        ? const Color(0xFFB388FF)
+        : (active ? Colors.white : Colors.white54);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
@@ -212,18 +210,16 @@ class _PageChips extends StatelessWidget {
         duration: const Duration(milliseconds: 160),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
-          color:
-              active
-                  ? (leb
-                      ? const Color(0xFFB388FF).withValues(alpha: 0.18)
-                      : Colors.white.withValues(alpha: 0.12))
-                  : Colors.transparent,
+          color: active
+              ? (leb
+                    ? const Color(0xFFB388FF).withValues(alpha: 0.18)
+                    : Colors.white.withValues(alpha: 0.12))
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color:
-                active
-                    ? color.withValues(alpha: 0.7)
-                    : Colors.white.withValues(alpha: 0.18),
+            color: active
+                ? color.withValues(alpha: 0.7)
+                : Colors.white.withValues(alpha: 0.18),
             width: active ? 1.2 : 0.8,
           ),
         ),
@@ -291,12 +287,32 @@ bool synergyMayHaveExtraRequirement(Synergy s) {
   return keys.any(t.contains);
 }
 
-class _LebPage extends StatelessWidget {
+class _LebPage extends StatefulWidget {
   final String currentName;
   const _LebPage({required this.currentName});
 
   @override
+  State<_LebPage> createState() => _LebPageState();
+}
+
+class _LebPageState extends State<_LebPage>
+    with SingleTickerProviderStateMixin {
+  // One ticker for the whole page — per-row controllers meant N
+  // simultaneous repaints for N synergies.
+  late final AnimationController _march = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1200),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _march.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final currentName = widget.currentName;
     final p = context.read<RunProvider>();
     final synergies = p.getSynergiesFor(currentName);
     final lebIcon = p.itemByName("Lich's Eye Bullets")?.icon ?? '';
@@ -313,9 +329,10 @@ class _LebPage extends StatelessWidget {
             if (synergies.isEmpty)
               _NoLebSynergies()
             else ...[
-              for (final s in [...synergies]
-                ..sort((a, b) => a.name.compareTo(b.name)))
-                _GhostSynergyRow(synergy: s),
+              for (final s in [
+                ...synergies,
+              ]..sort((a, b) => a.name.compareTo(b.name)))
+                _GhostSynergyRow(synergy: s, march: _march),
             ],
           ],
         ),
@@ -415,58 +432,57 @@ void _showLebExplainer(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
     ),
-    builder:
-        (ctx) => SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GoopText(
-                  "LICH'S EYE BULLETS",
-                  style: TextStyle(
-                    fontSize: FontSizes.labelSmall,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.4,
-                    color: Skeuo.inkIf(const Color(0xFFB388FF)),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                if (leb?.effect.isNotEmpty ?? false)
-                  GoopText(
-                    leb!.effect,
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.4,
-                      color: Colors.white.withValues(alpha: 0.8),
-                    ),
-                  ),
-                for (final n in notes) ...[
-                  const SizedBox(height: 8),
-                  GoopText(
-                    '• $n',
-                    style: TextStyle(
-                      fontSize: 12,
-                      height: 1.4,
-                      color: Colors.white.withValues(alpha: 0.65),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 12),
-                GoopText(
-                  'Rows marked EXTRA REQ may need additional items or '
-                  'conditions that LEB does not simulate.',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white.withValues(alpha: 0.45),
-                  ),
-                ),
-              ],
+    builder: (ctx) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GoopText(
+              "LICH'S EYE BULLETS",
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.4,
+                color: Skeuo.inkIf(const Color(0xFFB388FF)),
+              ),
             ),
-          ),
+            const SizedBox(height: 8),
+            if (leb?.effect.isNotEmpty ?? false)
+              GoopText(
+                leb!.effect,
+                style: TextStyle(
+                  fontSize: 13,
+                  height: 1.4,
+                  color: Colors.white.withValues(alpha: 0.8),
+                ),
+              ),
+            for (final n in notes) ...[
+              const SizedBox(height: 8),
+              GoopText(
+                '• $n',
+                style: TextStyle(
+                  fontSize: 12,
+                  height: 1.4,
+                  color: Colors.white.withValues(alpha: 0.65),
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            GoopText(
+              'Rows marked EXTRA REQ may need additional items or '
+              'conditions that LEB does not simulate.',
+              style: TextStyle(
+                fontSize: 11,
+                fontStyle: FontStyle.italic,
+                color: Colors.white.withValues(alpha: 0.45),
+              ),
+            ),
+          ],
         ),
+      ),
+    ),
   );
 }
 
@@ -502,36 +518,14 @@ class _NoLebSynergies extends StatelessWidget {
 /// Ghost/dashed simulated row — visually distinct from real
 /// COMPLETE/PARTIAL/LOCKED cards (Q6). The dashed outline marches
 /// continuously so simulated panels are obvious at a glance.
-class _GhostSynergyRow extends StatefulWidget {
+class _GhostSynergyRow extends StatelessWidget {
   final Synergy synergy;
-  const _GhostSynergyRow({required this.synergy});
-
-  @override
-  State<_GhostSynergyRow> createState() => _GhostSynergyRowState();
-}
-
-class _GhostSynergyRowState extends State<_GhostSynergyRow>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _march;
-
-  @override
-  void initState() {
-    super.initState();
-    _march = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _march.dispose();
-    super.dispose();
-  }
+  final Animation<double> march;
+  const _GhostSynergyRow({required this.synergy, required this.march});
 
   @override
   Widget build(BuildContext context) {
-    final synergy = widget.synergy;
+    final synergy = this.synergy;
     final accent = Skeuo.inkIf(const Color(0xFFB388FF));
     final extraReq = synergyMayHaveExtraRequirement(synergy);
     final still = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
@@ -548,24 +542,26 @@ class _GhostSynergyRowState extends State<_GhostSynergyRow>
         ),
         child: still
             ? CustomPaint(
-              painter: _DashedBorderPainter(
-                color: accent.withValues(alpha: 0.4),
-                radius: Radii.md,
-              ),
-              child: _ghostRowBody(synergy, p, extraReq),
-            )
+                painter: _DashedBorderPainter(
+                  color: accent.withValues(alpha: 0.4),
+                  radius: Radii.md,
+                ),
+                child: _ghostRowBody(synergy, p, extraReq),
+              )
             : AnimatedBuilder(
-              animation: _march,
-              builder:
-                  (_, _) => CustomPaint(
-                    painter: _DashedBorderPainter(
-                      color: accent.withValues(alpha: 0.4),
-                      radius: Radii.md,
-                      t: _march.value,
-                    ),
-                    child: _ghostRowBody(synergy, p, extraReq),
+                animation: march,
+                // Hoist the body — only the dashed border repaints per
+                // tick instead of rebuilding icon + text every frame.
+                child: _ghostRowBody(synergy, p, extraReq),
+                builder: (_, child) => CustomPaint(
+                  painter: _DashedBorderPainter(
+                    color: accent.withValues(alpha: 0.4),
+                    radius: Radii.md,
+                    t: march.value,
                   ),
-            ),
+                  child: child,
+                ),
+              ),
       ),
     );
   }
@@ -693,19 +689,14 @@ class _DashedBorderPainter extends CustomPainter {
   final Color color;
   final Radius radius;
   final double t;
-  _DashedBorderPainter({
-    required this.color,
-    required this.radius,
-    this.t = 0,
-  });
+  _DashedBorderPainter({required this.color, required this.radius, this.t = 0});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.0;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
     final rrect = RRect.fromRectAndRadius(
       Offset.zero & size,
       Radius.circular(radius.x),

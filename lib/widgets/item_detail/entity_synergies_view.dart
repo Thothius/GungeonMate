@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
@@ -43,13 +44,13 @@ class EntitySynergiesView extends StatelessWidget {
       return const _EmptySynergies();
     }
     final p = context.read<RunProvider>();
-    final mainNames =
-        p.runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final mainNames = p.runState.main.allItemNames
+        .map((n) => n.toLowerCase())
+        .toSet();
     final coop = p.runState.coop;
-    final coopNames =
-        coop == null
-            ? const <String>{}
-            : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final coopNames = coop == null
+        ? const <String>{}
+        : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
 
     final complete = <SynergyStatus>[];
     final partial = <SynergyStatus>[];
@@ -78,13 +79,17 @@ class EntitySynergiesView extends StatelessWidget {
       return coop == null
           ? 'P1'
           : (p1 && p2
-              ? 'P1+P2'
-              : p2
-              ? 'P2'
-              : 'P1');
+                ? 'P1+P2'
+                : p2
+                ? 'P2'
+                : 'P1');
     }
 
-    Widget rowsFor(List<SynergyStatus> group, {String? owners}) {
+    Widget rowsFor(
+      List<SynergyStatus> group, {
+      String? owners,
+      bool locked = false,
+    }) {
       return Column(
         children: [
           for (final st in group)
@@ -94,6 +99,7 @@ class EntitySynergiesView extends StatelessWidget {
               missing: _firstMissing(st, ownedLower, currentName),
               p: p,
               showOwnerPill: showOwnerPills,
+              locked: locked,
             ),
         ],
       );
@@ -132,7 +138,7 @@ class EntitySynergiesView extends StatelessWidget {
               icon: Icons.lock_outline_rounded,
             ),
             const SizedBox(height: 6),
-            rowsFor(locked),
+            rowsFor(locked, locked: true),
           ],
         ],
       ),
@@ -225,12 +231,17 @@ class _SynergyRow extends StatelessWidget {
   final String? missing;
   final RunProvider p;
   final bool showOwnerPill;
+
+  /// LOCKED group rows render neutral — amber is reserved for
+  /// PARTIAL progress so locked doesn't read as "almost there".
+  final bool locked;
   const _SynergyRow({
     required this.status,
     required this.owners,
     required this.missing,
     required this.p,
     this.showOwnerPill = true,
+    this.locked = false,
   });
 
   @override
@@ -249,10 +260,11 @@ class _SynergyRow extends StatelessWidget {
       iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
     }
 
-    final accent =
-        status.active
-            ? Skeuo.inkIf(Colors.greenAccent)
-            : Skeuo.inkIf(Colors.amberAccent);
+    final accent = locked
+        ? Colors.white38
+        : status.active
+        ? Skeuo.inkIf(Colors.greenAccent)
+        : Skeuo.inkIf(Colors.amberAccent);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -323,14 +335,13 @@ class _OwnerPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        label == 'NONE'
-            ? Colors.white38
-            : label.contains('+')
-            ? Skeuo.inkIf(Colors.cyanAccent)
-            : label == 'P2'
-            ? Skeuo.inkIf(Colors.orangeAccent)
-            : Skeuo.inkIf(Colors.lightGreenAccent);
+    final color = label == 'NONE'
+        ? Colors.white38
+        : label.contains('+')
+        ? Skeuo.inkIf(Colors.cyanAccent)
+        : label == 'P2'
+        ? Skeuo.inkIf(Colors.orangeAccent)
+        : Skeuo.inkIf(Colors.lightGreenAccent);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
