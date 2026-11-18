@@ -1,5 +1,25 @@
 [
   {
+    "version": "3.4.1",
+    "date": "2026-11",
+    "sections": {
+      "Features": [
+        "Preset quick slots — 3 pinned slots above the preset picker; tap applies instantly, long-press shows info/remove, empty slots pick any preset from the gallery",
+        "Preset gallery rework — LIST (default) / CARDS toggle, OFFICIAL section on top separated from YOURS, per-row delete + splash-art thumbnails",
+        "Global panel chrome — COLORS & BG PANELS section styles every panel app-wide (cards, run tiles, dashboard, bottom nav): color, opacity, border AUTO/CUSTOM/NONE + width, corner radius",
+        "Item-icon particles — PARTICLES tab ITEM ICONS grid floats 12 real game items (blanks, shell casing, heart, coin, key, medkit, bomb, gunboots, wings, armor, spice, sprun) instead of shapes",
+        "SIZE & SPEED controls — particle size (30-200%), opacity, and speed chips; grouped color picker with 5 collections (base, metallic, pink & purple, blue & cyan, green & minty)"
+      ],
+      "Fixed": [
+        "Particles OFF now wins over theme auto-on (explicit user choice no longer clobbered by curated themes)",
+        "Saved presets survive malformed entries and stale enum indices instead of wiping the gallery",
+        "Preset saves now carry particle type/schema/physics/icon picks (were silently dropped)",
+        "System back / swipe-back restores all staged studio changes instead of leaking them",
+        "Special item panels (Gunderfury, Ser Junkan, etc.) toggle restored in Settings -> Gameplay"
+      ]
+    }
+  },
+  {
     "version": "3.4.0",
     "date": "2026-11",
     "sections": {

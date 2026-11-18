@@ -1,3 +1,19 @@
+## v3.4.1 — Customization Polish Pass (November 2026)
+
+**Build:** 164
+
+Post-3.4.0 customization deep-dive: preset quick slots, global panel chrome, item-icon particles, grouped palettes, and a batch of save/load + particles fixes.
+
+### Changes
+- **Quick slots** — 3 pinned preset slots on the picker; tap = instant apply, long-press = info/remove, `+` opens the gallery in slot-pick mode. Persisted across sessions.
+- **Preset gallery** — LIST/CARDS view toggle (persisted), OFFICIAL vs YOURS sections, per-row delete with confirm, splash-art thumbnails, list rows scroll-to-select.
+- **Panel chrome** — new PANELS section in COLORS & BG: panel color, opacity, border mode (AUTO/CUSTOM/NONE) + color + width, radius — resolved through `flairFor` so cards, tiles, dashboard, browse surfaces and the bottom nav all follow. Sentinel defaults keep theme look unless overridden.
+- **Item-icon particles** — `ItemIconField` floats 12 real Gungeon item sprites (drift + sway + rotation + fade pulse); `VisualPrefs.particleItemIcon` persists and rides preset saves; DETAILS chip shows `ITEM: name`.
+- **SIZE & SPEED** — particle size (30–200%), opacity, and 5-step speed chips wired to the previously headless prefs.
+- **Grouped palettes** — every color picker now has GENERAL / METALLIC / PINK & PURPLE / BLUE & CYAN / GREEN & MINTY tabs (32 curated swatches each), header with live hex + current-color swatch, palette-dot tab identities.
+- **BG modes** — GRADIENT / SOLID / NONE / WALLPAPER all render identically in app overlay, LIVE LOOK, and mock preview.
+- **Fixes** — explicit particles-OFF beats theme auto-on (`particlesUserOff`); `CustomThemeStore.load` skips malformed entries; enum deserializers clamped; PopScope restores mode/prefs/custom-theme on system back; preset JSON backfilled for particle type/schema/chaos/touch/item icon; PANELS toggle restored in Settings → Gameplay.
+
 ## v3.4.0 — Customization Studio + Multiplayer Identity (November 2026)
 
 **Build:** 163

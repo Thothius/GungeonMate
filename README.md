@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.9.1-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-3.4.1-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="Data" src="https://img.shields.io/badge/wiki_data-509_verified-E040FB?style=flat-square">
 </p>
@@ -20,8 +20,8 @@
 ## 📥 DOWNLOAD
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/GungeonMate-v1.9.1.apk">
-    <img src="https://img.shields.io/badge/⬇_DOWNLOAD_APK-v1.9.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="72" alt="Download APK">
+  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/GungeonMate-v3.4.1.apk">
+    <img src="https://img.shields.io/badge/⬇_DOWNLOAD_APK-v3.4.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="72" alt="Download APK">
   </a>
 </p>
 
@@ -51,12 +51,15 @@
 - Gunfortuna dice game
 - MP Emotes — send a Kiss or Slap to the other player (purely visual, no gameplay effect)
 
-**Themes**
+**Customization Studio**
+- Preset flow — browse official + your saved presets (list or card gallery), or build a new one from scratch / copy an existing look; 3 quick slots for one-tap favorites
+- Full editor — DETAILS / COLORS & BG / TYPE / PARTICLES / AMBIANCE / SAVE tabs with a live fullscreen mock preview
+- Colors — every picker has grouped palettes (base, metallic, pink & purple, blue & cyan, green & minty); global panel chrome styles cards, run tiles and the bottom nav
+- Particles — 7 shape types, 18 color palettes, physics toggles, size/opacity/speed, or float 12 real game items (blanks, hearts, bombs...)
+- Ambiance — glow, vignette, film grain, FOG/RAIN shaders, tap sparkles + haptics; 4 background modes (gradient, solid, none, 46 wallpapers)
 - 22 themes including Bullet Hell, Forge Master, Robot's Core, Unicorn (7 palettes), Resourceful Rat, Lord Jammed, custom color editor
 - Goopian language mode (English to animated alien text)
-- 18 particle presets auto-bound to each theme, 10 curated wallpapers with gyro parallax
 - Auto-glow: themes with glow colors show a subtle ambient glow out of the box
-- Full-screen theme picker with live preview
 
 **Utilities**
 - Chronological run log with category colors and curse/coolness tracking
