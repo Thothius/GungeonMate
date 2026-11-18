@@ -86,24 +86,37 @@ class CustomThemeStore {
     } catch (_) {}
   }
 
-  static Future<void> save(SavedCustomTheme theme) async {
+  /// Persist [theme] to the gallery. Serializes and writes to
+  /// SharedPreferences FIRST — only on success does the in-memory
+  /// gallery update. Returns false on failure so callers can surface
+  /// it; previously a persist failure left a ghost preset that showed
+  /// in-session but vanished on restart.
+  static Future<bool> save(SavedCustomTheme theme) async {
     final updated = [...notifier.value, theme];
-    notifier.value = updated;
-    await _persist(updated);
-  }
-
-  static Future<void> delete(String id) async {
-    final updated = notifier.value.where((t) => t.id != id).toList();
-    notifier.value = updated;
-    await _persist(updated);
-  }
-
-  static Future<void> _persist(List<SavedCustomTheme> themes) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final json = jsonEncode(themes.map((t) => t.toJson()).toList());
-      await prefs.setString(_key, json);
-    } catch (_) {}
+      final json = jsonEncode(updated.map((t) => t.toJson()).toList());
+      final ok = await prefs.setString(_key, json);
+      if (!ok) return false;
+      notifier.value = updated;
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<bool> delete(String id) async {
+    final updated = notifier.value.where((t) => t.id != id).toList();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final json = jsonEncode(updated.map((t) => t.toJson()).toList());
+      final ok = await prefs.setString(_key, json);
+      if (!ok) return false;
+      notifier.value = updated;
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }
 

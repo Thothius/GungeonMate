@@ -463,7 +463,7 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
       return;
     }
     Haptics.success();
-    await CustomThemeStore.save(
+    final saved = await CustomThemeStore.save(
       SavedCustomTheme(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: name,
@@ -473,6 +473,10 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
         customData: _data.copyWith(name: name),
       ),
     );
+    if (!saved && mounted) {
+      setState(() => _error = 'Could not save palette — storage error');
+      return;
+    }
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

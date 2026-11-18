@@ -1979,7 +1979,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           ),
     );
     if (ok != true || !mounted) return;
-    await CustomThemeStore.delete(t.id);
+    final deleted = await CustomThemeStore.delete(t.id);
+    if (!deleted && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not delete preset')),
+      );
+      return;
+    }
     if (mounted) setState(() {});
   }
 
@@ -2398,7 +2404,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       prefs: VisualPrefs.notifier.value,
       customData: isCustom ? _draft.copyWith(name: name) : null,
     );
-    await CustomThemeStore.save(theme);
+    final saved = await CustomThemeStore.save(theme);
+    if (!saved && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not save preset — storage error')),
+      );
+      return;
+    }
     if (isCustom) {
       await AppTheme.saveCustomThemeData(_draft.copyWith(name: name));
     }
