@@ -19,6 +19,16 @@ import 'package:gungeon_mate/screens/mp_lobby_screen.dart';
 /// - HOST with empty nickname → toast
 /// - JOIN with empty nickname → toast
 void main() {
+  // Catalog data loads in setUpAll (real async zone) — inside
+  // testWidgets' FakeAsync zone the compute() isolate futures never
+  // resolve, even under tester.runAsync.
+  late RunProvider loadedRp;
+
+  setUpAll(() async {
+    loadedRp = RunProvider();
+    await loadedRp.loadData();
+  });
+
   Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
@@ -97,15 +107,12 @@ void main() {
   testWidgets('picking a character skips CONTINUE and lands on identity', (
     tester,
   ) async {
-    // The character picker needs catalog data — load it first.
-    // runAsync: loadData() uses compute() isolates which never resolve
-    // inside testWidgets' FakeAsync zone (10min timeout otherwise).
-    final rp = RunProvider();
-    await tester.runAsync(() => rp.loadData());
+    // The character picker needs catalog data — use the provider
+    // pre-loaded in setUpAll.
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider.value(value: rp),
+          ChangeNotifierProvider.value(value: loadedRp),
           ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
         ],
         child: const MaterialApp(home: MpLobbyScreen()),
