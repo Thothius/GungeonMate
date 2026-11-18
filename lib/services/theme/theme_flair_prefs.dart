@@ -312,6 +312,11 @@ class VisualPrefs {
   /// Defaults to true.
   final bool showLichEyeBulletsSynergies;
 
+  /// Browse-screen LEB toggle — independent of the detail/catalog pref.
+  /// When on, gun rows carry an LEB badge and pushed details open in
+  /// the simulated view. Defaults to true.
+  final bool browseShowLichEyeBullets;
+
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
@@ -450,6 +455,7 @@ class VisualPrefs {
     this.particleCount = 32,
     this.showDashboards = true,
     this.showLichEyeBulletsSynergies = true,
+    this.browseShowLichEyeBullets = true,
     this.periodicGridColumnCount = 0,
     this.particleColorSchema = ParticleColorSchema.presetDefault,
     this.particleSpeed = ParticleSpeed.normal,
@@ -487,6 +493,7 @@ class VisualPrefs {
 
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kShowLichEyeBullets = 'vp.show_lich_eye_bullets_v1';
+  static const _kBrowseLichEyeBullets = 'vp.browse_lich_eye_bullets_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
   static const _kParticleSpeed = 'vp.particle_speed_v1';
@@ -571,6 +578,8 @@ class VisualPrefs {
 
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final showLichEyeBullets = p.getBool(_kShowLichEyeBullets) ?? true;
+      final browseLichEyeBullets =
+          p.getBool(_kBrowseLichEyeBullets) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
       final particleColorSchemaIdx = p.getInt(_kParticleColorSchema) ?? 0;
       final particleColorSchema =
@@ -617,6 +626,7 @@ class VisualPrefs {
         particleCount: p.getInt(_kParticleCount) ?? 32,
         showDashboards: showDashboards,
         showLichEyeBulletsSynergies: showLichEyeBullets,
+        browseShowLichEyeBullets: browseLichEyeBullets,
         periodicGridColumnCount: periodicGridColumnCount,
         particleColorSchema: particleColorSchema,
         particleSpeed: particleSpeed,
@@ -762,6 +772,11 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setBrowseShowLichEyeBullets(bool v) async {
+    notifier.value = notifier.value._with(browseShowLichEyeBullets: v);
+    _persist();
+  }
+
   static Future<void> setPeriodicGridColumnCount(int v) async {
     notifier.value = notifier.value._with(
       periodicGridColumnCount: v.clamp(0, 4),
@@ -870,6 +885,7 @@ class VisualPrefs {
       await p.setInt(_kParticleCount, v.particleCount);
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setBool(_kShowLichEyeBullets, v.showLichEyeBulletsSynergies);
+      await p.setBool(_kBrowseLichEyeBullets, v.browseShowLichEyeBullets);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
       await p.setInt(_kParticleSpeed, v.particleSpeed.index);
@@ -908,6 +924,7 @@ class VisualPrefs {
     int? particleCount,
     bool? showDashboards,
     bool? showLichEyeBulletsSynergies,
+    bool? browseShowLichEyeBullets,
     int? periodicGridColumnCount,
     ParticleColorSchema? particleColorSchema,
     ParticleSpeed? particleSpeed,
@@ -942,6 +959,8 @@ class VisualPrefs {
     showDashboards: showDashboards ?? this.showDashboards,
     showLichEyeBulletsSynergies:
         showLichEyeBulletsSynergies ?? this.showLichEyeBulletsSynergies,
+    browseShowLichEyeBullets:
+        browseShowLichEyeBullets ?? this.browseShowLichEyeBullets,
     periodicGridColumnCount:
         periodicGridColumnCount ?? this.periodicGridColumnCount,
     particleColorSchema: particleColorSchema ?? this.particleColorSchema,
@@ -978,6 +997,7 @@ class VisualPrefs {
     'particleCount': particleCount,
     'showDashboards': showDashboards,
     'showLichEyeBulletsSynergies': showLichEyeBulletsSynergies,
+    'browseShowLichEyeBullets': browseShowLichEyeBullets,
     'periodicGridColumnCount': periodicGridColumnCount,
     'particleColorSchema': particleColorSchema.index,
     'particleSpeed': particleSpeed.index,
@@ -1013,6 +1033,8 @@ class VisualPrefs {
       showDashboards: j['showDashboards'] as bool? ?? true,
       showLichEyeBulletsSynergies:
           j['showLichEyeBulletsSynergies'] as bool? ?? true,
+      browseShowLichEyeBullets:
+          j['browseShowLichEyeBullets'] as bool? ?? true,
       periodicGridColumnCount: j['periodicGridColumnCount'] as int? ?? 0,
       particleColorSchema:
           ParticleColorSchema.values[(j['particleColorSchema'] as int?) ?? 0],

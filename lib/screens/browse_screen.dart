@@ -57,6 +57,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
   _KindFilter _kind = _KindFilter.all; // ALL-mode sub-filter
   _SynOwner _synOwner = _SynOwner.all; // synergies owner tab
   int _allCount = 0, _p1Count = 0, _p2Count = 0;
+  // Mirrored from VisualPrefs inside build — list builders deeper in
+  // the tree read this instead of threading the pref through params.
+  bool _browseLeb = true;
   final TextEditingController _searchCtrl = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String _query = '';
@@ -123,11 +126,22 @@ class _BrowseScreenState extends State<BrowseScreen> {
       onPopInvokedWithResult: (didPop, _) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: _buildScaffold(context, p, isCoop),
+      child: ValueListenableBuilder<VisualPrefs>(
+        valueListenable: VisualPrefs.notifier,
+        builder: (context, prefs, _) {
+          _browseLeb = prefs.browseShowLichEyeBullets;
+          return _buildScaffold(context, p, isCoop, _browseLeb);
+        },
+      ),
     );
   }
 
-  Widget _buildScaffold(BuildContext context, RunProvider p, bool isCoop) {
+  Widget _buildScaffold(
+    BuildContext context,
+    RunProvider p,
+    bool isCoop,
+    bool browseLeb,
+  ) {
     final sf = Responsive.factor(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -158,32 +172,37 @@ class _BrowseScreenState extends State<BrowseScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Filter mode bar — ALL / TIERS / SYNERGIES.
+                // Filter mode bar — ALL / TIERS / SYNERGIES + the
+                // browse-local LEB toggle (independent of the global
+                // detail pref — Q7).
                 Row(
-                  children:
-                      [
-                        _modeBtn(
-                          'ALL',
-                          Icons.apps,
-                          _BrowseMode.all,
-                          isCoop ? 'ALL · P2' : 'ALL',
-                          sf,
-                        ),
-                        _modeBtn(
-                          'TIERS',
-                          Icons.military_tech_outlined,
-                          _BrowseMode.tiers,
-                          'TIERS',
-                          sf,
-                        ),
-                        _modeBtn(
-                          'SYN',
-                          Icons.hub_outlined,
-                          _BrowseMode.synergies,
-                          'SYNERGIES',
-                          sf,
-                        ),
-                      ].map((w) => Expanded(child: w)).toList(),
+                  children: [
+                    ...[
+                      _modeBtn(
+                        'ALL',
+                        Icons.apps,
+                        _BrowseMode.all,
+                        isCoop ? 'ALL · P2' : 'ALL',
+                        sf,
+                      ),
+                      _modeBtn(
+                        'TIERS',
+                        Icons.military_tech_outlined,
+                        _BrowseMode.tiers,
+                        'TIERS',
+                        sf,
+                      ),
+                      _modeBtn(
+                        'SYN',
+                        Icons.hub_outlined,
+                        _BrowseMode.synergies,
+                        'SYNERGIES',
+                        sf,
+                      ),
+                    ].map((w) => Expanded(child: w)),
+                    const SizedBox(width: 6),
+                    _lebToggle(browseLeb, sf),
+                  ],
                 ),
                 // Tier strip — only while TIERS mode is active. Nothing
                 // selected means "show everything".
@@ -390,6 +409,58 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
   }
 
+  /// Browse-local Lich's Eye Bullets toggle — purple accent matching the
+  /// LEB simulated view. Independent of the global detail pref.
+  Widget _lebToggle(bool on, double sf) {
+    const leb = Color(0xFFB388FF);
+    return Tooltip(
+      message: "Lich's Eye Bullets view",
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Haptics.selection();
+          VisualPrefs.setBrowseShowLichEyeBullets(!on);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          height: 46 * sf,
+          padding: EdgeInsets.symmetric(horizontal: 10 * sf),
+          decoration: BoxDecoration(
+            color: on ? leb.withValues(alpha: 0.20) : Colors.transparent,
+            borderRadius: BorderRadius.all(Radii.md),
+            border: Border.all(
+              color:
+                  on
+                      ? leb.withValues(alpha: 0.8)
+                      : Colors.white.withValues(alpha: 0.12),
+              width: 1.2,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.auto_awesome,
+                size: 15 * sf,
+                color: on ? leb : Colors.white.withValues(alpha: 0.4),
+              ),
+              SizedBox(width: 4 * sf),
+              GoopText(
+                'LEB',
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium * sf,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.6,
+                  color: on ? leb : Colors.white.withValues(alpha: 0.45),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   /// One tier filter chip — single-select: tapping a tier selects only
   /// it; tapping the selected tier clears back to "show all".
   /// Chest colors are muted when idle, bright when selected.
@@ -526,7 +597,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
       itemCount: entries.length,
       itemBuilder: (c, i) {
         final e = entries[i];
-        return e.gun != null ? _gunRow(c, p, e.gun!) : _itemRow(c, p, e.item!);
+        return e.gun != null
+            ? _gunRow(c, p, e.gun!, lebView: _browseLeb)
+            : _itemRow(c, p, e.item!, lebView: _browseLeb);
       },
     );
   }
@@ -1033,10 +1106,17 @@ class _BrowseScreenState extends State<BrowseScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
+        final leb = VisualPrefs.notifier.value.browseShowLichEyeBullets;
         if (g != null) {
-          Navigator.push(c, fastRoute(ItemDetailScreen(gun: g)));
+          Navigator.push(
+            c,
+            fastRoute(ItemDetailScreen(gun: g, lebView: leb)),
+          );
         } else {
-          Navigator.push(c, fastRoute(ItemDetailScreen(item: it)));
+          Navigator.push(
+            c,
+            fastRoute(ItemDetailScreen(item: it, lebView: leb)),
+          );
         }
       },
       child: box,
@@ -1050,6 +1130,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     Gun g, {
     List<String>? completes,
     String? ownerLabel,
+    bool lebView = false,
   }) {
     final syn = p.synergyCountFor(g.name);
     completes ??= p.synergiesCompletedBy(g.name, slot: widget.targetSlot);
@@ -1070,12 +1151,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
         synergyCount: syn,
         completesSynergies: completes,
         ownerLabel: ownerLabel,
+        lebBadge: lebView && syn > 0,
       ),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
-        await Navigator.push(c, fastRoute(ItemDetailScreen(gun: g)));
+        await Navigator.push(
+          c,
+          fastRoute(ItemDetailScreen(gun: g, lebView: lebView)),
+        );
         if (!mounted) return;
         // Drop the keyboard again on return — Flutter likes to restore
         // focus to the search field, which would re-open the IME.
@@ -1104,6 +1189,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     Item it, {
     List<String>? completes,
     String? ownerLabel,
+    bool lebView = false,
   }) {
     final syn = p.synergyCountFor(it.name);
     completes ??= p.synergiesCompletedBy(it.name, slot: widget.targetSlot);
@@ -1129,7 +1215,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
       isRobot: isRobot,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
-        await Navigator.push(c, fastRoute(ItemDetailScreen(item: it)));
+        await Navigator.push(
+          c,
+          fastRoute(ItemDetailScreen(item: it, lebView: lebView)),
+        );
         if (!mounted) return;
         FocusManager.instance.primaryFocus?.unfocus();
       },

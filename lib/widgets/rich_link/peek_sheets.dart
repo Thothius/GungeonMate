@@ -142,7 +142,13 @@ class _PeekSheet extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    fastRoute(ItemDetailScreen(gun: gun, item: item)),
+                    fastRoute(
+                      ItemDetailScreen(
+                        gun: gun,
+                        item: item,
+                        lebView: LebViewScope.maybeOf(context),
+                      ),
+                    ),
                   );
                 },
               ),

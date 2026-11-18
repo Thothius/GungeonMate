@@ -13,6 +13,7 @@ import '../utils/fast_route.dart';
 import '../screens/stats_detail_screen.dart';
 import '../services/app_theme.dart';
 import 'game_icon.dart';
+import 'item_detail/leb_view_scope.dart';
 import 'quality_badge.dart';
 import 'themed_number.dart';
 import 'themed_section_title.dart';
@@ -224,7 +225,16 @@ class RichLinkText extends StatelessWidget {
 
   static void _openItemDetail(BuildContext context, {Gun? gun, Item? item}) {
     FocusManager.instance.primaryFocus?.unfocus();
-    Navigator.push(context, fastRoute(ItemDetailScreen(gun: gun, item: item)));
+    Navigator.push(
+      context,
+      fastRoute(
+        ItemDetailScreen(
+          gun: gun,
+          item: item,
+          lebView: LebViewScope.maybeOf(context),
+        ),
+      ),
+    );
   }
 }
 

@@ -1,88 +1,324 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/synergy.dart';
 import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
 import '../game_icon.dart';
-import '../state_widgets.dart';
 import '../skeuo/skeuo_tokens.dart';
+import 'entity_synergies_view.dart';
 
-/// SYNERGIES section for gun detail. Two modes driven by the global
-/// `VisualPrefs.showLichEyeBulletsSynergies` toggle:
+/// SYNERGIES section for gun detail — a swipeable pager:
 ///
-/// * **Lich's Eye Bullets (default):** every synergy the gun participates
-///   in is listed as a simulated/active row — the "what if LEB is owned"
-///   view requested for all weapons.
-/// * **Actual:** synergies grouped COMPLETE → PARTIAL → LOCKED against the
-///   real inventory. Every synergy is listed (no active/partial filter),
-///   so each gun always has the full list.
-class GunSynergiesTab extends StatelessWidget {
-  final List<SynergyStatus> statuses;
+/// * **ALL** — every synergy grouped COMPLETE / PARTIAL / LOCKED against
+///   the combined P1+P2 inventory, with owner pills showing which
+///   player(s) hold pieces.
+/// * **P1 / P2** — the same grouping computed against that player's
+///   inventory only (co-op runs only; empty players show just a label).
+/// * **LEB** — Lich's Eye Bullets simulated view: every synergy the gun
+///   participates in as a ghost/dashed row, with EXTRA REQ chips where
+///   the effect text implies additional requirements. Only present when
+///   the resolved [lebView] context allows simulation (catalog/browse/
+///   codex on, active-run surfaces off).
+class GunSynergiesTab extends StatefulWidget {
   final String currentName;
+
+  /// Whether the LEB simulated page is offered (and starts selected).
+  /// Resolved by ItemDetailScreen from the lebView param / prefs.
+  final bool lebView;
   const GunSynergiesTab({
     super.key,
-    required this.statuses,
     required this.currentName,
+    required this.lebView,
   });
 
   @override
+  State<GunSynergiesTab> createState() => _GunSynergiesTabState();
+}
+
+class _GunSynergiesTabState extends State<GunSynergiesTab> {
+  final _pageCtrl = PageController();
+  int _page = 0;
+  bool _didInitLeb = false;
+
+  @override
+  void dispose() {
+    _pageCtrl.dispose();
+    super.dispose();
+  }
+
+  List<SynergyStatus> _statusesFor(
+    RunProvider p,
+    List<String> ownedNames,
+  ) {
+    final ownedLower = ownedNames.map((n) => n.toLowerCase()).toSet();
+    return p
+        .getSynergiesFor(widget.currentName)
+        .map(
+          (s) => SynergyStatus(
+            synergy: s,
+            missing: s.missingFor(ownedLower),
+            active: s.matchesItems(ownedNames),
+          ),
+        )
+        .toList()
+      ..sort((a, b) {
+        if (a.active != b.active) return a.active ? -1 : 1;
+        return a.missing.length.compareTo(b.missing.length);
+      });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<VisualPrefs>(
-      valueListenable: VisualPrefs.notifier,
-      builder: (context, prefs, _) {
-        if (prefs.showLichEyeBulletsSynergies) {
-          return _LichEyeBulletsView(
-            statuses: statuses,
-            currentName: currentName,
-          );
+    final p = context.watch<RunProvider>();
+    final coop = p.runState.coop;
+    final hasCoop = coop != null;
+
+    // Page keys in display order — LEB last so ALL stays the default
+    // landing view even when simulation is enabled.
+    final pages = <String>['ALL'];
+    if (hasCoop) pages.addAll(['P1', 'P2']);
+    if (widget.lebView) pages.add('LEB');
+
+    // Solo + no LEB → nothing to page between; render the flat list.
+    if (pages.length == 1) {
+      final owned = p.runState.allItemNames;
+      return EntitySynergiesView(
+        statuses: _statusesFor(p, owned),
+        currentName: widget.currentName,
+        ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
+      );
+    }
+
+    // LEB-enabled contexts land on the simulated page — that's the
+    // "every gun has the list by default" ask. ALL/P1/P2 remain one
+    // swipe away for real-state inspection. Jump once, then leave the
+    // user in control of the pager.
+    if (widget.lebView && !_didInitLeb && pages.last == 'LEB') {
+      _didInitLeb = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _pageCtrl.hasClients) {
+          _pageCtrl.jumpToPage(pages.length - 1);
         }
-        return _ActualSynergiesView(
-          statuses: statuses,
-          currentName: currentName,
+      });
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _PageChips(
+          pages: pages,
+          selected: _page,
+          onSelect: (i) {
+            Haptics.selection();
+            _pageCtrl.animateToPage(
+              i,
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+            );
+          },
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.52,
+          child: PageView.builder(
+            controller: _pageCtrl,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemCount: pages.length,
+            itemBuilder: (context, i) {
+              final key = pages[i];
+              return _pageFor(key, p, coop != null);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _pageFor(String key, RunProvider p, bool hasCoop) {
+    switch (key) {
+      case 'LEB':
+        return _LebPage(currentName: widget.currentName);
+      case 'P1':
+      case 'P2':
+        final owned =
+            key == 'P1'
+                ? p.runState.main.allItemNames
+                : (p.runState.coop?.allItemNames ?? const <String>[]);
+        if (owned.isEmpty) {
+          return _EmptyPlayerNote(label: key);
+        }
+        return _scrollable(
+          EntitySynergiesView(
+            statuses: _statusesFor(p, owned),
+            currentName: widget.currentName,
+            ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
+          ),
         );
-      },
+      default:
+        final owned = p.runState.allItemNames;
+        return _scrollable(
+          EntitySynergiesView(
+            statuses: _statusesFor(p, owned),
+            currentName: widget.currentName,
+            ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
+          ),
+        );
+    }
+  }
+
+  Widget _scrollable(Widget child) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: child,
     );
   }
 }
 
-/// Lich's Eye Bullets simulated view — flat list of every synergy the
-/// gun participates in, styled as active/simulated regardless of the
-/// real inventory.
-class _LichEyeBulletsView extends StatelessWidget {
-  final List<SynergyStatus> statuses;
-  final String currentName;
-  const _LichEyeBulletsView({
-    required this.statuses,
-    required this.currentName,
+class _PageChips extends StatelessWidget {
+  final List<String> pages;
+  final int selected;
+  final ValueChanged<int> onSelect;
+  const _PageChips({
+    required this.pages,
+    required this.selected,
+    required this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (statuses.isEmpty) {
-      return const _EmptySynergies();
-    }
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 4, 14, 8),
+      child: Row(
+        children: [
+          for (var i = 0; i < pages.length; i++) ...[
+            if (i > 0) const SizedBox(width: 6),
+            _chip(pages[i], i == selected, () => onSelect(i)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _chip(String label, bool active, VoidCallback onTap) {
+    final leb = label == 'LEB';
+    final color =
+        leb ? const Color(0xFFB388FF) : (active ? Colors.white : Colors.white54);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        decoration: BoxDecoration(
+          color:
+              active
+                  ? (leb
+                      ? const Color(0xFFB388FF).withValues(alpha: 0.18)
+                      : Colors.white.withValues(alpha: 0.12))
+                  : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color:
+                active
+                    ? color.withValues(alpha: 0.7)
+                    : Colors.white.withValues(alpha: 0.18),
+            width: active ? 1.2 : 0.8,
+          ),
+        ),
+        child: GoopText(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.8,
+            color: color,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// P1/P2 page when that player holds nothing — label only, per spec.
+class _EmptyPlayerNote extends StatelessWidget {
+  final String label;
+  const _EmptyPlayerNote({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GoopText(
+        '$label has no items yet.',
+        style: TextStyle(
+          fontSize: 12,
+          color: Colors.white.withValues(alpha: 0.4),
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// LEB simulated page
+// ---------------------------------------------------------------------------
+
+/// True when the synergy's effect text implies extra requirements under
+/// Lich's Eye Bullets (conditionals, per-count scaling, replacements).
+/// Heuristic — the JSON carries no structured requirement flag.
+bool synergyMayHaveExtraRequirement(Synergy s) {
+  final t = s.effect.toLowerCase();
+  const keys = [
+    'requires',
+    'only if',
+    'only when',
+    'while ',
+    ' per ',
+    'each ',
+    'every ',
+    'after ',
+    'once per',
+    'at least',
+    'instead',
+    'replaces',
+    'cannot ',
+    ' out of ',
+    'when ',
+    'if ',
+  ];
+  return keys.any(t.contains);
+}
+
+class _LebPage extends StatelessWidget {
+  final String currentName;
+  const _LebPage({required this.currentName});
+
+  @override
+  Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final sorted = [...statuses]
-      ..sort((a, b) => a.synergy.name.compareTo(b.synergy.name));
+    final synergies = p.getSynergiesFor(currentName);
     final lebIcon = p.itemByName("Lich's Eye Bullets")?.icon ?? '';
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 4, 14, 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _LebHeader(iconPath: lebIcon),
-          const SizedBox(height: 10),
-          for (final st in sorted)
-            _SynergyRow(
-              status: st,
-              owners: 'LEB',
-              missing: null,
-              p: p,
-              simulated: true,
-            ),
-        ],
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 4, 14, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _LebHeader(iconPath: lebIcon),
+            const SizedBox(height: 10),
+            if (synergies.isEmpty)
+              _NoLebSynergies()
+            else ...[
+              for (final s in [...synergies]
+                ..sort((a, b) => a.name.compareTo(b.name)))
+                _GhostSynergyRow(synergy: s),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -110,14 +346,21 @@ class _LebHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GoopText(
-                "LICH'S EYE BULLETS",
-                style: TextStyle(
-                  fontSize: FontSizes.labelSmall,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.4,
-                  color: accent,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GoopText(
+                      "LICH'S EYE BULLETS",
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.4,
+                        color: accent,
+                      ),
+                    ),
+                  ),
+                  _InfoButton(onTap: () => _showLebExplainer(context)),
+                ],
               ),
               const SizedBox(height: 2),
               GoopText(
@@ -137,316 +380,250 @@ class _LebHeader extends StatelessWidget {
   }
 }
 
-/// Actual inventory view — COMPLETE / PARTIAL / LOCKED groups covering
-/// every synergy the gun participates in.
-class _ActualSynergiesView extends StatelessWidget {
-  final List<SynergyStatus> statuses;
-  final String currentName;
-  const _ActualSynergiesView({
-    required this.statuses,
-    required this.currentName,
-  });
+class _InfoButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const _InfoButton({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    if (statuses.isEmpty) {
-      return const _EmptySynergies();
-    }
-    final p = context.read<RunProvider>();
-    final mainNames =
-        p.runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
-    final coop = p.runState.coop;
-    final coopNames =
-        coop == null
-            ? const <String>{}
-            : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
-    final owned = p.currentOwnedLower;
-
-    final complete = <SynergyStatus>[];
-    final partial = <SynergyStatus>[];
-    final locked = <SynergyStatus>[];
-    for (final st in statuses) {
-      if (st.active) {
-        complete.add(st);
-      } else if (_hasAnyPiece(st, owned, currentName)) {
-        partial.add(st);
-      } else {
-        locked.add(st);
-      }
-    }
-
-    String ownersOf(SynergyStatus st) {
-      final s = st.synergy;
-      var p1 = false, p2 = false;
-      for (final piece in [...s.items, ...s.anyOf]) {
-        final pl = piece.toLowerCase();
-        if (pl == currentName.toLowerCase()) continue;
-        if (mainNames.contains(pl)) p1 = true;
-        if (coopNames.contains(pl)) p2 = true;
-      }
-      return coop == null
-          ? 'P1'
-          : (p1 && p2
-              ? 'P1+P2'
-              : p2
-              ? 'P2'
-              : 'P1');
-    }
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 4, 14, 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (complete.isNotEmpty) ...[
-            _GroupHeader(
-              label: 'COMPLETE',
-              color: Skeuo.inkIf(Colors.greenAccent),
-              icon: Icons.check_circle_rounded,
-            ),
-            const SizedBox(height: 6),
-            for (final st in complete)
-              _SynergyRow(
-                status: st,
-                owners: ownersOf(st),
-                missing: null,
-                p: p,
-              ),
-          ],
-          if (partial.isNotEmpty) ...[
-            if (complete.isNotEmpty) const SizedBox(height: 14),
-            _GroupHeader(
-              label: 'PARTIAL',
-              color: Skeuo.inkIf(Colors.amberAccent),
-              icon: Icons.pie_chart_outline_rounded,
-            ),
-            const SizedBox(height: 6),
-            for (final st in partial)
-              _SynergyRow(
-                status: st,
-                owners: ownersOf(st),
-                missing: _firstMissing(st, owned, currentName),
-                p: p,
-              ),
-          ],
-          if (locked.isNotEmpty) ...[
-            if (complete.isNotEmpty || partial.isNotEmpty)
-              const SizedBox(height: 14),
-            _GroupHeader(
-              label: 'LOCKED',
-              color: Colors.white38,
-              icon: Icons.lock_outline_rounded,
-            ),
-            const SizedBox(height: 6),
-            for (final st in locked)
-              _SynergyRow(
-                status: st,
-                owners: 'NONE',
-                missing: _firstMissing(st, owned, currentName),
-                p: p,
-              ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  /// True when the player owns at least one OTHER piece of this
-  /// synergy (the current gun doesn't count — they have it already).
-  static bool _hasAnyPiece(
-    SynergyStatus st,
-    Set<String> owned,
-    String currentName,
-  ) {
-    final cur = currentName.toLowerCase();
-    for (final piece in [...st.synergy.items, ...st.synergy.anyOf]) {
-      final pl = piece.toLowerCase();
-      if (pl != cur && owned.contains(pl)) return true;
-    }
-    return false;
-  }
-
-  /// First unowned required piece — drives the "missing item" icon.
-  static String _firstMissing(
-    SynergyStatus st,
-    Set<String> owned,
-    String currentName,
-  ) {
-    final cur = currentName.toLowerCase();
-    for (final piece in st.synergy.items) {
-      final pl = piece.toLowerCase();
-      if (pl != cur && !owned.contains(pl)) return piece;
-    }
-    for (final piece in st.synergy.anyOf) {
-      final pl = piece.toLowerCase();
-      if (pl != cur && !owned.contains(pl)) return piece;
-    }
-    return currentName;
-  }
-}
-
-class _EmptySynergies extends StatelessWidget {
-  const _EmptySynergies();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 40),
-      child: EmptyState(
-        icon: Icons.hub_outlined,
-        message: 'No synergies to show.',
-        flavor: 'This gun keeps to itself.',
-      ),
-    );
-  }
-}
-
-class _GroupHeader extends StatelessWidget {
-  final String label;
-  final Color color;
-  final IconData icon;
-  const _GroupHeader({
-    required this.label,
-    required this.color,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 13, color: color),
-        const SizedBox(width: 6),
-        GoopText(
-          label,
-          style: TextStyle(
-            fontSize: FontSizes.labelSmall,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.4,
-            color: color.withValues(alpha: 0.9),
-          ),
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: Icon(
+          Icons.info_outline_rounded,
+          size: 16,
+          color: Colors.white.withValues(alpha: 0.5),
         ),
-      ],
+      ),
     );
   }
 }
 
-class _SynergyRow extends StatelessWidget {
-  final SynergyStatus status;
-  final String owners;
-  final String? missing;
-  final RunProvider p;
-  final bool simulated;
-  const _SynergyRow({
-    required this.status,
-    required this.owners,
-    required this.missing,
-    required this.p,
-    this.simulated = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = status.synergy;
-    // Icon: the missing piece for partials/locked, the synergy's own icon
-    // (or first piece) for completes and LEB-simulated rows.
-    var iconPath = s.icon;
-    var iconName = missing ?? '';
-    if (missing != null) {
-      final resolved = p.entityByName(missing!);
-      iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? iconPath;
-      iconName = missing!;
-    } else if (iconPath.isEmpty && s.items.isNotEmpty) {
-      final resolved = p.entityByName(s.items.first);
-      iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
-    }
-
-    final accent =
-        simulated
-            ? Skeuo.inkIf(const Color(0xFFB388FF))
-            : status.active
-            ? Skeuo.inkIf(Colors.greenAccent)
-            : Skeuo.inkIf(Colors.amberAccent);
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.all(Radii.md),
-        border: Border.all(color: accent.withValues(alpha: 0.25), width: 0.8),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Tooltip(
-            message: iconName.isNotEmpty ? iconName : s.name,
-            child: GameIcon(
-              assetPath: iconPath,
-              fallback: Icons.hub_outlined,
-              quality: '',
-              size: 40,
-              showRing: false,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
+/// In-app explainer (Q11) — pulls the LEB item's own effect + wiki
+/// notes so the rules text ships with the data, not hardcoded.
+void _showLebExplainer(BuildContext context) {
+  final p = context.read<RunProvider>();
+  final leb = p.itemByName("Lich's Eye Bullets");
+  final notes =
+      leb?.wiki.notes.map((b) => b.plainText).where((t) => t.isNotEmpty) ??
+      const <String>[];
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: AppTheme.flair.card,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+    ),
+    builder:
+        (ctx) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: GoopText(
-                        s.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    _OwnerPill(label: owners),
-                  ],
+                GoopText(
+                  "LICH'S EYE BULLETS",
+                  style: TextStyle(
+                    fontSize: FontSizes.labelSmall,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.4,
+                    color: Skeuo.inkIf(const Color(0xFFB388FF)),
+                  ),
                 ),
-                if (s.effect.isNotEmpty) ...[
-                  const SizedBox(height: 4),
+                const SizedBox(height: 8),
+                if (leb?.effect.isNotEmpty ?? false)
                   GoopText(
-                    s.prettyEffect.isNotEmpty ? s.prettyEffect : s.effect,
+                    leb!.effect,
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.4,
+                      color: Colors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                for (final n in notes) ...[
+                  const SizedBox(height: 8),
+                  GoopText(
+                    '• $n',
                     style: TextStyle(
                       fontSize: 12,
-                      height: 1.35,
+                      height: 1.4,
                       color: Colors.white.withValues(alpha: 0.65),
                     ),
                   ),
                 ],
+                const SizedBox(height: 12),
+                GoopText(
+                  'Rows marked EXTRA REQ may need additional items or '
+                  'conditions that LEB does not simulate.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white.withValues(alpha: 0.45),
+                  ),
+                ),
               ],
             ),
           ),
-        ],
+        ),
+  );
+}
+
+/// Zero-synergy gun under LEB — header stays, honest note instead of
+/// the generic empty state (Q3).
+class _NoLebSynergies extends StatelessWidget {
+  const _NoLebSynergies();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.all(Radii.md),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+      child: GoopText(
+        'This gun has no synergies — even Lich\'s Eye Bullets '
+        'can\'t help it.',
+        style: TextStyle(
+          fontSize: 12.5,
+          height: 1.4,
+          fontStyle: FontStyle.italic,
+          color: Colors.white.withValues(alpha: 0.55),
+        ),
       ),
     );
   }
 }
 
-class _OwnerPill extends StatelessWidget {
-  final String label;
-  const _OwnerPill({required this.label});
+/// Ghost/dashed simulated row — visually distinct from real
+/// COMPLETE/PARTIAL/LOCKED cards (Q6).
+class _GhostSynergyRow extends StatelessWidget {
+  final Synergy synergy;
+  const _GhostSynergyRow({required this.synergy});
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        label == 'LEB'
-            ? Skeuo.inkIf(const Color(0xFFB388FF))
-            : label == 'NONE'
-            ? Colors.white38
-            : label.contains('+')
-            ? Skeuo.inkIf(Colors.cyanAccent)
-            : label == 'P2'
-            ? Skeuo.inkIf(Colors.orangeAccent)
-            : Skeuo.inkIf(Colors.lightGreenAccent);
+    final p = context.read<RunProvider>();
+    final accent = Skeuo.inkIf(const Color(0xFFB388FF));
+    final extraReq = synergyMayHaveExtraRequirement(synergy);
+
+    var iconPath = synergy.icon;
+    if (iconPath.isEmpty && synergy.items.isNotEmpty) {
+      final resolved = p.entityByName(synergy.items.first);
+      iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
+    }
+
+    return Opacity(
+      opacity: 0.85,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: accent.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.all(Radii.md),
+        ),
+        child: CustomPaint(
+          painter: _DashedBorderPainter(
+            color: accent.withValues(alpha: 0.4),
+            radius: Radii.md,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GameIcon(
+                assetPath: iconPath,
+                fallback: Icons.hub_outlined,
+                quality: '',
+                size: 40,
+                showRing: false,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GoopText(
+                            synergy.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        if (extraReq)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: Tooltip(
+                              message:
+                                  'May have extra requirements under '
+                                  "Lich's Eye Bullets",
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.amber.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: Colors.amber.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                child: GoopText(
+                                  'EXTRA REQ',
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.6,
+                                    color: Skeuo.inkIf(Colors.amberAccent),
+                                  ),
+                                ),
+                              ),
+                            ),
+                      ),
+                      _LebPill(),
+                      ],
+                    ),
+                    if (synergy.effect.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      GoopText(
+                        synergy.prettyEffect.isNotEmpty
+                            ? synergy.prettyEffect
+                            : synergy.effect,
+                        style: TextStyle(
+                          fontSize: 12,
+                          height: 1.35,
+                          color: Colors.white.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LebPill extends StatelessWidget {
+  const _LebPill();
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Skeuo.inkIf(const Color(0xFFB388FF));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
@@ -455,7 +632,7 @@ class _OwnerPill extends StatelessWidget {
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: GoopText(
-        label,
+        'LEB',
         style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w800,
@@ -465,4 +642,41 @@ class _OwnerPill extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Minimal dashed rounded-rect border for ghost rows.
+class _DashedBorderPainter extends CustomPainter {
+  final Color color;
+  final Radius radius;
+  _DashedBorderPainter({required this.color, required this.radius});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
+    final rrect = RRect.fromRectAndRadius(
+      Offset.zero & size,
+      Radius.circular(radius.x),
+    );
+    final path = Path()..addRRect(rrect);
+    for (final metric in path.computeMetrics()) {
+      var dist = 0.0;
+      const dash = 5.0;
+      const gap = 4.0;
+      while (dist < metric.length) {
+        canvas.drawPath(
+          metric.extractPath(dist, (dist + dash).clamp(0, metric.length)),
+          paint,
+        );
+        dist += dash + gap;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedBorderPainter old) =>
+      old.color != color || old.radius != radius;
 }

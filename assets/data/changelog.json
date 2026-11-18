@@ -4,6 +4,7 @@
     "date": "2026-11",
     "sections": {
       "Features": [
+        "LEB synergy expansion — swipeable ALL / P1 / P2 / LEB pager on gun details (co-op shows per-player views), ghost-dashed simulated rows, EXTRA REQ chips, in-app LEB explainer, items get the grouped all-list, browse LEB toggle + LEB badges, codex simulated states",
         "Lich's Eye Bullets simulated-synergy view for all guns — Settings → Gameplay → Synergies toggle (on by default); every gun detail lists all its synergies as if LEB is owned",
         "Gun detail synergies rework — every gun now lists ALL its synergies grouped COMPLETE / PARTIAL / LOCKED instead of hiding inactive ones"
       ],
@@ -18,6 +19,7 @@
         "Mode-switcher trackers cut (Shellegun, Chamber Gun, Polaris, Triple Gun) per usability review"
       ],
       "Fixes": [
+        "Gun detail synergy list now works for every gun — full grouped list replaces the broken partial view",
         "Gun detail synergy section no longer hides inactive synergies — every gun shows its full list",
         "Browse row meta overflow at ≤500px",
         "Particle TYPE picker ignored (all types drew circles)",

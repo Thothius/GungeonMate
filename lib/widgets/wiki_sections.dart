@@ -7,6 +7,7 @@ import '../screens/item_detail_screen.dart';
 import '../services/haptics.dart';
 import '../utils/fast_route.dart';
 import 'game_icon.dart';
+import 'item_detail/leb_view_scope.dart';
 import 'rich_link_text.dart';
 import '../services/goop_talk_engine.dart';
 import 'skeuo/skeuo_tokens.dart';
@@ -334,7 +335,13 @@ class BackRefChip extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
           Navigator.push(
             context,
-            fastRoute(ItemDetailScreen(gun: g, item: it)),
+            fastRoute(
+              ItemDetailScreen(
+                gun: g,
+                item: it,
+                lebView: LebViewScope.maybeOf(context),
+              ),
+            ),
           );
         },
         // Matches the peek affordance on synergy chips and inline rich-

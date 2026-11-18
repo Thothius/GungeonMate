@@ -7,6 +7,7 @@ import '../../theme/tokens.dart';
 import '../../services/haptics.dart';
 import '../../utils/fast_route.dart';
 import '../rich_link_text.dart';
+import 'leb_view_scope.dart';
 import '../../screens/item_detail_screen.dart';
 import '../skeuo/skeuo_tokens.dart';
 
@@ -372,7 +373,13 @@ class SynergyChip extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
           Navigator.push(
             context,
-            fastRoute(ItemDetailScreen(gun: gun, item: item)),
+            fastRoute(
+              ItemDetailScreen(
+                gun: gun,
+                item: item,
+                lebView: LebViewScope.maybeOf(context),
+              ),
+            ),
           );
         },
         onLongPress: () {

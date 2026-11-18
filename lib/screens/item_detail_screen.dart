@@ -18,9 +18,10 @@ import '../widgets/item_detail/header.dart';
 import '../widgets/item_detail/gun_stats.dart';
 import '../utils/responsive.dart';
 import '../widgets/item_detail/item_body.dart';
-import '../widgets/item_detail/synergies_section.dart';
 import '../widgets/item_detail/gun_notes_tab.dart';
 import '../widgets/item_detail/gun_synergies_tab.dart';
+import '../widgets/item_detail/entity_synergies_view.dart';
+import '../widgets/item_detail/leb_view_scope.dart';
 import '../widgets/item_detail/destroy_banner.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 
@@ -33,8 +34,20 @@ class ItemDetailScreen extends StatefulWidget {
   /// whichever slot currently owns this entry (main takes precedence).
   final PlayerSlot? ownerSlot;
 
-  const ItemDetailScreen({super.key, this.gun, this.item, this.ownerSlot})
-    : assert(gun != null || item != null);
+  /// LEB simulation override for the synergy section:
+  /// * `true` — offer the LEB simulated page (catalog/browse/codex).
+  /// * `false` — real inventory views only (active-run surfaces).
+  /// * `null` — resolve from context: ownerSlot present → false,
+  ///   otherwise the global `VisualPrefs.showLichEyeBulletsSynergies`.
+  final bool? lebView;
+
+  const ItemDetailScreen({
+    super.key,
+    this.gun,
+    this.item,
+    this.ownerSlot,
+    this.lebView,
+  }) : assert(gun != null || item != null);
 
   @override
   State<ItemDetailScreen> createState() => _ItemDetailScreenState();
@@ -122,7 +135,20 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       // tablets/desktop without a constraint. SizedBox pins BOTH
       // axes so the scrollable can't collapse inside loose
       // Center/ConstrainedBox constraints.
-      body: LayoutBuilder(
+      // Resolved LEB mode — explicit param wins, then run-context
+      // (ownerSlot) forces real state, else the global pref. Watched
+      // so flipping the setting live-swaps the synergy view.
+      body: ValueListenableBuilder<VisualPrefs>(
+        valueListenable: VisualPrefs.notifier,
+        builder: (context, prefs, _) {
+          final lebView =
+              widget.lebView ??
+              (ownerSlot != null
+                  ? false
+                  : prefs.showLichEyeBulletsSynergies);
+          return LebViewScope(
+        lebView: lebView,
+        child: LayoutBuilder(
         builder:
             (context, cons) => Center(
               child: SizedBox(
@@ -203,12 +229,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       ),
                     if (gun != null)
                       SliverToBoxAdapter(
-                        child: SizedBox(
-                          key: _synergyKey,
-                          child: GunSynergiesTab(
-                            statuses: synergyStatuses,
-                            currentName: name,
-                          ),
+                        child: GunSynergiesTab(
+                          currentName: name,
+                          lebView: lebView,
                         ),
                       ),
                     if (gun != null)
@@ -218,17 +241,33 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           elements: ElementalTagger.elementsOfGun(gun),
                         ),
                       ),
+                    // Items get the same grouped all-list as guns
+                    // (COMPLETE/PARTIAL/LOCKED) — no pager, no LEB
+                    // simulation (LEB only affects guns in-game).
                     if (item != null)
                       SliverToBoxAdapter(
-                        child: SizedBox(
-                          key: _synergyKey,
-                          height: MediaQuery.of(context).size.height * 0.5,
-                          child: SingleChildScrollView(
-                            child: SynergiesSection(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              key: _synergyKey,
+                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                              child: GoopText(
+                                'SYNERGIES',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.2,
+                                  color: Colors.white.withValues(alpha: 0.7),
+                                ),
+                              ),
+                            ),
+                            EntitySynergiesView(
                               statuses: synergyStatuses,
                               currentName: name,
+                              ownedLower: owned,
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     // ---- Ammonomicon flavour entry + wiki rich content
@@ -281,6 +320,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 ),
               ),
             ),
+        ),
+          );
+        },
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(

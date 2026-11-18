@@ -72,10 +72,14 @@ void main() {
     }
   }
 
+  // NB: the detail pager adds a horizontal PageView Scrollable, so
+  // scrollUntilVisible calls must pass `scrollable:
+  // find.byType(Scrollable).first` (the outer vertical one) explicitly.
   Future<void> scrollToSynergySection(WidgetTester t) async {
     await t.scrollUntilVisible(
       find.textContaining('LICH'),
       400,
+      scrollable: find.byType(Scrollable).first,
       maxScrolls: 40,
     );
     await t.pump();
@@ -144,8 +148,16 @@ void main() {
       await VisualPrefs.setShowLichEyeBulletsSynergies(false);
       await t.pump();
       // ValueListenableBuilder must rebuild without a re-pumpWidget.
-      expect(find.text('LOCKED'), findsOneWidget);
       expect(find.text("LICH'S EYE BULLETS"), findsNothing);
+      // Flat grouped list — LOCKED header sits below the fold.
+      await t.scrollUntilVisible(
+        find.text('LOCKED'),
+        400,
+        scrollable: find.byType(Scrollable).first,
+        maxScrolls: 40,
+      );
+      await t.pump();
+      expect(find.text('LOCKED'), findsOneWidget);
       expect(find.text(pair.synergy.name), findsOneWidget);
     });
   });
@@ -156,7 +168,12 @@ void main() {
       final pair = findPair();
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
-      await t.scrollUntilVisible(find.text('LOCKED'), 400, maxScrolls: 40);
+      await t.scrollUntilVisible(
+        find.text('LOCKED'),
+        400,
+        scrollable: find.byType(Scrollable).first,
+        maxScrolls: 40,
+      );
       await t.pump();
 
       expect(t.takeException(), isNull);
@@ -174,7 +191,12 @@ void main() {
       await t.pump(const Duration(milliseconds: 500));
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
-      await t.scrollUntilVisible(find.text('PARTIAL'), 400, maxScrolls: 40);
+      await t.scrollUntilVisible(
+        find.text('PARTIAL'),
+        400,
+        scrollable: find.byType(Scrollable).first,
+        maxScrolls: 40,
+      );
       await t.pump();
 
       expect(t.takeException(), isNull);
@@ -191,12 +213,117 @@ void main() {
       await t.pump(const Duration(milliseconds: 500));
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
-      await t.scrollUntilVisible(find.text('COMPLETE'), 400, maxScrolls: 40);
+      await t.scrollUntilVisible(
+        find.text('COMPLETE'),
+        400,
+        scrollable: find.byType(Scrollable).first,
+        maxScrolls: 40,
+      );
       await t.pump();
 
       expect(t.takeException(), isNull);
       expect(find.text('COMPLETE'), findsOneWidget);
       expect(find.text(pair.synergy.name), findsOneWidget);
+    });
+  });
+
+  group('gun detail — swipeable pager', () {
+    testWidgets('co-op run offers ALL/P1/P2/LEB pages', (t) async {
+      // Empty co-op slot — P2 page should show the label-only empty note.
+      p.applyPartnerSnapshot(
+        characterName: '',
+        gunNames: const [],
+        itemNames: const [],
+      );
+      await t.pump(const Duration(milliseconds: 500));
+      final pair = findPair();
+      await t.pumpWidget(
+        wrap(ItemDetailScreen(gun: pair.gun, lebView: true)),
+      );
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+      await scrollToSynergySection(t);
+
+      expect(t.takeException(), isNull);
+      // Chips for every page are present.
+      for (final label in ['ALL', 'P1', 'P2', 'LEB']) {
+        expect(find.text(label), findsWidgets, reason: 'missing $label');
+      }
+      // LEB context lands on the simulated page.
+      expect(find.text("LICH'S EYE BULLETS"), findsOneWidget);
+
+      // Swipe back one page (LEB → P2) — empty player shows label only.
+      await t.drag(find.byType(PageView), const Offset(400, 0));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 300));
+      expect(find.text('P2 has no items yet.'), findsOneWidget);
+    });
+
+    testWidgets('run-context detail (lebView false) hides the LEB page', (
+      t,
+    ) async {
+      final pair = findPair();
+      await t.pumpWidget(
+        wrap(ItemDetailScreen(gun: pair.gun, lebView: false)),
+      );
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+      await t.scrollUntilVisible(
+        find.text('LOCKED'),
+        400,
+        scrollable: find.byType(Scrollable).first,
+        maxScrolls: 40,
+      );
+      await t.pump();
+
+      expect(t.takeException(), isNull);
+      expect(find.text("LICH'S EYE BULLETS"), findsNothing);
+      // Solo + no LEB → flat grouped list, no pager chips at all.
+      expect(find.text('LEB'), findsNothing);
+      expect(find.text('LOCKED'), findsOneWidget);
+    });
+  });
+
+  group('item detail — grouped all-list', () {
+    testWidgets('item lists every synergy grouped by state', (t) async {
+      // Find an item + simple 2-piece synergy whose partner resolves.
+      ({String item, String partner, String synName})? found;
+      for (final item in p.allItems) {
+        final lower = item.name.toLowerCase();
+        for (final s in p.getSynergiesFor(item.name)) {
+          if (s.items.length != 2 || s.anyOf.isNotEmpty) continue;
+          if (!s.items.any((i) => i.toLowerCase() == lower)) continue;
+          final partner = s.items.firstWhere(
+            (i) => i.toLowerCase() != lower,
+          );
+          final r = p.entityByName(partner);
+          if (r.gun != null || r.item != null) {
+            found = (item: item.name, partner: partner, synName: s.name);
+            break;
+          }
+        }
+        if (found != null) break;
+      }
+      final f = found ?? (throw StateError('no item synergy pair'));
+      ownPartner(f.partner);
+      await t.pump(const Duration(milliseconds: 500));
+
+      final item = p.allItems.firstWhere((i) => i.name == f.item);
+      await t.pumpWidget(wrap(ItemDetailScreen(item: item)));
+      await t.pump();
+      await t.scrollUntilVisible(
+        find.text('PARTIAL'),
+        400,
+        scrollable: find.byType(Scrollable).first,
+        maxScrolls: 40,
+      );
+      await t.pump();
+
+      expect(t.takeException(), isNull);
+      expect(find.text('PARTIAL'), findsOneWidget);
+      expect(find.text(f.synName), findsOneWidget);
+      // Items never get the LEB simulated view.
+      expect(find.text("LICH'S EYE BULLETS"), findsNothing);
     });
   });
 
@@ -208,19 +335,24 @@ void main() {
         (g) => p.getSynergiesFor(g.name).isEmpty,
         orElse: () => throw StateError('every gun has a synergy'),
       );
-      // Both modes must degrade to the same empty state.
+      // Both modes must degrade to an honest empty state — the LEB
+      // page keeps its header + note, the real view shows the generic
+      // empty state.
       for (final leb in [true, false]) {
         await VisualPrefs.setShowLichEyeBulletsSynergies(leb);
         await t.pumpWidget(wrap(ItemDetailScreen(gun: gun)));
         await t.pump();
+        await t.pump(const Duration(milliseconds: 100));
+        final expected = leb ? 'This gun has no synergies' : 'No synergies';
         await t.scrollUntilVisible(
-          find.text('No synergies to show.'),
+          find.textContaining(expected),
           400,
+          scrollable: find.byType(Scrollable).first,
           maxScrolls: 40,
         );
         await t.pump();
         expect(t.takeException(), isNull);
-        expect(find.text('No synergies to show.'), findsOneWidget);
+        expect(find.textContaining(expected), findsWidgets);
       }
     });
 
@@ -242,6 +374,51 @@ void main() {
   });
 
   group('data integrity', () {
+    test('all-guns sweep: every gun partitions cleanly in every view', () {
+      // For every gun × every inventory slice, COMPLETE + PARTIAL +
+      // LOCKED must account for ALL of its synergies — no drops, no
+      // double-counts. This is the bughunt net for the pager views.
+      final slices = <String, List<String>>{
+        'ALL': p.runState.allItemNames,
+        'P1': p.runState.main.allItemNames,
+        'P2': p.runState.coop?.allItemNames ?? const <String>[],
+      };
+      for (final g in p.allGuns) {
+        final synergies = p.getSynergiesFor(g.name);
+        final cur = g.name.toLowerCase();
+        for (final slice in slices.entries) {
+          final owned = slice.value;
+          final ownedLower = owned.map((n) => n.toLowerCase()).toSet();
+          var complete = 0, partial = 0, locked = 0;
+          for (final s in synergies) {
+            if (s.matchesItems(owned)) {
+              complete++;
+            } else {
+              final hasPiece = [
+                ...s.items,
+                ...s.anyOf,
+              ].any((i) {
+                final pl = i.toLowerCase();
+                return pl != cur && ownedLower.contains(pl);
+              });
+              if (hasPiece) {
+                partial++;
+              } else {
+                locked++;
+              }
+            }
+          }
+          expect(
+            complete + partial + locked,
+            synergies.length,
+            reason:
+                '${g.name} [${slice.key}]: '
+                '$complete+$partial+$locked != ${synergies.length}',
+          );
+        }
+      }
+    });
+
     test('every synergy piece resolves against the catalogs', () {
       final unresolved = <String>[];
       for (final s in p.allSynergies) {

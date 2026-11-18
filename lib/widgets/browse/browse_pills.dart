@@ -209,12 +209,17 @@ class GunMeta extends StatelessWidget {
   final int synergyCount;
   final List<String> completesSynergies;
   final String? ownerLabel;
+
+  /// Purple LEB badge — shown on browse rows when the browse-local
+  /// Lich's Eye Bullets toggle is on and the gun has synergies.
+  final bool lebBadge;
   const GunMeta({
     super.key,
     required this.gun,
     required this.synergyCount,
     this.completesSynergies = const [],
     this.ownerLabel,
+    this.lebBadge = false,
   });
 
   @override
@@ -234,6 +239,8 @@ class GunMeta extends StatelessWidget {
         ),
       if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
         coinPill(gun.sellPrice),
+      if (lebBadge)
+        metaPill('LEB', const Color(0xFFB388FF), icon: Icons.auto_awesome),
       if (completesSynergies.isNotEmpty)
         completesPill(completesSynergies, ownerLabel: ownerLabel),
     ];

@@ -93,7 +93,12 @@ void main() {
     await t.pump();
     // LEB mode is the default — every gun lists all its synergies as
     // simulated rows. '38 Special' has 4 synergies in the catalog.
-    await t.scrollUntilVisible(find.textContaining('LICH'), 400, maxScrolls: 20);
+    await t.scrollUntilVisible(
+      find.textContaining('LICH'),
+      400,
+      scrollable: find.byType(Scrollable).first,
+      maxScrolls: 20,
+    );
     await t.pump();
     expect(t.takeException(), isNull);
     expect(find.text('Detective Magnum'), findsOneWidget);
@@ -107,7 +112,12 @@ void main() {
     await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
     await t.pump();
     // Empty run state → every synergy is LOCKED, but still listed.
-    await t.scrollUntilVisible(find.text('LOCKED'), 400, maxScrolls: 20);
+    await t.scrollUntilVisible(
+      find.text('LOCKED'),
+      400,
+      scrollable: find.byType(Scrollable).first,
+      maxScrolls: 20,
+    );
     await t.pump();
     expect(t.takeException(), isNull);
     expect(find.text('Detective Magnum'), findsOneWidget);
