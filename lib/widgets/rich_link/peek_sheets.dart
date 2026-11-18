@@ -38,7 +38,13 @@ class _RefChipText extends StatelessWidget {
 class _PeekSheet extends StatelessWidget {
   final Gun? gun;
   final Item? item;
-  const _PeekSheet({this.gun, this.item}) : assert(gun != null || item != null);
+
+  /// Ambient LEB mode captured before the sheet opened — the sheet's
+  /// own context can't see [LebViewScope] (it sits above the detail
+  /// route), so the caller resolves and passes it through.
+  final bool? lebView;
+  const _PeekSheet({this.gun, this.item, this.lebView})
+    : assert(gun != null || item != null);
 
   @override
   Widget build(BuildContext context) {
@@ -143,11 +149,7 @@ class _PeekSheet extends StatelessWidget {
                   Navigator.push(
                     context,
                     fastRoute(
-                      ItemDetailScreen(
-                        gun: gun,
-                        item: item,
-                        lebView: LebViewScope.maybeOf(context),
-                      ),
+                      ItemDetailScreen(gun: gun, item: item, lebView: lebView),
                     ),
                   );
                 },

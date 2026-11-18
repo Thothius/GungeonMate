@@ -263,7 +263,15 @@ void showEntityPeekSheet(
     builder: (ctx) {
       if (character != null) return _CharacterPeekSheet(character: character);
       if (shrine != null) return _ShrinePeekSheet(shrine: shrine);
-      return _PeekSheet(gun: gun, item: item);
+      // Capture the ambient LEB scope HERE — the sheet's own context
+      // lives under the modal route, above LebViewScope, so maybeOf
+      // inside the sheet would always return null and silently drop
+      // browse-local LEB mode on "Open detail".
+      return _PeekSheet(
+        gun: gun,
+        item: item,
+        lebView: LebViewScope.maybeOf(context),
+      );
     },
   );
 }
