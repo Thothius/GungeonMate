@@ -2,6 +2,24 @@ part of '../app_theme.dart';
 
 // Split from theme_models.dart — same library, no import changes.
 
+/// Bundled custom-theme wallpapers — files live in
+/// `assets/images/wallpapers/custom/`. `null` on [CustomThemeData.wallpaper]
+/// means the solid CANVAS color shows through.
+final List<String> kCustomWallpaperAssets = List<String>.generate(
+  46,
+  (i) => 'wp_${(i + 1).toString().padLeft(2, '0')}.webp',
+);
+
+/// Normalize a stored wallpaper file name to the current asset set —
+/// pre-webp saves referenced `.jpg` names that no longer exist.
+String? normalizeWallpaperFileName(String? name) {
+  if (name == null) return null;
+  if (name.endsWith('.jpg')) {
+    name = '${name.substring(0, name.length - 4)}.webp';
+  }
+  return name;
+}
+
 class CustomThemeData {
   final String name;
   final Color scaffold;
@@ -13,6 +31,10 @@ class CustomThemeData {
   final AvatarAuraStyle auraStyle;
   final AppFont font;
 
+  /// Wallpaper asset file name (from [kCustomWallpaperAssets]) shown as
+  /// the app background instead of the flat [scaffold] color. Null = off.
+  final String? wallpaper;
+
   const CustomThemeData({
     required this.name,
     required this.scaffold,
@@ -23,6 +45,7 @@ class CustomThemeData {
     required this.bulletColor,
     this.auraStyle = AvatarAuraStyle.none,
     this.font = AppFont.gungeon,
+    this.wallpaper,
   });
 
   /// Serialize for embedding inside SavedCustomTheme.
@@ -36,6 +59,7 @@ class CustomThemeData {
     'bulletColor': bulletColor.toARGB32(),
     'auraStyle': auraStyle.index,
     'font': font.index,
+    'wallpaper': wallpaper,
   };
 
   /// Deserialize from embedded JSON. Color fields fall back to defaults
@@ -54,8 +78,13 @@ class CustomThemeData {
       bulletColor: Color(j['bulletColor'] as int? ?? d.bulletColor.toARGB32()),
       auraStyle: AvatarAuraStyle.values[j['auraStyle'] as int? ?? 0],
       font: AppFont.values[j['font'] as int? ?? 0],
+      wallpaper: normalizeWallpaperFileName(j['wallpaper'] as String?),
     );
   }
+
+  /// Sentinel so [copyWith] can distinguish "leave wallpaper alone"
+  /// from "clear the wallpaper" (plain `?? this.` can't pass null).
+  static const Object _unset = Object();
 
   /// Copy with optional overrides (used by color picker).
   CustomThemeData copyWith({
@@ -68,6 +97,7 @@ class CustomThemeData {
     Color? bulletColor,
     AvatarAuraStyle? auraStyle,
     AppFont? font,
+    Object? wallpaper = _unset,
   }) {
     return CustomThemeData(
       name: name ?? this.name,
@@ -79,6 +109,8 @@ class CustomThemeData {
       bulletColor: bulletColor ?? this.bulletColor,
       auraStyle: auraStyle ?? this.auraStyle,
       font: font ?? this.font,
+      wallpaper:
+          identical(wallpaper, _unset) ? this.wallpaper : wallpaper as String?,
     );
   }
 
@@ -123,6 +155,7 @@ class CustomThemeData {
           font:
               AppFont.values[json['font'] as int? ??
                   0], // Default to Gungeon (index 0)
+          wallpaper: normalizeWallpaperFileName(json['wallpaper'] as String?),
         );
       }
     } catch (e) {
@@ -145,6 +178,7 @@ class CustomThemeData {
         'bulletColor': data.bulletColor.toARGB32(),
         'auraStyle': data.auraStyle.index,
         'font': data.font.index,
+        'wallpaper': data.wallpaper,
       });
       await prefs.setString(_prefsKey, json);
     } catch (e) {

@@ -1,9 +1,13 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
 import '../theme/tokens.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
@@ -11,6 +15,7 @@ import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import 'palette_maker_screen.dart';
 import '../widgets/theme_overlay.dart';
+import '../widgets/backgrounds/custom_wallpaper.dart';
 import '../widgets/particles/ambient_glow.dart';
 import '../utils/fast_route.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
@@ -179,6 +184,21 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   /// immediately reflects the selected theme — not just the preview box.
   Widget _buildPreviewBackground() {
     final flair = AppTheme.flairFor(_previewMode);
+    // Custom theme with a wallpaper picked — show the real image +
+    // scrim instead of the flat canvas gradient.
+    final wp =
+        _previewMode == AppThemeMode.custom
+            ? AppTheme.cachedCustomTheme?.wallpaper
+            : null;
+    if (wp != null) {
+      return Positioned.fill(
+        child: CustomWallpaper(
+          assetFileName: wp,
+          scrimColor: flair.scaffold,
+          scrimStrength: 0.66,
+        ),
+      );
+    }
     return Positioned.fill(
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -405,6 +425,19 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           borderRadius: BorderRadius.circular(13),
           child: Stack(
             children: [
+              // Wallpaper under everything — the CANVAS pick previews
+              // here exactly like the app renders it.
+              if (_previewMode == AppThemeMode.custom &&
+                  AppTheme.cachedCustomTheme?.wallpaper != null)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: CustomWallpaper(
+                      assetFileName: AppTheme.cachedCustomTheme!.wallpaper!,
+                      scrimColor: AppTheme.flairFor(_previewMode).scaffold,
+                      scrimStrength: 0.72,
+                    ),
+                  ),
+                ),
               // Real particles inside the pane — every particle option
               // visibly changes the LIVE LOOK (was: wrote prefs but
               // nothing rendered → "options don't do anything").
@@ -815,12 +848,19 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         (c) => _draft.copyWith(bulletColor: c),
       ),
     ];
+    final rows = <Widget>[
+      for (var i = 0; i < roles.length; i++) ...[
+        _colorRoleRow(roles[i].$1, roles[i].$2, roles[i].$3, roles[i].$4),
+        // Wallpaper picker sits directly under CANVAS — it replaces
+        // that solid color as the app backdrop when set.
+        if (i == 0) _buildWallpaperRow(),
+      ],
+    ];
     return ListView(
       padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.lg),
       children: [
         if (_previewMode == AppThemeMode.unicorn) _buildUnicornStrip(),
-        for (final (label, desc, color, update) in roles)
-          _colorRoleRow(label, desc, color, update),
+        ...rows,
         const SizedBox(height: 14),
         ScaleButton(
           onTap: _showSaveThemeDialog,
@@ -924,6 +964,227 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         ),
       ),
     );
+  }
+
+  /// Wallpaper row under CANVAS — shows the current pick (or NONE)
+  /// and opens the wallpaper sheet. Picking one swaps the flat canvas
+  /// color for the image app-wide; NONE restores the solid color.
+  Widget _buildWallpaperRow() {
+    final wp = AppTheme.cachedCustomTheme?.wallpaper;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _showWallpaperSheet,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 26,
+                height: 34,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: _draft.scaffold,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    width: 1.2,
+                  ),
+                ),
+                child:
+                    wp == null
+                        ? const Icon(
+                          Icons.wallpaper_outlined,
+                          size: 14,
+                          color: Colors.white38,
+                        )
+                        : Image.asset(
+                          CustomWallpaper.assetPath(wp),
+                          fit: BoxFit.cover,
+                          cacheWidth: 96,
+                          errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                        ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      'WALLPAPER',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    GoopText(
+                      'app backdrop image',
+                      style: TextStyle(fontSize: 9, color: Color(0x80FFFFFF)),
+                    ),
+                  ],
+                ),
+              ),
+              GoopText(
+                wp == null
+                    ? 'NONE'
+                    : (wp.length >= 5 ? 'WP ${wp.substring(3, 5)}' : wp),
+                style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
+              ),
+              const SizedBox(width: 6),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 16,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Bottom sheet grid of bundled wallpapers + a NONE tile. Picking one
+  /// applies immediately to the draft (same live-preview path as the
+  /// color rows) and pops the sheet.
+  void _showWallpaperSheet() {
+    Haptics.selection();
+    final current = AppTheme.cachedCustomTheme?.wallpaper;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        final flair = AppTheme.flairFor(_previewMode);
+        return Container(
+          height: MediaQuery.sizeOf(ctx).height * 0.62,
+          decoration: BoxDecoration(
+            color: flair.card,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            border: Border.all(color: flair.primary.withValues(alpha: 0.3)),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GoopText(
+                        'WALLPAPER',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.4,
+                          color: flair.primary,
+                        ),
+                      ),
+                    ),
+                    GoopText(
+                      'replaces CANVAS color',
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        color: Colors.white.withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.72,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemCount: kCustomWallpaperAssets.length + 1,
+                  itemBuilder: (ctx, i) {
+                    // Tile 0 = NONE (solid canvas color).
+                    if (i == 0) {
+                      final isSel = current == null;
+                      return _WallpaperTile(
+                        selected: isSel,
+                        accent: flair.primary,
+                        onTap: () => _applyWallpaper(null),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.wallpaper_outlined,
+                              size: 26,
+                              color: isSel ? flair.primary : Colors.white54,
+                            ),
+                            const SizedBox(height: 6),
+                            GoopText(
+                              'NONE',
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.0,
+                                color:
+                                    isSel
+                                        ? flair.primary
+                                        : Colors.white.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    final file = kCustomWallpaperAssets[i - 1];
+                    final isSel = file == current;
+                    return _WallpaperTile(
+                      selected: isSel,
+                      accent: flair.primary,
+                      onTap: () => _applyWallpaper(file),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          CustomWallpaper.assetPath(file),
+                          fit: BoxFit.cover,
+                          cacheWidth: 240,
+                          errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Persist the wallpaper pick into the custom draft + live preview,
+  /// then close the sheet.
+  Future<void> _applyWallpaper(String? file) async {
+    Haptics.selection();
+    setState(() => _draft = _draft.copyWith(wallpaper: file));
+    await AppTheme.saveCustomThemeData(_draft);
+    _previewTheme(AppThemeMode.custom);
+    if (mounted && Navigator.of(context).canPop()) {
+      // Pop the bottom sheet — the studio screen itself stays open.
+      Navigator.of(context).pop();
+    }
   }
 
   /// Unicorn megapack — the 6 sub-palettes as switchable chips.

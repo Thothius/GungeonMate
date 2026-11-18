@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' show PointMode;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -13,6 +14,7 @@ import 'particles/touch_particle.dart';
 import 'particles/ambient_glow.dart';
 import 'backgrounds/page_frame.dart';
 import 'backgrounds/ambient_shader.dart';
+import 'backgrounds/custom_wallpaper.dart';
 import 'skeuo/skeuo_backdrop.dart' show SkeuoGrainPainter;
 
 /// Shared RouteObserver — MainMenuScreen subscribes (RouteAware) to
@@ -222,6 +224,13 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                       menuVisible: menuVisible,
                       reduceMotion: reduceMotion,
                     );
+            // Custom theme wallpaper — replaces the flat scaffold fill
+            // with a bundled image + scrim. Sits above the base color,
+            // below shader/particles/glow so all effects stay on top.
+            final customWallpaper =
+                (!menuVisible && !skeuo && mode == AppThemeMode.custom)
+                    ? AppTheme.cachedCustomTheme?.wallpaper
+                    : null;
             Widget content = widget.child;
 
             // Apply visual customizer wrappers based on active Theme Mode!
@@ -257,6 +266,18 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // Home screen vortex animation removed — default to
                   // Minimalist. ThemeOverlay provides only the base color
                   // and themed layers (particles, glow, shader).
+
+                  // 0.4. Custom-theme wallpaper — image + scrim over the
+                  // base color. Particles/glow/shader layers stay above.
+                  if (customWallpaper != null)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: CustomWallpaper(
+                          assetFileName: customWallpaper,
+                          scrimColor: f.scaffold,
+                        ),
+                      ),
+                    ),
 
                   // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
                   // rain or dark neon fog. Sits behind particles but above the

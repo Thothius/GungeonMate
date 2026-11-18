@@ -141,6 +141,78 @@ class _StudioSlider extends StatelessWidget {
   }
 }
 
+/// Wallpaper grid tile — image (or custom child like the NONE tile)
+/// with a selection border + check badge.
+class _WallpaperTile extends StatelessWidget {
+  final bool selected;
+  final Color accent;
+  final VoidCallback onTap;
+  final Widget child;
+  const _WallpaperTile({
+    required this.selected,
+    required this.accent,
+    required this.onTap,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: selected ? accent : Colors.white.withValues(alpha: 0.15),
+            width: selected ? 2.0 : 1.0,
+          ),
+          boxShadow:
+              selected
+                  ? [
+                    BoxShadow(
+                      color: accent.withValues(alpha: 0.35),
+                      blurRadius: 10,
+                    ),
+                  ]
+                  : null,
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(7),
+                child: child,
+              ),
+            ),
+            if (selected)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: accent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.check_rounded,
+                    size: 10,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Schema chip — colored dots + name for the per-theme color pick.
 class _SchemaChip extends StatelessWidget {
   final ({String name, List<Color> colors}) schema;
