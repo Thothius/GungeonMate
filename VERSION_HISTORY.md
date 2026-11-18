@@ -5,6 +5,9 @@
 Post-3.4.0 customization deep-dive: preset quick slots, global panel chrome, item-icon particles, grouped palettes, and a batch of save/load + particles fixes.
 
 ### Changes
+- **Multiplayer identity** — nickname + avatar + frame propagate through lobby → searching/connecting → active run; avatar tap opens the SurpriseSheet emote popup. 4 new animated frames (TOXIC, STORM, ROYAL, NEON) bring the total to 12.
+- **Synergy stat chips** — `synergy_stats.dart` parses quantified effect text into old→new chips on every synergy surface incl. the LEB ghost list; tap reveals the source clause. Fire-rate percents correctly invert the interval stat; enemy-side clauses excluded.
+- **Synergy meta chips** — `synergy_meta.json` (Gemini classification pass, 110 synergies) renders mechanic tags + qualitative buff arrows beneath stat chips; coverage grows as the remaining ~285 get classified.
 - **Quick slots** — 3 pinned preset slots on the picker; tap = instant apply, long-press = info/remove, `+` opens the gallery in slot-pick mode. Persisted across sessions.
 - **Preset gallery** — LIST/CARDS view toggle (persisted), OFFICIAL vs YOURS sections, per-row delete with confirm, splash-art thumbnails, list rows scroll-to-select.
 - **Panel chrome** — new PANELS section in COLORS & BG: panel color, opacity, border mode (AUTO/CUSTOM/NONE) + color + width, radius — resolved through `flairFor` so cards, tiles, dashboard, browse surfaces and the bottom nav all follow. Sentinel defaults keep theme look unless overridden.
