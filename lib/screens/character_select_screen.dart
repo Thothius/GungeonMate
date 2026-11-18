@@ -1,5 +1,6 @@
 import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -9,6 +10,7 @@ import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/scale_button.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
@@ -90,29 +92,36 @@ class CharacterSelectScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: _GungeoneerPicker(
-                    // Cultist is only pickable as MP Sidekick — the lobby
-                    // passes the full list (incl. Cultist) for Sidekick.
-                    // Solo/Coop get a filtered list with Cultist excluded.
-                    gungeoneers:
-                        gungeoneers ??
-                        p.allGungeoneers
-                            .where((g) => g.name != 'The Cultist')
-                            .toList(),
-                    flair: flair,
-                    prefs: prefs,
-                    onPick: (c, char) {
-                      final run = c.read<RunProvider>();
-                      if (isMultiplayerPick) {
-                        Navigator.pop(c, char);
-                      } else if (isCoop) {
-                        run.startCoopPlayer(char);
-                        if (Navigator.canPop(c)) Navigator.pop(c);
-                      } else {
-                        run.startNewRun(char);
-                        if (Navigator.canPop(c)) Navigator.pop(c);
-                      }
-                    },
-                  ),
+                        // Cultist is only pickable as MP Sidekick — the lobby
+                        // passes the full list (incl. Cultist) for Sidekick.
+                        // Solo/Coop get a filtered list with Cultist excluded.
+                        gungeoneers:
+                            gungeoneers ??
+                            p.allGungeoneers
+                                .where((g) => g.name != 'The Cultist')
+                                .toList(),
+                        flair: flair,
+                        prefs: prefs,
+                        onPick: (c, char) {
+                          final run = c.read<RunProvider>();
+                          if (isMultiplayerPick) {
+                            Navigator.pop(c, char);
+                          } else if (isCoop) {
+                            run.startCoopPlayer(char);
+                            if (Navigator.canPop(c)) Navigator.pop(c);
+                          } else {
+                            run.startNewRun(char);
+                            if (Navigator.canPop(c)) Navigator.pop(c);
+                          }
+                        },
+                      )
+                      .animate()
+                      .fadeIn(duration: 280.ms, curve: Curves.easeOut)
+                      .slideY(
+                        begin: 0.06,
+                        duration: 280.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
                 ),
               ],
             ),
@@ -303,8 +312,10 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
               Insets.lg,
               Insets.md,
             ),
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
+            child: ScaleButton(
+              // ScaleButton fires its own light haptic on tap-down;
+              // keep only the selection tick the old GestureDetector gave.
+              enableHaptics: false,
               onTap: () {
                 Haptics.selection();
                 widget.onPick(context, sel);
