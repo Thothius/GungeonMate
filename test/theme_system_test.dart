@@ -485,4 +485,27 @@ void main() {
       expect(f.cardRadius, AppThemeMode.paperInk.flair.cardRadius);
     });
   });
+
+  group('BG modes + particle off-flag', () {
+    tearDown(() => VisualPrefs.notifier.value = const VisualPrefs());
+
+    test('CustomThemeData bgMode round-trips; legacy defaults to wallpaper', () {
+      final d = CustomThemeData.defaultTheme.copyWith(bgMode: 2);
+      final j = d.toJson();
+      expect(j['bgMode'], 2);
+      final r = CustomThemeData.fromJson(j);
+      expect(r.bgMode, CustomThemeData.bgGradient);
+      // Missing key = legacy wallpaper-or-solid behavior.
+      final legacy = CustomThemeData.fromJson(
+        Map<String, dynamic>.from(j)..remove('bgMode'),
+      );
+      expect(legacy.bgMode, CustomThemeData.bgWallpaper);
+    });
+
+    test('VisualPrefs particlesUserOff round-trips', () {
+      const p = VisualPrefs(particlesUserOff: true);
+      expect(VisualPrefs.fromJson(p.toJson()).particlesUserOff, isTrue);
+      expect(const VisualPrefs().particlesUserOff, isFalse);
+    });
+  });
 }

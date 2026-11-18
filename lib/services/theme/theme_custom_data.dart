@@ -35,6 +35,23 @@ class CustomThemeData {
   /// the app background instead of the flat [scaffold] color. Null = off.
   final String? wallpaper;
 
+  /// Backdrop mode — see the [bg*] constants. [bgWallpaper] keeps the
+  /// legacy behavior (image when [wallpaper] is set, flat canvas
+  /// otherwise); the other modes ignore [wallpaper] until switched back.
+  final int bgMode;
+
+  /// Wallpaper image when set, flat canvas when null.
+  static const int bgWallpaper = 0;
+
+  /// Flat [scaffold] color only.
+  static const int bgSolid = 1;
+
+  /// Palette-derived diagonal gradient over the canvas.
+  static const int bgGradient = 2;
+
+  /// No themed background — plain black void for particles/glow.
+  static const int bgNone = 3;
+
   const CustomThemeData({
     required this.name,
     required this.scaffold,
@@ -46,6 +63,7 @@ class CustomThemeData {
     this.auraStyle = AvatarAuraStyle.none,
     this.font = AppFont.gungeon,
     this.wallpaper,
+    this.bgMode = bgWallpaper,
   });
 
   /// Serialize for embedding inside SavedCustomTheme.
@@ -60,6 +78,7 @@ class CustomThemeData {
     'auraStyle': auraStyle.index,
     'font': font.index,
     'wallpaper': wallpaper,
+    'bgMode': bgMode,
   };
 
   /// Deserialize from embedded JSON. Color fields fall back to defaults
@@ -86,6 +105,7 @@ class CustomThemeData {
         (j['font'] as int? ?? 0).clamp(0, AppFont.values.length - 1)
       ],
       wallpaper: normalizeWallpaperFileName(j['wallpaper'] as String?),
+      bgMode: ((j['bgMode'] as int?) ?? 0).clamp(0, 3),
     );
   }
 
@@ -105,6 +125,7 @@ class CustomThemeData {
     AvatarAuraStyle? auraStyle,
     AppFont? font,
     Object? wallpaper = _unset,
+    int? bgMode,
   }) {
     return CustomThemeData(
       name: name ?? this.name,
@@ -118,6 +139,7 @@ class CustomThemeData {
       font: font ?? this.font,
       wallpaper:
           identical(wallpaper, _unset) ? this.wallpaper : wallpaper as String?,
+      bgMode: bgMode ?? this.bgMode,
     );
   }
 

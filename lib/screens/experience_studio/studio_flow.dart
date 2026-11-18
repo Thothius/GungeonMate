@@ -134,17 +134,7 @@ class _MockPreviewScreen extends StatelessWidget {
               ),
             ),
           ),
-          if (mode == AppThemeMode.custom &&
-              AppTheme.cachedCustomTheme?.wallpaper != null)
-            Positioned.fill(
-              child: IgnorePointer(
-                child: CustomWallpaper(
-                  assetFileName: AppTheme.cachedCustomTheme!.wallpaper!,
-                  scrimColor: flair.scaffold,
-                  scrimStrength: 0.72,
-                ),
-              ),
-            ),
+          ..._customBgLayers(mode, 0.72),
           // Ambient shader — FOG/RAIN picks render here too, same
           // layer order as ThemeOverlay (above wallpaper, below
           // particles).

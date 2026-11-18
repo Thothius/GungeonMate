@@ -322,6 +322,12 @@ class VisualPrefs {
   /// Whether the particle system is enabled. Off by default.
   final bool particlesEnabled;
 
+  /// Explicit user OFF for the ambient particle field. Theme auto-on
+  /// (kThemeParticleDefaults) must not resurrect particles the user
+  /// killed — setParticles writes this alongside particlesEnabled,
+  /// applyCuration/preset picks reset it.
+  final bool particlesUserOff;
+
   /// Selected particle preset (replaces old CustomParticleType).
   final ParticlePreset particlePreset;
 
@@ -528,6 +534,7 @@ class VisualPrefs {
   const VisualPrefs({
     this.glowIntensity = 0.0,
     this.particlesEnabled = true,
+    this.particlesUserOff = false,
     this.particlePreset = ParticlePreset.gungeonDust,
     this.particleGlowEffect = GlowEffect.none,
     this.particleLineLinks = false,
@@ -569,6 +576,7 @@ class VisualPrefs {
 
   static const _kGlow = 'vp.glow_v1';
   static const _kParticles = 'vp.particles_v2'; // v2: default on (was v1=false)
+  static const _kParticlesUserOff = 'vp.particles_user_off_v1';
   static const _kSpacing = 'visual.font.spacing';
   static const _kWeight = 'vp.weight_v1';
   static const _kFont = 'vp.font_v1';
@@ -711,6 +719,7 @@ class VisualPrefs {
       notifier.value = VisualPrefs(
         glowIntensity: p.getDouble(_kGlow) ?? 0.0,
         particlesEnabled: p.getBool(_kParticles) ?? true,
+        particlesUserOff: p.getBool(_kParticlesUserOff) ?? false,
         particlePreset: particlePreset,
         particleGlowEffect: particleGlowEffect,
         particleLineLinks: particleLineLinks,
@@ -769,7 +778,10 @@ class VisualPrefs {
   }
 
   static Future<void> setParticles(bool v) async {
-    notifier.value = notifier.value._with(particlesEnabled: v);
+    notifier.value = notifier.value._with(
+      particlesEnabled: v,
+      particlesUserOff: !v,
+    );
     _persist();
   }
 
@@ -990,6 +1002,7 @@ class VisualPrefs {
       shaderEnabled: c.shaderEnabled,
       shaderPreset: c.shaderPreset ?? notifier.value.shaderPreset,
       particlesEnabled: true,
+      particlesUserOff: false,
     );
     _persist();
   }
@@ -1012,6 +1025,7 @@ class VisualPrefs {
       final v = notifier.value;
       await p.setDouble(_kGlow, v.glowIntensity);
       await p.setBool(_kParticles, v.particlesEnabled);
+      await p.setBool(_kParticlesUserOff, v.particlesUserOff);
       await p.setInt(_kWeight, v.fontWeightBias);
       await p.setInt(_kSpacing, v.fontLetterSpacing);
       await p.setInt(_kFont, v.font.index);
@@ -1058,6 +1072,7 @@ class VisualPrefs {
   VisualPrefs _with({
     double? glowIntensity,
     bool? particlesEnabled,
+    bool? particlesUserOff,
     int? fontWeightBias,
     int? fontLetterSpacing,
     AppFont? font,
@@ -1098,6 +1113,7 @@ class VisualPrefs {
   }) => VisualPrefs(
     glowIntensity: glowIntensity ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
+    particlesUserOff: particlesUserOff ?? this.particlesUserOff,
     fontWeightBias: fontWeightBias ?? this.fontWeightBias,
     fontLetterSpacing: fontLetterSpacing ?? this.fontLetterSpacing,
     font: font ?? this.font,
@@ -1144,6 +1160,7 @@ class VisualPrefs {
   Map<String, dynamic> toJson() => {
     'glowIntensity': glowIntensity,
     'particlesEnabled': particlesEnabled,
+    'particlesUserOff': particlesUserOff,
     'fontWeightBias': fontWeightBias,
     'font': font.index,
     'fontSize': fontSize,
@@ -1191,6 +1208,7 @@ class VisualPrefs {
     return VisualPrefs(
       glowIntensity: (j['glowIntensity'] as num?)?.toDouble() ?? 0.0,
       particlesEnabled: j['particlesEnabled'] as bool? ?? false,
+      particlesUserOff: j['particlesUserOff'] as bool? ?? false,
       fontWeightBias: j['fontWeightBias'] as int? ?? 0,
       font: _enumOr(AppFont.values, j['font'] as int?, 0),
       fontSize: (j['fontSize'] as num?)?.toDouble() ?? 12.0,

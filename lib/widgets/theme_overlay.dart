@@ -232,8 +232,14 @@ class _ThemeOverlayState extends State<ThemeOverlay>
             // Custom theme wallpaper — replaces the flat scaffold fill
             // with a bundled image + scrim. Sits above the base color,
             // below shader/particles/glow so all effects stay on top.
-            final customWallpaper =
+            // bgMode gates it: solid/gradient/none suppress the image.
+            final customBgMode =
                 (!menuVisible && !skeuo && mode == AppThemeMode.custom)
+                    ? (AppTheme.cachedCustomTheme?.bgMode ??
+                        CustomThemeData.bgWallpaper)
+                    : CustomThemeData.bgWallpaper;
+            final customWallpaper =
+                customBgMode == CustomThemeData.bgWallpaper
                     ? AppTheme.cachedCustomTheme?.wallpaper
                     : null;
             Widget content = widget.child;
@@ -264,7 +270,11 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // its fixed base color and skip all theme layers below.
                   Positioned.fill(
                     child: Container(
-                      color: menuVisible ? const Color(0xFF0A0710) : f.scaffold,
+                      color: menuVisible
+                          ? const Color(0xFF0A0710)
+                          : customBgMode == CustomThemeData.bgNone
+                          ? Colors.black
+                          : f.scaffold,
                     ),
                   ),
 
@@ -280,6 +290,29 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                         child: CustomWallpaper(
                           assetFileName: customWallpaper,
                           scrimColor: f.scaffold,
+                        ),
+                      ),
+                    ),
+
+                  // 0.45. Custom-theme gradient backdrop — palette sweep
+                  // over the canvas for the GRADIENT bg mode.
+                  if (!menuVisible &&
+                      !skeuo &&
+                      customBgMode == CustomThemeData.bgGradient)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                f.scaffold,
+                                f.card,
+                                f.primary.withValues(alpha: 0.45),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -478,7 +511,13 @@ Widget? buildBackdropParticleField(
           ? themeDefault
           : prefs.particlePreset;
   final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
-  final particlesOn = !reduceMotion && (prefs.particlesEnabled || themeAutoOn);
+  // Explicit user OFF always wins — themeAutoOn only applies when the
+  // user hasn't deliberately killed the particle field (curation and
+  // preset picks reset particlesUserOff, so themed looks still auto-on).
+  final particlesOn =
+      !reduceMotion &&
+      (prefs.particlesEnabled ||
+          (themeAutoOn && !prefs.particlesUserOff));
   if (!particlesOn || menuVisible) return null;
   // color schema priority — explicit user schema > unicorn palette >
   // preset default. themeMatch uses the active flair's colors.

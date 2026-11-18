@@ -42,6 +42,60 @@ class ExperienceStudioScreen extends StatefulWidget {
   State<ExperienceStudioScreen> createState() => _ExperienceStudioScreenState();
 }
 
+/// Backdrop layers for studio previews — mirrors ThemeOverlay's custom
+/// bgMode logic: wallpaper image / flat canvas / palette gradient /
+/// black void. Returns Positioned.fill layers for a Stack.
+List<Widget> _customBgLayers(AppThemeMode previewMode, double scrim) {
+  if (previewMode != AppThemeMode.custom) return const [];
+  final d = AppTheme.cachedCustomTheme;
+  if (d == null) return const [];
+  final f = AppTheme.flairFor(previewMode);
+  switch (d.bgMode) {
+    case CustomThemeData.bgNone:
+      return [
+        Positioned.fill(
+          child: IgnorePointer(child: Container(color: Colors.black)),
+        ),
+      ];
+    case CustomThemeData.bgGradient:
+      return [
+        Positioned.fill(
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    f.scaffold,
+                    f.card,
+                    f.primary.withValues(alpha: 0.45),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ];
+    case CustomThemeData.bgSolid:
+      return const [];
+    default:
+      final wp = d.wallpaper;
+      if (wp == null) return const [];
+      return [
+        Positioned.fill(
+          child: IgnorePointer(
+            child: CustomWallpaper(
+              assetFileName: wp,
+              scrimColor: f.scaffold,
+              scrimStrength: scrim,
+            ),
+          ),
+        ),
+      ];
+  }
+}
+
 class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   late AppThemeMode _previewMode;
   late final AppThemeMode _originalMode;
@@ -266,10 +320,41 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   /// immediately reflects the selected theme — not just the preview box.
   Widget _buildPreviewBackground() {
     final flair = AppTheme.flairFor(_previewMode);
+    // Custom theme backdrop modes — NONE paints a black void, GRADIENT
+    // a palette sweep; SOLID/WALLPAPER fall through to the branches
+    // below (wallpaper image when set, subtle canvas gradient else).
+    final bgMode =
+        _previewMode == AppThemeMode.custom
+            ? (AppTheme.cachedCustomTheme?.bgMode ??
+                CustomThemeData.bgWallpaper)
+            : CustomThemeData.bgWallpaper;
+    if (bgMode == CustomThemeData.bgNone) {
+      return Positioned.fill(
+        child: Container(color: Colors.black),
+      );
+    }
+    if (bgMode == CustomThemeData.bgGradient) {
+      return Positioned.fill(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                flair.scaffold,
+                flair.card,
+                flair.primary.withValues(alpha: 0.45),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     // Custom theme with a wallpaper picked — show the real image +
     // scrim instead of the flat canvas gradient.
     final wp =
-        _previewMode == AppThemeMode.custom
+        bgMode == CustomThemeData.bgWallpaper &&
+                _previewMode == AppThemeMode.custom
             ? AppTheme.cachedCustomTheme?.wallpaper
             : null;
     if (wp != null) {
@@ -509,19 +594,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           borderRadius: BorderRadius.circular(13),
           child: Stack(
             children: [
-              // Wallpaper under everything — the CANVAS pick previews
-              // here exactly like the app renders it.
-              if (_previewMode == AppThemeMode.custom &&
-                  AppTheme.cachedCustomTheme?.wallpaper != null)
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: CustomWallpaper(
-                      assetFileName: AppTheme.cachedCustomTheme!.wallpaper!,
-                      scrimColor: AppTheme.flairFor(_previewMode).scaffold,
-                      scrimStrength: 0.72,
-                    ),
-                  ),
-                ),
+              // Backdrop under everything — the BG MODE pick previews
+              // here exactly like the app renders it (wallpaper / solid /
+              // gradient / none).
+              ..._customBgLayers(_previewMode, 0.72),
               // Ambient shader — same layer the app overlay renders so
               // FOG/RAIN picks are visible in the pane (was: prefs
               // wrote but nothing rendered → looked dead).
@@ -2739,11 +2815,19 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   /// BG MODE chips — SOLID uses the CANVAS color, WALLPAPER opens the
   /// picker sheet. Mirrors the wallpaper sheet's NONE tile so both
   /// paths clear/set the same field.
+  void _setBgMode(int mode) {
+    if (_draft.bgMode == mode) return;
+    Haptics.selection();
+    setState(() => _draft = _draft.copyWith(bgMode: mode));
+    AppTheme.saveCustomThemeData(_draft);
+    _previewTheme(AppThemeMode.custom);
+  }
+
   Widget _buildBgModeRow() {
-    final wp = AppTheme.cachedCustomTheme?.wallpaper;
+    final mode = _draft.bgMode;
     Widget chip(String label, bool on, VoidCallback onTap) => Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 3),
         child: _ShaderChip(label: label, on: on, onTap: onTap),
       ),
     );
@@ -2751,14 +2835,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          chip('SOLID', wp == null, () {
-            if (wp == null) return;
-            Haptics.selection();
-            setState(() => _draft = _draft.copyWith(wallpaper: null));
-            AppTheme.saveCustomThemeData(_draft);
-            _previewTheme(AppThemeMode.custom);
+          chip('GRADIENT', mode == CustomThemeData.bgGradient, () {
+            _setBgMode(CustomThemeData.bgGradient);
           }),
-          chip('WALLPAPER', wp != null, () {
+          chip('SOLID', mode == CustomThemeData.bgSolid, () {
+            _setBgMode(CustomThemeData.bgSolid);
+          }),
+          chip('NONE', mode == CustomThemeData.bgNone, () {
+            _setBgMode(CustomThemeData.bgNone);
+          }),
+          chip('WALLPAPER', mode == CustomThemeData.bgWallpaper, () {
             Haptics.selection();
             _showWallpaperSheet();
           }),
@@ -2979,7 +3065,15 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   /// then close the sheet.
   Future<void> _applyWallpaper(String? file) async {
     Haptics.selection();
-    setState(() => _draft = _draft.copyWith(wallpaper: file));
+    setState(
+      () => _draft = _draft.copyWith(
+        wallpaper: file,
+        bgMode:
+            file == null
+                ? CustomThemeData.bgSolid
+                : CustomThemeData.bgWallpaper,
+      ),
+    );
     await AppTheme.saveCustomThemeData(_draft);
     _previewTheme(AppThemeMode.custom);
     if (mounted && Navigator.of(context).canPop()) {
