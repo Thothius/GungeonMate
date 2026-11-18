@@ -10,6 +10,7 @@ import '../../theme/tokens.dart';
 import '../game_icon.dart';
 import '../skeuo/skeuo_tokens.dart';
 import 'entity_synergies_view.dart';
+import 'leb_view_scope.dart';
 
 /// SYNERGIES section for gun detail — a swipeable pager:
 ///
@@ -29,10 +30,20 @@ class GunSynergiesTab extends StatefulWidget {
   /// Whether the LEB simulated page is offered (and starts selected).
   /// Resolved by ItemDetailScreen from the lebView param / prefs.
   final bool lebView;
+
+  /// Which persisted LEB toggle the ON/OFF chip flips — browse-local
+  /// for details pushed from Browse, global everywhere else.
+  final LebPrefSource lebSource;
+
+  /// Show the LEB ON/OFF chip. Hidden on owner-scoped run surfaces
+  /// where simulation is force-disabled and a toggle would lie.
+  final bool showLebToggle;
   const GunSynergiesTab({
     super.key,
     required this.currentName,
     required this.lebView,
+    this.lebSource = LebPrefSource.global,
+    this.showLebToggle = true,
   });
 
   @override
@@ -48,6 +59,14 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
   void dispose() {
     _pageCtrl.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(GunSynergiesTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Re-enabling LEB re-arms the one-shot auto-jump so the simulated
+    // page lands selected again instead of staying on ALL.
+    if (!oldWidget.lebView && widget.lebView) _didInitLeb = false;
   }
 
   List<SynergyStatus> _statusesFor(RunProvider p, List<String> ownedNames) {
@@ -80,10 +99,11 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
     if (hasCoop) pages.addAll(['P1', 'P2']);
     if (widget.lebView) pages.add('LEB');
 
+    Widget? flatBody;
     // Solo + no LEB → nothing to page between; render the flat list.
     if (pages.length == 1) {
       final owned = p.runState.allItemNames;
-      return EntitySynergiesView(
+      flatBody = EntitySynergiesView(
         statuses: _statusesFor(p, owned),
         currentName: widget.currentName,
         ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
@@ -106,11 +126,8 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _PageChips(
+        _SynergyHeaderRow(
           pages: pages,
-          // pages can shrink under us (LEB pref toggled off while the
-          // LEB page is showing) — clamp so no chip highlights a
-          // now-nonexistent index.
           selected: _page.clamp(0, pages.length - 1),
           onSelect: (i) {
             Haptics.selection();
@@ -120,19 +137,26 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
               curve: Curves.easeOutCubic,
             );
           },
+          showChips: pages.length > 1,
+          showLebToggle: widget.showLebToggle,
+          lebOn: widget.lebView,
+          lebSource: widget.lebSource,
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.52,
-          child: PageView.builder(
-            controller: _pageCtrl,
-            onPageChanged: (i) => setState(() => _page = i),
-            itemCount: pages.length,
-            itemBuilder: (context, i) {
-              final key = pages[i];
-              return _pageFor(key, p, coop != null);
-            },
+        if (flatBody != null)
+          flatBody
+        else
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.52,
+            child: PageView.builder(
+              controller: _pageCtrl,
+              onPageChanged: (i) => setState(() => _page = i),
+              itemCount: pages.length,
+              itemBuilder: (context, i) {
+                final key = pages[i];
+                return _pageFor(key, p, coop != null);
+              },
+            ),
           ),
-        ),
       ],
     );
   }
@@ -143,9 +167,10 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
         return _LebPage(currentName: widget.currentName);
       case 'P1':
       case 'P2':
-        final owned = key == 'P1'
-            ? p.runState.main.allItemNames
-            : (p.runState.coop?.allItemNames ?? const <String>[]);
+        final owned =
+            key == 'P1'
+                ? p.runState.main.allItemNames
+                : (p.runState.coop?.allItemNames ?? const <String>[]);
         if (owned.isEmpty) {
           return _EmptyPlayerNote(label: key);
         }
@@ -188,24 +213,24 @@ class _PageChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 4, 14, 8),
-      child: Row(
-        children: [
-          for (var i = 0; i < pages.length; i++) ...[
-            if (i > 0) const SizedBox(width: 6),
-            _chip(pages[i], i == selected, () => onSelect(i)),
-          ],
+    // Outer padding lives on _SynergyHeaderRow — this is just the chips.
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < pages.length; i++) ...[
+          if (i > 0) const SizedBox(width: 6),
+          _chip(pages[i], i == selected, () => onSelect(i)),
         ],
-      ),
+      ],
     );
   }
 
   Widget _chip(String label, bool active, VoidCallback onTap) {
     final leb = label == 'LEB';
-    final color = leb
-        ? const Color(0xFFB388FF)
-        : (active ? Colors.white : Colors.white54);
+    final color =
+        leb
+            ? const Color(0xFFB388FF)
+            : (active ? Colors.white : Colors.white54);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
@@ -213,16 +238,18 @@ class _PageChips extends StatelessWidget {
         duration: const Duration(milliseconds: 160),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
-          color: active
-              ? (leb
-                    ? const Color(0xFFB388FF).withValues(alpha: 0.18)
-                    : Colors.white.withValues(alpha: 0.12))
-              : Colors.transparent,
+          color:
+              active
+                  ? (leb
+                      ? const Color(0xFFB388FF).withValues(alpha: 0.18)
+                      : Colors.white.withValues(alpha: 0.12))
+                  : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: active
-                ? color.withValues(alpha: 0.7)
-                : Colors.white.withValues(alpha: 0.18),
+            color:
+                active
+                    ? color.withValues(alpha: 0.7)
+                    : Colors.white.withValues(alpha: 0.18),
             width: active ? 1.2 : 0.8,
           ),
         ),
@@ -332,9 +359,8 @@ class _LebPageState extends State<_LebPage>
             if (synergies.isEmpty)
               _NoLebSynergies()
             else ...[
-              for (final s in [
-                ...synergies,
-              ]..sort((a, b) => a.name.compareTo(b.name)))
+              for (final s in [...synergies]
+                ..sort((a, b) => a.name.compareTo(b.name)))
                 _GhostSynergyRow(synergy: s, march: _march),
             ],
           ],
@@ -435,57 +461,58 @@ void _showLebExplainer(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
     ),
-    builder: (ctx) => SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GoopText(
-              "LICH'S EYE BULLETS",
-              style: TextStyle(
-                fontSize: FontSizes.labelSmall,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.4,
-                color: Skeuo.inkIf(const Color(0xFFB388FF)),
-              ),
-            ),
-            const SizedBox(height: 8),
-            if (leb?.effect.isNotEmpty ?? false)
-              GoopText(
-                leb!.effect,
-                style: TextStyle(
-                  fontSize: 13,
-                  height: 1.4,
-                  color: Colors.white.withValues(alpha: 0.8),
+    builder:
+        (ctx) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  "LICH'S EYE BULLETS",
+                  style: TextStyle(
+                    fontSize: FontSizes.labelSmall,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.4,
+                    color: Skeuo.inkIf(const Color(0xFFB388FF)),
+                  ),
                 ),
-              ),
-            for (final n in notes) ...[
-              const SizedBox(height: 8),
-              GoopText(
-                '• $n',
-                style: TextStyle(
-                  fontSize: 12,
-                  height: 1.4,
-                  color: Colors.white.withValues(alpha: 0.65),
+                const SizedBox(height: 8),
+                if (leb?.effect.isNotEmpty ?? false)
+                  GoopText(
+                    leb!.effect,
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.4,
+                      color: Colors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                for (final n in notes) ...[
+                  const SizedBox(height: 8),
+                  GoopText(
+                    '• $n',
+                    style: TextStyle(
+                      fontSize: 12,
+                      height: 1.4,
+                      color: Colors.white.withValues(alpha: 0.65),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 12),
+                GoopText(
+                  'Rows marked EXTRA REQ may need additional items or '
+                  'conditions that LEB does not simulate.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white.withValues(alpha: 0.45),
+                  ),
                 ),
-              ),
-            ],
-            const SizedBox(height: 12),
-            GoopText(
-              'Rows marked EXTRA REQ may need additional items or '
-              'conditions that LEB does not simulate.',
-              style: TextStyle(
-                fontSize: 11,
-                fontStyle: FontStyle.italic,
-                color: Colors.white.withValues(alpha: 0.45),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    ),
   );
 }
 
@@ -543,28 +570,30 @@ class _GhostSynergyRow extends StatelessWidget {
           color: accent.withValues(alpha: 0.05),
           borderRadius: BorderRadius.all(Radii.md),
         ),
-        child: still
-            ? CustomPaint(
-                painter: _DashedBorderPainter(
-                  color: accent.withValues(alpha: 0.4),
-                  radius: Radii.md,
-                ),
-                child: _ghostRowBody(synergy, p, extraReq),
-              )
-            : AnimatedBuilder(
-                animation: march,
-                // Hoist the body — only the dashed border repaints per
-                // tick instead of rebuilding icon + text every frame.
-                child: _ghostRowBody(synergy, p, extraReq),
-                builder: (_, child) => CustomPaint(
+        child:
+            still
+                ? CustomPaint(
                   painter: _DashedBorderPainter(
                     color: accent.withValues(alpha: 0.4),
                     radius: Radii.md,
-                    t: march.value,
                   ),
-                  child: child,
+                  child: _ghostRowBody(synergy, p, extraReq),
+                )
+                : AnimatedBuilder(
+                  animation: march,
+                  // Hoist the body — only the dashed border repaints per
+                  // tick instead of rebuilding icon + text every frame.
+                  child: _ghostRowBody(synergy, p, extraReq),
+                  builder:
+                      (_, child) => CustomPaint(
+                        painter: _DashedBorderPainter(
+                          color: accent.withValues(alpha: 0.4),
+                          radius: Radii.md,
+                          t: march.value,
+                        ),
+                        child: child,
+                      ),
                 ),
-              ),
       ),
     );
   }
@@ -696,10 +725,11 @@ class _DashedBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     final rrect = RRect.fromRectAndRadius(
       Offset.zero & size,
       Radius.circular(radius.x),
@@ -727,4 +757,118 @@ class _DashedBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(_DashedBorderPainter old) =>
       old.color != color || old.radius != radius || old.t != t;
+}
+
+/// Header row above the synergy pager — page chips on the left
+/// (scrollable so ALL/P1/P2/LEB + the LEB toggle never overflow on
+/// narrow screens), LEB ON/OFF pill pinned right.
+class _SynergyHeaderRow extends StatelessWidget {
+  final List<String> pages;
+  final int selected;
+  final ValueChanged<int> onSelect;
+  final bool showChips;
+  final bool showLebToggle;
+  final bool lebOn;
+  final LebPrefSource lebSource;
+  const _SynergyHeaderRow({
+    required this.pages,
+    required this.selected,
+    required this.onSelect,
+    required this.showChips,
+    required this.showLebToggle,
+    required this.lebOn,
+    required this.lebSource,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 4, 14, 8),
+      child: Row(
+        children: [
+          if (showChips)
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: _PageChips(
+                  pages: pages,
+                  selected: selected,
+                  onSelect: onSelect,
+                ),
+              ),
+            )
+          else
+            const Spacer(),
+          if (showLebToggle) _LebTogglePill(on: lebOn, source: lebSource),
+        ],
+      ),
+    );
+  }
+}
+
+/// Compact LEB state pill — reflects the live pref and flips it on tap
+/// so the simulated view can be toggled from any gun detail without
+/// hunting through Settings or Browse.
+class _LebTogglePill extends StatelessWidget {
+  final bool on;
+  final LebPrefSource source;
+  const _LebTogglePill({required this.on, required this.source});
+
+  static const _purple = Color(0xFFB388FF);
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message:
+          on
+              ? "Lich's Eye Bullets simulation is ON — tap to disable"
+              : "Lich's Eye Bullets simulation is OFF — tap to enable",
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Haptics.selection();
+          if (source == LebPrefSource.browse) {
+            VisualPrefs.setBrowseShowLichEyeBullets(!on);
+          } else {
+            VisualPrefs.setShowLichEyeBulletsSynergies(!on);
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+          decoration: BoxDecoration(
+            color: on ? _purple.withValues(alpha: 0.18) : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color:
+                  on
+                      ? _purple.withValues(alpha: 0.7)
+                      : Colors.white.withValues(alpha: 0.2),
+              width: on ? 1.2 : 0.8,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.auto_awesome_rounded,
+                size: 11,
+                color: on ? _purple : Colors.white38,
+              ),
+              const SizedBox(width: 4),
+              GoopText(
+                'LEB ${on ? 'ON' : 'OFF'}',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.8,
+                  color: on ? _purple : Colors.white38,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

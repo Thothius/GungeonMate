@@ -8,6 +8,7 @@ import '../models/item.dart';
 import '../models/player.dart';
 import '../models/run_state.dart'; // Used by context.select type parameter
 import 'item_detail_screen.dart';
+import '../widgets/item_detail/leb_view_scope.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../utils/fast_route.dart';
@@ -1106,16 +1107,17 @@ class _BrowseScreenState extends State<BrowseScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
-        final leb = VisualPrefs.notifier.value.browseShowLichEyeBullets;
         if (g != null) {
           Navigator.push(
             c,
-            fastRoute(ItemDetailScreen(gun: g, lebView: leb)),
+            fastRoute(ItemDetailScreen(gun: g, lebPref: LebPrefSource.browse)),
           );
         } else {
           Navigator.push(
             c,
-            fastRoute(ItemDetailScreen(item: it, lebView: leb)),
+            fastRoute(
+              ItemDetailScreen(item: it, lebPref: LebPrefSource.browse),
+            ),
           );
         }
       },
@@ -1159,7 +1161,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
           c,
-          fastRoute(ItemDetailScreen(gun: g, lebView: lebView)),
+          fastRoute(ItemDetailScreen(gun: g, lebPref: LebPrefSource.browse)),
         );
         if (!mounted) return;
         // Drop the keyboard again on return — Flutter likes to restore
@@ -1217,7 +1219,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
           c,
-          fastRoute(ItemDetailScreen(item: it, lebView: lebView)),
+          fastRoute(ItemDetailScreen(item: it, lebPref: LebPrefSource.browse)),
         );
         if (!mounted) return;
         FocusManager.instance.primaryFocus?.unfocus();

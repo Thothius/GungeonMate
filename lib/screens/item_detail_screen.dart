@@ -38,8 +38,14 @@ class ItemDetailScreen extends StatefulWidget {
   /// * `true` — offer the LEB simulated page (catalog/browse/codex).
   /// * `false` — real inventory views only (active-run surfaces).
   /// * `null` — resolve from context: ownerSlot present → false,
-  ///   otherwise the global `VisualPrefs.showLichEyeBulletsSynergies`.
+  ///   otherwise the pref selected by [lebPref] (global by default,
+  ///   browse-local for details pushed from the Browse tab).
   final bool? lebView;
+
+  /// Which persisted LEB toggle feeds the fallback resolution when
+  /// [lebView] is null. Ignored when [lebView] is set or ownerSlot
+  /// forces real state.
+  final LebPrefSource lebPref;
 
   const ItemDetailScreen({
     super.key,
@@ -47,6 +53,7 @@ class ItemDetailScreen extends StatefulWidget {
     this.item,
     this.ownerSlot,
     this.lebView,
+    this.lebPref = LebPrefSource.global,
   }) : assert(gun != null || item != null);
 
   @override
@@ -146,7 +153,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         builder: (context, prefs, _) {
           final lebView =
               widget.lebView ??
-              (ownerSlot != null ? false : prefs.showLichEyeBulletsSynergies);
+              (ownerSlot != null
+                  ? false
+                  : widget.lebPref == LebPrefSource.browse
+                  ? prefs.browseShowLichEyeBullets
+                  : prefs.showLichEyeBulletsSynergies);
           return LebViewScope(
             lebView: lebView,
             child: LayoutBuilder(
@@ -257,6 +268,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                     child: GunSynergiesTab(
                                       currentName: name,
                                       lebView: lebView,
+                                      lebSource: widget.lebPref,
+                                      showLebToggle: ownerSlot == null,
                                     ),
                                   ),
                                   _DetailTabSpec(

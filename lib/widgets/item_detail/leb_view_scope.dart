@@ -1,5 +1,12 @@
 import 'package:flutter/widgets.dart';
 
+/// Which persisted LEB toggle governs a detail screen opened without an
+/// explicit `lebView` snapshot. Catalog surfaces that carry their own
+/// toggle (Browse) pass [LebPrefSource.browse] so the detail resolves —
+/// and live-updates — from that pref; everything else uses the global
+/// `VisualPrefs.showLichEyeBulletsSynergies`.
+enum LebPrefSource { global, browse }
+
 /// Ambient LEB-simulation context for item detail screens.
 ///
 /// ItemDetailScreen wraps its body in this widget with the RESOLVED
@@ -14,17 +21,11 @@ class LebViewScope extends InheritedWidget {
   /// Resolved simulation flag for the detail subtree.
   final bool lebView;
 
-  const LebViewScope({
-    super.key,
-    required this.lebView,
-    required super.child,
-  });
+  const LebViewScope({super.key, required this.lebView, required super.child});
 
   /// Nearest scope value, or null outside a detail screen.
   static bool? maybeOf(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<LebViewScope>()
-        ?.lebView;
+    return context.dependOnInheritedWidgetOfExactType<LebViewScope>()?.lebView;
   }
 
   @override

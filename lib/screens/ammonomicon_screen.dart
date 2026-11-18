@@ -615,14 +615,13 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
         entry.game == 'synergy'
             ? p.allSynergies.where((s) => s.name == entry.name).firstOrNull
             : null;
-    // Codex is a catalog surface — gun details open with the LEB
-    // simulated view when the global pref allows it.
-    final leb = VisualPrefs.notifier.value.showLichEyeBulletsSynergies;
+    // Codex is a catalog surface — details resolve the global LEB
+    // pref live (no snapshot), so toggles apply immediately.
     final dest =
         gun != null
-            ? ItemDetailScreen(gun: gun, lebView: leb)
+            ? ItemDetailScreen(gun: gun)
             : item != null
-            ? ItemDetailScreen(item: item, lebView: leb)
+            ? ItemDetailScreen(item: item)
             : syn != null
             ? SynergyDetailScreen(synergy: syn)
             : AmmonomiconDetailScreen(entry: entry, section: section);
