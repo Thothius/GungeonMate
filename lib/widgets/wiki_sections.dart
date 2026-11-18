@@ -29,9 +29,11 @@ import 'skeuo/skeuo_tokens.dart';
 ///                       forward-compat with future scrape passes).
 /// Trivia is intentionally omitted — flavour-only content that pushes the
 /// useful information off-screen.
-List<Widget> buildWikiSlivers(WikiContent wiki) {
+/// Plain (non-sliver) wiki sections — for embedding inside other
+/// scrollables/panels (e.g. the gun detail NOTES tab).
+List<Widget> buildWikiSections(WikiContent wiki) {
   if (!wiki.hasAny) return const [];
-  final sections = <Widget>[
+  return [
     if (wiki.effects.isNotEmpty)
       WikiSection(
         title: 'Effects',
@@ -63,7 +65,12 @@ List<Widget> buildWikiSlivers(WikiContent wiki) {
         bullets: wiki.tips,
       ),
   ];
-  return sections.map((s) => SliverToBoxAdapter(child: s)).toList();
+}
+
+List<Widget> buildWikiSlivers(WikiContent wiki) {
+  return buildWikiSections(
+    wiki,
+  ).map((s) => SliverToBoxAdapter(child: s)).toList();
 }
 
 // =============================================================================

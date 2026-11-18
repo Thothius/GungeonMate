@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
@@ -27,14 +28,18 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   int _page = 0;
   late String _picked = widget.selected;
   bool _frameStage = false; // step 2: dedicated frame preview
+  // Portrait order reshuffles every open so the grid doesn't always
+  // lead with the same faces.
+  late final List<String> _ids;
 
-  int get _pageCount => (kAvatarIds.length + _perPage - 1) ~/ _perPage;
+  int get _pageCount => (_ids.length + _perPage - 1) ~/ _perPage;
 
   @override
   void initState() {
     super.initState();
+    _ids = List<String>.of(kAvatarIds)..shuffle(math.Random());
     // Open on the sheet containing the current pick (base id).
-    final idx = kAvatarIds.indexOf(avatarBaseId(widget.selected));
+    final idx = _ids.indexOf(avatarBaseId(widget.selected));
     _page = idx < 0 ? 0 : idx ~/ _perPage;
     _pageCtrl = PageController(initialPage: _page);
   }
@@ -61,9 +66,18 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
         borderRadius: BorderRadius.circular(18),
         side: BorderSide(color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
       ),
-      child: Padding(
-        padding: EdgeInsets.all(16 * sf),
-        child: _frameStage ? _buildFrameStage(sf) : _buildGridStage(sf),
+      // Cap at 82% of the viewport and scroll — on tall/high-sf phones
+      // the unconstrainted column pushed CONFIRM off-panel.
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.82,
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16 * sf),
+            child: _frameStage ? _buildFrameStage(sf) : _buildGridStage(sf),
+          ),
+        ),
       ),
     );
   }
@@ -72,7 +86,13 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   /// frame style rendered live around it (specials animate for real).
   Widget _buildFrameStage(double sf) {
     final frame = avatarFrameId(_picked);
-    final styles = [...kAvatarFrames, ...kSpecialFrames];
+    // NONE (to clear) + the animated specials only — static color
+    // frames are hidden from the picker per request.
+    final styles = [
+      for (final f in kAvatarFrames)
+        if (f.id.isEmpty) f,
+      ...kSpecialFrames,
+    ];
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -270,7 +290,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                   children: List.generate(_perPage, (i) {
                     final idx = page * _perPage + i;
                     // Empty slot on the last partial sheet.
-                    if (idx >= kAvatarIds.length) {
+                    if (idx >= _ids.length) {
                       return Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -279,7 +299,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                         ),
                       );
                     }
-                    final id = kAvatarIds[idx];
+                    final id = _ids[idx];
                     final isSel = id == avatarBaseId(_picked);
                     return GestureDetector(
                       behavior: HitTestBehavior.opaque,

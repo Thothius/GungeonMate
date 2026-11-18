@@ -75,6 +75,21 @@ void main() {
   // NB: the detail pager adds a horizontal PageView Scrollable, so
   // scrollUntilVisible calls must pass `scrollable:
   // find.byType(Scrollable).first` (the outer vertical one) explicitly.
+  /// Gun detail bottom tabs are closed by default — expand SYN
+  /// before asserting on synergy content.
+  Future<void> openSynTab(WidgetTester t) async {
+    await t.scrollUntilVisible(
+      find.text('SYN'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+      maxScrolls: 30,
+    );
+    await t.pump();
+    await t.tap(find.text('SYN'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+  }
+
   Future<void> scrollToSynergySection(WidgetTester t) async {
     await t.scrollUntilVisible(
       find.textContaining('LICH'),
@@ -124,6 +139,7 @@ void main() {
       final pair = findPair();
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
+      await openSynTab(t);
       await scrollToSynergySection(t);
 
       expect(t.takeException(), isNull);
@@ -142,6 +158,7 @@ void main() {
       final pair = findPair();
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
+      await openSynTab(t);
       await scrollToSynergySection(t);
       expect(find.text("LICH'S EYE BULLETS"), findsOneWidget);
 
@@ -168,6 +185,7 @@ void main() {
       final pair = findPair();
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
+      await openSynTab(t);
       await t.scrollUntilVisible(
         find.text('LOCKED'),
         400,
@@ -191,6 +209,7 @@ void main() {
       await t.pump(const Duration(milliseconds: 500));
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
+      await openSynTab(t);
       await t.scrollUntilVisible(
         find.text('PARTIAL'),
         400,
@@ -213,6 +232,7 @@ void main() {
       await t.pump(const Duration(milliseconds: 500));
       await t.pumpWidget(wrap(ItemDetailScreen(gun: pair.gun)));
       await t.pump();
+      await openSynTab(t);
       await t.scrollUntilVisible(
         find.text('COMPLETE'),
         400,
@@ -242,6 +262,7 @@ void main() {
       );
       await t.pump();
       await t.pump(const Duration(milliseconds: 100));
+      await openSynTab(t);
       await scrollToSynergySection(t);
 
       expect(t.takeException(), isNull);
@@ -268,6 +289,7 @@ void main() {
       );
       await t.pump();
       await t.pump(const Duration(milliseconds: 100));
+      await openSynTab(t);
       await t.scrollUntilVisible(
         find.text('LOCKED'),
         400,
@@ -340,9 +362,13 @@ void main() {
       // empty state.
       for (final leb in [true, false]) {
         await VisualPrefs.setShowLichEyeBulletsSynergies(leb);
+        // Reset the tree — reusing the State would keep _detailTab open
+        // and the second openSynTab tap would toggle it shut.
+        await t.pumpWidget(const SizedBox());
         await t.pumpWidget(wrap(ItemDetailScreen(gun: gun)));
         await t.pump();
         await t.pump(const Duration(milliseconds: 100));
+        await openSynTab(t);
         final expected = leb ? 'This gun has no synergies' : 'No synergies';
         await t.scrollUntilVisible(
           find.textContaining(expected),

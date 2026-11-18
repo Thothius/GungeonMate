@@ -602,7 +602,12 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       ),
     );
     if (mounted && picked != null) {
-      setState(() => _selectedChar = picked);
+      // Picking a character IS the confirm — skip the extra CONTINUE
+      // tap and land straight on nickname / run title / avatar.
+      setState(() {
+        _selectedChar = picked;
+        _stage = 2;
+      });
     }
   }
 

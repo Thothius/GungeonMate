@@ -94,6 +94,45 @@ void main() {
     expect(find.text('JOIN GAME'), findsNothing);
   });
 
+  testWidgets('picking a character skips CONTINUE and lands on identity', (
+    tester,
+  ) async {
+    // The character picker needs catalog data — load it first.
+    // runAsync: loadData() uses compute() isolates which never resolve
+    // inside testWidgets' FakeAsync zone (10min timeout otherwise).
+    final rp = RunProvider();
+    await tester.runAsync(() => rp.loadData());
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: rp),
+          ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
+        ],
+        child: const MaterialApp(home: MpLobbyScreen()),
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.text('HOST'));
+    await settleStages(tester);
+    expect(find.text('PICK YOUR GUNGEONEER'), findsOneWidget);
+
+    // Tap the preview card (chevron sits inside its GestureDetector)
+    // → character select → confirm a pick.
+    await tester.tap(find.byIcon(Icons.chevron_right_rounded));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(find.textContaining('PICK '), findsWidgets);
+    await tester.tap(find.textContaining('PICK '), warnIfMissed: false);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    // Landed on identity directly — no CONTINUE step.
+    expect(find.text('IDENTITY'), findsOneWidget);
+    expect(find.text('HOST GAME'), findsOneWidget);
+    expect(find.text('CONTINUE'), findsNothing);
+  });
+
   testWidgets('HOST with empty nickname shows toast', (tester) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();

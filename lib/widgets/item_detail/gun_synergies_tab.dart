@@ -500,22 +500,42 @@ class _NoLebSynergies extends StatelessWidget {
 }
 
 /// Ghost/dashed simulated row — visually distinct from real
-/// COMPLETE/PARTIAL/LOCKED cards (Q6).
-class _GhostSynergyRow extends StatelessWidget {
+/// COMPLETE/PARTIAL/LOCKED cards (Q6). The dashed outline marches
+/// continuously so simulated panels are obvious at a glance.
+class _GhostSynergyRow extends StatefulWidget {
   final Synergy synergy;
   const _GhostSynergyRow({required this.synergy});
 
   @override
+  State<_GhostSynergyRow> createState() => _GhostSynergyRowState();
+}
+
+class _GhostSynergyRowState extends State<_GhostSynergyRow>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _march;
+
+  @override
+  void initState() {
+    super.initState();
+    _march = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _march.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final p = context.read<RunProvider>();
+    final synergy = widget.synergy;
     final accent = Skeuo.inkIf(const Color(0xFFB388FF));
     final extraReq = synergyMayHaveExtraRequirement(synergy);
-
-    var iconPath = synergy.icon;
-    if (iconPath.isEmpty && synergy.items.isNotEmpty) {
-      final resolved = p.entityByName(synergy.items.first);
-      iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
-    }
+    final still = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    final p = context.read<RunProvider>();
 
     return Opacity(
       opacity: 0.85,
@@ -526,94 +546,116 @@ class _GhostSynergyRow extends StatelessWidget {
           color: accent.withValues(alpha: 0.05),
           borderRadius: BorderRadius.all(Radii.md),
         ),
-        child: CustomPaint(
-          painter: _DashedBorderPainter(
-            color: accent.withValues(alpha: 0.4),
-            radius: Radii.md,
-          ),
-          child: Row(
+        child: still
+            ? CustomPaint(
+              painter: _DashedBorderPainter(
+                color: accent.withValues(alpha: 0.4),
+                radius: Radii.md,
+              ),
+              child: _ghostRowBody(synergy, p, extraReq),
+            )
+            : AnimatedBuilder(
+              animation: _march,
+              builder:
+                  (_, _) => CustomPaint(
+                    painter: _DashedBorderPainter(
+                      color: accent.withValues(alpha: 0.4),
+                      radius: Radii.md,
+                      t: _march.value,
+                    ),
+                    child: _ghostRowBody(synergy, p, extraReq),
+                  ),
+            ),
+      ),
+    );
+  }
+
+  Widget _ghostRowBody(Synergy synergy, RunProvider p, bool extraReq) {
+    var iconPath = synergy.icon;
+    if (iconPath.isEmpty && synergy.items.isNotEmpty) {
+      final resolved = p.entityByName(synergy.items.first);
+      iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GameIcon(
+          assetPath: iconPath,
+          fallback: Icons.hub_outlined,
+          quality: '',
+          size: 40,
+          showRing: false,
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GameIcon(
-                assetPath: iconPath,
-                fallback: Icons.hub_outlined,
-                quality: '',
-                size: 40,
-                showRing: false,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
+              Row(
+                children: [
+                  Expanded(
+                    child: GoopText(
+                      synergy.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  if (extraReq)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Tooltip(
+                        message:
+                            'May have extra requirements under '
+                            "Lich's Eye Bullets",
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: Colors.amber.withValues(alpha: 0.5),
+                            ),
+                          ),
                           child: GoopText(
-                            synergy.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
+                            'EXTRA REQ',
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.6,
+                              color: Skeuo.inkIf(Colors.amberAccent),
                             ),
                           ),
                         ),
-                        if (extraReq)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 6),
-                            child: Tooltip(
-                              message:
-                                  'May have extra requirements under '
-                                  "Lich's Eye Bullets",
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: Colors.amber.withValues(alpha: 0.5),
-                                  ),
-                                ),
-                                child: GoopText(
-                                  'EXTRA REQ',
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 0.6,
-                                    color: Skeuo.inkIf(Colors.amberAccent),
-                                  ),
-                                ),
-                              ),
-                            ),
                       ),
-                      _LebPill(),
-                      ],
                     ),
-                    if (synergy.effect.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      GoopText(
-                        synergy.prettyEffect.isNotEmpty
-                            ? synergy.prettyEffect
-                            : synergy.effect,
-                        style: TextStyle(
-                          fontSize: 12,
-                          height: 1.35,
-                          color: Colors.white.withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+                  const _LebPill(),
+                ],
               ),
+              if (synergy.effect.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                GoopText(
+                  synergy.prettyEffect.isNotEmpty
+                      ? synergy.prettyEffect
+                      : synergy.effect,
+                  style: TextStyle(
+                    fontSize: 12,
+                    height: 1.35,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -644,11 +686,18 @@ class _LebPill extends StatelessWidget {
   }
 }
 
-/// Minimal dashed rounded-rect border for ghost rows.
+/// Minimal dashed rounded-rect border for ghost rows. [t] (0..1)
+/// marches the dashes along the path — the LEB "this is simulated"
+/// tell.
 class _DashedBorderPainter extends CustomPainter {
   final Color color;
   final Radius radius;
-  _DashedBorderPainter({required this.color, required this.radius});
+  final double t;
+  _DashedBorderPainter({
+    required this.color,
+    required this.radius,
+    this.t = 0,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -662,21 +711,26 @@ class _DashedBorderPainter extends CustomPainter {
       Radius.circular(radius.x),
     );
     final path = Path()..addRRect(rrect);
+    const dash = 5.0;
+    const gap = 4.0;
+    final period = dash + gap;
+    final shift = (t.clamp(0.0, 1.0) * period) % period;
     for (final metric in path.computeMetrics()) {
       var dist = 0.0;
-      const dash = 5.0;
-      const gap = 4.0;
-      while (dist < metric.length) {
-        canvas.drawPath(
-          metric.extractPath(dist, (dist + dash).clamp(0, metric.length)),
-          paint,
-        );
-        dist += dash + gap;
+      while (dist < metric.length + period) {
+        final start = dist - shift;
+        final end = start + dash;
+        if (end > 0 && start < metric.length) {
+          final s = start < 0 ? 0.0 : start;
+          final e = end > metric.length ? metric.length : end;
+          if (e > s) canvas.drawPath(metric.extractPath(s, e), paint);
+        }
+        dist += period;
       }
     }
   }
 
   @override
   bool shouldRepaint(_DashedBorderPainter old) =>
-      old.color != color || old.radius != radius;
+      old.color != color || old.radius != radius || old.t != t;
 }

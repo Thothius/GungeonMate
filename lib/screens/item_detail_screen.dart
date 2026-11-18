@@ -61,6 +61,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final _wikiKey = GlobalKey();
   final _synergyKey = GlobalKey();
   final _scrollCtrl = ScrollController();
+  // Gun detail bottom tabs — -1 = all closed (default), else index
+  // into the SYN/NOTES/REFS spec list. Single-open accordion.
+  int _detailTab = -1;
 
   @override
   void dispose() {
@@ -227,18 +230,68 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           child: GunStats(gun: gun),
                         ),
                       ),
+                    // Collapsible detail tabs — all closed by default so
+                    // the page stays compact; tapping a header expands
+                    // that section (tap again to close). SYN carries the
+                    // LEB pager, NOTES carries notes + ammonomicon +
+                    // wiki sections, REFS carries the back-reference card.
                     if (gun != null)
                       SliverToBoxAdapter(
-                        child: GunSynergiesTab(
-                          currentName: name,
-                          lebView: lebView,
-                        ),
-                      ),
-                    if (gun != null)
-                      SliverToBoxAdapter(
-                        child: GunNotesTab(
-                          gun: gun,
-                          elements: ElementalTagger.elementsOfGun(gun),
+                        child: _DetailTabs(
+                          openIndex: _detailTab,
+                          onToggle:
+                              (i) => setState(
+                                () => _detailTab = _detailTab == i ? -1 : i,
+                              ),
+                          tabs: [
+                            _DetailTabSpec(
+                              label: 'SYN',
+                              count:
+                                  runProvider.getSynergiesFor(name).length,
+                              child: GunSynergiesTab(
+                                currentName: name,
+                                lebView: lebView,
+                              ),
+                            ),
+                            _DetailTabSpec(
+                              label: 'NOTES',
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GunNotesTab(
+                                    gun: gun,
+                                    elements:
+                                        ElementalTagger.elementsOfGun(gun),
+                                  ),
+                                  if (ammonomiconEntry.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                        16,
+                                        12,
+                                        16,
+                                        4,
+                                      ),
+                                      child: AmmonomiconCard(
+                                        text: ammonomiconEntry,
+                                      ),
+                                    ),
+                                  ...buildWikiSections(wiki),
+                                ],
+                              ),
+                            ),
+                            _DetailTabSpec(
+                              label: 'REFS',
+                              count: referrers.length,
+                              child:
+                                  referrers.isNotEmpty
+                                      ? ReferencedBySection(
+                                        referrers: referrers,
+                                      )
+                                      : const _EmptyTabNote(
+                                        'Nothing references this gun yet.',
+                                      ),
+                            ),
+                          ],
                         ),
                       ),
                     // Items get the same grouped all-list as guns
@@ -272,22 +325,22 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       ),
                     // ---- Ammonomicon flavour entry + wiki rich content
                     // (Effects, Interactions, Notes, Tips) + back-refs.
-                    // Same three blocks serve guns and items — the data
-                    // is 100% populated on both sides.
-                    if (ammonomiconEntry.isNotEmpty)
+                    // Items only — guns get these inside the NOTES/REFS
+                    // collapsible tabs above.
+                    if (item != null && ammonomiconEntry.isNotEmpty)
                       SliverToBoxAdapter(
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                           child: AmmonomiconCard(text: ammonomiconEntry),
                         ),
                       ),
-                    if (wiki.hasAny) ...[
+                    if (item != null && wiki.hasAny) ...[
                       SliverToBoxAdapter(
                         child: SizedBox(key: _wikiKey, height: 0),
                       ),
                       ...buildWikiSlivers(wiki),
                     ],
-                    if (referrers.isNotEmpty)
+                    if (item != null && referrers.isNotEmpty)
                       SliverToBoxAdapter(
                         child: ReferencedBySection(referrers: referrers),
                       ),
@@ -497,6 +550,149 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Collapsible detail tabs (gun detail bottom: SYN / NOTES / REFS)
+// ---------------------------------------------------------------------------
+
+class _DetailTabSpec {
+  final String label;
+  final int? count;
+  final Widget child;
+  const _DetailTabSpec({
+    required this.label,
+    required this.child,
+    this.count,
+  });
+}
+
+/// Accordion of detail sections — all headers visible, exactly one
+/// (or none) expanded. Closed tabs render no content, keeping the
+/// page short until the user asks for it.
+class _DetailTabs extends StatelessWidget {
+  final int openIndex;
+  final ValueChanged<int> onToggle;
+  final List<_DetailTabSpec> tabs;
+  const _DetailTabs({
+    required this.openIndex,
+    required this.onToggle,
+    required this.tabs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < tabs.length; i++) ...[
+          _DetailTabHeader(
+            spec: tabs[i],
+            open: openIndex == i,
+            onTap: () => onToggle(i),
+          ),
+          if (openIndex == i) tabs[i].child,
+        ],
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+}
+
+class _DetailTabHeader extends StatelessWidget {
+  final _DetailTabSpec spec;
+  final bool open;
+  final VoidCallback onTap;
+  const _DetailTabHeader({
+    required this.spec,
+    required this.open,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final sf = Responsive.factor(context);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Haptics.selection();
+        onTap();
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+        ),
+        child: Row(
+          children: [
+            GoopText(
+              spec.label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: Colors.white.withValues(alpha: open ? 0.9 : 0.55),
+              ),
+            ),
+            if (spec.count != null) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 7,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: GoopText(
+                  '${spec.count}',
+                  style: TextStyle(
+                    fontSize: 10 * sf,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+              ),
+            ],
+            const Spacer(),
+            AnimatedRotation(
+              turns: open ? 0.5 : 0,
+              duration: const Duration(milliseconds: 180),
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 20,
+                color: Colors.white.withValues(alpha: open ? 0.8 : 0.4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyTabNote extends StatelessWidget {
+  final String text;
+  const _EmptyTabNote(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 4, 18, 18),
+      child: GoopText(
+        text,
+        style: TextStyle(
+          fontSize: 12.5,
+          fontStyle: FontStyle.italic,
+          color: Colors.white.withValues(alpha: 0.45),
         ),
       ),
     );
