@@ -1776,9 +1776,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     final rows = <Widget>[
       for (var i = 0; i < roles.length; i++) ...[
         _colorRoleRow(roles[i].$1, roles[i].$2, roles[i].$3, roles[i].$4),
-        // Wallpaper picker sits directly under CANVAS — it replaces
-        // that solid color as the app backdrop when set.
-        if (i == 0) _buildWallpaperRow(),
+        // BG mode + wallpaper picker sit directly under CANVAS — the
+        // backdrop is either the solid canvas color or a wallpaper.
+        if (i == 0) ...[_buildBgModeRow(), _buildWallpaperRow()],
       ],
     ];
     return ListView(
@@ -1870,6 +1870,37 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// BG MODE chips — SOLID uses the CANVAS color, WALLPAPER opens the
+  /// picker sheet. Mirrors the wallpaper sheet's NONE tile so both
+  /// paths clear/set the same field.
+  Widget _buildBgModeRow() {
+    final wp = AppTheme.cachedCustomTheme?.wallpaper;
+    Widget chip(String label, bool on, VoidCallback onTap) => Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: _ShaderChip(label: label, on: on, onTap: onTap),
+      ),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          chip('SOLID', wp == null, () {
+            if (wp == null) return;
+            Haptics.selection();
+            setState(() => _draft = _draft.copyWith(wallpaper: null));
+            AppTheme.saveCustomThemeData(_draft);
+            _previewTheme(AppThemeMode.custom);
+          }),
+          chip('WALLPAPER', wp != null, () {
+            Haptics.selection();
+            _showWallpaperSheet();
+          }),
+        ],
       ),
     );
   }

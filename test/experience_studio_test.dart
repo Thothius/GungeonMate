@@ -394,7 +394,9 @@ void main() {
       expect(find.text('numbers & metrics'), findsOneWidget);
       // Old SAVE THEME button is gone — SAVE tab owns persistence.
       expect(find.text('SAVE THEME'), findsNothing);
-      expect(find.text('WALLPAPER'), findsOneWidget);
+      // BG MODE chips + wallpaper row label both say WALLPAPER.
+      expect(find.text('SOLID'), findsOneWidget);
+      expect(find.text('WALLPAPER'), findsWidgets);
     });
 
     testWidgets('TYPE shows swipable tiles + bottom controls', (

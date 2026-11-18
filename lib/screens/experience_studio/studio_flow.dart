@@ -156,6 +156,76 @@ class _MockPreviewScreen extends StatelessWidget {
               ),
             ),
           ),
+          // Ambient glow — same resolution as the app overlay / LIVE
+          // LOOK so AMBIANCE picks show in the mock too.
+          Positioned.fill(
+            child: IgnorePointer(
+              child: ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (_, prefs, _) {
+                  final f = AppTheme.flairFor(mode);
+                  final eff = (prefs.glowIntensity * 1.8).clamp(0.0, 1.8);
+                  if (eff <= 0.001) return const SizedBox.shrink();
+                  Color scaled(Color c) =>
+                      c.withValues(alpha: (c.a * eff).clamp(0.0, 1.0));
+                  return AmbientGlow(
+                    primary: scaled(
+                      Color.lerp(f.glowPrimary, prefs.glowColor, 0.5) ??
+                          f.glowPrimary,
+                    ),
+                    secondary: scaled(
+                      Color.lerp(f.glowSecondary, prefs.glowColor, 0.5) ??
+                          f.glowSecondary,
+                    ),
+                    tertiary: f.headlineStat.withValues(alpha: 0.3),
+                    style: prefs.glowStyleOverride ?? f.glowStyle,
+                  );
+                },
+              ),
+            ),
+          ),
+          // Vignette + film grain — the AMBIANCE depth sliders.
+          Positioned.fill(
+            child: IgnorePointer(
+              child: ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder:
+                    (_, prefs, _) => Stack(
+                      children: [
+                        if (prefs.vignetteIntensity > 0.01)
+                          Positioned.fill(
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: RadialGradient(
+                                  center: Alignment.center,
+                                  radius: 1.25,
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.black.withValues(
+                                      alpha: 0.2 * prefs.vignetteIntensity,
+                                    ),
+                                    Colors.black.withValues(
+                                      alpha: 0.45 * prefs.vignetteIntensity,
+                                    ),
+                                  ],
+                                  stops: const [0.0, 0.6, 1.0],
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (prefs.grainIntensity > 0.005)
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: GrainPainter(
+                                opacity: prefs.grainIntensity * 0.35,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+              ),
+            ),
+          ),
           SafeArea(
             child: Column(
               children: [
