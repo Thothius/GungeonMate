@@ -1,3 +1,19 @@
+## v3.4.0 — Customization Studio + Multiplayer Identity (November 2026)
+
+**Build:** 163
+
+Preset pick-or-create customization flow, custom wallpapers, new avatars, and a multiplayer/lobby polish pass.
+
+### Changes
+- **Preset studio** — CHOOSE (browse premade + saved themes) or NEW PRESET (name → copy existing vs scratch) → wizard with DETAILS / COLORS&BG / TYPE / PARTICLES / AMBIANCE / SAVE tabs and a fullscreen mock preview running the real particle/wallpaper path.
+- **Wallpapers** — 46 wallpaper WebPs under `assets/images/wallpapers/custom/`; SOLID/WALLPAPER BG mode chips; wallpaper layer sits above canvas, below particles/glow, with readability scrim; legacy .jpg→.webp migration for saved themes.
+- **Avatars** — 11 new `custom_01..11` portraits in the MP avatar picker (reshuffle per open, animated-frames-only stage, viewport-capped so CONFIRM stays reachable).
+- **LEB synergies** — ALL/P1/P2/LEB pager on gun details, grouped all-list, ghost simulated rows, browse LEB toggle + badges, codex simulated states; LEB scope preserved through entity peek sheets.
+- **Gun detail tabs** — SYN / NOTES / REFS bottom accordion; responsive tab headers.
+- **Settings reorg** — RUN / GAMEPLAY / MULTIPLAYER / DATA / CUSTOMIZATION / DEV TOOLS / DANGER ZONE.
+- **MP flow** — lobby character pick skips CONTINUE → straight to identity stage.
+- **Fixes** — phantom Cultist P2 on co-op picker cancel; LEB pager chip desync on toggle-off; mp_lobby test hang (catalog load moved to setUpAll).
+
 ## v3.3.0 — Lean Machine + Modern Stack (October 2026)
 
 **Build:** 162

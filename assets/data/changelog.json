@@ -1,5 +1,28 @@
 [
   {
+    "version": "3.4.0",
+    "date": "2026-11",
+    "sections": {
+      "Features": [
+        "Preset pick-or-create flow in Customization — browse premade + saved themes or start from scratch, wizard tabs (Details / Colors & BG / Type / Particles / Ambiance / Save) with fullscreen live mock preview",
+        "Custom wallpaper backgrounds — pick from 46 wallpapers under Colors & BG; SOLID/WALLPAPER mode chips; renders app-wide under particles with a readability scrim",
+        "11 new custom avatar portraits for multiplayer identity",
+        "Gun detail bottom tabs — SYN / NOTES / REFS accordion views",
+        "TAP FX ambiance control — tap sparkles + haptics intensity chips"
+      ],
+      "Polish": [
+        "Settings reorganized — RUN / GAMEPLAY / MULTIPLAYER / DATA / CUSTOMIZATION / DEV TOOLS / DANGER ZONE with honest section labels",
+        "Multiplayer lobby — picking a character skips straight to identity; avatar picker reshuffles portraits per open with frame stage",
+        "Item detail tab headers scale responsively; synergy pager clamp fix; LEB scope preserved through peek-sheet navigation",
+        "Character select entrance animation + PICK bar press feedback"
+      ],
+      "Fixed": [
+        "Add Co-op no longer leaves a phantom Cultist Player 2 if you back out of the picker",
+        "LEB toggle-off while viewing the LEB page no longer desyncs the pager chips"
+      ]
+    }
+  },
+  {
     "version": "3.3.0",
     "date": "2026-11",
     "sections": {
