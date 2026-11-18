@@ -189,29 +189,48 @@ List<StatMod> parseStatMods(String effect) {
   final mods = <StatMod>[];
   final seen = <String>{};
   for (final clause in _clauses(effect)) {
-    if (_enemyRe.hasMatch(clause)) continue;
-    for (final (stat, kwRe) in _statKeywords) {
-      for (final m in kwRe.allMatches(clause)) {
-        final mod = _modFor(stat, clause, m.start);
-        if (mod == null) continue;
-        final key =
-            '${stat.name}|${mod.kind.name}|${mod.value}|${clause.hashCode}';
-        if (seen.add(key)) mods.add(mod);
-      }
-    }
-    // "fires 4 projectiles instead of 3" style — one mod per clause.
-    final instRe = RegExp(
-      r'(\d+(?:\.\d+)?)\s*(?:projectiles?|bullets?|shots?|pellets?)\s+instead of\s+\d+',
-      caseSensitive: false,
-    );
-    for (final m in instRe.allMatches(clause)) {
-      final v = double.tryParse(m.group(1)!);
-      if (v != null) {
-        mods.add(StatMod(SynStat.projectilesPerShot, ModKind.setTo, v, clause));
-      }
+    // Enemy-side tail in the same clause must not kill a player buff:
+    // "deal 50% more damage and slow enemy bullets" → keep the damage part.
+    for (final sub in _stripEnemyParts(clause)) {
+      _modsInClause(sub, mods, seen);
     }
   }
   return mods;
+}
+
+void _modsInClause(String clause, List<StatMod> mods, Set<String> seen) {
+  for (final (stat, kwRe) in _statKeywords) {
+    for (final m in kwRe.allMatches(clause)) {
+      final mod = _modFor(stat, clause, m.start);
+      if (mod == null) continue;
+      final key =
+          '${stat.name}|${mod.kind.name}|${mod.value}|${clause.hashCode}';
+      if (seen.add(key)) mods.add(mod);
+    }
+  }
+  // "fires 4 projectiles instead of 3" style — one mod per clause.
+  final instRe = RegExp(
+    r'(\d+(?:\.\d+)?)\s*(?:projectiles?|bullets?|shots?|pellets?)\s+instead of\s+\d+',
+    caseSensitive: false,
+  );
+  for (final m in instRe.allMatches(clause)) {
+    final v = double.tryParse(m.group(1)!);
+    if (v != null) {
+      mods.add(StatMod(SynStat.projectilesPerShot, ModKind.setTo, v, clause));
+    }
+  }
+}
+
+/// Split a clause on "and"/"," ONLY when it contains enemy-side text,
+/// keeping the player-side parts. Non-enemy clauses pass through whole
+/// so shared-number phrases ("damage and knockback by 20%") survive.
+List<String> _stripEnemyParts(String clause) {
+  if (!_enemyRe.hasMatch(clause)) return [clause];
+  return clause
+      .split(RegExp(r'\s+and\s+|,'))
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty && !_enemyRe.hasMatch(s))
+      .toList();
 }
 
 StatMod? _modFor(SynStat stat, String clause, int kwStart) {
@@ -222,17 +241,24 @@ StatMod? _modFor(SynStat stat, String clause, int kwStart) {
   final after = clause.substring(kwStart, winEnd);
   final window = before + after;
 
-  // Direction from verbs nearest the number — check the whole window,
-  // preferring whichever verb appears closest to the stat keyword.
+  // Direction from the verb NEAREST the stat keyword — first-match
+  // scanning misattributes signs in multi-stat clauses
+  // ("increases magazine ... and decreases reload ...").
   double sign = 0;
-  final downM = _downRe.firstMatch(window);
-  final upM = _upRe.firstMatch(window);
-  if (downM != null && upM != null) {
-    sign = downM.start < upM.start ? -1 : 1;
-  } else if (downM != null) {
-    sign = -1;
-  } else if (upM != null) {
-    sign = 1;
+  var bestDist = 1 << 30;
+  for (final m in _downRe.allMatches(window)) {
+    final d = (winStart + m.start - kwStart).abs();
+    if (d < bestDist) {
+      bestDist = d;
+      sign = -1;
+    }
+  }
+  for (final m in _upRe.allMatches(window)) {
+    final d = (winStart + m.start - kwStart).abs();
+    if (d < bestDist) {
+      bestDist = d;
+      sign = 1;
+    }
   }
 
   // "to N" set-value wins when there's no % sign.

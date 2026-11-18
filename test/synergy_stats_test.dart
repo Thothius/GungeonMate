@@ -72,6 +72,17 @@ void main() {
           SynStat.reload,
         ]),
       );
+      // Sign attribution: reload must be NEGATIVE ("decreases ... 33%")
+      // even though "Increases" appears earlier in the same clause.
+      final reload = mods.firstWhere((m) => m.stat == SynStat.reload);
+      expect(reload.value, -33);
+    });
+
+    test('enemy tail does not kill player buff in same clause', () {
+      final mods = parseStatMods(
+        'Deals 50% more damage and slows down enemy bullets by 20%.',
+      );
+      expect(mods.any((m) => m.stat == SynStat.damage), isTrue);
     });
 
     test('enemy-side skipped', () {
