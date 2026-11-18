@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/synergy_stats.dart';
 import '../../theme/tokens.dart';
 import '../game_icon.dart';
+import '../stat_delta_chips.dart';
 import '../skeuo/skeuo_tokens.dart';
 import '../state_widgets.dart';
 
@@ -44,13 +46,27 @@ class EntitySynergiesView extends StatelessWidget {
       return const _EmptySynergies();
     }
     final p = context.read<RunProvider>();
-    final mainNames = p.runState.main.allItemNames
-        .map((n) => n.toLowerCase())
-        .toSet();
+    final curGun = p.gunByName(currentName);
+    List<StatDelta> deltasFor(SynergyStatus st) {
+      final g = curGun;
+      if (g == null) return const [];
+      final others = <String>{};
+      for (final piece in [...st.synergy.items, ...st.synergy.anyOf]) {
+        final gn = p.gunByName(piece)?.name;
+        if (gn != null && gn.toLowerCase() != currentName.toLowerCase()) {
+          others.add(gn.toLowerCase());
+        }
+      }
+      return deltasForSynergy(st.synergy.effect, g, currentName, others);
+    }
+
+    final mainNames =
+        p.runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
     final coop = p.runState.coop;
-    final coopNames = coop == null
-        ? const <String>{}
-        : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final coopNames =
+        coop == null
+            ? const <String>{}
+            : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
 
     final complete = <SynergyStatus>[];
     final partial = <SynergyStatus>[];
@@ -79,10 +95,10 @@ class EntitySynergiesView extends StatelessWidget {
       return coop == null
           ? 'P1'
           : (p1 && p2
-                ? 'P1+P2'
-                : p2
-                ? 'P2'
-                : 'P1');
+              ? 'P1+P2'
+              : p2
+              ? 'P2'
+              : 'P1');
     }
 
     Widget rowsFor(
@@ -100,6 +116,7 @@ class EntitySynergiesView extends StatelessWidget {
               p: p,
               showOwnerPill: showOwnerPills,
               locked: locked,
+              statDeltas: deltasFor(st),
             ),
         ],
       );
@@ -225,7 +242,7 @@ class _GroupHeader extends StatelessWidget {
   }
 }
 
-class _SynergyRow extends StatelessWidget {
+class _SynergyRow extends StatefulWidget {
   final SynergyStatus status;
   final String owners;
   final String? missing;
@@ -235,6 +252,9 @@ class _SynergyRow extends StatelessWidget {
   /// LOCKED group rows render neutral — amber is reserved for
   /// PARTIAL progress so locked doesn't read as "almost there".
   final bool locked;
+
+  /// Parsed stat deltas for the current gun (empty for items / no mods).
+  final List<StatDelta> statDeltas;
   const _SynergyRow({
     required this.status,
     required this.owners,
@@ -242,29 +262,39 @@ class _SynergyRow extends StatelessWidget {
     required this.p,
     this.showOwnerPill = true,
     this.locked = false,
+    this.statDeltas = const [],
   });
 
   @override
+  State<_SynergyRow> createState() => _SynergyRowState();
+}
+
+class _SynergyRowState extends State<_SynergyRow> {
+  @override
   Widget build(BuildContext context) {
+    final status = widget.status;
     final s = status.synergy;
+    final p = widget.p;
+    final missing = widget.missing;
     // Icon: the missing piece for partials/locked, the synergy's own icon
     // (or first piece) for completes.
     var iconPath = s.icon;
     var iconName = missing ?? '';
     if (missing != null) {
-      final resolved = p.entityByName(missing!);
+      final resolved = p.entityByName(missing);
       iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? iconPath;
-      iconName = missing!;
+      iconName = missing;
     } else if (iconPath.isEmpty && s.items.isNotEmpty) {
       final resolved = p.entityByName(s.items.first);
       iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
     }
 
-    final accent = locked
-        ? Colors.white38
-        : status.active
-        ? Skeuo.inkIf(Colors.greenAccent)
-        : Skeuo.inkIf(Colors.amberAccent);
+    final accent =
+        widget.locked
+            ? Colors.white38
+            : status.active
+            ? Skeuo.inkIf(Colors.greenAccent)
+            : Skeuo.inkIf(Colors.amberAccent);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -306,7 +336,7 @@ class _SynergyRow extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (showOwnerPill) _OwnerPill(label: owners),
+                    if (widget.showOwnerPill) _OwnerPill(label: widget.owners),
                   ],
                 ),
                 if (s.effect.isNotEmpty) ...[
@@ -319,6 +349,10 @@ class _SynergyRow extends StatelessWidget {
                       color: Colors.white.withValues(alpha: 0.65),
                     ),
                   ),
+                ],
+                if (widget.statDeltas.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  StatDeltaChips(deltas: widget.statDeltas),
                 ],
               ],
             ),
@@ -335,13 +369,14 @@ class _OwnerPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = label == 'NONE'
-        ? Colors.white38
-        : label.contains('+')
-        ? Skeuo.inkIf(Colors.cyanAccent)
-        : label == 'P2'
-        ? Skeuo.inkIf(Colors.orangeAccent)
-        : Skeuo.inkIf(Colors.lightGreenAccent);
+    final color =
+        label == 'NONE'
+            ? Colors.white38
+            : label.contains('+')
+            ? Skeuo.inkIf(Colors.cyanAccent)
+            : label == 'P2'
+            ? Skeuo.inkIf(Colors.orangeAccent)
+            : Skeuo.inkIf(Colors.lightGreenAccent);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(

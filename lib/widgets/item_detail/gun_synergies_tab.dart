@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/gun.dart';
 import '../../models/synergy.dart';
 import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/synergy_stats.dart';
 import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
 import '../game_icon.dart';
+import '../stat_delta_chips.dart';
 import '../skeuo/skeuo_tokens.dart';
 import 'entity_synergies_view.dart';
 import 'leb_view_scope.dart';
@@ -340,12 +343,26 @@ class _LebPageState extends State<_LebPage>
     super.dispose();
   }
 
+  List<StatDelta> _lebDeltas(RunProvider p, Gun? curGun, Synergy s) {
+    final g = curGun;
+    if (g == null) return const [];
+    final others = <String>{};
+    for (final piece in [...s.items, ...s.anyOf]) {
+      final gn = p.gunByName(piece)?.name;
+      if (gn != null && gn.toLowerCase() != widget.currentName.toLowerCase()) {
+        others.add(gn.toLowerCase());
+      }
+    }
+    return deltasForSynergy(s.effect, g, widget.currentName, others);
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentName = widget.currentName;
     final p = context.read<RunProvider>();
     final synergies = p.getSynergiesFor(currentName);
     final lebIcon = p.itemByName("Lich's Eye Bullets")?.icon ?? '';
+    final curGun = p.gunByName(currentName);
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -361,7 +378,11 @@ class _LebPageState extends State<_LebPage>
             else ...[
               for (final s in [...synergies]
                 ..sort((a, b) => a.name.compareTo(b.name)))
-                _GhostSynergyRow(synergy: s, march: _march),
+                _GhostSynergyRow(
+                  synergy: s,
+                  march: _march,
+                  statDeltas: _lebDeltas(p, curGun, s),
+                ),
             ],
           ],
         ),
@@ -551,7 +572,12 @@ class _NoLebSynergies extends StatelessWidget {
 class _GhostSynergyRow extends StatelessWidget {
   final Synergy synergy;
   final Animation<double> march;
-  const _GhostSynergyRow({required this.synergy, required this.march});
+  final List<StatDelta> statDeltas;
+  const _GhostSynergyRow({
+    required this.synergy,
+    required this.march,
+    this.statDeltas = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -679,6 +705,10 @@ class _GhostSynergyRow extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.6),
                   ),
                 ),
+              ],
+              if (statDeltas.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                StatDeltaChips(deltas: statDeltas),
               ],
             ],
           ),
