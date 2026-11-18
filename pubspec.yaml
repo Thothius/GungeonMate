@@ -93,6 +93,7 @@ flutter:
     - assets/data/guns.json
     - assets/data/items.json
     - assets/data/synergies.json
+    - assets/data/synergy_meta.json
     - assets/data/shrines.json
     - assets/data/gungeoneers.json
     - assets/data/back_refs.json
