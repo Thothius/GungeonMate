@@ -1,4 +1,4 @@
-## v3.4.2 — Preset Save Hardening (November 2026)
+## v3.5.0 — Preset Save Hardening (November 2026)
 
 **Build:** 165
 
