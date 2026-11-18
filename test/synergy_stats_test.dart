@@ -82,6 +82,15 @@ void main() {
       expect(mods.every((m) => m.stat != SynStat.shotSpeed), isTrue);
     });
 
+    test('decimals survive clause splitting (1.5x, 0.25%)', () {
+      final mods = parseStatMods(
+        'Spinning 360 degrees provides a 3-second buff that gives the next '
+        'shot a 1.5x damage multiplier.',
+      );
+      final d = mods.firstWhere((m) => m.stat == SynStat.damage);
+      expect(d.value, closeTo(50, 0.001));
+    });
+
     test('projectile count instead-of', () {
       final mods = parseStatMods(
         'Big Shotgun fires 4 projectiles instead of 3.',

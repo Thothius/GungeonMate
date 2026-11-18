@@ -122,7 +122,7 @@ final _downRe = RegExp(
   caseSensitive: false,
 );
 final _upRe = RegExp(
-  r'increas|boost|rais|improv|enhanc|gain|add|doubl|tripl|quadrupl|\btimes\b|more damage|higher|greater|larger|stronger|faster',
+  r'increas|boost|rais|improv|enhanc|gain|add|doubl|tripl|quadrupl|buff|multiplier|\btimes\b|more damage|higher|greater|larger|stronger|faster',
   caseSensitive: false,
 );
 final _multWordRe = RegExp(
@@ -149,12 +149,38 @@ const _multValues = {
 
 /// Split effect text into clauses on sentence/clause boundaries.
 List<String> _clauses(String effect) {
-  return effect
-      .split(RegExp(r'[.!?;]+|\n+'))
-      .map((c) => c.trim())
-      .where((c) => c.isNotEmpty)
-      .toList();
+  // Decimals must survive — "1.5x damage" and "0.25%" would shatter into
+  // "1" + "5x" (+400% bug) if we split naively on '.'.
+  final out = <String>[];
+  final buf = StringBuffer();
+  for (var i = 0; i < effect.length; i++) {
+    final ch = effect[i];
+    final isBreak =
+        ch == '.' ||
+        ch == '!' ||
+        ch == '?' ||
+        ch == ';' ||
+        ch.codeUnitAt(0) == 10;
+    final decimal =
+        ch == '.' &&
+        i > 0 &&
+        i + 1 < effect.length &&
+        _isDigit(effect[i - 1]) &&
+        _isDigit(effect[i + 1]);
+    if (isBreak && !decimal) {
+      final c = buf.toString().trim();
+      if (c.isNotEmpty) out.add(c);
+      buf.clear();
+    } else {
+      buf.write(ch);
+    }
+  }
+  final c = buf.toString().trim();
+  if (c.isNotEmpty) out.add(c);
+  return out;
 }
+
+bool _isDigit(String ch) => ch.codeUnitAt(0) >= 48 && ch.codeUnitAt(0) <= 57;
 
 /// Extract every quantified stat modifier from an effect text.
 /// Each [StatMod] keeps its source clause for tap-to-inspect display.
@@ -226,10 +252,12 @@ StatMod? _modFor(SynStat stat, String clause, int kwStart) {
   }
 
   final multM = _multRe.firstMatch(after) ?? _multRe.firstMatch(before);
-  if (multM != null && sign != 0) {
+  if (multM != null) {
     final x = double.tryParse(multM.group(1)!);
     if (x != null) {
-      return StatMod(stat, ModKind.percent, sign * (x - 1) * 100, clause);
+      final pct = (x - 1) * 100;
+      final eff = sign != 0 && x >= 1 ? sign * pct.abs() : pct;
+      return StatMod(stat, ModKind.percent, eff, clause);
     }
   }
 
