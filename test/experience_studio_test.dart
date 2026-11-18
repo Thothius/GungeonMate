@@ -419,6 +419,35 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       expect(VisualPrefs.notifier.value.particleItemIcon, -1);
     });
+
+    testWidgets('SIZE & SPEED section writes size/opacity/speed prefs', (
+      tester,
+    ) async {
+      await openWizard(tester, 3); // PARTICLES
+      expect(find.text('SIZE & SPEED'), findsOneWidget);
+      expect(find.text('SIZE'), findsOneWidget);
+      expect(find.text('OPACITY'), findsOneWidget);
+      expect(find.text('VERY FAST'), findsOneWidget);
+      await tester.tap(find.text('VERY FAST'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(
+        VisualPrefs.notifier.value.particleSpeed,
+        ParticleSpeed.veryFast,
+      );
+      // drag the SIZE slider (inside the row labelled SIZE) -> pref moves
+      final sizeRow = find
+          .ancestor(of: find.text('SIZE'), matching: find.byType(Row))
+          .first;
+      await tester.drag(
+        find.descendant(of: sizeRow, matching: find.byType(Slider)),
+        const Offset(80, 0),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(
+        VisualPrefs.notifier.value.particleSizeScale,
+        isNot(1.0),
+      );
+    });
   });
 
   group('Wizard — tab content', () {

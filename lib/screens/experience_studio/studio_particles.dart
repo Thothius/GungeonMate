@@ -164,6 +164,44 @@ class _ParticlesStep extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  _StepLabel('SIZE & SPEED'),
+                  const SizedBox(height: 8),
+                  _MiniSlider(
+                    label: 'SIZE',
+                    value: prefs.particleSizeScale,
+                    min: 0.3,
+                    max: 2.0,
+                    display: '${(prefs.particleSizeScale * 100).round()}%',
+                    onChanged: (v) =>
+                        VisualPrefs.setParticleSizeScale(v),
+                  ),
+                  const SizedBox(height: 4),
+                  _MiniSlider(
+                    label: 'OPACITY',
+                    value: prefs.particleOpacity,
+                    min: 0.0,
+                    max: 1.0,
+                    display: '${(prefs.particleOpacity * 100).round()}%',
+                    onChanged: (v) =>
+                        VisualPrefs.setParticleOpacity(v),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final sp in ParticleSpeed.values)
+                        _GlowFxChip(
+                          label: sp.label.toUpperCase(),
+                          on: prefs.particleSpeed == sp,
+                          onTap: () {
+                            VisualPrefs.setParticleSpeed(sp);
+                            Haptics.selection();
+                          },
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   _StepLabel('COLOR'),
                   const SizedBox(height: 8),
                   // 18 global palettes — horizontal scroller so every
@@ -222,6 +260,65 @@ class _ParticlesStep extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// Compact labeled slider for the SIZE & SPEED section — label chip,
+/// slim slider, live % readout.
+class _MiniSlider extends StatelessWidget {
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final String display;
+  final ValueChanged<double> onChanged;
+  const _MiniSlider({
+    required this.label,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.display,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 56,
+          child: GoopText(
+            label,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.8,
+              color: Colors.white.withValues(alpha: 0.55),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Slider(
+            value: value.clamp(min, max),
+            min: min,
+            max: max,
+            onChanged: onChanged,
+          ),
+        ),
+        SizedBox(
+          width: 40,
+          child: GoopText(
+            display,
+            textAlign: TextAlign.end,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w800,
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
