@@ -108,7 +108,10 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
       children: [
         _PageChips(
           pages: pages,
-          selected: _page,
+          // pages can shrink under us (LEB pref toggled off while the
+          // LEB page is showing) — clamp so no chip highlights a
+          // now-nonexistent index.
+          selected: _page.clamp(0, pages.length - 1),
           onSelect: (i) {
             Haptics.selection();
             _pageCtrl.animateToPage(
