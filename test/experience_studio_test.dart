@@ -167,6 +167,16 @@ void main() {
       // Restore for later groups.
       await VisualPrefs.setTapSparkles(true);
     });
+
+    test('particleItemIcon defaults off + survives json round-trip', () async {
+      expect(const VisualPrefs().particleItemIcon, -1);
+      expect(VisualPrefs.fromJson(const {}).particleItemIcon, -1);
+      await VisualPrefs.setParticleItemIcon(3);
+      final r = VisualPrefs.fromJson(VisualPrefs.notifier.value.toJson());
+      expect(r.particleItemIcon, 3);
+      expect(VisualPrefs.notifier.value.particleItemIcon, 3);
+      await VisualPrefs.setParticleItemIcon(-1);
+    });
   });
 
   group('Flow — CHOOSE', () {
@@ -391,6 +401,23 @@ void main() {
       await openWizard(tester, 3); // PARTICLES
       expect(find.text('DETAILS'), findsWidgets);
       expect(find.text('Enable Particles'), findsOneWidget);
+    });
+
+    testWidgets('ITEM ICONS grid picks a sprite and persists pref', (
+      tester,
+    ) async {
+      await openWizard(tester, 3); // PARTICLES
+      expect(find.text('ITEM ICONS'), findsOneWidget);
+      expect(find.text('BLANKS'), findsOneWidget);
+      expect(find.text('SPRUN'), findsOneWidget);
+      // OFF tile index 0 -> pick BLANKS (index 1 in grid = item 0)
+      await tester.tap(find.text('BLANKS'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particleItemIcon, 0);
+      // OFF restores shape particles
+      await tester.tap(find.text('OFF'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particleItemIcon, -1);
     });
   });
 

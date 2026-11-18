@@ -98,6 +98,18 @@ class _ParticlesStep extends StatelessWidget {
                   const SizedBox(height: 8),
                   _typeGrid(prefs),
                   const SizedBox(height: 16),
+                  _StepLabel('ITEM ICONS'),
+                  const SizedBox(height: 4),
+                  GoopText(
+                    'float real game items instead of shapes',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _itemIconGrid(prefs),
+                  const SizedBox(height: 16),
                   _StepLabel('PHYSICS'),
                   const SizedBox(height: 8),
                   Row(
@@ -382,7 +394,120 @@ class _ParticlePreview extends StatelessWidget {
 }
 
 /// Type tile — fixed-size cell with a painted shape glyph + label,
+  /// ITEM ICONS - OFF tile + the 12 Gungeon item sprites. Picking one
+  /// swaps the whole particle field for floating game icons.
+  Widget _itemIconGrid(VisualPrefs prefs) {
+    const cols = 4;
+    final items = kItemIconParticles;
+    final total = items.length + 1; // + OFF
+    return Column(
+      children: [
+        for (var r = 0; r * cols < total; r++)
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: (r + 1) * cols < total ? 8 : 0,
+            ),
+            child: Row(
+              children: [
+                for (var c = 0; c < cols; c++) ...[
+                  Expanded(
+                    child: r * cols + c < total
+                        ? _ItemIconTile(
+                            index: r * cols + c - 1, // -1 = OFF
+                            active:
+                                prefs.particleItemIcon == r * cols + c - 1,
+                            onTap: () {
+                              VisualPrefs.setParticleItemIcon(
+                                r * cols + c - 1,
+                              );
+                              Haptics.selection();
+                            },
+                          )
+                        : const SizedBox(),
+                  ),
+                  if (c < cols - 1) const SizedBox(width: 8),
+                ],
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
 /// used by the uniform TYPE grid.
+/// One ITEM ICONS cell - OFF glyph or the item sprite + label.
+class _ItemIconTile extends StatelessWidget {
+  final int index; // -1 = OFF, else kItemIconParticles index
+  final bool active;
+  final VoidCallback onTap;
+  const _ItemIconTile({
+    required this.index,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final c = active ? flair.primary : Colors.white.withValues(alpha: 0.5);
+    final label = index < 0 ? 'OFF' : kItemIconParticles[index].$1;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        height: 56,
+        decoration: BoxDecoration(
+          color:
+              active
+                  ? flair.primary.withValues(alpha: 0.18)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                active ? flair.primary : Colors.white.withValues(alpha: 0.12),
+            width: active ? 1.6 : 1.0,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 22,
+              child:
+                  index < 0
+                      ? Icon(Icons.block_rounded, size: 20, color: c)
+                      : Image.asset(
+                          kItemIconParticles[index].$2,
+                          width: 22,
+                          height: 22,
+                          cacheWidth: 96,
+                          errorBuilder: (_, _, _) => Icon(
+                            Icons.broken_image_outlined,
+                            size: 18,
+                            color: c,
+                          ),
+                        ),
+            ),
+            const SizedBox(height: 4),
+            GoopText(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 7.5,
+                fontWeight: active ? FontWeight.w900 : FontWeight.w700,
+                letterSpacing: 0.4,
+                color: c,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ParticleTypeTile extends StatelessWidget {
   final ParticleType type;
   final bool active;

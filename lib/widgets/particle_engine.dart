@@ -29,6 +29,162 @@ part 'particle_engine/particle_types.dart';
 // =============================================================================
 
 // =============================================================================
+// Item-icon particles — 12 iconic Gungeon items floating instead of the
+// shape particles. VisualPrefs.particleItemIcon indexes this list;
+// -1 keeps the normal typed-shape field.
+// =============================================================================
+const kItemIconParticles = <(String, String)>[
+  ('BLANKS', 'assets/images/items/blank_bullets.webp'),
+  ('SHELL CASING', 'assets/images/items/obsidian_shell_casing.webp'),
+  ('HEART', 'assets/images/items/heart_bottle.webp'),
+  ('IRON COIN', 'assets/images/items/iron_coin.webp'),
+  ('KEY', 'assets/images/items/bracket_key.webp'),
+  ('MEDKIT', 'assets/images/items/medkit.webp'),
+  ('BOMB', 'assets/images/items/bomb.webp'),
+  ('GUNBOOTS', 'assets/images/items/gunboots.webp'),
+  ('WINGS', 'assets/images/items/wax_wings.webp'),
+  ('ARMOR', 'assets/images/items/gunknight_armor.webp'),
+  ('SPICE', 'assets/images/items/spice.webp'),
+  ('SPRUN', 'assets/images/items/sprun.webp'),
+];
+
+/// Floating game-item icons drifting upward with sway + rotation —
+/// drop-in replacement for [ParticleField] when the user picks an
+/// item icon in the studio. Same opacity/sizeScale/count knobs.
+class ItemIconField extends StatefulWidget {
+  final int iconIndex;
+  final int count;
+  final double sizeScale;
+  final double opacity;
+  const ItemIconField({
+    super.key,
+    required this.iconIndex,
+    this.count = 14,
+    this.sizeScale = 1.0,
+    this.opacity = 0.7,
+  });
+
+  @override
+  State<ItemIconField> createState() => _ItemIconFieldState();
+}
+
+class _IconP {
+  _IconP(math.Random r, this.slot)
+    : x = r.nextDouble(),
+      y = r.nextDouble(),
+      speed = 0.05 + r.nextDouble() * 0.09,
+      size = 20 + r.nextDouble() * 18,
+      sway = 8 + r.nextDouble() * 22,
+      phase = r.nextDouble() * math.pi * 2,
+      freq = 0.6 + r.nextDouble() * 1.1,
+      spin = (r.nextDouble() - 0.5) * 0.5,
+      fade = 0.45 + r.nextDouble() * 0.4;
+  final int slot;
+  final double x, y, speed, size, sway, phase, freq, spin, fade;
+}
+
+class _ItemIconFieldState extends State<ItemIconField>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+  late List<_IconP> _ps;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 12),
+    )..repeat();
+    _ps = _build();
+  }
+
+  List<_IconP> _build() {
+    final r = math.Random(widget.iconIndex * 31 + widget.count);
+    return [for (var i = 0; i < widget.count; i++) _IconP(r, i)];
+  }
+
+  @override
+  void didUpdateWidget(ItemIconField old) {
+    super.didUpdateWidget(old);
+    if (old.iconIndex != widget.iconIndex || old.count != widget.count) {
+      _ps = _build();
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.iconIndex < 0 ||
+        widget.iconIndex >= kItemIconParticles.length ||
+        widget.opacity <= 0) {
+      return const SizedBox.shrink();
+    }
+    final path = kItemIconParticles[widget.iconIndex].$2;
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: _c,
+        builder: (context, _) {
+          final t = _c.value;
+          return LayoutBuilder(
+            builder: (ctx, box) {
+              final w = box.maxWidth, h = box.maxHeight;
+              if (w <= 0 || h <= 0) return const SizedBox.shrink();
+              return Stack(
+                children: [
+                  for (final p in _ps)
+                    Builder(builder: (_) {
+                      // Loop vertically: start below, drift up past top.
+                      final span = h + p.size * 2;
+                      final yy =
+                          (p.y * span - t * p.speed * span) % span;
+                      final top = yy - p.size;
+                      final left =
+                          p.x * (w - p.size) +
+                          math.sin(t * math.pi * 2 * p.freq + p.phase) *
+                              p.sway;
+                      final rot =
+                          math.sin(t * math.pi * 2 * p.freq * 0.7 + p.phase) *
+                              p.spin;
+                      final op =
+                          widget.opacity *
+                          p.fade *
+                          (0.6 + 0.4 * math.sin(t * math.pi * 2 + p.phase));
+                      final sz = p.size * widget.sizeScale.clamp(0.4, 2.0);
+                      return Positioned(
+                        left: left.clamp(-sz, w),
+                        top: top,
+                        child: Opacity(
+                          opacity: op.clamp(0.0, 1.0),
+                          child: Transform.rotate(
+                            angle: rot,
+                            child: Image.asset(
+                              path,
+                              width: sz,
+                              height: sz,
+                              cacheWidth: 96,
+                              gaplessPlayback: true,
+                              errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+// =============================================================================
 // ParticleField — the main widget
 // =============================================================================
 

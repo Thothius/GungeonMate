@@ -519,6 +519,16 @@ Widget? buildBackdropParticleField(
       (prefs.particlesEnabled ||
           (themeAutoOn && !prefs.particlesUserOff));
   if (!particlesOn || menuVisible) return null;
+  // Item-icon mode - 12 Gungeon item sprites float instead of shapes.
+  // Same gate (particlesOn), same count/size/opacity knobs.
+  if (prefs.particleItemIcon >= 0) {
+    return ItemIconField(
+      iconIndex: prefs.particleItemIcon,
+      count: prefs.particleCount.clamp(6, 18),
+      sizeScale: prefs.particleSizeScale,
+      opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
+    );
+  }
   // color schema priority — explicit user schema > unicorn palette >
   // preset default. themeMatch uses the active flair's colors.
   List<Color>? colorOverride;

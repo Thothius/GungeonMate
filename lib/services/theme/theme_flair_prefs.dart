@@ -414,6 +414,10 @@ class VisualPrefs {
   /// Index into the active theme's 3 flavored color schemas (0-2).
   final int particleSchemaIndex;
 
+  /// Floating game-item icon mode - index into [kItemIconParticles];
+  /// -1 keeps the normal typed-shape particle field.
+  final int particleItemIcon;
+
   /// Chaotic motion toggle — organic turbulence on top of drift.
   final bool particleChaos;
 
@@ -562,6 +566,7 @@ class VisualPrefs {
     this.particleSpeed = ParticleSpeed.normal,
     this.particleTypeIndex = 0,
     this.particleSchemaIndex = 0,
+    this.particleItemIcon = -1,
     this.particleChaos = false,
     this.particleTouch = true,
     this.tapSparkles = true,
@@ -607,6 +612,7 @@ class VisualPrefs {
   static const _kParticleSpeed = 'vp.particle_speed_v1';
   static const _kParticleTypeIdx = 'vp.particle_type_v1';
   static const _kParticleSchemaIdx = 'vp.particle_schema_idx_v1';
+  static const _kParticleItemIcon = 'vp.particle_item_icon_v1';
   static const _kParticleChaos = 'vp.particle_chaos_v1';
   static const _kParticleTouch = 'vp.particle_touch_v1';
   static const _kTapSparkles = 'vp.tap_sparkles_v1';
@@ -753,6 +759,7 @@ class VisualPrefs {
           0,
           kGlobalParticlePalettes.length - 1,
         ),
+        particleItemIcon: p.getInt(_kParticleItemIcon) ?? -1,
         particleChaos: p.getBool(_kParticleChaos) ?? false,
         particleTouch: p.getBool(_kParticleTouch) ?? true,
         tapSparkles: p.getBool(_kTapSparkles) ?? true,
@@ -916,6 +923,11 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setParticleItemIcon(int v) async {
+    notifier.value = notifier.value._with(particleItemIcon: v);
+    _persist();
+  }
+
   static Future<void> setParticleTypeIndex(int v) async {
     notifier.value = notifier.value._with(
       particleTypeIndex: v.clamp(0, ParticleType.values.length - 1),
@@ -1054,6 +1066,7 @@ class VisualPrefs {
       await p.setInt(_kParticleSpeed, v.particleSpeed.index);
       await p.setInt(_kParticleTypeIdx, v.particleTypeIndex);
       await p.setInt(_kParticleSchemaIdx, v.particleSchemaIndex);
+      await p.setInt(_kParticleItemIcon, v.particleItemIcon);
       await p.setBool(_kParticleChaos, v.particleChaos);
       await p.setBool(_kParticleTouch, v.particleTouch);
       await p.setBool(_kTapSparkles, v.tapSparkles);
@@ -1100,6 +1113,7 @@ class VisualPrefs {
     ParticleSpeed? particleSpeed,
     int? particleTypeIndex,
     int? particleSchemaIndex,
+    int? particleItemIcon,
     bool? particleChaos,
     bool? particleTouch,
     bool? tapSparkles,
@@ -1144,6 +1158,7 @@ class VisualPrefs {
     particleSpeed: particleSpeed ?? this.particleSpeed,
     particleTypeIndex: particleTypeIndex ?? this.particleTypeIndex,
     particleSchemaIndex: particleSchemaIndex ?? this.particleSchemaIndex,
+    particleItemIcon: particleItemIcon ?? this.particleItemIcon,
     particleChaos: particleChaos ?? this.particleChaos,
     particleTouch: particleTouch ?? this.particleTouch,
     tapSparkles: tapSparkles ?? this.tapSparkles,
@@ -1185,6 +1200,11 @@ class VisualPrefs {
     'periodicGridColumnCount': periodicGridColumnCount,
     'particleColorSchema': particleColorSchema.index,
     'particleSpeed': particleSpeed.index,
+    'particleTypeIndex': particleTypeIndex,
+    'particleSchemaIndex': particleSchemaIndex,
+    'particleChaos': particleChaos,
+    'particleTouch': particleTouch,
+    'particleItemIcon': particleItemIcon,
     'shaderEnabled': shaderEnabled,
     'shaderPreset': shaderPreset.index,
     'tapSparkles': tapSparkles,
@@ -1259,6 +1279,11 @@ class VisualPrefs {
         j['particleSpeed'] as int?,
         2,
       ),
+      particleTypeIndex: (j['particleTypeIndex'] as int?) ?? 0,
+      particleSchemaIndex: (j['particleSchemaIndex'] as int?) ?? 0,
+      particleChaos: j['particleChaos'] as bool? ?? false,
+      particleTouch: j['particleTouch'] as bool? ?? true,
+      particleItemIcon: j['particleItemIcon'] as int? ?? -1,
       shaderEnabled: j['shaderEnabled'] as bool? ?? false,
       shaderPreset: _enumOr(
         ShaderPreset.values,

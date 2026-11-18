@@ -2230,7 +2230,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             // palette — not the hidden particlePreset curation field.
             chip(
               'PARTICLES',
-              '${ParticleType.values[prefs.particleTypeIndex.clamp(0, ParticleType.values.length - 1)].label} · ${kGlobalParticlePalettes[prefs.particleSchemaIndex.clamp(0, kGlobalParticlePalettes.length - 1)].name}',
+              '${prefs.particleItemIcon >= 0 ? 'ITEM: ${kItemIconParticles[prefs.particleItemIcon.clamp(0, kItemIconParticles.length - 1)].$1}' : ParticleType.values[prefs.particleTypeIndex.clamp(0, ParticleType.values.length - 1)].label} · ${kGlobalParticlePalettes[prefs.particleSchemaIndex.clamp(0, kGlobalParticlePalettes.length - 1)].name}',
             ),
             chip('FONT', prefs.font.label),
             chip('GLOW', '${(prefs.glowIntensity * 100).round()}%'),
