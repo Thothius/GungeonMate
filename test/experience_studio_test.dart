@@ -471,6 +471,19 @@ void main() {
       await tester.tap(find.text('METALLIC'), warnIfMissed: false);
       await tester.pump(const Duration(milliseconds: 300));
       expect(circlesInSheet(tester), greaterThanOrEqualTo(24));
+
+      // Unique collections — each ships its own 32-swatch palette.
+      for (final tab in [
+        'PINK & PURPLE',
+        'BLUE & CYAN',
+        'GREEN & MINTY',
+      ]) {
+        await tester.ensureVisible(find.text(tab));
+        await tester.tap(find.text(tab), warnIfMissed: false);
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.text(tab), findsOneWidget);
+        expect(circlesInSheet(tester), greaterThanOrEqualTo(20));
+      }
     });
   });
 

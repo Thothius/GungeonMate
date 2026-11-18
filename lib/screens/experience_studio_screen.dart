@@ -3190,7 +3190,13 @@ class _PaletteColorSheet extends StatefulWidget {
 
 class _PaletteColorSheetState extends State<_PaletteColorSheet> {
   int _tab = 0;
-  static const _tabs = ['GENERAL', 'METALLIC'];
+  static const _tabs = [
+    'GENERAL',
+    'METALLIC',
+    'PINK & PURPLE',
+    'BLUE & CYAN',
+    'GREEN & MINTY',
+  ];
 
   /// 6x10 curated — darks, then hue families red→purple.
   static const _general = [
@@ -3293,11 +3299,55 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
     0xFF8C3B1B,
   ];
 
+  /// Curated - pinks, magentas, roses, orchids, violets.
+  static const _pinkPurple = [
+    0xFFEC4899, 0xFFF472B6, 0xFFDB2777, 0xFFBE185D,
+    0xFF9D174D, 0xFF831843, 0xFFC2185B, 0xFFAD1457,
+    0xFF880E4F, 0xFF6A1B9A, 0xFF7B1FA2, 0xFF8E24AA,
+    0xFF9C27B0, 0xFFAB47BC, 0xFFBA68C8, 0xFFCE93D8,
+    0xFFD81B60, 0xFFE040FB, 0xFFF06292, 0xFFEC407A,
+    0xFFF48FB1, 0xFFB388FF, 0xFF9575CD, 0xFF7E57C2,
+    0xFF4A148C, 0xFF311B92, 0xFFE91E63, 0xFFF50057,
+    0xFFFF4081, 0xFFFF80AB, 0xFFE1BEE7, 0xFF7C4DFF,
+  ];
+
+  /// Curated - azures, sapphires, cyans, teals, ice blues.
+  static const _blueCyan = [
+    0xFF0EA5E9, 0xFF38BDF8, 0xFF7DD3FC, 0xFFA5F3FC,
+    0xFF22D3EE, 0xFF67E8F9, 0xFF0891B2, 0xFF06B6D4,
+    0xFF164E63, 0xFF0E7490, 0xFF075985, 0xFF0369A1,
+    0xFF0284C7, 0xFF0C4A6E, 0xFF1565C0, 0xFF1D4ED8,
+    0xFF2563EB, 0xFF3B82F6, 0xFF60A5FA, 0xFF93C5FD,
+    0xFFBEDBFF, 0xFF42A5F5, 0xFF29B6F6, 0xFF00BCD4,
+    0xFF26C6DA, 0xFF4DD0E1, 0xFFB3E5FC, 0xFF82B1FF,
+    0xFF4FC3F7, 0xFF80DEEA, 0xFFBAE6FD, 0xFF0288D1,
+  ];
+
+  /// Curated - emeralds, mints, teals, limes, seafoam.
+  static const _greenMinty = [
+    0xFF22C55E, 0xFF4ADE80, 0xFF86EFAC, 0xFF16A34A,
+    0xFF15803D, 0xFF166534, 0xFF14532D, 0xFF065F46,
+    0xFF047857, 0xFF10B981, 0xFF34D399, 0xFF6EE7B7,
+    0xFFA7F3D0, 0xFF5EEAD4, 0xFF2DD4BF, 0xFF14B8A6,
+    0xFF0D9488, 0xFF99F6E4, 0xFF00E676, 0xFF69F0AE,
+    0xFF00BFA5, 0xFF1DE9B6, 0xFF64FFDA, 0xFF84CC16,
+    0xFF65A30D, 0xFFA3E635, 0xFFD9F99D, 0xFFCCFF90,
+    0xFF8BC34A, 0xFF558B2F, 0xFFC5E1A5, 0xFF33691E,
+  ];
+
+  static const _palettes = [
+    _general,
+    _metallic,
+    _pinkPurple,
+    _blueCyan,
+    _greenMinty,
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final colors = _tab == 0 ? _general : _metallic;
+    final colors = _palettes[_tab];
     return Container(
-      height: 360,
+      height: 400,
       decoration: BoxDecoration(
         color: const Color(0xFF16161C),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
@@ -3318,17 +3368,22 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Row(
-              children: [
-                for (var i = 0; i < _tabs.length; i++)
-                  Expanded(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => setState(() => _tab = i),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 140),
-                        margin: EdgeInsets.only(right: i == 0 ? 6 : 0),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+            child: LayoutBuilder(
+              builder: (ctx, c) {
+                final w = (c.maxWidth - 6) / 2;
+                return Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    for (var i = 0; i < _tabs.length; i++)
+                      SizedBox(
+                        width: w,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => setState(() => _tab = i),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 140),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
                           color:
                               _tab == i
@@ -3342,24 +3397,28 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                                     : Colors.white.withValues(alpha: 0.08),
                           ),
                         ),
-                        child: Center(
-                          child: GoopText(
-                            _tabs[i],
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.0,
-                              color:
-                                  _tab == i
-                                      ? Colors.white
-                                      : Colors.white.withValues(alpha: 0.4),
+                            child: Center(
+                              child: GoopText(
+                                _tabs[i],
+                                style: TextStyle(
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.8,
+                                  color:
+                                      _tab == i
+                                          ? Colors.white
+                                          : Colors.white.withValues(
+                                            alpha: 0.4,
+                                          ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(height: 10),
