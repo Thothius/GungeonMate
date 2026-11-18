@@ -146,234 +146,259 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         builder: (context, prefs, _) {
           final lebView =
               widget.lebView ??
-              (ownerSlot != null
-                  ? false
-                  : prefs.showLichEyeBulletsSynergies);
+              (ownerSlot != null ? false : prefs.showLichEyeBulletsSynergies);
           return LebViewScope(
-        lebView: lebView,
-        child: LayoutBuilder(
-        builder:
-            (context, cons) => Center(
-              child: SizedBox(
-                width: cons.maxWidth > 760 ? 760 : cons.maxWidth,
-                height: cons.maxHeight,
-                child: CustomScrollView(
-                  controller: _scrollCtrl,
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                        decoration: BoxDecoration(
-                          color: AppTheme.flair.card,
-                          borderRadius: BorderRadius.all(Radii.lg),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppTheme.flair.primary.withValues(
-                                alpha: 0.08,
-                              ),
-                              blurRadius: 12,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            ItemDetailHeader(
-                              name: name,
-                              subtitle: subtitle,
-                              quality: quality,
-                              quote: quote,
-                              // Guns show notes; items show their mechanical
-                              // effect line (was empty — all 270 items have
-                              // one and it was parsed but never rendered).
-                              effect: gun?.notes ?? item?.effect ?? '',
-                              isGun: gun != null,
-                              isActive: item?.isActive ?? false,
-                              iconPath: gun?.icon ?? item?.icon ?? '',
-                              chestColor:
-                                  gun?.chestColorDisplay ??
-                                  item?.chestColorDisplay ??
-                                  '',
-                              sellPrice:
-                                  gun?.sellPrice ?? item?.sellPrice ?? '',
-                              synergyCount: synergyStatuses.length,
-                              curse: gun?.curse ?? item?.curse ?? 0.0,
-                              coolness: gun?.coolness ?? item?.coolness ?? 0.0,
-                              elements:
-                                  gun != null
-                                      ? ElementalTagger.elementsOfGun(gun)
-                                      : ElementalTagger.elementsOfItem(item!),
-                            ),
-                            if (gun == null)
-                              KeyedSubtree(
-                                key: _statsKey,
-                                child: ItemBody(
-                                  item: item!,
-                                  ownerSlot: ownerSlot,
-                                ),
-                              )
-                            else
-                              _ElementTagRow(
-                                elements: ElementalTagger.elementsOfGun(gun),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // ---- Flat single-scroll layout (no tabs): STATS →
-                    // SYNERGIES → NOTES/wiki last. Gun path renders everything;
-                    // item path keeps its existing flat body + synergy section.
-                    if (gun != null)
-                      SliverToBoxAdapter(
-                        child: KeyedSubtree(
-                          key: _statsKey,
-                          child: GunStats(gun: gun),
-                        ),
-                      ),
-                    // Collapsible detail tabs — all closed by default so
-                    // the page stays compact; tapping a header expands
-                    // that section (tap again to close). SYN carries the
-                    // LEB pager, NOTES carries notes + ammonomicon +
-                    // wiki sections, REFS carries the back-reference card.
-                    if (gun != null)
-                      SliverToBoxAdapter(
-                        child: _DetailTabs(
-                          openIndex: _detailTab,
-                          onToggle:
-                              (i) => setState(
-                                () => _detailTab = _detailTab == i ? -1 : i,
-                              ),
-                          tabs: [
-                            _DetailTabSpec(
-                              label: 'SYN',
-                              count:
-                                  runProvider.getSynergiesFor(name).length,
-                              child: GunSynergiesTab(
-                                currentName: name,
-                                lebView: lebView,
-                              ),
-                            ),
-                            _DetailTabSpec(
-                              label: 'NOTES',
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GunNotesTab(
-                                    gun: gun,
-                                    elements:
-                                        ElementalTagger.elementsOfGun(gun),
+            lebView: lebView,
+            child: LayoutBuilder(
+              builder:
+                  (context, cons) => Center(
+                    child: SizedBox(
+                      width: cons.maxWidth > 760 ? 760 : cons.maxWidth,
+                      height: cons.maxHeight,
+                      child: CustomScrollView(
+                        controller: _scrollCtrl,
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Container(
+                              margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                              decoration: BoxDecoration(
+                                color: AppTheme.flair.card,
+                                borderRadius: BorderRadius.all(Radii.lg),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppTheme.flair.primary.withValues(
+                                      alpha: 0.08,
+                                    ),
+                                    blurRadius: 12,
+                                    spreadRadius: 2,
                                   ),
-                                  if (ammonomiconEntry.isNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        16,
-                                        12,
-                                        16,
-                                        4,
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  ItemDetailHeader(
+                                    name: name,
+                                    subtitle: subtitle,
+                                    quality: quality,
+                                    quote: quote,
+                                    // Guns show notes; items show their mechanical
+                                    // effect line (was empty — all 270 items have
+                                    // one and it was parsed but never rendered).
+                                    effect: gun?.notes ?? item?.effect ?? '',
+                                    isGun: gun != null,
+                                    isActive: item?.isActive ?? false,
+                                    iconPath: gun?.icon ?? item?.icon ?? '',
+                                    chestColor:
+                                        gun?.chestColorDisplay ??
+                                        item?.chestColorDisplay ??
+                                        '',
+                                    sellPrice:
+                                        gun?.sellPrice ?? item?.sellPrice ?? '',
+                                    synergyCount: synergyStatuses.length,
+                                    curse: gun?.curse ?? item?.curse ?? 0.0,
+                                    coolness:
+                                        gun?.coolness ?? item?.coolness ?? 0.0,
+                                    elements:
+                                        gun != null
+                                            ? ElementalTagger.elementsOfGun(gun)
+                                            : ElementalTagger.elementsOfItem(
+                                              item!,
+                                            ),
+                                  ),
+                                  if (gun == null)
+                                    KeyedSubtree(
+                                      key: _statsKey,
+                                      child: ItemBody(
+                                        item: item!,
+                                        ownerSlot: ownerSlot,
                                       ),
-                                      child: AmmonomiconCard(
-                                        text: ammonomiconEntry,
+                                    )
+                                  else
+                                    _ElementTagRow(
+                                      elements: ElementalTagger.elementsOfGun(
+                                        gun,
                                       ),
                                     ),
-                                  ...buildWikiSections(wiki),
                                 ],
                               ),
                             ),
-                            _DetailTabSpec(
-                              label: 'REFS',
-                              count: referrers.length,
-                              child:
-                                  referrers.isNotEmpty
-                                      ? ReferencedBySection(
-                                        referrers: referrers,
-                                      )
-                                      : const _EmptyTabNote(
-                                        'Nothing references this gun yet.',
+                          ),
+                          // ---- Flat single-scroll layout (no tabs): STATS →
+                          // SYNERGIES → NOTES/wiki last. Gun path renders everything;
+                          // item path keeps its existing flat body + synergy section.
+                          if (gun != null)
+                            SliverToBoxAdapter(
+                              child: KeyedSubtree(
+                                key: _statsKey,
+                                child: GunStats(gun: gun),
+                              ),
+                            ),
+                          // Collapsible detail tabs — all closed by default so
+                          // the page stays compact; tapping a header expands
+                          // that section (tap again to close). SYN carries the
+                          // LEB pager, NOTES carries notes + ammonomicon +
+                          // wiki sections, REFS carries the back-reference card.
+                          if (gun != null)
+                            SliverToBoxAdapter(
+                              child: _DetailTabs(
+                                openIndex: _detailTab,
+                                onToggle:
+                                    (i) => setState(
+                                      () =>
+                                          _detailTab = _detailTab == i ? -1 : i,
+                                    ),
+                                tabs: [
+                                  _DetailTabSpec(
+                                    label: 'SYN',
+                                    count:
+                                        runProvider
+                                            .getSynergiesFor(name)
+                                            .length,
+                                    child: GunSynergiesTab(
+                                      currentName: name,
+                                      lebView: lebView,
+                                    ),
+                                  ),
+                                  _DetailTabSpec(
+                                    label: 'NOTES',
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GunNotesTab(
+                                          gun: gun,
+                                          elements:
+                                              ElementalTagger.elementsOfGun(
+                                                gun,
+                                              ),
+                                        ),
+                                        if (ammonomiconEntry.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                              16,
+                                              12,
+                                              16,
+                                              4,
+                                            ),
+                                            child: AmmonomiconCard(
+                                              text: ammonomiconEntry,
+                                            ),
+                                          ),
+                                        ...buildWikiSections(wiki),
+                                      ],
+                                    ),
+                                  ),
+                                  _DetailTabSpec(
+                                    label: 'REFS',
+                                    count: referrers.length,
+                                    child:
+                                        referrers.isNotEmpty
+                                            ? ReferencedBySection(
+                                              referrers: referrers,
+                                            )
+                                            : const _EmptyTabNote(
+                                              'Nothing references this gun yet.',
+                                            ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          // Items get the same grouped all-list as guns
+                          // (COMPLETE/PARTIAL/LOCKED) — no pager, no LEB
+                          // simulation (LEB only affects guns in-game).
+                          if (item != null)
+                            SliverToBoxAdapter(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    key: _synergyKey,
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      12,
+                                      16,
+                                      4,
+                                    ),
+                                    child: GoopText(
+                                      'SYNERGIES',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 1.2,
+                                        color: Colors.white.withValues(
+                                          alpha: 0.7,
+                                        ),
                                       ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    // Items get the same grouped all-list as guns
-                    // (COMPLETE/PARTIAL/LOCKED) — no pager, no LEB
-                    // simulation (LEB only affects guns in-game).
-                    if (item != null)
-                      SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              key: _synergyKey,
-                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                              child: GoopText(
-                                'SYNERGIES',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.2,
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                ),
+                                    ),
+                                  ),
+                                  EntitySynergiesView(
+                                    statuses: synergyStatuses,
+                                    currentName: name,
+                                    ownedLower: owned,
+                                  ),
+                                ],
                               ),
                             ),
-                            EntitySynergiesView(
-                              statuses: synergyStatuses,
-                              currentName: name,
-                              ownedLower: owned,
-                            ),
-                          ],
-                        ),
-                      ),
-                    // ---- Ammonomicon flavour entry + wiki rich content
-                    // (Effects, Interactions, Notes, Tips) + back-refs.
-                    // Items only — guns get these inside the NOTES/REFS
-                    // collapsible tabs above.
-                    if (item != null && ammonomiconEntry.isNotEmpty)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                          child: AmmonomiconCard(text: ammonomiconEntry),
-                        ),
-                      ),
-                    if (item != null && wiki.hasAny) ...[
-                      SliverToBoxAdapter(
-                        child: SizedBox(key: _wikiKey, height: 0),
-                      ),
-                      ...buildWikiSlivers(wiki),
-                    ],
-                    if (item != null && referrers.isNotEmpty)
-                      SliverToBoxAdapter(
-                        child: ReferencedBySection(referrers: referrers),
-                      ),
-                    if (item != null && item.isDestroyedOnUse && isInRun)
-                      SliverToBoxAdapter(
-                        child: DestroyBanner(
-                          onDestroy: () {
-                            final slot =
-                                ownerSlot ??
-                                runProvider.ownerSlotOfItem(item.name) ??
-                                PlayerSlot.main;
-                            runProvider.removeItem(item, slot: slot);
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: GoopText(
-                                  '${item.name} destroyed on use',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                          // ---- Ammonomicon flavour entry + wiki rich content
+                          // (Effects, Interactions, Notes, Tips) + back-refs.
+                          // Items only — guns get these inside the NOTES/REFS
+                          // collapsible tabs above.
+                          if (item != null && ammonomiconEntry.isNotEmpty)
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  12,
+                                  16,
+                                  4,
                                 ),
-                                duration: const Duration(milliseconds: 1400),
-                                behavior: SnackBarBehavior.floating,
+                                child: AmmonomiconCard(text: ammonomiconEntry),
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          if (item != null && wiki.hasAny) ...[
+                            SliverToBoxAdapter(
+                              child: SizedBox(key: _wikiKey, height: 0),
+                            ),
+                            ...buildWikiSlivers(wiki),
+                          ],
+                          if (item != null && referrers.isNotEmpty)
+                            SliverToBoxAdapter(
+                              child: ReferencedBySection(referrers: referrers),
+                            ),
+                          if (item != null && item.isDestroyedOnUse && isInRun)
+                            SliverToBoxAdapter(
+                              child: DestroyBanner(
+                                onDestroy: () {
+                                  final slot =
+                                      ownerSlot ??
+                                      runProvider.ownerSlotOfItem(item.name) ??
+                                      PlayerSlot.main;
+                                  runProvider.removeItem(item, slot: slot);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: GoopText(
+                                        '${item.name} destroyed on use',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      duration: const Duration(
+                                        milliseconds: 1400,
+                                      ),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          const SliverToBoxAdapter(
+                            child: SizedBox(height: 120),
+                          ),
+                        ],
                       ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 120)),
-                  ],
-                ),
-              ),
+                    ),
+                  ),
             ),
-        ),
           );
         },
       ),
@@ -564,11 +589,7 @@ class _DetailTabSpec {
   final String label;
   final int? count;
   final Widget child;
-  const _DetailTabSpec({
-    required this.label,
-    required this.child,
-    this.count,
-  });
+  const _DetailTabSpec({required this.label, required this.child, this.count});
 }
 
 /// Accordion of detail sections — all headers visible, exactly one
@@ -624,7 +645,7 @@ class _DetailTabHeader extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12 * sf),
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
@@ -635,7 +656,7 @@ class _DetailTabHeader extends StatelessWidget {
             GoopText(
               spec.label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 12 * sf,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
                 color: Colors.white.withValues(alpha: open ? 0.9 : 0.55),
@@ -644,10 +665,7 @@ class _DetailTabHeader extends StatelessWidget {
             if (spec.count != null) ...[
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 7,
-                  vertical: 2,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(8),
@@ -668,7 +686,7 @@ class _DetailTabHeader extends StatelessWidget {
               duration: const Duration(milliseconds: 180),
               child: Icon(
                 Icons.keyboard_arrow_down_rounded,
-                size: 20,
+                size: 20 * sf,
                 color: Colors.white.withValues(alpha: open ? 0.8 : 0.4),
               ),
             ),
@@ -685,12 +703,13 @@ class _EmptyTabNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sf = Responsive.factor(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 4, 18, 18),
+      padding: EdgeInsets.fromLTRB(18, 4, 18, 18 * sf),
       child: GoopText(
         text,
         style: TextStyle(
-          fontSize: 12.5,
+          fontSize: 12.5 * sf,
           fontStyle: FontStyle.italic,
           color: Colors.white.withValues(alpha: 0.45),
         ),
