@@ -431,8 +431,9 @@ String _fmt(double v) {
           ? 2
           : 3;
   var s = v.toStringAsFixed(digits);
-  if (s.contains('.'))
+  if (s.contains('.')) {
     s = s.replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+  }
   return s;
 }
 
