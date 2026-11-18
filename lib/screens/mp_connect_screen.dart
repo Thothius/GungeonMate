@@ -15,6 +15,7 @@ import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/avatar_aura.dart';
+import '../widgets/paradox/avatar_frame.dart';
 import '../widgets/particles/ambient_glow.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 
@@ -267,6 +268,8 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 pulse: _pulseCtrl,
                 sf: sf,
                 flair: flair,
+                avatarId: session.avatarId,
+                sub: session.myCharacterName,
               ),
               SizedBox(width: 20 * sf),
               // Pulsing link icon with animated glow ring
@@ -308,6 +311,8 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 pulse: _pulseCtrl,
                 sf: sf,
                 flair: flair,
+                avatarId: session.peerAvatarId,
+                sub: session.peerCharacterName ?? '',
               ),
             ],
           ),
@@ -409,6 +414,8 @@ class _MpConnectScreenState extends State<MpConnectScreen>
               pulse: null,
               sf: sf,
               flair: flair,
+              avatarId: session.avatarId,
+              sub: session.myCharacterName,
             ),
             SizedBox(width: 20 * sf),
             Icon(Icons.link_rounded, size: 28 * sf, color: MpColors.connected),
@@ -420,6 +427,8 @@ class _MpConnectScreenState extends State<MpConnectScreen>
               pulse: null,
               sf: sf,
               flair: flair,
+              avatarId: session.peerAvatarId,
+              sub: session.peerCharacterName ?? '',
             ),
           ],
         ),
@@ -672,6 +681,13 @@ class _Portrait extends StatelessWidget {
   final double sf;
   final ThemeFlair flair;
 
+  /// Chosen avatar id (with optional `:frame` suffix) — shown instead
+  /// of the character sprite once the peer's identity is known.
+  final String avatarId;
+
+  /// Small secondary line under the nickname — the picked character.
+  final String sub;
+
   const _Portrait({
     required this.character,
     required this.label,
@@ -679,6 +695,8 @@ class _Portrait extends StatelessWidget {
     required this.pulse,
     required this.sf,
     required this.flair,
+    this.avatarId = '',
+    this.sub = '',
   });
 
   @override
@@ -711,7 +729,9 @@ class _Portrait extends StatelessWidget {
                       : null,
             ),
             child:
-                character != null
+                avatarId.isNotEmpty
+                    ? FramedAvatar(id: avatarId, size: 84 * sf, radius: 10)
+                    : character != null
                     ? ClipRRect(
                       borderRadius: BorderRadius.all(Radii.lg),
                       child: AvatarAura(
@@ -742,13 +762,15 @@ class _Portrait extends StatelessWidget {
         ),
         SizedBox(height: 2 * sf),
         GoopText(
-          isMe ? 'You' : 'Partner',
+          sub.isNotEmpty ? sub : (isMe ? 'You' : 'Partner'),
           style: TextStyle(
             fontSize: FontSizes.labelSmall * sf,
             fontWeight: FontWeight.w600,
             color: color.withValues(alpha: 0.6),
             letterSpacing: 1,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

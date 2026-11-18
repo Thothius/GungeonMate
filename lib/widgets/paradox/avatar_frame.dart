@@ -45,6 +45,10 @@ const kSpecialFrames = <AvatarFrameStyle>[
   AvatarFrameStyle('fiery', 'FIERY', Color(0xFFFF5722), special: true),
   AvatarFrameStyle('cosmic', 'COSMIC', Color(0xFF5E35B1), special: true),
   AvatarFrameStyle('glitch', 'GLITCH', Color(0xFF00E5FF), special: true),
+  AvatarFrameStyle('toxic', 'TOXIC', Color(0xFF76FF03), special: true),
+  AvatarFrameStyle('storm', 'STORM', Color(0xFF82B1FF), special: true),
+  AvatarFrameStyle('royal', 'ROYAL', Color(0xFFCE93D8), special: true),
+  AvatarFrameStyle('neon', 'NEON', Color(0xFF18FFFF), special: true),
 ];
 
 AvatarFrameStyle? avatarFrameStyleOf(String id) {
@@ -275,6 +279,131 @@ class _SpecialFramePainter extends CustomPainter {
         canvas.drawRRect(r.shift(Offset(j, 0)), p);
         p.color = const Color(0xFFFF4081).withValues(alpha: 0.7);
         canvas.drawRRect(r.shift(Offset(-j, 0)), p);
+      case 'toxic':
+        // Bubbling slime border — base line + rising bubble dots.
+        p.color = const Color(0xFF76FF03).withValues(alpha: 0.8);
+        p.strokeWidth = 2.5;
+        canvas.drawRRect(r, p);
+        final bub = Paint()..color = const Color(0xFFCCFF90);
+        for (var i = 0; i < 7; i++) {
+          final phase = (t + i / 7) % 1.0;
+          final edge = (i * 37) % 4; // 0 top 1 right 2 bottom 3 left
+          final pos = phase;
+          double x, y;
+          switch (edge) {
+            case 0:
+              x = size.width * pos;
+              y = 1.5;
+            case 1:
+              x = size.width - 1.5;
+              y = size.height * pos;
+            case 2:
+              x = size.width * (1 - pos);
+              y = size.height - 1.5;
+            default:
+              x = 1.5;
+              y = size.height * (1 - pos);
+          }
+          bub.color = const Color(
+            0xFFCCFF90,
+          ).withValues(alpha: 0.9 - phase * 0.7);
+          canvas.drawCircle(Offset(x, y), 1.4 + phase * 1.6, bub);
+        }
+      case 'storm':
+        // Lightning flicker — border strobes white/blue irregularly.
+        final flick =
+            (math.sin(t * math.pi * 22) * math.sin(t * math.pi * 7) + 1) / 2;
+        p.color = Color.lerp(
+          const Color(0xFF3949AB),
+          Colors.white,
+          flick,
+        )!.withValues(alpha: 0.55 + flick * 0.45);
+        p.strokeWidth = 2 + flick * 1.6;
+        canvas.drawRRect(r, p);
+        // Occasional bolt tick across the top edge.
+        if (flick > 0.86) {
+          final bolt =
+              Paint()
+                ..color = Colors.white.withValues(alpha: (flick - 0.86) * 5)
+                ..strokeWidth = 1.4;
+          final bx = size.width * (0.2 + 0.6 * ((t * 7) % 1));
+          canvas.drawLine(
+            Offset(bx, 0),
+            Offset(bx + 4, size.height * 0.35),
+            bolt,
+          );
+        }
+      case 'royal':
+        // Crown orbit — slow rotating dashed ring + jewel dots.
+        p.color = const Color(0xFFCE93D8).withValues(alpha: 0.85);
+        p.strokeWidth = 2;
+        final rr = r;
+        final path = Path()..addRRect(rr);
+        for (final m in path.computeMetrics()) {
+          var d = 0.0;
+          while (d < m.length) {
+            final e = (d + 4).clamp(0.0, m.length);
+            if ((d / 8 + t * 4) % 2 < 1) {
+              canvas.drawPath(m.extractPath(d, e), p);
+            }
+            d += 8;
+          }
+        }
+        final jewel = Paint()..color = const Color(0xFFFFD700);
+        for (var i = 0; i < 3; i++) {
+          final a = t * math.pi * 2 + i * math.pi * 2 / 3;
+          final x = size.width / 2 + (size.width / 2 - 3) * math.cos(a) * 0.9;
+          final y = size.height / 2 + (size.height / 2 - 3) * math.sin(a) * 0.9;
+          jewel.color = const Color(
+            0xFFFFD700,
+          ).withValues(alpha: 0.6 + 0.4 * math.sin(a * 2));
+          canvas.drawCircle(Offset(x, y), 1.8, jewel);
+        }
+      case 'neon':
+        // Split neon — cyan left edge, magenta right, pulsing seam.
+        final pulse = 0.5 + 0.5 * math.sin(t * math.pi * 4);
+        final mid = size.width / 2;
+        p.strokeWidth = 2.4;
+        p.color = const Color(
+          0xFF18FFFF,
+        ).withValues(alpha: 0.75 + pulse * 0.25);
+        canvas.drawLine(Offset(0, 0), Offset(mid, 0), p);
+        canvas.drawLine(
+          Offset(mid, 0),
+          Offset(size.width, 0),
+          Paint()
+            ..color = const Color(
+              0xFFFF4081,
+            ).withValues(alpha: 0.75 + (1 - pulse) * 0.25)
+            ..strokeWidth = 2.4,
+        );
+        canvas.drawLine(
+          Offset(size.width, 0),
+          Offset(size.width, size.height),
+          Paint()
+            ..color = const Color(
+              0xFF18FFFF,
+            ).withValues(alpha: 0.75 + pulse * 0.25)
+            ..strokeWidth = 2.4,
+        );
+        canvas.drawLine(
+          Offset(size.width, size.height),
+          Offset(0, size.height),
+          Paint()
+            ..color = const Color(
+              0xFFFF4081,
+            ).withValues(alpha: 0.75 + (1 - pulse) * 0.25)
+            ..strokeWidth = 2.4,
+        );
+        canvas.drawLine(
+          Offset(0, size.height),
+          Offset(0, 0),
+          Paint()
+            ..color = const Color(
+              0xFF18FFFF,
+            ).withValues(alpha: 0.75 + pulse * 0.25)
+            ..strokeWidth = 2.4,
+        );
     }
   }
 

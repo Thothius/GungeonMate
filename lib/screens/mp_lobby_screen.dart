@@ -308,35 +308,61 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
   ];
 
   List<Widget> _identityStage(double sf, ThemeFlair flair) => [
-    Row(
-      children: [
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: _pickAvatar,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: flair.primary.withValues(alpha: 0.5),
-                width: 1.5,
+    // Centered identity block — big avatar with change hint, then the
+    // fields stacked full-width so every element shares one axis.
+    Center(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _pickAvatar,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: flair.primary.withValues(alpha: 0.55),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: flair.primary.withValues(alpha: 0.25),
+                    blurRadius: 18,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: FramedAvatar(
+                id: _avatarId,
+                size: 84 * sf,
+                radius: 42 * sf,
               ),
             ),
-            child: FramedAvatar(id: _avatarId, size: 52 * sf, radius: 26 * sf),
-          ),
+            SizedBox(height: 6 * sf),
+            GoopText(
+              'TAP TO CHANGE',
+              style: TextStyle(
+                fontSize: 10 * sf,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.6,
+                color: flair.primary.withValues(alpha: 0.65),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(child: _buildNicknameField(sf, flair)),
-      ],
+      ),
     ),
+    SizedBox(height: 20 * sf),
+    _buildNicknameField(sf, flair),
     // Run title is Main-only — the host names the run, the Sidekick
     // receives it via the session-meta handshake.
     if (_role == _LobbyRole.main) ...[
-      SizedBox(height: 14 * sf),
+      SizedBox(height: 12 * sf),
       _buildRunTitleField(sf, flair),
     ],
     SizedBox(height: 24 * sf),
     _buildActionButton(sf, flair),
-    SizedBox(height: 24 * sf),
+    SizedBox(height: 20 * sf),
     TextButton.icon(
       onPressed: _showHowToPlay,
       icon: Icon(

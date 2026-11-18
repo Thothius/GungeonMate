@@ -80,21 +80,44 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   ),
                   builder: (_) => const SurpriseSheet(),
                 ),
-            child: Container(
-              width: 42 * sf,
-              height: 42 * sf,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xFFB388FF).withValues(alpha: 0.55),
-                  width: 1.5,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 42 * sf,
+                  height: 42 * sf,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color(0xFFB388FF).withValues(alpha: 0.55),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: FramedAvatar(
+                    id: avatarId,
+                    size: double.infinity,
+                    radius: 8,
+                  ),
                 ),
-              ),
-              child: FramedAvatar(
-                id: avatarId,
-                size: double.infinity,
-                radius: 8,
-              ),
+                SizedBox(height: 2 * sf),
+                SizedBox(
+                  width: 64 * sf,
+                  child: GoopText(
+                    isMyPage
+                        ? session.myNickname
+                        : (session.peerNickname ?? 'P2'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 8.5 * sf,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.4,
+                      color: Colors.white.withValues(alpha: 0.75),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(width: 8 * sf),
