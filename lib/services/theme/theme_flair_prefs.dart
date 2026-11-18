@@ -168,6 +168,82 @@ class ThemeFlair {
     this.statGroupMeta,
     this.font,
   });
+
+  ThemeFlair copyWith({
+    Color? scaffold,
+    Color? card,
+    Color? primary,
+    Color? secondary,
+    Color? headlineStat,
+    Color? bulletColor,
+    String? bulletGlyph,
+    bool? shimmerHeadline,
+    bool? sparkleNumbers,
+    Color? numberGlowColor,
+    bool? twinkleBullets,
+    bool? glowCurse,
+    bool? embossNumbers,
+    bool? tabularFigures,
+    double? numberSizeScale,
+    FontWeight? numberWeight,
+    FontStyle? numberStyle,
+    double? chipRadius,
+    double? cardRadius,
+    Color? cardBorderColor,
+    double? cardBorderWidth,
+    bool? chipFilled,
+    Color? dividerColor,
+    double? dividerThickness,
+    Color? glowPrimary,
+    Color? glowSecondary,
+    GlowStyle? glowStyle,
+    AvatarAuraStyle? auraStyle,
+    String? headerGlyph,
+    bool? headerAllCaps,
+    Color? headerUnderlineColor,
+    bool? pageFrame,
+    Color? statGroupCombat,
+    Color? statGroupHandling,
+    Color? statGroupMeta,
+    AppFont? font,
+  }) => ThemeFlair(
+    scaffold: scaffold ?? this.scaffold,
+    card: card ?? this.card,
+    primary: primary ?? this.primary,
+    secondary: secondary ?? this.secondary,
+    headlineStat: headlineStat ?? this.headlineStat,
+    bulletColor: bulletColor ?? this.bulletColor,
+    bulletGlyph: bulletGlyph ?? this.bulletGlyph,
+    shimmerHeadline: shimmerHeadline ?? this.shimmerHeadline,
+    sparkleNumbers: sparkleNumbers ?? this.sparkleNumbers,
+    numberGlowColor: numberGlowColor ?? this.numberGlowColor,
+    twinkleBullets: twinkleBullets ?? this.twinkleBullets,
+    glowCurse: glowCurse ?? this.glowCurse,
+    embossNumbers: embossNumbers ?? this.embossNumbers,
+    tabularFigures: tabularFigures ?? this.tabularFigures,
+    numberSizeScale: numberSizeScale ?? this.numberSizeScale,
+    numberWeight: numberWeight ?? this.numberWeight,
+    numberStyle: numberStyle ?? this.numberStyle,
+    chipRadius: chipRadius ?? this.chipRadius,
+    cardRadius: cardRadius ?? this.cardRadius,
+    cardBorderColor: cardBorderColor ?? this.cardBorderColor,
+    cardBorderWidth: cardBorderWidth ?? this.cardBorderWidth,
+    chipFilled: chipFilled ?? this.chipFilled,
+    dividerColor: dividerColor ?? this.dividerColor,
+    dividerThickness: dividerThickness ?? this.dividerThickness,
+    glowPrimary: glowPrimary ?? this.glowPrimary,
+    glowSecondary: glowSecondary ?? this.glowSecondary,
+    glowStyle: glowStyle ?? this.glowStyle,
+    auraStyle: auraStyle ?? this.auraStyle,
+    headerGlyph: headerGlyph ?? this.headerGlyph,
+    headerAllCaps: headerAllCaps ?? this.headerAllCaps,
+    headerUnderlineColor: headerUnderlineColor ?? this.headerUnderlineColor,
+    pageFrame: pageFrame ?? this.pageFrame,
+    statGroupCombat: statGroupCombat ?? this.statGroupCombat,
+    statGroupHandling: statGroupHandling ?? this.statGroupHandling,
+    statGroupMeta: statGroupMeta ?? this.statGroupMeta,
+    font: font ?? this.font,
+  );
 }
 
 /// Shift the hue of a [Color] by [degrees] in HSL space.
@@ -343,6 +419,19 @@ class VisualPrefs {
   /// can keep ambient particles but kill the tap burst (or vice versa).
   final bool tapSparkles;
 
+  /// Panel chrome overrides - applied to every panel surface (cards,
+  /// run dashboard, item/gun tiles, bottom nav) via the flairFor
+  /// post-process in AppTheme. Sentinels mean "follow the theme":
+  /// [panelColor] 0, [panelOpacity] 1.0, [panelBorderColor] 0,
+  /// [panelBorderWidth] 0, [panelRadius] 0.
+  final int panelColor;
+  final double panelOpacity;
+
+  /// 0 = theme border, -1 = no border, else an ARGB color.
+  final int panelBorderColor;
+  final double panelBorderWidth;
+  final double panelRadius;
+
   /// Whether ambient fragment shaders (Q3) are enabled. Off by default —
   /// shaders are GPU-intensive and opt-in. See [shaderPreset].
   final bool shaderEnabled;
@@ -469,6 +558,11 @@ class VisualPrefs {
     this.particleChaos = false,
     this.particleTouch = true,
     this.tapSparkles = true,
+    this.panelColor = 0,
+    this.panelOpacity = 1.0,
+    this.panelBorderColor = 0,
+    this.panelBorderWidth = 0.0,
+    this.panelRadius = 0.0,
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
   });
@@ -508,6 +602,11 @@ class VisualPrefs {
   static const _kParticleChaos = 'vp.particle_chaos_v1';
   static const _kParticleTouch = 'vp.particle_touch_v1';
   static const _kTapSparkles = 'vp.tap_sparkles_v1';
+  static const _kPanelColor = 'vp.panel_color_v1';
+  static const _kPanelOpacity = 'vp.panel_opacity_v1';
+  static const _kPanelBorderColor = 'vp.panel_border_color_v1';
+  static const _kPanelBorderWidth = 'vp.panel_border_width_v1';
+  static const _kPanelRadius = 'vp.panel_radius_v1';
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
 
@@ -648,6 +747,14 @@ class VisualPrefs {
         particleChaos: p.getBool(_kParticleChaos) ?? false,
         particleTouch: p.getBool(_kParticleTouch) ?? true,
         tapSparkles: p.getBool(_kTapSparkles) ?? true,
+        panelColor: p.getInt(_kPanelColor) ?? 0,
+        panelOpacity: (p.getDouble(_kPanelOpacity) ?? 1.0).clamp(0.05, 1.0),
+        panelBorderColor: p.getInt(_kPanelBorderColor) ?? 0,
+        panelBorderWidth: (p.getDouble(_kPanelBorderWidth) ?? 0.0).clamp(
+          0.0,
+          8.0,
+        ),
+        panelRadius: (p.getDouble(_kPanelRadius) ?? 0.0).clamp(0.0, 48.0),
         shaderEnabled: shaderEnabled,
         shaderPreset: shaderPreset,
       );
@@ -826,6 +933,35 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setPanelColor(int argb) async {
+    notifier.value = notifier.value._with(panelColor: argb);
+    _persist();
+  }
+
+  static Future<void> setPanelOpacity(double v) async {
+    notifier.value = notifier.value._with(
+      panelOpacity: v.clamp(0.05, 1.0),
+    );
+    _persist();
+  }
+
+  static Future<void> setPanelBorderColor(int argb) async {
+    notifier.value = notifier.value._with(panelBorderColor: argb);
+    _persist();
+  }
+
+  static Future<void> setPanelBorderWidth(double v) async {
+    notifier.value = notifier.value._with(
+      panelBorderWidth: v.clamp(0.0, 8.0),
+    );
+    _persist();
+  }
+
+  static Future<void> setPanelRadius(double v) async {
+    notifier.value = notifier.value._with(panelRadius: v.clamp(0.0, 48.0));
+    _persist();
+  }
+
   static Future<void> setParticleSpeed(ParticleSpeed v) async {
     notifier.value = notifier.value._with(particleSpeed: v);
     _persist();
@@ -907,6 +1043,11 @@ class VisualPrefs {
       await p.setBool(_kParticleChaos, v.particleChaos);
       await p.setBool(_kParticleTouch, v.particleTouch);
       await p.setBool(_kTapSparkles, v.tapSparkles);
+      await p.setInt(_kPanelColor, v.panelColor);
+      await p.setDouble(_kPanelOpacity, v.panelOpacity);
+      await p.setInt(_kPanelBorderColor, v.panelBorderColor);
+      await p.setDouble(_kPanelBorderWidth, v.panelBorderWidth);
+      await p.setDouble(_kPanelRadius, v.panelRadius);
       await p.setBool(_kShaderEnabled, v.shaderEnabled);
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
     } catch (e) {
@@ -947,6 +1088,11 @@ class VisualPrefs {
     bool? particleChaos,
     bool? particleTouch,
     bool? tapSparkles,
+    int? panelColor,
+    double? panelOpacity,
+    int? panelBorderColor,
+    double? panelBorderWidth,
+    double? panelRadius,
     bool? shaderEnabled,
     ShaderPreset? shaderPreset,
   }) => VisualPrefs(
@@ -985,6 +1131,11 @@ class VisualPrefs {
     particleChaos: particleChaos ?? this.particleChaos,
     particleTouch: particleTouch ?? this.particleTouch,
     tapSparkles: tapSparkles ?? this.tapSparkles,
+    panelColor: panelColor ?? this.panelColor,
+    panelOpacity: panelOpacity ?? this.panelOpacity,
+    panelBorderColor: panelBorderColor ?? this.panelBorderColor,
+    panelBorderWidth: panelBorderWidth ?? this.panelBorderWidth,
+    panelRadius: panelRadius ?? this.panelRadius,
     shaderEnabled: shaderEnabled ?? this.shaderEnabled,
     shaderPreset: shaderPreset ?? this.shaderPreset,
   );
@@ -1020,7 +1171,20 @@ class VisualPrefs {
     'shaderEnabled': shaderEnabled,
     'shaderPreset': shaderPreset.index,
     'tapSparkles': tapSparkles,
+    'panelColor': panelColor,
+    'panelOpacity': panelOpacity,
+    'panelBorderColor': panelBorderColor,
+    'panelBorderWidth': panelBorderWidth,
+    'panelRadius': panelRadius,
   };
+
+  /// Enum lookup that survives stale persisted indices — a preset saved
+  /// by an older build (fewer enum values / reordered) clamps to the
+  /// nearest valid entry instead of throwing and nuking the whole store.
+  static T _enumOr<T extends Enum>(List<T> values, int? index, int fallback) {
+    final i = (index ?? fallback).clamp(0, values.length - 1);
+    return values[i];
+  }
 
   /// Deserialize from JSON for custom theme restoration.
   factory VisualPrefs.fromJson(Map<String, dynamic> j) {
@@ -1028,22 +1192,36 @@ class VisualPrefs {
       glowIntensity: (j['glowIntensity'] as num?)?.toDouble() ?? 0.0,
       particlesEnabled: j['particlesEnabled'] as bool? ?? false,
       fontWeightBias: j['fontWeightBias'] as int? ?? 0,
-      font: AppFont.values[(j['font'] as int?) ?? 0],
+      font: _enumOr(AppFont.values, j['font'] as int?, 0),
       fontSize: (j['fontSize'] as num?)?.toDouble() ?? 12.0,
       inventoryFontSize: (j['inventoryFontSize'] as num?)?.toDouble() ?? 11.0,
       vignetteIntensity: (j['vignetteIntensity'] as num?)?.toDouble() ?? 1.0,
       grainIntensity: (j['grainIntensity'] as num?)?.toDouble() ?? 0.0,
-      inventoryDisplayMode:
-          InventoryDisplayMode.values[(j['inventoryDisplayMode'] as int?) ?? 0],
-      particlePreset: ParticlePreset.values[(j['particlePreset'] as int?) ?? 0],
-      particleGlowEffect:
-          GlowEffect.values[(j['particleGlowEffect'] as int?) ?? 0],
+      inventoryDisplayMode: _enumOr(
+        InventoryDisplayMode.values,
+        j['inventoryDisplayMode'] as int?,
+        0,
+      ),
+      particlePreset: _enumOr(
+        ParticlePreset.values,
+        j['particlePreset'] as int?,
+        0,
+      ),
+      particleGlowEffect: _enumOr(
+        GlowEffect.values,
+        j['particleGlowEffect'] as int?,
+        0,
+      ),
       particleLineLinks: j['particleLineLinks'] as bool? ?? false,
       particleBounce: j['particleBounce'] as bool? ?? false,
       glowColorIndex: j['glowColorIndex'] as int? ?? 0,
       glowCustomColor: j['glowCustomColor'] as int? ?? 0,
       glowStyleIndex: j['glowStyleIndex'] as int? ?? -1,
-      customDiceType: CustomDiceType.values[(j['customDiceType'] as int?) ?? 0],
+      customDiceType: _enumOr(
+        CustomDiceType.values,
+        j['customDiceType'] as int?,
+        0,
+      ),
       particleSizeScale: (j['particleSizeScale'] as num?)?.toDouble() ?? 1.0,
       particleOpacity: (j['particleOpacity'] as num?)?.toDouble() ?? 0.8,
       particleCount: j['particleCount'] as int? ?? 16,
@@ -1053,12 +1231,34 @@ class VisualPrefs {
       browseShowLichEyeBullets:
           j['browseShowLichEyeBullets'] as bool? ?? true,
       periodicGridColumnCount: j['periodicGridColumnCount'] as int? ?? 0,
-      particleColorSchema:
-          ParticleColorSchema.values[(j['particleColorSchema'] as int?) ?? 0],
-      particleSpeed: ParticleSpeed.values[(j['particleSpeed'] as int?) ?? 2],
+      particleColorSchema: _enumOr(
+        ParticleColorSchema.values,
+        j['particleColorSchema'] as int?,
+        0,
+      ),
+      particleSpeed: _enumOr(
+        ParticleSpeed.values,
+        j['particleSpeed'] as int?,
+        2,
+      ),
       shaderEnabled: j['shaderEnabled'] as bool? ?? false,
-      shaderPreset: ShaderPreset.values[(j['shaderPreset'] as int?) ?? 0],
+      shaderPreset: _enumOr(
+        ShaderPreset.values,
+        j['shaderPreset'] as int?,
+        0,
+      ),
       tapSparkles: j['tapSparkles'] as bool? ?? true,
+      panelColor: j['panelColor'] as int? ?? 0,
+      panelOpacity:
+          ((j['panelOpacity'] as num?)?.toDouble() ?? 1.0).clamp(0.05, 1.0),
+      panelBorderColor: j['panelBorderColor'] as int? ?? 0,
+      panelBorderWidth:
+          ((j['panelBorderWidth'] as num?)?.toDouble() ?? 0.0).clamp(
+            0.0,
+            8.0,
+          ),
+      panelRadius:
+          ((j['panelRadius'] as num?)?.toDouble() ?? 0.0).clamp(0.0, 48.0),
     );
   }
 }

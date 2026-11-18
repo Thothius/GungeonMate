@@ -251,8 +251,15 @@ class PlayerPageState extends State<PlayerPage> {
                                           isCool: _editStat == 'cool',
                                         ),
                               ),
-                              if (VisualPrefs.notifier.value.showDashboards)
-                                DashboardSwiperCard(slot: _slot),
+                              // Listenable so the PANELS settings toggle
+                              // shows/hides trackers without a rebuild.
+                              ValueListenableBuilder<VisualPrefs>(
+                                valueListenable: VisualPrefs.notifier,
+                                builder:
+                                    (_, p, _) => p.showDashboards
+                                        ? DashboardSwiperCard(slot: _slot)
+                                        : const SizedBox.shrink(),
+                              ),
                             ],
                           ),
                         ),

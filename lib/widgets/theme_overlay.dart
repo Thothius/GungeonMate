@@ -496,7 +496,11 @@ Widget? buildBackdropParticleField(
   // chaos/tilt physics flags.
   final schemaColors = particleSchemaColors(mode, prefs.particleSchemaIndex);
   final typedCfg = typedParticleConfig(
-    ParticleType.values[prefs.particleTypeIndex],
+    // Clamp — a persisted index from an older enum size must not throw.
+    ParticleType.values[prefs.particleTypeIndex.clamp(
+      0,
+      ParticleType.values.length - 1,
+    )],
     schemaColors,
     chaos: prefs.particleChaos,
   );

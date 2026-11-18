@@ -266,7 +266,18 @@ class _FontSizeSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     final steps = VisualPrefs.fontSizeSteps;
-    final activeStep = steps.indexOf(current);
+    var activeStep = steps.indexOf(current);
+    if (activeStep < 0) {
+      // Legacy/persisted size outside the step list — show the nearest
+      // step instead of snapping the thumb to a lying position.
+      var best = 0;
+      for (var i = 1; i < steps.length; i++) {
+        if ((steps[i] - current).abs() < (steps[best] - current).abs()) {
+          best = i;
+        }
+      }
+      activeStep = best;
+    }
     final stepLabel = current == 0 ? 'Auto' : '${current.toStringAsFixed(0)}pt';
 
     return Column(
@@ -323,7 +334,7 @@ class _FontSizeSlider extends StatelessWidget {
             thumbColor: Colors.white,
           ),
           child: Slider(
-            value: activeStep >= 0 ? activeStep.toDouble() : 3.0,
+            value: activeStep.toDouble(),
             min: 0,
             max: (steps.length - 1).toDouble(),
             divisions: steps.length - 1,

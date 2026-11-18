@@ -201,16 +201,24 @@ void main() {
       await openGallery(tester);
       expect(find.text('PRESETS'), findsOneWidget);
       expect(find.text('PICK PRESET'), findsOneWidget);
-      expect(find.byType(PageView), findsOneWidget);
+      // List view is the default — official section header + rows.
+      expect(find.text('OFFICIAL'), findsOneWidget);
+      expect(find.byType(PageView), findsNothing);
     });
 
-    testWidgets('first card is a picker theme with palette strip', (
+    testWidgets('list view shows official presets; CARDS restores swiper', (
       tester,
     ) async {
       await openGallery(tester);
-      // kPickerThemes.first = unicorn (label 'Unicorn') — name +
-      // vibe strip render on the card.
+      // kPickerThemes.first = unicorn — list row shows its label.
+      expect(find.text('Unicorn'), findsWidgets);
+
+      // Flip to card view — fullscreen PageView + uppercase card name.
+      await tester.tap(find.byIcon(Icons.grid_view_rounded));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.byType(PageView), findsOneWidget);
       expect(find.text('UNICORN'), findsWidgets);
+      expect(find.text('OFFICIAL'), findsNothing);
     });
 
     testWidgets('PICK PRESET applies and closes', (tester) async {
@@ -585,6 +593,269 @@ void main() {
       final after = tester.getCenter(handle).dy;
 
       expect(after, greaterThan(before));
+    });
+  });
+
+  group('Polish — back/restore integrity', () {
+    /// Push the studio on top of a host route so maybePop has somewhere
+    /// real to land after the restore-and-pop.
+    Future<void> openStudioOnRoute(
+      WidgetTester tester, {
+      int tab = 2,
+    }) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder:
+                (ctx) => TextButton(
+                  onPressed:
+                      () => Navigator.of(ctx).push(
+                        MaterialPageRoute(
+                          builder: (_) => ExperienceStudioScreen(initialTab: tab),
+                        ),
+                      ),
+                  child: const Text('open'),
+                ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+
+    testWidgets('system back restores prefs + pops (no state leak)', (
+      tester,
+    ) async {
+      final originalFont = VisualPrefs.notifier.value.font;
+      await openStudioOnRoute(tester, tab: 2); // TYPE tab
+
+      // Mutate a pref through real UI — pick a different font tile.
+      await tester.tap(find.text('Orbitron'));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(VisualPrefs.notifier.value.font, isNot(originalFont));
+
+      // System back → PopScope → _onFlowBack → _onBack (deep link,
+      // didn't come from flow) → restore + pop.
+      final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
+      await nav.maybePop();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+
+      expect(VisualPrefs.notifier.value.font, originalFont);
+      expect(find.text('open'), findsOneWidget);
+      expect(find.byType(ExperienceStudioScreen), findsNothing);
+    });
+
+    testWidgets('BACK restores mutated custom theme data', (tester) async {
+      // Live custom theme with known colors.
+      final original = CustomThemeData.defaultTheme.copyWith(
+        name: 'Base',
+        primary: const Color(0xFF112233),
+      );
+      AppTheme.setCustomThemeData(original);
+      await openStudioOnRoute(tester, tab: 1); // COLORS & BG
+
+      // Mutate through the real picker — open PRIME sheet, tap a swatch.
+      await tester.tap(find.text('PRIME'));
+      await tester.pump(const Duration(milliseconds: 400));
+      final swatch = find
+          .descendant(
+            of: find.byType(GridView),
+            matching: find.byType(GestureDetector),
+          )
+          .first;
+      await tester.ensureVisible(swatch);
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.tap(swatch);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(
+        AppTheme.cachedCustomTheme!.primary,
+        isNot(const Color(0xFF112233)),
+      );
+
+      final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
+      await nav.maybePop();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(AppTheme.cachedCustomTheme!.primary, const Color(0xFF112233));
+      expect(find.text('open'), findsOneWidget);
+    });
+  });
+
+  group('Polish — saved preset gallery', () {
+    SavedCustomTheme makePreset(String name, VisualPrefs prefs) {
+      return SavedCustomTheme(
+        id: name,
+        name: name,
+        splashSlug: 'custom',
+        baseMode: AppThemeMode.custom,
+        prefs: prefs,
+        customData: CustomThemeData.defaultTheme.copyWith(name: name),
+      );
+    }
+
+    /// Reach a gallery entry — list view lazily builds rows (drag the
+    /// list until the label mounts); card view lazily pages (fling
+    /// until it mounts).
+    Future<void> goToGalleryEntry(WidgetTester tester, String text) async {
+      if (find.byType(PageView).evaluate().isNotEmpty) {
+        for (var i = 0; i < 8; i++) {
+          if (find.text(text).evaluate().isNotEmpty) return;
+          await tester.fling(
+            find.byType(PageView).first,
+            const Offset(-3000, 0),
+            8000,
+          );
+          await tester.pump(const Duration(milliseconds: 400));
+        }
+        return;
+      }
+      for (var i = 0; i < 12 && find.text(text).evaluate().isEmpty; i++) {
+        await tester.drag(
+          find.byType(ListView).first,
+          const Offset(0, -500),
+        );
+        await tester.pump(const Duration(milliseconds: 250));
+      }
+      await tester.ensureVisible(find.text(text));
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+
+    testWidgets('swiping to a saved preset applies its prefs live', (
+      tester,
+    ) async {
+      const savedPrefs = VisualPrefs(glowIntensity: 0.9);
+      CustomThemeStore.notifier.value = [
+        makePreset('MY NEON', savedPrefs),
+      ];
+
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('BROWSE PRESETS'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await goToGalleryEntry(tester, 'MY NEON');
+      expect(find.text('MY NEON'), findsOneWidget);
+
+      // List rows preview on tap (card view previews on swipe) — the
+      // saved snapshot must replace the previous entry's curation.
+      await tester.tap(find.text('MY NEON'));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(VisualPrefs.notifier.value.glowIntensity, 0.9);
+    });
+
+    testWidgets('long-press a saved preset deletes it after confirm', (
+      tester,
+    ) async {
+      CustomThemeStore.notifier.value = [
+        makePreset('Doomed', const VisualPrefs()),
+      ];
+
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('BROWSE PRESETS'));
+      await tester.pump(const Duration(milliseconds: 400));
+      await goToGalleryEntry(tester, 'Doomed');
+      expect(find.text('Doomed'), findsOneWidget);
+
+      await tester.longPress(find.text('Doomed'));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('DELETE PRESET'), findsOneWidget);
+
+      await tester.tap(find.text('DELETE'));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(CustomThemeStore.themes, isEmpty);
+    });
+
+    test('store load skips malformed entries instead of wiping', () async {
+      SharedPreferences.setMockInitialValues({
+        'custom.themes.v1':
+            '[{"id":"ok","name":"Good","splashSlug":"custom",'
+            '"baseMode":0,"prefs":{}},'
+            '42,'
+            '{"name":"missing required fields"}]',
+      });
+      await CustomThemeStore.load();
+      expect(CustomThemeStore.themes, hasLength(1));
+      expect(CustomThemeStore.themes.single.name, 'Good');
+      CustomThemeStore.notifier.value = [];
+    });
+  });
+
+  group('Flow - QUICK SLOTS', () {
+    Future<void> openChoose(WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+
+    testWidgets('empty slots show +; tap opens slot picker; SET SLOT fills', (
+      tester,
+    ) async {
+      await openChoose(tester);
+      expect(find.byIcon(Icons.add_rounded), findsNWidgets(3));
+
+      await tester.tap(find.byIcon(Icons.add_rounded).first);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('PICK FOR SLOT 1'), findsOneWidget);
+      expect(find.text('SET SLOT'), findsOneWidget);
+
+      // Page 0 = unicorn (kPickerThemes.first).
+      await tester.tap(find.text('SET SLOT'));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('CUSTOMIZE'), findsOneWidget);
+      expect(find.text('Unicorn'), findsWidgets);
+      expect(find.byIcon(Icons.add_rounded), findsNWidgets(2));
+    });
+
+    testWidgets('filled slot tap applies preset and closes', (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'studio.quickSlots.v1': '["m:unicorn",null,null]',
+      });
+      final before = AppTheme.mode;
+      await openChoose(tester);
+      await tester.tap(find.text('Unicorn').first);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(AppTheme.mode, AppThemeMode.unicorn);
+      expect(AppTheme.previewNotifier.value, isNull);
+      await AppTheme.setMode(before);
+    });
+
+    testWidgets('slots persist across studio reopen', (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'studio.quickSlots.v1': '["m:unicorn",null,null]',
+      });
+      await openChoose(tester);
+      expect(find.text('Unicorn'), findsWidgets);
+
+      await tester.pumpWidget(const SizedBox());
+      await openChoose(tester);
+      expect(find.text('Unicorn'), findsWidgets);
+      expect(find.byIcon(Icons.add_rounded), findsNWidgets(2));
+    });
+
+    testWidgets('long-press filled slot shows info; REMOVE empties it', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({
+        'studio.quickSlots.v1': '["m:unicorn",null,null]',
+      });
+      await openChoose(tester);
+      await tester.longPress(find.text('Unicorn').first);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('SLOT 1'), findsOneWidget);
+      expect(find.text('REMOVE'), findsOneWidget);
+
+      await tester.tap(find.text('REMOVE'));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.byIcon(Icons.add_rounded), findsNWidgets(3));
     });
   });
 }

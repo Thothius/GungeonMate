@@ -146,6 +146,26 @@ class AppTheme {
     refresh();
   }
 
+  /// Restore the custom theme data slot to a previous snapshot — used by
+  /// the studio's BACK path so discarded color/wallpaper edits don't leak
+  /// onto disk. [data] == null removes the persisted entry entirely.
+  static Future<void> restoreCustomThemeData(CustomThemeData? data) async {
+    _cachedCustomTheme = data;
+    _customThemeName = data?.name ?? 'Custom';
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (data == null) {
+        await prefs.remove(CustomThemeData._prefsKey);
+      } else {
+        await prefs.setString(
+          CustomThemeData._prefsKey,
+          jsonEncode(data.toJson()),
+        );
+      }
+    } catch (_) {}
+    refresh();
+  }
+
   /// Hydrate [mode] from disk. Call once from `main()` before `runApp`.
   /// If the persisted theme is no longer in [kVisibleThemes] (e.g. one
   /// of the removed lore themes from older releases) we silently
@@ -525,6 +545,13 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: f.card,
+        indicatorColor: f.primary.withValues(alpha: 0.18),
+        labelTextStyle: WidgetStatePropertyAll(
+          textTheme.labelSmall?.copyWith(color: f.secondary),
+        ),
+      ),
       filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
           minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
@@ -578,7 +605,62 @@ class AppTheme {
 
   /// Concrete flair for each theme. Kept in one place so the picker
   /// preview and the live app read the exact same values.
-  static ThemeFlair flairFor(AppThemeMode m) => m.flair;
+  /// Concrete flair for each theme, with the user's global panel-chrome
+  /// overrides (VisualPrefs.panel*) applied on top. Every consumer of
+  /// flair.card / cardRadius / cardBorder* - cards, dashboard, tiles,
+  /// browse surfaces, the bottom nav theme - picks the overrides up
+  /// for free since they all resolve through here.
+  static ThemeFlair flairFor(AppThemeMode m) {
+    final f = m.flair;
+    final p = VisualPrefs.notifier.value;
+
+    var card = f.card;
+    var touched = false;
+    if (p.panelColor != 0) {
+      card = Color(p.panelColor);
+      touched = true;
+    }
+    if (p.panelOpacity < 0.999) {
+      card = card.withValues(alpha: p.panelOpacity);
+      touched = true;
+    }
+
+    Color? borderColor = f.cardBorderColor;
+    var borderWidth = f.cardBorderWidth;
+    if (p.panelBorderColor == -1) {
+      borderColor = Colors.transparent;
+      borderWidth = 1.0;
+      touched = true;
+    } else {
+      if (p.panelBorderColor != 0) {
+        borderColor = Color(p.panelBorderColor);
+        touched = true;
+      }
+      if (p.panelBorderWidth > 0) {
+        borderWidth = p.panelBorderWidth;
+        touched = true;
+      }
+      // cardTheme only honors cardBorderWidth when a border color is
+      // set - backfill the theme fallback so width-only overrides land.
+      if (borderColor == null && touched) {
+        borderColor = f.primary.withValues(alpha: 0.16);
+      }
+    }
+
+    var radius = f.cardRadius;
+    if (p.panelRadius > 0) {
+      radius = p.panelRadius;
+      touched = true;
+    }
+
+    if (!touched) return f;
+    return f.copyWith(
+      card: card,
+      cardRadius: radius,
+      cardBorderColor: borderColor,
+      cardBorderWidth: borderWidth,
+    );
+  }
 }
 
 /// A [ValueNotifier] that exposes [refresh] so external callers can

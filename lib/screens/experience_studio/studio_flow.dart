@@ -145,6 +145,27 @@ class _MockPreviewScreen extends StatelessWidget {
                 ),
               ),
             ),
+          // Ambient shader — FOG/RAIN picks render here too, same
+          // layer order as ThemeOverlay (above wallpaper, below
+          // particles).
+          Positioned.fill(
+            child: IgnorePointer(
+              child: ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (_, prefs, _) {
+                  if (!prefs.shaderEnabled) {
+                    return const SizedBox.shrink();
+                  }
+                  return AmbientShaderLayer(
+                    shader:
+                        prefs.shaderPreset == ShaderPreset.darkNeonFog
+                            ? AmbientShader.darkNeonFog
+                            : AmbientShader.digitalRain,
+                  );
+                },
+              ),
+            ),
+          ),
           Positioned.fill(
             child: IgnorePointer(
               child: ValueListenableBuilder<VisualPrefs>(
@@ -157,14 +178,20 @@ class _MockPreviewScreen extends StatelessWidget {
             ),
           ),
           // Ambient glow — same resolution as the app overlay / LIVE
-          // LOOK so AMBIANCE picks show in the mock too.
+          // LOOK so AMBIANCE picks show in the mock too (incl. the
+          // theme auto-glow when the user hasn't set one).
           Positioned.fill(
             child: IgnorePointer(
               child: ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (_, prefs, _) {
                   final f = AppTheme.flairFor(mode);
-                  final eff = (prefs.glowIntensity * 1.8).clamp(0.0, 1.8);
+                  final auto = f.glowPrimary.a > 0.01 ? 0.15 : 0.0;
+                  final user =
+                      prefs.glowIntensity > 0.001
+                          ? prefs.glowIntensity
+                          : auto;
+                  final eff = (user * 1.8).clamp(0.0, 1.8);
                   if (eff <= 0.001) return const SizedBox.shrink();
                   Color scaled(Color c) =>
                       c.withValues(alpha: (c.a * eff).clamp(0.0, 1.0));
@@ -192,6 +219,7 @@ class _MockPreviewScreen extends StatelessWidget {
                 builder:
                     (_, prefs, _) => Stack(
                       children: [
+                        // Exact ThemeOverlay vignette (4-stop radial).
                         if (prefs.vignetteIntensity > 0.01)
                           Positioned.fill(
                             child: DecoratedBox(
@@ -202,13 +230,19 @@ class _MockPreviewScreen extends StatelessWidget {
                                   colors: [
                                     Colors.transparent,
                                     Colors.black.withValues(
-                                      alpha: 0.2 * prefs.vignetteIntensity,
+                                      alpha:
+                                          0.05 * prefs.vignetteIntensity,
                                     ),
                                     Colors.black.withValues(
-                                      alpha: 0.45 * prefs.vignetteIntensity,
+                                      alpha:
+                                          0.25 * prefs.vignetteIntensity,
+                                    ),
+                                    Colors.black.withValues(
+                                      alpha:
+                                          0.48 * prefs.vignetteIntensity,
                                     ),
                                   ],
-                                  stops: const [0.0, 0.6, 1.0],
+                                  stops: const [0.0, 0.45, 0.82, 1.0],
                                 ),
                               ),
                             ),

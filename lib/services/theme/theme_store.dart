@@ -37,7 +37,14 @@ class SavedCustomTheme {
       id: j['id'] as String,
       name: j['name'] as String,
       splashSlug: j['splashSlug'] as String,
-      baseMode: AppThemeMode.values[j['baseMode'] as int],
+      // Clamp — a preset saved before an enum shrink/reorder must not
+      // throw (one bad entry used to fail the entire gallery load).
+      baseMode: AppThemeMode.values[
+        (j['baseMode'] as int? ?? 0).clamp(
+          0,
+          AppThemeMode.values.length - 1,
+        )
+      ],
       prefs: VisualPrefs.fromJson(j['prefs'] as Map<String, dynamic>),
       customData:
           j['customData'] != null
@@ -65,12 +72,16 @@ class CustomThemeStore {
       final json = prefs.getString(_key);
       if (json != null) {
         final list = jsonDecode(json) as List;
-        notifier.value =
-            list
-                .map(
-                  (j) => SavedCustomTheme.fromJson(j as Map<String, dynamic>),
-                )
-                .toList();
+        // Per-item resilience — one malformed entry must not wipe the
+        // whole gallery (a single bad cast used to nuke every preset).
+        final parsed = <SavedCustomTheme>[];
+        for (final j in list) {
+          if (j is! Map<String, dynamic>) continue;
+          try {
+            parsed.add(SavedCustomTheme.fromJson(j));
+          } catch (_) {}
+        }
+        notifier.value = parsed;
       }
     } catch (_) {}
   }

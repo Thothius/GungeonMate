@@ -215,19 +215,35 @@ class _PeriodicTileState extends State<PeriodicTile>
         isS ? const Color(0xFFFFD700) : rawQColor; // Gold/yellow for S
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
-    final cardShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radii.sm),
-      side: BorderSide(
-        color:
-            isS
-                ? const Color(0xFFFFD700) // Gold border
-                : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35),
-        width:
-            isS ? 1.9 : (isHighTier ? 1.4 : 0.8), // Fatter border frame for S
-      ),
-    );
-
     final cardBgColor = isS ? const Color(0xFF14120E) : null;
+    // Global panel chrome (studio PANELS section): when the user overrode
+    // panel color/opacity the tile surface follows flair.card (which
+    // already carries the resolved chrome); otherwise keep the skeuo
+    // default. Border color/width/radius honor the same overrides.
+    final panelBg =
+        prefs.panelColor != 0 || prefs.panelOpacity < 0.999
+            ? AppTheme.flair.card
+            : null;
+    final pBorder = prefs.panelBorderColor;
+    final effBorderColor =
+        pBorder == -1
+            ? Colors.transparent
+            : pBorder != 0
+            ? Color(pBorder)
+            : (isS
+                  ? const Color(0xFFFFD700)
+                  : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35));
+    final effBorderWidth =
+        pBorder != 0 && prefs.panelBorderWidth > 0
+            ? prefs.panelBorderWidth
+            : (isS ? 1.9 : (isHighTier ? 1.4 : 0.8));
+
+    final cardShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        prefs.panelRadius > 0 ? Radius.circular(prefs.panelRadius) : Radii.sm,
+      ),
+      side: BorderSide(color: effBorderColor, width: effBorderWidth),
+    );
 
     // Helper: Strikethrough for single-use active items
     Widget maybeStrikethrough(Widget child) {
@@ -344,7 +360,7 @@ class _PeriodicTileState extends State<PeriodicTile>
         return Card(
           clipBehavior: Clip.antiAlias,
           margin: const EdgeInsets.all(3),
-          color: cardBgColor ?? const Color(0xFF17150F),
+          color: cardBgColor ?? panelBg ?? const Color(0xFF17150F),
           shape: cardShape,
           elevation: isHighTier ? 4 : 1,
           child: InkWell(
@@ -514,7 +530,7 @@ class _PeriodicTileState extends State<PeriodicTile>
         return Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.zero,
-          color: cardBgColor,
+          color: cardBgColor ?? panelBg,
           shape: cardShape,
           shadowColor: isHighTier ? qColor.withValues(alpha: 0.55) : null,
           elevation: isHighTier ? 4 : 1,

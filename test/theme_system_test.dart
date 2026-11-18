@@ -427,4 +427,62 @@ void main() {
       }
     });
   });
+
+  group('Panel chrome overrides', () {
+    tearDown(() => VisualPrefs.notifier.value = const VisualPrefs());
+
+    test('defaults are theme-following sentinels', () {
+      const p = VisualPrefs();
+      expect(p.panelColor, 0);
+      expect(p.panelOpacity, 1.0);
+      expect(p.panelBorderColor, 0);
+      expect(p.panelBorderWidth, 0);
+      expect(p.panelRadius, 0);
+    });
+
+    test('toJson/fromJson round-trip preserves panel fields', () {
+      const p = VisualPrefs(
+        panelColor: 0xFF112233,
+        panelOpacity: 0.5,
+        panelBorderColor: -1,
+        panelBorderWidth: 2.0,
+        panelRadius: 16.0,
+      );
+      final r = VisualPrefs.fromJson(p.toJson());
+      expect(r.panelColor, 0xFF112233);
+      expect(r.panelOpacity, 0.5);
+      expect(r.panelBorderColor, -1);
+      expect(r.panelBorderWidth, 2.0);
+      expect(r.panelRadius, 16.0);
+    });
+
+    test('flairFor applies color/opacity/border/radius overrides', () {
+      VisualPrefs.notifier.value = const VisualPrefs(
+        panelColor: 0xFF102030,
+        panelOpacity: 0.5,
+        panelBorderColor: 0xFF445566,
+        panelBorderWidth: 2.5,
+        panelRadius: 20.0,
+      );
+      final f = AppTheme.flairFor(AppThemeMode.paperInk);
+      expect(f.card.a, closeTo(0.5, 0.02));
+      expect(f.card.r, closeTo(0x10 / 255, 0.02));
+      expect(f.card.g, closeTo(0x20 / 255, 0.02));
+      expect(f.cardRadius, 20.0);
+      expect(f.cardBorderColor!.toARGB32(), 0xFF445566);
+      expect(f.cardBorderWidth, 2.5);
+    });
+
+    test('flairFor border -1 hides the border', () {
+      VisualPrefs.notifier.value = const VisualPrefs(panelBorderColor: -1);
+      final f = AppTheme.flairFor(AppThemeMode.paperInk);
+      expect(f.cardBorderColor, Colors.transparent);
+    });
+
+    test('flairFor returns theme flair untouched when sentinels', () {
+      final f = AppTheme.flairFor(AppThemeMode.paperInk);
+      expect(f.card, AppThemeMode.paperInk.flair.card);
+      expect(f.cardRadius, AppThemeMode.paperInk.flair.cardRadius);
+    });
+  });
 }

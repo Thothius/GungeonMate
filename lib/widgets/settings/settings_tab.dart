@@ -329,6 +329,44 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                     ],
                   ),
                 ),
+                const SizedBox(height: 12),
+                _CollapsibleCard(
+                  title: 'PANELS',
+                  icon: Icons.dashboard_customize_outlined,
+                  flair: flair,
+                  initiallyExpanded: false,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GoopText(
+                              'Special item panels',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            GoopText(
+                              'Gunderfury, Ser Junkan, Evolver & co. trackers',
+                              style: TextStyle(
+                                fontSize: FontSizes.labelMedium,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: prefs.showDashboards,
+                        activeThumbColor: flair.primary,
+                        onChanged: VisualPrefs.setShowDashboards,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

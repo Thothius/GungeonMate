@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import '../widgets/theme_overlay.dart';
 import '../widgets/backgrounds/custom_wallpaper.dart';
+import '../widgets/backgrounds/ambient_shader.dart';
 import '../widgets/particles/ambient_glow.dart';
 import '../utils/asset_paths.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
@@ -30,7 +32,8 @@ part 'experience_studio/studio_flow.dart';
 /// options below. Picks stage live through the whole screen; APPLY
 /// commits, BACK restores the entry snapshot.
 ///
-/// [initialTab] selects the opening tab (0=PRESETS … 4=AMBIANCE).
+/// [initialTab] selects the opening wizard tab (1=COLORS & BG …
+/// 5=SAVE); 0 opens the pick-or-create CHOOSE stage.
 class ExperienceStudioScreen extends StatefulWidget {
   final int initialTab;
   const ExperienceStudioScreen({super.key, this.initialTab = 0});
@@ -43,7 +46,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   late AppThemeMode _previewMode;
   late final AppThemeMode _originalMode;
   late final VisualPrefs _originalPrefs;
+  late final CustomThemeData? _originalCustomTheme;
   late CustomThemeData _draft;
+  // Set right before every intentional pop — PopScope blocks raw
+  // system-back so staged picks always route through the restore path.
+  bool _allowPop = false;
   int _hubTab = 0;
   double _liveLookH = 0.22;
 
@@ -56,6 +63,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   bool _gallerySelect = false; // gallery doubles as copy-source picker
   bool _cameFromFlow = false; // wizard entered via NEW PRESET
   String _presetName = '';
+  // Gallery presentation — list (official/custom sections, easy scan)
+  // vs cards (fullscreen swipe). Persisted; list is the default since
+  // the swiper doesn't scale past a handful of presets.
+  bool _galleryListView = true;
+  /// 3 quick-slot favorites above the preset doors - encoded refs
+  /// `m:<AppThemeMode.name>` / `s:<SavedCustomTheme.id>`. Tap applies
+  /// instantly; tap empty assigns via the gallery; long-press removes.
+  static const _kQuickSlotsKey = 'studio.quickSlots.v1';
+  List<String?> _quickSlots = List<String?>.filled(3, null);
+  int _quickPickSlot = -1; // gallery doubles as slot picker for this idx
 
   @override
   void initState() {
@@ -65,8 +82,37 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     _previewMode = AppTheme.mode;
     _originalMode = AppTheme.mode;
     _originalPrefs = VisualPrefs.notifier.value;
-    _draft = CustomThemeData.defaultTheme;
+    _originalCustomTheme = AppTheme.cachedCustomTheme;
+    // Seed the draft from the LIVE custom theme, not a blank default —
+    // deep links (initialTab>0) open the wizard on the real palette.
+    _draft = AppTheme.cachedCustomTheme ?? CustomThemeData.defaultTheme;
     AppTheme.previewNotifier.value = _previewMode;
+    SharedPreferences.getInstance().then((p) {
+      final v = p.getBool('studio.galleryListView');
+      if (v != null && mounted) setState(() => _galleryListView = v);
+    });
+    _loadQuickSlots();
+  }
+
+  Future<void> _loadQuickSlots() async {
+    try {
+      final p = await SharedPreferences.getInstance();
+      final raw = p.getString(_kQuickSlotsKey);
+      if (raw == null || !mounted) return;
+      final list = (jsonDecode(raw) as List).cast<String?>();
+      setState(() {
+        _quickSlots = [
+          for (var i = 0; i < 3; i++) i < list.length ? list[i] : null,
+        ];
+      });
+    } catch (_) {}
+  }
+
+  Future<void> _saveQuickSlots() async {
+    try {
+      final p = await SharedPreferences.getInstance();
+      await p.setString(_kQuickSlotsKey, jsonEncode(_quickSlots));
+    } catch (_) {}
   }
 
   @override
@@ -76,12 +122,23 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     super.dispose();
   }
 
+  /// Intentional close — commits staged picks, clears the preview and
+  /// pops. PopScope's canPop is baked at build time, so flip the flag,
+  /// rebuild, then pop post-frame (covers both pop semantics).
+  void _closeAfterCommit() {
+    AppTheme.previewNotifier.value = null;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
   Future<void> _applyAndClose() async {
     Haptics.success();
-    AppTheme.previewNotifier.value = null;
     await AppTheme.setMode(_previewMode);
-    if (!mounted) return;
-    if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+    _closeAfterCommit();
   }
 
   @override
@@ -173,7 +230,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 
     return Theme(
       data: cleanTheme,
-      child: Scaffold(
+      // System back / iOS swipe must walk the same stage-back path as the
+      // on-screen BACK button — a raw pop would leak staged VisualPrefs
+      // writes (gallery curation persists on every swipe) and skip the
+      // mode + custom-theme restore.
+      child: PopScope(
+        canPop: _allowPop,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _onFlowBack();
+        },
+        child: Scaffold(
         backgroundColor: Colors.transparent,
         // Back moved to the bottom thumb zone (task 17 sweep).
         body: SafeArea(
@@ -190,6 +256,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               },
             ],
           ),
+        ),
         ),
       ),
     );
@@ -455,6 +522,27 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                     ),
                   ),
                 ),
+              // Ambient shader — same layer the app overlay renders so
+              // FOG/RAIN picks are visible in the pane (was: prefs
+              // wrote but nothing rendered → looked dead).
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: ValueListenableBuilder<VisualPrefs>(
+                    valueListenable: VisualPrefs.notifier,
+                    builder: (_, prefs, _) {
+                      if (!prefs.shaderEnabled) {
+                        return const SizedBox.shrink();
+                      }
+                      return AmbientShaderLayer(
+                        shader:
+                            prefs.shaderPreset == ShaderPreset.darkNeonFog
+                                ? AmbientShader.darkNeonFog
+                                : AmbientShader.digitalRain,
+                      );
+                    },
+                  ),
+                ),
+              ),
               // Real particles inside the pane — every particle option
               // visibly changes the LIVE LOOK (was: wrote prefs but
               // nothing rendered → "options don't do anything").
@@ -481,7 +569,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                     valueListenable: VisualPrefs.notifier,
                     builder: (_, prefs, _) {
                       final f = AppTheme.flairFor(_previewMode);
-                      final eff = (prefs.glowIntensity * 1.8).clamp(0.0, 1.8);
+                      // Same resolution as ThemeOverlay: theme auto-glow
+                      // when the user hasn't set one, ×1.8 boost.
+                      final auto = f.glowPrimary.a > 0.01 ? 0.15 : 0.0;
+                      final user =
+                          prefs.glowIntensity > 0.001
+                              ? prefs.glowIntensity
+                              : auto;
+                      final eff = (user * 1.8).clamp(0.0, 1.8);
                       if (eff <= 0.001) return const SizedBox.shrink();
                       Color scaled(Color c) =>
                           c.withValues(alpha: (c.a * eff).clamp(0.0, 1.0));
@@ -509,6 +604,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                     builder:
                         (_, prefs, _) => Stack(
                           children: [
+                            // Exact ThemeOverlay vignette — same
+                            // 4-stop radial + per-stop alphas so the
+                            // slider previews what the app renders.
                             if (prefs.vignetteIntensity > 0.01)
                               Positioned.fill(
                                 child: DecoratedBox(
@@ -519,13 +617,19 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                                       colors: [
                                         Colors.transparent,
                                         Colors.black.withValues(
-                                          alpha: 0.2 * prefs.vignetteIntensity,
+                                          alpha:
+                                              0.05 * prefs.vignetteIntensity,
                                         ),
                                         Colors.black.withValues(
-                                          alpha: 0.45 * prefs.vignetteIntensity,
+                                          alpha:
+                                              0.25 * prefs.vignetteIntensity,
+                                        ),
+                                        Colors.black.withValues(
+                                          alpha:
+                                              0.48 * prefs.vignetteIntensity,
                                         ),
                                       ],
-                                      stops: const [0.0, 0.6, 1.0],
+                                      stops: const [0.0, 0.45, 0.82, 1.0],
                                     ),
                                   ),
                                 ),
@@ -782,6 +886,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           ),
         ),
         const SizedBox(height: 22),
+        _buildQuickSlots(),
         _FlowCard(
           icon: Icons.auto_awesome_rounded,
           title: 'BROWSE PRESETS',
@@ -792,6 +897,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             setState(() {
               _stage = _StudioStage.gallery;
               _gallerySelect = false;
+              _quickPickSlot = -1;
               _galleryIndex = 0;
             });
             // PageView isn't attached until the gallery builds — jump
@@ -938,8 +1044,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     if (name.isEmpty) {
       err = 'Name cannot be empty';
     } else if (CustomThemeStore.themes.any(
-      (t) => t.name.toLowerCase() == name.toLowerCase(),
-    )) {
+          (t) => t.name.toLowerCase() == name.toLowerCase(),
+        ) ||
+        kPickerThemes.any(
+          (t) => t.label.toLowerCase() == name.toLowerCase(),
+        )) {
       err = 'A preset named "$name" exists';
     }
     if (err != null) {
@@ -988,6 +1097,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             setState(() {
               _stage = _StudioStage.gallery;
               _gallerySelect = true;
+              _quickPickSlot = -1;
               _galleryIndex = 0;
             });
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1008,30 +1118,143 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   /// Gallery entries — premade picker themes first, then saved customs.
-  List<_PresetEntry> _presetEntries() {
-    return [
-      for (final m in kPickerThemes)
-        _PresetEntry(
-          name: m.label,
-          subtitle: '${m.vibe} · ${m.elem}',
-          colors: [
-            AppTheme.flairFor(m).scaffold,
-            AppTheme.flairFor(m).card,
-            AppTheme.flairFor(m).primary,
-            AppTheme.flairFor(m).secondary,
-            AppTheme.flairFor(m).headlineStat,
-          ],
-          mode: m,
-          splash: m.splashSlug.isEmpty ? null : m.splashSlug,
-        ),
-      for (final t in CustomThemeStore.themes)
-        _PresetEntry(
-          name: t.name,
-          subtitle: 'SAVED PRESET',
-          colors: _savedColors(t),
-          saved: t,
-        ),
-    ];
+  List<_PresetEntry> _presetEntries() => [
+    for (final m in kPickerThemes) _presetEntryForMode(m),
+    for (final t in CustomThemeStore.themes) _presetEntryForSaved(t),
+  ];
+
+  _PresetEntry _presetEntryForMode(AppThemeMode m) => _PresetEntry(
+    name: m.label,
+    subtitle: '${m.vibe} · ${m.elem}',
+    colors: [
+      AppTheme.flairFor(m).scaffold,
+      AppTheme.flairFor(m).card,
+      AppTheme.flairFor(m).primary,
+      AppTheme.flairFor(m).secondary,
+      AppTheme.flairFor(m).headlineStat,
+    ],
+    mode: m,
+    splash: m.splashSlug.isEmpty ? null : m.splashSlug,
+  );
+
+  _PresetEntry _presetEntryForSaved(SavedCustomTheme t) => _PresetEntry(
+    name: t.name,
+    subtitle: 'SAVED PRESET',
+    colors: _savedColors(t),
+    saved: t,
+    // 'custom' → custom.jpg exists; premade-based saves keep the
+    // source theme's splash - both render real card art.
+    splash: t.splashSlug.isEmpty ? null : t.splashSlug,
+  );
+
+  /// Decode a quick-slot ref into a gallery entry - null when the ref
+  /// is stale (saved preset deleted, mode removed from the picker).
+  _PresetEntry? _resolveSlot(int i) {
+    final ref = i >= 0 && i < _quickSlots.length ? _quickSlots[i] : null;
+    if (ref == null) return null;
+    if (ref.startsWith('m:')) {
+      final name = ref.substring(2);
+      for (final m in kPickerThemes) {
+        if (m.name == name) return _presetEntryForMode(m);
+      }
+      return null;
+    }
+    if (ref.startsWith('s:')) {
+      final id = ref.substring(2);
+      for (final t in CustomThemeStore.themes) {
+        if (t.id == id) return _presetEntryForSaved(t);
+      }
+    }
+    return null;
+  }
+
+  void _onSlotTap(int i) {
+    Haptics.selection();
+    final e = _resolveSlot(i);
+    if (e != null) {
+      // Filled slot = one-tap apply, same as PICK PRESET.
+      _applyEntry(e);
+      return;
+    }
+    // Empty slot -> gallery in slot-pick mode.
+    setState(() {
+      _stage = _StudioStage.gallery;
+      _quickPickSlot = i;
+      _gallerySelect = false;
+      _galleryIndex = 0;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
+    });
+  }
+
+  void _showSlotInfo(int i, _PresetEntry e) {
+    Haptics.selection();
+    final flair = AppTheme.flairFor(_previewMode);
+    showDialog(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: flair.card,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: flair.primary.withValues(alpha: 0.4)),
+            ),
+            title: GoopText(
+              'SLOT ${i + 1}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: flair.primary,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  e.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                GoopText(
+                  e.mode != null
+                      ? 'Official preset - tap the slot to apply it instantly.'
+                      : 'Your saved preset - tap the slot to apply it instantly.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const GoopText(
+                  'CLOSE',
+                  style: TextStyle(color: Colors.white54),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() => _quickSlots[i] = null);
+                  _saveQuickSlots();
+                  Navigator.of(ctx).pop();
+                },
+                child: const GoopText(
+                  'REMOVE',
+                  style: TextStyle(color: Color(0xFFE57373)),
+                ),
+              ),
+            ],
+          ),
+    );
   }
 
   List<Color> _savedColors(SavedCustomTheme t) {
@@ -1081,7 +1304,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: GoopText(
-                  _gallerySelect ? 'COPY FROM' : 'PRESETS',
+                  _quickPickSlot >= 0
+                      ? 'PICK FOR SLOT ${_quickPickSlot + 1}'
+                      : (_gallerySelect ? 'COPY FROM' : 'PRESETS'),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w900,
@@ -1090,53 +1315,60 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   ),
                 ),
               ),
+              // View toggle — LIST scans official + custom sections;
+              // CARDS keeps the fullscreen swipe gallery.
+              _galleryViewToggle(flair),
             ],
           ),
         ),
         const SizedBox(height: 8),
         Expanded(
-          child: PageView.builder(
-            controller: _galleryCtrl,
-            onPageChanged: (i) {
-              setState(() => _galleryIndex = i);
-              _previewGalleryEntry(entries[i]);
-            },
-            itemCount: entries.length,
-            itemBuilder: (ctx, i) {
-              final e = entries[i];
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 28,
-                  vertical: 8,
-                ),
-                child: _presetCard(e, i == idx, i),
-              );
-            },
-          ),
-        ),
-        // Page dots
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var i = 0; i < entries.length; i++)
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 160),
-                  margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                  width: i == idx ? 16 : 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color:
-                        i == idx
-                            ? flair.primary
-                            : Colors.white.withValues(alpha: 0.25),
-                    borderRadius: BorderRadius.circular(3),
+          child:
+              _galleryListView
+                  ? _buildPresetList(entries, idx)
+                  : PageView.builder(
+                    controller: _galleryCtrl,
+                    onPageChanged: (i) {
+                      setState(() => _galleryIndex = i);
+                      _previewGalleryEntry(entries[i]);
+                    },
+                    itemCount: entries.length,
+                    itemBuilder: (ctx, i) {
+                      final e = entries[i];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 28,
+                          vertical: 8,
+                        ),
+                        child: _presetCard(e, i == idx, i),
+                      );
+                    },
                   ),
-                ),
-            ],
-          ),
         ),
+        // Page dots — card view only.
+        if (!_galleryListView)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < entries.length; i++)
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 160),
+                    margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                    width: i == idx ? 16 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color:
+                          i == idx
+                              ? flair.primary
+                              : Colors.white.withValues(alpha: 0.25),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         // Bottom pick bar
         Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -1164,7 +1396,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    _gallerySelect ? Icons.copy_rounded : Icons.check_rounded,
+                    _quickPickSlot >= 0
+                        ? Icons.star_rounded
+                        : (_gallerySelect
+                            ? Icons.copy_rounded
+                            : Icons.check_rounded),
                     size: 16,
                     color:
                         flair.primary.computeLuminance() > 0.5
@@ -1173,7 +1409,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   ),
                   const SizedBox(width: 8),
                   GoopText(
-                    _gallerySelect ? 'USE AS BASE' : 'PICK PRESET',
+                    _quickPickSlot >= 0
+                        ? 'SET SLOT'
+                        : (_gallerySelect ? 'USE AS BASE' : 'PICK PRESET'),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w900,
@@ -1193,6 +1431,309 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
+  /// LIST/CARDS toggle for the gallery header — persisted so the
+  /// user's preferred browsing style sticks across sessions.
+  Widget _galleryViewToggle(ThemeFlair flair) {
+    Widget btn(bool list, IconData icon) {
+      final on = _galleryListView == list;
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Haptics.selection();
+          setState(() => _galleryListView = list);
+          SharedPreferences.getInstance().then(
+            (p) => p.setBool('studio.galleryListView', list),
+          );
+          // Flipping to cards must land on the list's selected entry —
+          // the PageView keeps its own page or the highlight lies.
+          if (!list) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_galleryCtrl.hasClients) {
+                _galleryCtrl.jumpToPage(_galleryIndex);
+              }
+            });
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 2),
+          padding: const EdgeInsets.all(7),
+          decoration: BoxDecoration(
+            color:
+                on
+                    ? flair.primary.withValues(alpha: 0.18)
+                    : Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color:
+                  on
+                      ? flair.primary.withValues(alpha: 0.7)
+                      : Colors.white.withValues(alpha: 0.12),
+            ),
+          ),
+          child: Icon(
+            icon,
+            size: 15,
+            color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [btn(true, Icons.view_list_rounded), btn(false, Icons.grid_view_rounded)],
+    );
+  }
+
+  /// List presentation — OFFICIAL section (premade picker themes) on
+  /// top, YOURS (saved presets) below. Every row is tappable, saved
+  /// rows get a delete affordance in browse mode.
+  Widget _buildPresetList(List<_PresetEntry> entries, int idx) {
+    final flair = AppTheme.flairFor(_previewMode);
+    final officialCount = entries.where((e) => e.mode != null).length;
+    final hasCustom = entries.length > officialCount;
+    Widget sectionHeader(String label) => Padding(
+      padding: const EdgeInsets.fromLTRB(18, 10, 18, 4),
+      child: GoopText(
+        label,
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1.6,
+          color: Colors.white.withValues(alpha: 0.4),
+        ),
+      ),
+    );
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(bottom: 8),
+      itemCount: entries.length + (hasCustom ? 2 : 1),
+      itemBuilder: (ctx, i) {
+        // Section headers occupy slots 0 and officialCount+1.
+        if (i == 0) return sectionHeader('OFFICIAL');
+        if (hasCustom && i == officialCount + 1) {
+          return sectionHeader('YOURS');
+        }
+        final ei = i - 1 - (hasCustom && i > officialCount + 1 ? 1 : 0);
+        final e = entries[ei];
+        return _presetListTile(e, ei, ei == idx, flair);
+      },
+    );
+  }
+
+  /// One list row — splash thumb (or color dots), name + vibe, select
+  /// highlight, delete icon on saved presets (browse mode only).
+  Widget _presetListTile(
+    _PresetEntry e,
+    int index,
+    bool isCurrent,
+    ThemeFlair flair,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Haptics.selection();
+          setState(() => _galleryIndex = index);
+          _previewGalleryEntry(e);
+        },
+        // Same affordance as the card view — long-press deletes a saved
+        // preset (browse mode only, never in the copy-source picker).
+        onLongPress:
+            e.saved != null && !_gallerySelect
+                ? () => _confirmDeletePreset(e.saved!)
+                : null,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color:
+                isCurrent
+                    ? flair.primary.withValues(alpha: 0.12)
+                    : Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color:
+                  isCurrent
+                      ? flair.primary.withValues(alpha: 0.7)
+                      : Colors.white.withValues(alpha: 0.1),
+              width: isCurrent ? 1.6 : 1.0,
+            ),
+          ),
+          child: Row(
+            children: [
+              // Thumb — splash art when the preset has one, else the
+              // palette gradient.
+              Container(
+                width: 44,
+                height: 44,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.15),
+                  ),
+                ),
+                child:
+                    e.splash != null
+                        ? Image.asset(
+                          'assets/images/themes/splash/${e.splash}.jpg',
+                          fit: BoxFit.cover,
+                          errorBuilder:
+                              (_, _, _) => _presetListThumbFallback(e),
+                        )
+                        : _presetListThumbFallback(e),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      e.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.8,
+                        color: isCurrent ? flair.primary : Colors.white,
+                      ),
+                    ),
+                    GoopText(
+                      e.subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (e.saved != null && !_gallerySelect && _quickPickSlot < 0)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => _confirmDeletePreset(e.saved!),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.delete_outline_rounded,
+                      size: 17,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+                )
+              else if (isCurrent)
+                Icon(Icons.check_circle_rounded, size: 16, color: flair.primary),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// The 3 quick slots pinned above the preset doors.
+  Widget _buildQuickSlots() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Row(
+        children: [
+          for (var i = 0; i < 3; i++) ...[
+            if (i > 0) const SizedBox(width: 10),
+            Expanded(child: _quickSlot(i)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _quickSlot(int i) {
+    final e = _resolveSlot(i);
+    final flair = AppTheme.flairFor(_previewMode);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _onSlotTap(i),
+      onLongPress: e == null ? null : () => _showSlotInfo(i, e),
+      child: Container(
+        height: 58,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: e == null ? 0.03 : 0.07),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color:
+                e == null
+                    ? Colors.white.withValues(alpha: 0.14)
+                    : flair.primary.withValues(alpha: 0.45),
+            width: e == null ? 1.0 : 1.4,
+          ),
+        ),
+        child:
+            e == null
+                ? Center(
+                  child: Icon(
+                    Icons.add_rounded,
+                    color: Colors.white.withValues(alpha: 0.35),
+                    size: 22,
+                  ),
+                )
+                : Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: SizedBox(
+                        width: 30,
+                        height: 38,
+                        child: _slotThumb(e),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: GoopText(
+                        e.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                  ],
+                ),
+      ),
+    );
+  }
+
+  Widget _slotThumb(_PresetEntry e) {
+    if (e.splash != null) {
+      return Image.asset(
+        'assets/images/themes/splash/${e.splash}.jpg',
+        fit: BoxFit.cover,
+        errorBuilder:
+            (_, _, _) => _presetListThumbFallback(e),
+      );
+    }
+    return _presetListThumbFallback(e);
+  }
+
+  Widget _presetListThumbFallback(_PresetEntry e) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [e.colors[0], e.colors[1], e.colors[2]],
+        ),
+      ),
+    );
+  }
+
   /// One gallery card — splash art when available, else a palette
   /// gradient; name + vibe strip at the bottom.
   Widget _presetCard(_PresetEntry e, bool isCurrent, int index) {
@@ -1207,6 +1748,12 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           curve: Curves.easeOut,
         );
       },
+      // Long-press a saved preset to delete it — browse mode only;
+      // the copy-source picker shouldn't mutate the store mid-flow.
+      onLongPress:
+          e.saved != null && !_gallerySelect && _quickPickSlot < 0
+              ? () => _confirmDeletePreset(e.saved!)
+              : null,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
@@ -1306,6 +1853,60 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
+  /// Long-press delete for saved presets — confirm, remove from the
+  /// store, and rebuild the gallery without it.
+  Future<void> _confirmDeletePreset(SavedCustomTheme t) async {
+    Haptics.selection();
+    final flair = AppTheme.flairFor(_previewMode);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: flair.card,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: flair.primary.withValues(alpha: 0.4)),
+            ),
+            title: GoopText(
+              'DELETE PRESET',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: flair.primary,
+              ),
+            ),
+            content: GoopText(
+              '"${t.name}" will be removed from your presets. This cannot be undone.',
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const GoopText(
+                  'CANCEL',
+                  style: TextStyle(color: Colors.white54),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: GoopText(
+                  'DELETE',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              ),
+            ],
+          ),
+    );
+    if (ok != true || !mounted) return;
+    await CustomThemeStore.delete(t.id);
+    if (mounted) setState(() {});
+  }
+
   Widget _presetCardBg(_PresetEntry e) {
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -1318,29 +1919,52 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  /// Live-preview the gallery entry under the finger.
+  /// Live-preview the gallery entry under the finger. Saved presets
+  /// swap the whole VisualPrefs snapshot (not persisted — PICK/seed
+  /// persists, BACK restores the entry snapshot) so particles, font
+  /// and glow preview honestly instead of showing the last entry's.
   void _previewGalleryEntry(_PresetEntry e) {
     if (e.mode != null) {
       _previewTheme(e.mode!);
     } else if (e.saved != null) {
+      final s = e.saved!;
       final d =
-          e.saved!.customData ??
+          s.customData ??
           _customDataFromFlair(
-            AppTheme.flairFor(e.saved!.baseMode),
-            name: e.saved!.name,
+            AppTheme.flairFor(s.baseMode),
+            name: s.name,
           );
+      VisualPrefs.notifier.value = s.prefs;
       AppTheme.saveCustomThemeData(d);
       _previewTheme(AppThemeMode.custom);
     }
   }
 
-  /// Bottom pick — apply & close (browse) or seed wizard (copy).
+  /// Bottom pick - assign quick slot, seed wizard (copy), or apply
+  /// & close (browse).
   Future<void> _onGalleryPick(_PresetEntry e) async {
     Haptics.success();
+    if (_quickPickSlot >= 0) {
+      setState(() {
+        _quickSlots[_quickPickSlot] =
+            e.mode != null ? 'm:${e.mode!.name}' : 's:${e.saved!.id}';
+        _quickPickSlot = -1;
+        _stage = _StudioStage.choose;
+      });
+      await _saveQuickSlots();
+      return;
+    }
     if (_gallerySelect) {
       await _seedFromEntry(e);
       return;
     }
+    await _applyEntry(e);
+  }
+
+  /// Apply a gallery entry app-wide and close - premade swaps the mode
+  /// (curation applies inside setMode); saved presets restore their
+  /// full VisualPrefs snapshot + palette.
+  Future<void> _applyEntry(_PresetEntry e) async {
     if (e.mode != null) {
       await AppTheme.setMode(e.mode!);
     } else if (e.saved != null) {
@@ -1352,8 +1976,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       await AppTheme.saveCustomThemeData(d);
       await AppTheme.setMode(AppThemeMode.custom);
     }
-    AppTheme.previewNotifier.value = null;
-    if (mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
+    _closeAfterCommit();
   }
 
   /// Seed the wizard from a gallery entry (copy-existing path).
@@ -1362,6 +1985,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     if (e.mode != null) {
       final curation = kThemeCuration[e.mode!];
       if (curation != null) await VisualPrefs.applyCuration(curation);
+      // Match setMode's font behavior — a premade's typeface is part of
+      // its identity; copying it shouldn't inherit the old font.
+      final themeFont = e.mode!.flair.font;
+      if (themeFont != null) await VisualPrefs.setFont(themeFont);
       setState(() {
         _draft = _customDataFromFlair(
           AppTheme.flairFor(e.mode!),
@@ -1513,13 +2140,22 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             const SizedBox(height: 14),
             chip(
               'CANVAS',
-              wp != null ? 'WALLPAPER ${wp.toUpperCase()}' : 'SOLID',
+              _previewMode == AppThemeMode.custom
+                  ? (wp != null
+                      ? 'WALLPAPER ${wp.toUpperCase()}'
+                      : 'SOLID ${hex(_draft.scaffold)}')
+                  : 'THEME',
             ),
             chip('PANEL', hex(_draft.card)),
             chip('PRIME', hex(_draft.primary), dot: _draft.primary),
             chip('SECOND', hex(_draft.secondary), dot: _draft.secondary),
             chip('STAT', hex(_draft.headlineStat), dot: _draft.headlineStat),
-            chip('PARTICLES', prefs.particlePreset.label),
+            // The typed system's real picks — shape type + color
+            // palette — not the hidden particlePreset curation field.
+            chip(
+              'PARTICLES',
+              '${ParticleType.values[prefs.particleTypeIndex.clamp(0, ParticleType.values.length - 1)].label} · ${kGlobalParticlePalettes[prefs.particleSchemaIndex.clamp(0, kGlobalParticlePalettes.length - 1)].name}',
+            ),
             chip('FONT', prefs.font.label),
             chip('GLOW', '${(prefs.glowIntensity * 100).round()}%'),
             chip(
@@ -1691,8 +2327,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       await AppTheme.saveCustomThemeData(_draft.copyWith(name: name));
     }
     await AppTheme.setMode(_previewMode);
-    AppTheme.previewNotifier.value = null;
-    if (mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
+    _closeAfterCommit();
   }
 
   /// Stage-aware BACK — walk the flow backwards; at CHOOSE it does
@@ -1707,10 +2342,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           _onBack();
         }
       case _StudioStage.gallery:
-        setState(
-          () => _stage =
-              _gallerySelect ? _StudioStage.source : _StudioStage.choose,
-        );
+        setState(() {
+          _quickPickSlot = -1;
+          _stage =
+              _gallerySelect ? _StudioStage.source : _StudioStage.choose;
+        });
       case _StudioStage.source:
         setState(() => _stage = _StudioStage.choose);
       case _StudioStage.choose:
@@ -1719,14 +2355,22 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   /// BACK — discard staged picks by restoring the entry snapshot
-  /// (premade-mode restores prefs too, since curation writes them).
+  /// (premade-mode restores prefs too, since curation writes them;
+  /// custom-theme data restores because color/wallpaper edits persist
+  /// eagerly through saveCustomThemeData).
   Future<void> _onBack() async {
     Haptics.selection();
     AppTheme.previewNotifier.value = null;
     await VisualPrefs.replaceAndPersist(_originalPrefs);
+    await AppTheme.restoreCustomThemeData(_originalCustomTheme);
     await AppTheme.setMode(_originalMode);
     if (!mounted) return;
-    if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   // ── CUSTOM tab — per-role color rows → color picker, Unicorn
@@ -1786,6 +2430,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       children: [
         if (_previewMode == AppThemeMode.unicorn) _buildUnicornStrip(),
         ...rows,
+        const SizedBox(height: 14),
+        _buildPanelChromeSection(),
         const SizedBox(height: 14),
         GoopText(
           'save your finished preset from the SAVE tab',
@@ -1867,6 +2513,222 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 '#${color.toARGB32().toRadixString(16).toUpperCase()}',
                 style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// PANELS — global chrome overrides applied to every panel surface
+  /// (dashboard, gun/item tiles, browse cards, bottom nav) via the
+  /// flairFor post-process. All controls write VisualPrefs directly so
+  /// they persist and ride inside preset saves like every other pref.
+  Widget _buildPanelChromeSection() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return ValueListenableBuilder<VisualPrefs>(
+      valueListenable: VisualPrefs.notifier,
+      builder: (_, prefs, _) {
+        final borderMode = prefs.panelBorderColor == -1
+            ? 2
+            : prefs.panelBorderColor != 0
+            ? 1
+            : 0;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GoopText(
+              'PANELS',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.6,
+                color: flair.primary,
+              ),
+            ),
+            const SizedBox(height: 2),
+            GoopText(
+              'every card, tile & nav surface',
+              style: TextStyle(
+                fontSize: 9,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+            const SizedBox(height: 8),
+            _chromeColorRow(
+              'PANEL COLOR',
+              'fill for all panels',
+              prefs.panelColor != 0 ? Color(prefs.panelColor) : flair.card,
+              prefs.panelColor != 0,
+              (c) => VisualPrefs.setPanelColor(c.toARGB32()),
+              onClear: () => VisualPrefs.setPanelColor(0),
+            ),
+            _StudioSlider(
+              'OPACITY',
+              '${(prefs.panelOpacity * 100).round()}%',
+              prefs.panelOpacity,
+              0.15,
+              1.0,
+              17,
+              flair.primary,
+              (v) => VisualPrefs.setPanelOpacity(v),
+            ),
+            Row(
+              children: [
+                for (var i = 0; i < 3; i++) ...[
+                  if (i > 0) const SizedBox(width: 6),
+                  Expanded(
+                    child: _ShaderChip(
+                      label: const ['AUTO', 'CUSTOM', 'NONE'][i],
+                      on: borderMode == i,
+                      onTap: () async {
+                        if (i == 0) {
+                          await VisualPrefs.setPanelBorderColor(0);
+                        } else if (i == 2) {
+                          await VisualPrefs.setPanelBorderColor(-1);
+                        } else {
+                          final c = await _PaletteColorSheet.show(
+                            context,
+                            prefs.panelBorderColor > 0
+                                ? Color(prefs.panelBorderColor)
+                                : flair.primary,
+                          );
+                          if (c != null && mounted) {
+                            await VisualPrefs.setPanelBorderColor(
+                              c.toARGB32(),
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            if (prefs.panelBorderColor > 0) ...[
+              const SizedBox(height: 8),
+              _chromeColorRow(
+                'BORDER COLOR',
+                'panel outline',
+                Color(prefs.panelBorderColor),
+                true,
+                (c) => VisualPrefs.setPanelBorderColor(c.toARGB32()),
+                onClear: () => VisualPrefs.setPanelBorderColor(0),
+              ),
+              _StudioSlider(
+                'BORDER WIDTH',
+                prefs.panelBorderWidth > 0
+                    ? prefs.panelBorderWidth.toStringAsFixed(1)
+                    : 'AUTO',
+                prefs.panelBorderWidth > 0 ? prefs.panelBorderWidth : 1.0,
+                0.5,
+                3.0,
+                10,
+                flair.primary,
+                (v) => VisualPrefs.setPanelBorderWidth(v),
+              ),
+            ],
+            _StudioSlider(
+              'RADIUS',
+              prefs.panelRadius > 0
+                  ? prefs.panelRadius.toStringAsFixed(0)
+                  : 'AUTO',
+              prefs.panelRadius > 0 ? prefs.panelRadius : 12.0,
+              0.0,
+              24.0,
+              24,
+              flair.primary,
+              (v) => VisualPrefs.setPanelRadius(v),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Callback variant of [_colorRoleRow] for prefs-backed chrome picks —
+  /// same sheet, same look, writes VisualPrefs instead of the draft.
+  Widget _chromeColorRow(
+    String label,
+    String desc,
+    Color color,
+    bool overridden,
+    void Function(Color) onPick, {
+    VoidCallback? onClear,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () async {
+          final c = await _PaletteColorSheet.show(context, color);
+          if (c == null || !mounted) return;
+          onPick(c);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    width: 1.2,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    GoopText(
+                      desc,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (overridden && onClear != null)
+                GestureDetector(
+                  onTap: onClear,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    child: GoopText(
+                      'AUTO',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color: AppTheme.flair.primary,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
