@@ -123,6 +123,7 @@ flutter:
     - assets/images/home/junk/
     - assets/animations/
     - assets/images/wallpapers/animated/
+    - assets/images/wallpapers/custom/
     - assets/images/themes/splash/
     - assets/images/game/guns/
     - assets/images/game/items/

@@ -176,6 +176,19 @@ const List<String> kAvatarIds = <String>[
   'g12_3',
   'g12_7',
   'g12_8',
+  // Avatar-base set — standalone portraits from X:\XXXXXXXXX\avatar-base,
+  // center-cropped to 320x320 webp (custom_01..custom_11).
+  'custom_01',
+  'custom_02',
+  'custom_03',
+  'custom_04',
+  'custom_05',
+  'custom_06',
+  'custom_07',
+  'custom_08',
+  'custom_09',
+  'custom_10',
+  'custom_11',
 ];
 
 /// Asset path for a Paradox avatar id ('' if unknown). Empty or
