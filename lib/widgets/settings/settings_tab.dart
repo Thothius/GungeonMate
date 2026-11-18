@@ -115,11 +115,9 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
             ),
       );
     } else {
-      final cultist =
-          p.gungeoneerByName('The Cultist') ?? p.gungeoneerByName('Cultist');
-      if (cultist != null) {
-        p.startCoopPlayer(cultist);
-      }
+      // Don't pre-seed a Cultist — the picker's onPick calls
+      // startCoopPlayer(char) itself. Seeding first meant backing out
+      // of the picker left a phantom Player 2 in the run.
       Navigator.push(
         context,
         fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
