@@ -31,8 +31,21 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   // Portrait order reshuffles every open so the grid doesn't always
   // lead with the same faces.
   late final List<String> _ids;
+  // Category filter — 96 portraits across 11 shuffled pages is a lot
+  // to hunt through; chips narrow to a family at a time.
+  String _category = 'ALL';
+  static const _categories = ['ALL', 'CAST', 'UNICORN', 'GRIDS', 'CUSTOM'];
 
-  int get _pageCount => (_ids.length + _perPage - 1) ~/ _perPage;
+  /// Visible ids for the active category chip.
+  List<String> get _visibleIds => switch (_category) {
+    'CAST' => _ids.where((id) => id.startsWith('the_')).toList(),
+    'UNICORN' => _ids.where((id) => id.startsWith('uni_')).toList(),
+    'GRIDS' => _ids.where((id) => id.startsWith('g')).toList(),
+    'CUSTOM' => _ids.where((id) => id.startsWith('custom_')).toList(),
+    _ => _ids,
+  };
+
+  int get _pageCount => (_visibleIds.length + _perPage - 1) ~/ _perPage;
 
   @override
   void initState() {
@@ -273,90 +286,147 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
             FramedAvatar(id: _picked, size: 40 * sf, radius: 9),
           ],
         ),
-        SizedBox(height: 12 * sf),
+        SizedBox(height: 10 * sf),
+        // Category chips — narrow 96 portraits to one family.
+        SizedBox(
+          height: 26 * sf,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: _categories.length,
+            separatorBuilder: (_, _) => SizedBox(width: 6 * sf),
+            itemBuilder: (context, i) {
+              final c = _categories[i];
+              final on = c == _category;
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (c == _category) return;
+                  Haptics.selection();
+                  setState(() {
+                    _category = c;
+                    _page = 0;
+                  });
+                  if (_pageCtrl.hasClients) _pageCtrl.jumpToPage(0);
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 10 * sf),
+                  decoration: BoxDecoration(
+                    color:
+                        on
+                            ? const Color(0xFF7C4DFF).withValues(alpha: 0.22)
+                            : Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color:
+                          on
+                              ? const Color(0xFFB388FF)
+                              : Colors.white.withValues(alpha: 0.15),
+                    ),
+                  ),
+                  child: GoopText(
+                    c,
+                    style: TextStyle(
+                      fontSize: 9 * sf,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.9,
+                      color:
+                          on
+                              ? const Color(0xFFB388FF)
+                              : Colors.white.withValues(alpha: 0.55),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 10 * sf),
         SizedBox(
           height: 330 * sf,
           child: PageView.builder(
             controller: _pageCtrl,
             itemCount: _pageCount,
             onPageChanged: (p) => setState(() => _page = p),
-            itemBuilder:
-                (_, page) => GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  children: List.generate(_perPage, (i) {
-                    final idx = page * _perPage + i;
-                    // Empty slot on the last partial sheet.
-                    if (idx >= _ids.length) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.05),
-                          ),
-                        ),
-                      );
-                    }
-                    final id = _ids[idx];
-                    final isSel = id == avatarBaseId(_picked);
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Haptics.selection();
-                        final frame = avatarFrameId(_picked);
-                        setState(() {
-                          _picked = frame.isEmpty ? id : '$id:$frame';
-                          _frameStage = true; // → dedicated frame stage
-                        });
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color:
-                                isSel
-                                    ? const Color(0xFFB388FF)
-                                    : Colors.white.withValues(alpha: 0.15),
-                            width: isSel ? 2.5 : 1.2,
-                          ),
-                          boxShadow:
-                              isSel
-                                  ? [
-                                    BoxShadow(
-                                      color: const Color(
-                                        0xFF7C4DFF,
-                                      ).withValues(alpha: 0.35),
-                                      blurRadius: 14,
-                                    ),
-                                  ]
-                                  : null,
-                        ),
-                        child: ClipRect(
-                          // Overscale bleeds off the 1-2px white
-                          // gridline edges on sliced grid portraits.
-                          child: Transform.scale(
-                            scale: 1.20,
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              avatarPath(id),
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.none,
-                              errorBuilder:
-                                  (_, _, _) => const Icon(
-                                    Icons.person,
-                                    size: 36,
-                                    color: Colors.white38,
-                                  ),
-                            ),
-                          ),
+            itemBuilder: (_, page) {
+              final ids = _visibleIds;
+              return GridView.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                children: List.generate(_perPage, (i) {
+                  final idx = page * _perPage + i;
+                  // Empty slot on the last partial sheet.
+                  if (idx >= ids.length) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.05),
                         ),
                       ),
                     );
-                  }),
-                ),
+                  }
+                  final id = ids[idx];
+                  final isSel = id == avatarBaseId(_picked);
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Haptics.selection();
+                      final frame = avatarFrameId(_picked);
+                      setState(() {
+                        _picked = frame.isEmpty ? id : '$id:$frame';
+                        _frameStage = true; // → dedicated frame stage
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color:
+                              isSel
+                                  ? const Color(0xFFB388FF)
+                                  : Colors.white.withValues(alpha: 0.15),
+                          width: isSel ? 2.5 : 1.2,
+                        ),
+                        boxShadow:
+                            isSel
+                                ? [
+                                  BoxShadow(
+                                    color: const Color(
+                                      0xFF7C4DFF,
+                                    ).withValues(alpha: 0.35),
+                                    blurRadius: 14,
+                                  ),
+                                ]
+                                : null,
+                      ),
+                      child: ClipRect(
+                        // Overscale bleeds off the 1-2px white
+                        // gridline edges on sliced grid portraits.
+                        child: Transform.scale(
+                          scale: 1.20,
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            avatarPath(id),
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.none,
+                            errorBuilder:
+                                (_, _, _) => const Icon(
+                                  Icons.person,
+                                  size: 36,
+                                  color: Colors.white38,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              );
+            },
           ),
         ),
         SizedBox(height: 8 * sf),
