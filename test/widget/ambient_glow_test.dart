@@ -10,11 +10,11 @@ import 'package:gungeon_mate/services/app_theme.dart';
 /// use pump() with finite durations rather than pumpAndSettle().
 void main() {
   group('GlowStyle enum', () {
-    test('has exactly 4 values', () {
-      expect(GlowStyle.values.length, 4);
+    test('has exactly 6 values', () {
+      expect(GlowStyle.values.length, 6);
     });
 
-    test('values are orbit, ember, halo, drip', () {
+    test('values are orbit, ember, halo, drip, prism, ripple', () {
       expect(
         GlowStyle.values,
         containsAll([
@@ -22,6 +22,8 @@ void main() {
           GlowStyle.ember,
           GlowStyle.halo,
           GlowStyle.drip,
+          GlowStyle.prism,
+          GlowStyle.ripple,
         ]),
       );
     });

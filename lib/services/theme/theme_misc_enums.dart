@@ -31,6 +31,41 @@ extension LiquidKindX on LiquidKind {
   };
 }
 
+/// Procedural atmosphere backdrop — painter-driven ambient effects that
+/// sit between the liquid tank and the fragment shaders. Each kind is a
+/// CustomPainter scene tinted by the active flair palette. Persisted as
+/// an int index; [off] renders nothing.
+enum AmbientKind {
+  /// Nothing — clean backdrop.
+  off,
+
+  /// Volumetric light shafts sweeping down from the top edge.
+  godRays,
+
+  /// Ember/ash motes drifting upward with per-mote flicker.
+  ash,
+
+  /// Slowly rotating arcane ring with orbiting rune ticks.
+  runes,
+
+  /// CRT scanlines with an occasional horizontal glitch band.
+  scanlines,
+
+  /// Deep parallax speck field — far dust + a few near motes.
+  abyss,
+}
+
+extension AmbientKindX on AmbientKind {
+  String get label => switch (this) {
+    AmbientKind.off => 'OFF',
+    AmbientKind.godRays => 'RAYS',
+    AmbientKind.ash => 'ASH',
+    AmbientKind.runes => 'RUNES',
+    AmbientKind.scanlines => 'SCAN',
+    AmbientKind.abyss => 'ABYSS',
+  };
+}
+
 /// Data model for custom theme settings persisted to SharedPreferences.
 /// Allows users to create their own color palette with optional backdrop/aura/font.
 
@@ -46,6 +81,13 @@ enum GlowStyle {
 
   /// Top-down drip — slow downward gradient movement.
   drip,
+
+  /// Rotating color-wheel sweep — linear gradient angle spins slowly,
+  /// colors cycle through primary → secondary → tertiary.
+  prism,
+
+  /// Sonar rings — staggered radial pulses expanding from center.
+  ripple,
 }
 
 /// Extra per-theme styling knobs beyond [ColorScheme]. Read via

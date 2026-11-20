@@ -471,6 +471,19 @@ class VisualPrefs {
   /// reduced-motion renders a static frame.
   final bool wallpaperImmersive;
 
+  /// Procedural atmosphere backdrop — index into [AmbientKind.values]
+  /// (0 = off). God-rays / ash / runes / scanlines / abyss are
+  /// painter-driven scenes tinted by the active flair palette.
+  final int ambientKindIndex;
+
+  /// Cinematic letterbox — soft black bars top + bottom edge. Pure
+  /// depth dressing; static under reduced-motion like everything else.
+  final bool cinematicBars;
+
+  /// Tap ripple — an expanding ring burst alongside the sparkle dots
+  /// on pointer-down. Premium tactile punctuation.
+  final bool tapRipple;
+
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
 
@@ -602,6 +615,9 @@ class VisualPrefs {
     this.shaderPreset = ShaderPreset.digitalRain,
     this.liquidKindIndex = 0,
     this.wallpaperImmersive = false,
+    this.ambientKindIndex = 0,
+    this.cinematicBars = false,
+    this.tapRipple = true,
   });
 
   static const _kGlow = 'vp.glow_v1';
@@ -652,6 +668,9 @@ class VisualPrefs {
   static const _kShaderPreset = 'vp.shader_preset_v1';
   static const _kLiquidKind = 'vp.liquid_kind_v1';
   static const _kWallpaperImmersive = 'vp.wallpaper_immersive_v1';
+  static const _kAmbientKind = 'vp.ambient_kind_v1';
+  static const _kCinematicBars = 'vp.cinematic_bars_v1';
+  static const _kTapRipple = 'vp.tap_ripple_v1';
 
   static ValueNotifier<VisualPrefs> notifier = ValueNotifier(
     const VisualPrefs(),
@@ -809,6 +828,12 @@ class VisualPrefs {
           LiquidKind.values.length - 1,
         ),
         wallpaperImmersive: p.getBool(_kWallpaperImmersive) ?? false,
+        ambientKindIndex: (p.getInt(_kAmbientKind) ?? 0).clamp(
+          0,
+          AmbientKind.values.length - 1,
+        ),
+        cinematicBars: p.getBool(_kCinematicBars) ?? false,
+        tapRipple: p.getBool(_kTapRipple) ?? true,
       );
     } catch (e) {
       debugPrint('[AppTheme] prefs error: $e');
@@ -1056,6 +1081,23 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setAmbientKindIndex(int v) async {
+    notifier.value = notifier.value._with(
+      ambientKindIndex: v.clamp(0, AmbientKind.values.length - 1),
+    );
+    _persist();
+  }
+
+  static Future<void> setCinematicBars(bool v) async {
+    notifier.value = notifier.value._with(cinematicBars: v);
+    _persist();
+  }
+
+  static Future<void> setTapRipple(bool v) async {
+    notifier.value = notifier.value._with(tapRipple: v);
+    _persist();
+  }
+
   static Future<void> setPanelColor(int argb) async {
     notifier.value = notifier.value._with(panelColor: argb);
     _persist();
@@ -1203,6 +1245,9 @@ class VisualPrefs {
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
       await p.setInt(_kLiquidKind, v.liquidKindIndex);
       await p.setBool(_kWallpaperImmersive, v.wallpaperImmersive);
+      await p.setInt(_kAmbientKind, v.ambientKindIndex);
+      await p.setBool(_kCinematicBars, v.cinematicBars);
+      await p.setBool(_kTapRipple, v.tapRipple);
     } catch (e) {
       debugPrint('[AppTheme] prefs error: $e');
     }
@@ -1254,6 +1299,9 @@ class VisualPrefs {
     ShaderPreset? shaderPreset,
     int? liquidKindIndex,
     bool? wallpaperImmersive,
+    int? ambientKindIndex,
+    bool? cinematicBars,
+    bool? tapRipple,
   }) => VisualPrefs(
     glowIntensity: glowIntensity ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -1303,6 +1351,9 @@ class VisualPrefs {
     shaderPreset: shaderPreset ?? this.shaderPreset,
     liquidKindIndex: liquidKindIndex ?? this.liquidKindIndex,
     wallpaperImmersive: wallpaperImmersive ?? this.wallpaperImmersive,
+    ambientKindIndex: ambientKindIndex ?? this.ambientKindIndex,
+    cinematicBars: cinematicBars ?? this.cinematicBars,
+    tapRipple: tapRipple ?? this.tapRipple,
   );
 
   /// Serialize to JSON for custom theme persistence.
@@ -1346,6 +1397,9 @@ class VisualPrefs {
     'liquidKindIndex': liquidKindIndex,
     // wallpaperImmersive deliberately omitted — app-level toggle, not
     // theme identity (restores go through preserveAppLevel).
+    'ambientKindIndex': ambientKindIndex,
+    'cinematicBars': cinematicBars,
+    'tapRipple': tapRipple,
     'tapSparkles': tapSparkles,
     'panelColor': panelColor,
     'panelOpacity': panelOpacity,
@@ -1469,6 +1523,12 @@ class VisualPrefs {
         LiquidKind.values.length - 1,
       ),
       wallpaperImmersive: j['wallpaperImmersive'] as bool? ?? false,
+      ambientKindIndex: ((j['ambientKindIndex'] as num?)?.toInt() ?? 0).clamp(
+        0,
+        AmbientKind.values.length - 1,
+      ),
+      cinematicBars: j['cinematicBars'] as bool? ?? false,
+      tapRipple: j['tapRipple'] as bool? ?? true,
       tapSparkles: j['tapSparkles'] as bool? ?? true,
       panelColor: j['panelColor'] as int? ?? 0,
       panelOpacity: ((j['panelOpacity'] as num?)?.toDouble() ?? 1.0).clamp(

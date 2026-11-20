@@ -65,8 +65,56 @@ class _AmbianceStep extends StatelessWidget {
                 flair.headlineStat,
                 (v) => VisualPrefs.setGrainIntensity(v),
               ),
+              const SizedBox(height: 10),
+              _ShaderChip(
+                label: 'CINEMA BARS',
+                on: prefs.cinematicBars,
+                onTap: () {
+                  VisualPrefs.setCinematicBars(!prefs.cinematicBars);
+                  Haptics.selection();
+                },
+              ),
               const SizedBox(height: 18),
-              _StepLabel('BACKGROUND'),
+              _StepLabel('ATMOSPHERE'),
+              const SizedBox(height: 8),
+              // Procedural backdrop scenes — each is a bespoke painter
+              // tinted by the active palette. Two rows of three keeps
+              // the chips tappable on phones.
+              for (var row = 0; row < 2; row++) ...[
+                Row(
+                  children: [
+                    for (
+                      var i = row * 3;
+                      i < (row * 3 + 3).clamp(0, AmbientKind.values.length);
+                      i++
+                    )
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: _ShaderChip(
+                            label: AmbientKind.values[i].label,
+                            on: prefs.ambientKindIndex == i,
+                            onTap: () {
+                              VisualPrefs.setAmbientKindIndex(i);
+                              Haptics.selection();
+                            },
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                if (row == 0) const SizedBox(height: 8),
+              ],
+              const SizedBox(height: 6),
+              GoopText(
+                'procedural scenes behind everything · stacks with liquid + shader',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
+              const SizedBox(height: 18),
+              _StepLabel('SHADER'),
               const SizedBox(height: 8),
               // The shader layer existed in the engine + prefs but had
               // zero UI — surfacing it (hidden feature the user asked
@@ -132,9 +180,9 @@ class _AmbianceStep extends StatelessWidget {
               const SizedBox(height: 18),
               _StepLabel('TAP FX'),
               const SizedBox(height: 8),
-              // Sparkles are a VisualPrefs pick (saved with the preset);
-              // haptics is a device-level Haptics.intensity — the row
-              // owns its own rebuild for that one.
+              // Sparkles + ripple are VisualPrefs picks (saved with the
+              // preset); haptics is a device-level Haptics.intensity —
+              // it gets its own row.
               Row(
                 children: [
                   Expanded(
@@ -148,12 +196,23 @@ class _AmbianceStep extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Expanded(child: _HapticsChips()),
+                  Expanded(
+                    child: _ShaderChip(
+                      label: 'RIPPLE',
+                      on: prefs.tapRipple,
+                      onTap: () {
+                        VisualPrefs.setTapRipple(!prefs.tapRipple);
+                        Haptics.selection();
+                      },
+                    ),
+                  ),
                 ],
               ),
+              const SizedBox(height: 8),
+              const _HapticsChips(),
               const SizedBox(height: 6),
               GoopText(
-                'sparkles = tap particle burst · haptics = vibration',
+                'sparkles = tap burst · ripple = expanding ring · haptics = vibration',
                 style: TextStyle(
                   fontSize: 9,
                   color: Colors.white.withValues(alpha: 0.4),
@@ -243,7 +302,15 @@ class _GlowStyleRow extends StatelessWidget {
   const _GlowStyleRow({required this.currentIndex});
   final int currentIndex;
 
-  static const _labels = ['THEME', 'ORBIT', 'EMBER', 'HALO', 'DRIP'];
+  static const _labels = [
+    'THEME',
+    'ORBIT',
+    'EMBER',
+    'HALO',
+    'DRIP',
+    'PRISM',
+    'RIPPLE',
+  ];
 
   @override
   Widget build(BuildContext context) {

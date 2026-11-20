@@ -28,6 +28,8 @@ class _AmbientGlowState extends State<AmbientGlow>
     GlowStyle.ember: Duration(seconds: 6),
     GlowStyle.halo: Duration(seconds: 20),
     GlowStyle.drip: Duration(seconds: 12),
+    GlowStyle.prism: Duration(seconds: 18),
+    GlowStyle.ripple: Duration(seconds: 9),
   };
 
   @override
@@ -78,6 +80,8 @@ class _AmbientGlowState extends State<AmbientGlow>
           GlowStyle.ember => _buildEmber(t, pColor, sColor),
           GlowStyle.halo => _buildHalo(t, pColor, sColor, tColor),
           GlowStyle.drip => _buildDrip(t, pColor, sColor, tColor),
+          GlowStyle.prism => _buildPrism(t, pColor, sColor, tColor),
+          GlowStyle.ripple => _buildRipple(t, pColor, sColor, tColor),
         };
       },
     );
@@ -214,6 +218,101 @@ class _AmbientGlowState extends State<AmbientGlow>
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  // ── Prism: rotating color-wheel sweep ────────────────────────────────
+  // A diagonal linear gradient whose axis slowly rotates while the three
+  // stops drift through primary → secondary → tertiary and back. A faint
+  // counter-rotating radial adds depth. Premium "energy field" feel.
+  Widget _buildPrism(double t, Color pColor, Color sColor, Color tColor) {
+    // t is 0..2π over the controller duration.
+    final dx = math.cos(t);
+    final dy = math.sin(t);
+    // Color drift — each stop lerps on its own slow phase.
+    final cA = Color.lerp(pColor, sColor, (math.sin(t * 0.5 + 1.2) + 1) / 2)!;
+    final cB = Color.lerp(sColor, tColor, (math.sin(t * 0.4 + 3.4) + 1) / 2)!;
+    final cC = Color.lerp(tColor, pColor, (math.sin(t * 0.6 + 5.1) + 1) / 2)!;
+
+    return Stack(
+      children: [
+        // Main rotating sweep.
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(-dx * 0.95, -dy * 0.95),
+                end: Alignment(dx * 0.95, dy * 0.95),
+                colors: [cA, cB, cC, const Color(0x00000000)],
+                stops: const [0.0, 0.35, 0.7, 1.0],
+              ),
+            ),
+          ),
+        ),
+        // Counter-sweep accent — opposite direction, half speed.
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(
+                  math.cos(-t * 0.6) * 0.8,
+                  math.sin(-t * 0.6) * 0.8,
+                ),
+                end: Alignment(
+                  -math.cos(-t * 0.6) * 0.8,
+                  -math.sin(-t * 0.6) * 0.8,
+                ),
+                colors: [
+                  cB.withValues(alpha: cB.a * 0.5),
+                  const Color(0x00000000),
+                  cC.withValues(alpha: cC.a * 0.4),
+                ],
+                stops: const [0.0, 0.5, 1.0],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Ripple: sonar rings expanding from drifting centers ─────────────
+  // Three staggered radial pulses — each a bright rim that swells and
+  // fades, center drifting on a slow Lissajous so the rings never feel
+  // mechanical. Reads as sonar / ritual pulse.
+  Widget _buildRipple(double t, Color pColor, Color sColor, Color tColor) {
+    Widget ring(Color c, double phase, double speed, double maxR) {
+      // Ping-pong expansion: 0→1→0 over each half-cycle.
+      final p = (math.sin(t * speed + phase) + 1) / 2;
+      final radius = 0.15 + p * maxR;
+      final alpha = (1.0 - p) * 0.85;
+      return Positioned.fill(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment(
+                0.28 * math.cos(t * 0.35 + phase),
+                0.22 * math.sin(t * 0.28 + phase * 1.7),
+              ),
+              radius: radius,
+              colors: [
+                c.withValues(alpha: alpha),
+                c.withValues(alpha: alpha * 0.4),
+                const Color(0x00000000),
+              ],
+              stops: const [0.0, 0.72, 1.0],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        ring(pColor, 0.0, 1.0, 1.15),
+        ring(sColor, 2.1, 1.35, 0.95),
+        ring(tColor, 4.2, 0.75, 1.35),
       ],
     );
   }

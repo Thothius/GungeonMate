@@ -137,11 +137,33 @@ void main() {
         vignetteIntensity: 0.7,
         grainIntensity: 0.4,
         glowStyleIndex: 2,
+        ambientKindIndex: 3,
+        cinematicBars: true,
+        tapRipple: false,
       );
       final r = VisualPrefs.fromJson(p.toJson());
       expect(r.vignetteIntensity, 0.7);
       expect(r.grainIntensity, 0.4);
       expect(r.glowStyleIndex, 2);
+      expect(r.ambientKindIndex, 3);
+      expect(r.cinematicBars, isTrue);
+      expect(r.tapRipple, isFalse);
+    });
+
+    test('atmosphere fields default off + survive old json', () {
+      const p = VisualPrefs();
+      expect(p.ambientKindIndex, 0);
+      expect(p.cinematicBars, isFalse);
+      expect(p.tapRipple, isTrue);
+      final r = VisualPrefs.fromJson(const {});
+      expect(r.ambientKindIndex, 0);
+      expect(r.cinematicBars, isFalse);
+      expect(r.tapRipple, isTrue);
+    });
+
+    test('ambientKindIndex clamps to enum range in fromJson', () {
+      final r = VisualPrefs.fromJson(const {'ambientKindIndex': 99});
+      expect(r.ambientKindIndex, AmbientKind.values.length - 1);
     });
 
     test('old json without new fields gets defaults', () {

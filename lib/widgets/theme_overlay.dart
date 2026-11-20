@@ -12,6 +12,7 @@ import 'theme_engines.dart';
 import 'particle_engine.dart';
 import 'particles/touch_particle.dart';
 import 'particles/ambient_glow.dart';
+import 'particles/ambient_field.dart';
 import 'particles/liquid_tank.dart';
 import 'backgrounds/page_frame.dart';
 import 'backgrounds/ambient_shader.dart';
@@ -109,7 +110,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
         final p = _touchParticles[i];
         p.pos += p.vel;
         p.vel = Offset(p.vel.dx * 0.85, p.vel.dy * 0.85); // deceleration
-        p.life -= 0.08; // decays in ~12 frames (~0.2 seconds)
+        p.life -= p.decay; // rings decay slower — pulse, not pop
         if (p.life <= 0) {
           _touchParticles.removeAt(i);
         }
@@ -132,6 +133,22 @@ class _ThemeOverlayState extends State<ThemeOverlay>
       // that uses both theme accent colors.
       final colors = [activeFlair.primary, activeFlair.secondary];
       setState(() {
+        // Expanding sonar ring — the premium punctuation under the
+        // sparkle dots. Slower decay so it reads as a pulse, not a pop.
+        if (prefs.tapRipple) {
+          _touchParticles.add(
+            TouchParticle(
+              pos: localPos,
+              vel: Offset.zero,
+              color: colors.first,
+              size: 0,
+              life: 1.0,
+              ring: true,
+              maxRadius: 44.0 + _rng.nextDouble() * 18.0,
+              decay: 0.045,
+            ),
+          );
+        }
         for (var i = 0; i < 5; i++) {
           final angle = _rng.nextDouble() * 2 * math.pi;
           final speed = 0.5 + _rng.nextDouble() * 1.5;
@@ -232,6 +249,13 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                         prefs.liquidKindIndex < LiquidKind.values.length
                     ? LiquidKind.values[prefs.liquidKindIndex]
                     : LiquidKind.off;
+            // Procedural atmosphere pick — painter scenes tinted by the
+            // flair palette; off renders nothing.
+            final ambientKind =
+                prefs.ambientKindIndex >= 0 &&
+                        prefs.ambientKindIndex < AmbientKind.values.length
+                    ? AmbientKind.values[prefs.ambientKindIndex]
+                    : AmbientKind.off;
             final particleBackdropBg =
                 skeuo
                     ? null
@@ -344,6 +368,22 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                       ),
                     ),
 
+                  // 0.48. Ambient atmosphere — god-rays / ash / runes /
+                  // scanlines / abyss painter scenes. Sits above the
+                  // liquid tank, below shaders + particles so textures
+                  // never cover the particle identity.
+                  if (!menuVisible && !skeuo && ambientKind != AmbientKind.off)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: AmbientField(
+                          kind: ambientKind,
+                          primary: f.primary,
+                          secondary: f.secondary,
+                          tertiary: f.headlineStat,
+                        ),
+                      ),
+                    ),
+
                   // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
                   // rain or dark neon fog. Sits behind particles but above the
                   // base background + video wallpaper. Opt-in via VisualPrefs.
@@ -434,14 +474,20 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     Positioned.fill(
                       child: IgnorePointer(
                         child: RepaintBoundary(
-                          child: CustomPaint(
-                            painter:
-                                skeuo
-                                    ? const SkeuoGrainPainter()
-                                    : GrainPainter(
+                          child:
+                              skeuo
+                                  ? const CustomPaint(
+                                    painter: SkeuoGrainPainter(),
+                                  )
+                                  : reduceMotion
+                                  ? CustomPaint(
+                                    painter: GrainPainter(
                                       opacity: prefs.grainIntensity * 0.35,
                                     ),
-                          ),
+                                  )
+                                  : _AnimatedGrainField(
+                                    opacity: prefs.grainIntensity * 0.35,
+                                  ),
                         ),
                       ),
                     ),
@@ -467,6 +513,16 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                           maxDripHeight: 25.0,
                           viscosity: 1.2,
                         ),
+                      ),
+                    ),
+
+                  // 3.7. Cinematic letterbox — soft black bars framing
+                  // top + bottom edges. Static dressing; sits above all
+                  // backdrop dressing but below tap sparkles.
+                  if (!menuVisible && !skeuo && prefs.cinematicBars)
+                    const Positioned.fill(
+                      child: IgnorePointer(
+                        child: CustomPaint(painter: _CinemaBarsPainter()),
                       ),
                     ),
 
@@ -659,4 +715,131 @@ class GrainPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(GrainPainter old) => old.opacity != opacity;
+}
+
+/// Cinematic letterbox — soft black gradients framing the top and
+/// bottom ~7% of the screen. Pure depth dressing, no animation.
+class _CinemaBarsPainter extends CustomPainter {
+  const _CinemaBarsPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final barH = size.height * 0.07;
+    final top =
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withValues(alpha: 0.92),
+              Colors.black.withValues(alpha: 0.55),
+              const Color(0x00000000),
+            ],
+          ).createShader(Rect.fromLTWH(0, 0, size.width, barH));
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, barH), top);
+    final bottom =
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Colors.black.withValues(alpha: 0.92),
+              Colors.black.withValues(alpha: 0.55),
+              const Color(0x00000000),
+            ],
+          ).createShader(
+            Rect.fromLTWH(0, size.height - barH, size.width, barH),
+          );
+    canvas.drawRect(
+      Rect.fromLTWH(0, size.height - barH, size.width, barH),
+      bottom,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_CinemaBarsPainter old) => false;
+}
+
+/// Animated film grain — same 1200-speck field as [GrainPainter] but the
+/// speckle positions jitter ~10×/sec via a frame-bucketed reseed, giving
+/// real per-frame grain shimmer instead of a printed-on texture. Only
+/// used when animations are enabled; reduced-motion falls back to the
+/// static painter.
+class _AnimatedGrainField extends StatefulWidget {
+  final double opacity;
+  const _AnimatedGrainField({required this.opacity});
+
+  @override
+  State<_AnimatedGrainField> createState() => _AnimatedGrainFieldState();
+}
+
+class _AnimatedGrainFieldState extends State<_AnimatedGrainField>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder:
+          (_, _) => CustomPaint(
+            painter: _AnimatedGrainPainter(
+              opacity: widget.opacity,
+              frame: (_c.value * 10).floor(),
+            ),
+          ),
+    );
+  }
+}
+
+class _AnimatedGrainPainter extends CustomPainter {
+  final double opacity;
+  final int frame;
+  const _AnimatedGrainPainter({required this.opacity, required this.frame});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (opacity <= 0 || size.isEmpty) return;
+    // Reseed per frame-bucket — deterministic within a frame, different
+    // speckle field every ~100ms.
+    final rnd = math.Random(77 + frame * 7919);
+    final light =
+        Paint()
+          ..color = Colors.white.withValues(alpha: opacity)
+          ..strokeWidth = 1.0
+          ..strokeCap = StrokeCap.round;
+    final dark =
+        Paint()
+          ..color = Colors.black.withValues(alpha: opacity * 0.9)
+          ..strokeWidth = 1.0
+          ..strokeCap = StrokeCap.round;
+    final pts = <Offset>[
+      for (var i = 0; i < 600; i++)
+        Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
+    ];
+    canvas.drawPoints(PointMode.points, pts, light);
+    final darkPts = <Offset>[
+      for (var i = 0; i < 600; i++)
+        Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
+    ];
+    canvas.drawPoints(PointMode.points, darkPts, dark);
+  }
+
+  @override
+  bool shouldRepaint(_AnimatedGrainPainter old) => old.frame != frame;
 }
