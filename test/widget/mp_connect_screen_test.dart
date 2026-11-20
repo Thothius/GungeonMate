@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:gungeon_mate/models/multiplayer_messages.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/mp_connect_screen.dart';
@@ -165,5 +166,131 @@ void main() {
 
     expect(find.text('RESTORING'), findsOneWidget);
     expect(find.text('Restoring your run…'), findsOneWidget);
+  });
+
+  // ── VS splash + final handshake (S5) ───────────────────────────
+
+  testWidgets('Main sees VS splash with READY button on fresh connect', (
+    tester,
+  ) async {
+    final session = MpSession.placeholder();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.hosting,
+      role: MpRole.main,
+      nickname: 'Hosty',
+      peerNickname: 'Sidekick',
+    );
+
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('LINKED'), findsOneWidget);
+    expect(find.text('VS'), findsOneWidget);
+    expect(find.textContaining('READY'), findsOneWidget);
+  });
+
+  testWidgets('READY tap flips to STARTING and fires sendStartRun', (
+    tester,
+  ) async {
+    final session = MpSession.placeholder();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.hosting,
+      role: MpRole.main,
+      nickname: 'Hosty',
+      peerNickname: 'Sidekick',
+    );
+
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
+    await tester.pump();
+
+    await tester.tap(find.textContaining('READY'));
+    await tester.pump();
+    // Flush the 600ms enter-run delay so no Timer leaks past teardown.
+    await tester.pump(const Duration(milliseconds: 800));
+
+    // Confirmed → handshake resolves → entering beat replaces READY.
+    expect(find.textContaining('ENTERING THE GUNGEON'), findsOneWidget);
+    expect(find.textContaining('READY'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Sidekick sees WAITING FOR host on fresh connect', (
+    tester,
+  ) async {
+    final session = MpSession.placeholder();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.joining,
+      role: MpRole.sidekick,
+      nickname: 'Sidekick',
+      peerNickname: 'Hosty',
+    );
+
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.textContaining('WAITING FOR'), findsOneWidget);
+    expect(find.textContaining('HOSTY'), findsOneWidget);
+    expect(find.textContaining('READY'), findsNothing);
+  });
+
+  testWidgets('Sidekick enters run when peer startRun arrives', (
+    tester,
+  ) async {
+    final session = MpSession.placeholder();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.joining,
+      role: MpRole.sidekick,
+      nickname: 'Sidekick',
+      peerNickname: 'Hosty',
+    );
+
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
+    await tester.pump();
+    expect(find.textContaining('WAITING FOR'), findsOneWidget);
+
+    // Simulate the wire MpStartRun → onStartRun callback.
+    session.onStartRun?.call();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Reconnect skips the handshake — no READY button', (
+    tester,
+  ) async {
+    final session = MpSession.placeholder();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.reconnecting,
+      role: MpRole.main,
+      nickname: 'Hosty',
+      peerNickname: 'Sidekick',
+    );
+
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    // Auto-entered — entering beat shows, no handshake UI remains.
+    expect(find.textContaining('ENTERING THE GUNGEON'), findsOneWidget);
+    expect(find.textContaining('READY'), findsNothing);
+    expect(find.textContaining('WAITING FOR'), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }

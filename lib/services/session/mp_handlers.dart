@@ -39,6 +39,7 @@ mixin _MpSessionHandlers on ChangeNotifier {
   void Function(MpSurprise)? get onSurpriseReceived;
   void _setPhase(MpPhase p);
   void _applyPaused(bool paused, {required bool notifyPeer});
+  void _startRunTimer();
   Future<void> _persistSession();
   void _startSaveTimer();
   void logEvent(MpEvent e);
@@ -58,7 +59,12 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _sync.onPeerHello = _onPeerHello;
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
-    _sync.onStartRun = () => onStartRun?.call();
+    _sync.onStartRun = () {
+      // Peer confirmed the run start — arm our clock on the same
+      // beat so both timers measure the same run.
+      _startRunTimer();
+      onStartRun?.call();
+    };
     _sync.onSurprise = (s) {
       logEvent(
         MpEvent.event(

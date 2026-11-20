@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../theme/tokens.dart';
 
 import 'package:flutter/material.dart';
@@ -36,11 +38,23 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     with TickerProviderStateMixin {
   late final AnimationController _pulseCtrl;
   late final AnimationController _checkPopCtrl;
+  late final MpSession _session;
   bool _navigatedToRun = false;
+
+  /// Final-handshake state for the VS splash:
+  /// - Main must tap READY → [MpSession.sendStartRun] fires the
+  ///   `MpStartRun` wire message and both sides drop into the run.
+  /// - Sidekick waits for that message (`onStartRun`) before entering.
+  /// Reconnects/restores skip the gate — the run already started.
+  bool _mainConfirmed = false;
+  bool _peerStarted = false;
+  bool _still = false;
 
   @override
   void initState() {
     super.initState();
+    _session = context.read<MpSession>();
+    _session.onStartRun = _onPeerStartRun;
     _pulseCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1400),
@@ -52,7 +66,64 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = MediaQuery.disableAnimationsOf(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _pulseCtrl.stop();
+    } else if (!_pulseCtrl.isAnimating) {
+      _pulseCtrl.repeat(reverse: true);
+    }
+  }
+
+  /// Sidekick path — the host's READY fired `MpStartRun` over the
+  /// wire; leave the splash and drop into the run.
+  void _onPeerStartRun() {
+    if (!mounted) return;
+    setState(() => _peerStarted = true);
+  }
+
+  /// Fresh pairings need the host's confirm; reconnects and app-kill
+  /// restores already had their handshake — enter immediately.
+  bool _needsHandshake(MpSession session) {
+    if (session.demoMode) return false;
+    return session.connectReason != MpConnectReason.reconnecting &&
+        session.connectReason != MpConnectReason.restoring;
+  }
+
+  bool _awaitingHandshake(MpSession session) {
+    if (session.phase != MpPhase.connected || !_needsHandshake(session)) {
+      return false;
+    }
+    return session.myRole == MpRole.main ? !_mainConfirmed : !_peerStarted;
+  }
+
+  void _enterRun() {
+    if (_navigatedToRun) return;
+    _navigatedToRun = true;
+    _checkPopCtrl.forward();
+    final navigator = Navigator.of(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Haptics.success();
+      Future.delayed(const Duration(milliseconds: 600), () {
+        if (!mounted) return;
+        navigator.popUntil((route) => route.isFirst);
+      });
+    });
+  }
+
+  Future<void> _confirmAndStart() async {
+    Haptics.success();
+    setState(() => _mainConfirmed = true);
+    await _session.sendStartRun();
+  }
+
+  @override
   void dispose() {
+    _session.onStartRun = null;
     _pulseCtrl.dispose();
     _checkPopCtrl.dispose();
     super.dispose();
@@ -65,20 +136,12 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     final sf = Responsive.factor(context);
     final flair = AppTheme.flair;
 
-    // Auto-navigate to active run when connected (with a brief delay
-    // so the user sees the "Connected!" success state).
-    if (session.phase == MpPhase.connected && !_navigatedToRun) {
-      _navigatedToRun = true;
-      _checkPopCtrl.forward();
-      final navigator = Navigator.of(context);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        Haptics.success();
-        Future.delayed(const Duration(milliseconds: 600), () {
-          if (!mounted) return;
-          navigator.popUntil((route) => route.isFirst);
-        });
-      });
+    // Enter the run once the handshake resolves: main after READY,
+    // sidekick after the peer's MpStartRun, reconnects immediately.
+    if (session.phase == MpPhase.connected &&
+        !_awaitingHandshake(session) &&
+        !_navigatedToRun) {
+      _enterRun();
     }
 
     return Scaffold(
@@ -265,7 +328,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 character: myChar,
                 label: session.myNickname,
                 isMe: true,
-                pulse: _pulseCtrl,
+                pulse: _still ? null : _pulseCtrl,
                 sf: sf,
                 flair: flair,
                 avatarId: session.avatarId,
@@ -308,7 +371,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 character: null,
                 label: session.peerNickname ?? 'Partner',
                 isMe: false,
-                pulse: _pulseCtrl,
+                pulse: _still ? null : _pulseCtrl,
                 sf: sf,
                 flair: flair,
                 avatarId: session.peerAvatarId,
@@ -386,8 +449,12 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     }
   }
 
-  // ── Connected ──────────────────────────────────────────────────
+  // ── Connected — VS splash + final handshake ────────────────────
 
+  /// The versus screen both players see once the link is up. Big
+  /// portraits flanking a pulsing VS medallion; the host must hit
+  /// READY (fires `MpStartRun`) before either side drops into the
+  /// run. Reconnects never reach this — they auto-enter instead.
   Widget _buildConnected(
     MpSession session,
     RunProvider rp,
@@ -396,78 +463,219 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   ) {
     final myChar = rp.gungeoneerByName(session.myCharacterName);
     final peerChar = rp.gungeoneerByName(session.peerCharacterName ?? '');
+    final isMain = session.myRole == MpRole.main;
+    final peerName = (session.peerNickname ?? 'Partner').toUpperCase();
 
-    return _cardShell(
-      accent: MpColors.connected,
-      sf: sf,
-      flair: flair,
+    // Handshake resolved — show the brief "entering" beat while the
+    // route pops back to the run.
+    if (_navigatedToRun) {
+      return _buildEntering(session, sf, flair);
+    }
+
+    return Stack(
       children: [
-        if (session.runTitle.isNotEmpty)
-          _runTitleChip(session.runTitle, sf, flair),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _Portrait(
-              character: myChar,
-              label: session.myNickname,
-              isMe: true,
-              pulse: null,
-              sf: sf,
-              flair: flair,
-              avatarId: session.avatarId,
-              sub: session.myCharacterName,
+        // Drifting glow orbs — each side tinted by its player color.
+        Positioned.fill(
+          child: IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _pulseCtrl,
+              builder: (context, _) {
+                final t = _still ? 0.5 : _pulseCtrl.value;
+                return CustomPaint(
+                  painter: _VsGlowPainter(
+                    left: flair.primary,
+                    right: flair.secondary,
+                    t: t,
+                  ),
+                );
+              },
             ),
-            SizedBox(width: 20 * sf),
-            Icon(Icons.link_rounded, size: 28 * sf, color: MpColors.connected),
-            SizedBox(width: 20 * sf),
-            _Portrait(
-              character: peerChar,
-              label: session.peerNickname ?? 'Partner',
-              isMe: false,
-              pulse: null,
-              sf: sf,
-              flair: flair,
-              avatarId: session.peerAvatarId,
-              sub: session.peerCharacterName ?? '',
+          ),
+        ),
+        SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20 * sf),
+            child: Column(
+              children: [
+                SizedBox(height: 14 * sf),
+                // Status row — connected pill + run title.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _VsChip(
+                      icon: Icons.check_circle_rounded,
+                      label: 'LINKED',
+                      color: MpColors.connected,
+                      sf: sf,
+                    ),
+                    if (session.runTitle.isNotEmpty) ...[
+                      SizedBox(width: 8 * sf),
+                      Flexible(
+                        child: _VsChip(
+                          icon: Icons.flag_outlined,
+                          label: session.runTitle.toUpperCase(),
+                          color: flair.secondary,
+                          sf: sf,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                SizedBox(height: 30 * sf),
+                // The matchup — portraits huge, VS medallion between.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _Portrait(
+                      character: myChar,
+                      label: session.myNickname,
+                      isMe: true,
+                      pulse: _still ? null : _pulseCtrl,
+                      sf: sf,
+                      flair: flair,
+                      avatarId: session.avatarId,
+                      sub: session.myCharacterName,
+                      size: 108,
+                      textScale: 1.45,
+                    ),
+                    SizedBox(width: 10 * sf),
+                    _VsMedallion(
+                      ctrl: _still ? null : _pulseCtrl,
+                      sf: sf,
+                      flair: flair,
+                    ),
+                    SizedBox(width: 10 * sf),
+                    _Portrait(
+                      character: peerChar,
+                      label: session.peerNickname ?? 'Partner',
+                      isMe: false,
+                      pulse: _still ? null : _pulseCtrl,
+                      sf: sf,
+                      flair: flair,
+                      avatarId: session.peerAvatarId,
+                      sub: session.peerCharacterName ?? '',
+                      size: 108,
+                      textScale: 1.45,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 34 * sf),
+                // Handshake zone — host confirms, sidekick waits.
+                if (isMain) ...[
+                  FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: flair.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: Size.fromHeight(58 * sf),
+                      padding: EdgeInsets.symmetric(horizontal: 28 * sf),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    icon: Icon(Icons.sports_mma_rounded, size: 24 * sf),
+                    label: GoopText(
+                      _mainConfirmed ? 'STARTING…' : 'READY — LET\'S GUNGEON',
+                      style: TextStyle(
+                        fontSize: 15 * sf,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    onPressed: _mainConfirmed ? null : _confirmAndStart,
+                  ),
+                  SizedBox(height: 10 * sf),
+                  GoopText(
+                    'You are MAIN — confirm to drop both of you in.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11 * sf,
+                      color: Colors.white.withValues(alpha: 0.45),
+                    ),
+                  ),
+                ] else ...[
+                  _WaitingForHost(name: peerName, ctrl: _pulseCtrl, sf: sf),
+                  SizedBox(height: 10 * sf),
+                  GoopText(
+                    'The host confirms to start the run.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11 * sf,
+                      color: Colors.white.withValues(alpha: 0.45),
+                    ),
+                  ),
+                ],
+                SizedBox(height: 20 * sf),
+              ],
             ),
-          ],
-        ),
-        SizedBox(height: 32 * sf),
-        // Checkmark pops in with a spring-like scale animation.
-        ScaleTransition(
-          scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(parent: _checkPopCtrl, curve: Curves.elasticOut),
-          ),
-          child: Icon(
-            Icons.check_circle_rounded,
-            size: 48 * sf,
-            color: MpColors.connected,
           ),
         ),
-        SizedBox(height: 12 * sf),
-        GoopText(
-          'Connected!',
-          style: TextStyle(
-            fontSize: FontSizes.titleLarge * sf,
-            fontWeight: FontWeight.w900,
-            color: MpColors.connected,
+      ],
+    );
+  }
+
+  /// Transitional beat between handshake and the run — check pop +
+  /// "ENTERING THE GUNGEON…" over the same VS glow.
+  Widget _buildEntering(MpSession session, double sf, ThemeFlair flair) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _pulseCtrl,
+              builder: (context, _) {
+                final t = _still ? 0.5 : _pulseCtrl.value;
+                return CustomPaint(
+                  painter: _VsGlowPainter(
+                    left: flair.primary,
+                    right: flair.secondary,
+                    t: t,
+                  ),
+                );
+              },
+            ),
           ),
         ),
-        SizedBox(height: 8 * sf),
-        GoopText(
-          '${session.myNickname} & ${session.peerNickname ?? "Partner"}',
-          style: TextStyle(
-            fontSize: 13 * sf,
-            color: Colors.white.withValues(alpha: 0.6),
-          ),
-        ),
-        SizedBox(height: 24 * sf),
-        GoopText(
-          'Entering the Gungeon…',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: FontSizes.labelMedium * sf,
-            color: Colors.white.withValues(alpha: 0.4),
+        SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ScaleTransition(
+                  scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                    CurvedAnimation(
+                      parent: _checkPopCtrl,
+                      curve: Curves.elasticOut,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.check_circle_rounded,
+                    size: 56 * sf,
+                    color: MpColors.connected,
+                  ),
+                ),
+                SizedBox(height: 14 * sf),
+                GoopText(
+                  'ENTERING THE GUNGEON…',
+                  style: TextStyle(
+                    fontSize: 17 * sf,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+                SizedBox(height: 6 * sf),
+                GoopText(
+                  '${session.myNickname} vs ${session.peerNickname ?? 'Partner'}',
+                  style: TextStyle(
+                    fontSize: 12 * sf,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                    color: Colors.white.withValues(alpha: 0.55),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -688,6 +896,12 @@ class _Portrait extends StatelessWidget {
   /// Small secondary line under the nickname — the picked character.
   final String sub;
 
+  /// Portrait edge length in sf units (84 = connecting card, 108 = VS splash).
+  final double size;
+
+  /// Multiplier on the name/character text sizes — splash runs bigger.
+  final double textScale;
+
   const _Portrait({
     required this.character,
     required this.label,
@@ -697,6 +911,8 @@ class _Portrait extends StatelessWidget {
     required this.flair,
     this.avatarId = '',
     this.sub = '',
+    this.size = 84,
+    this.textScale = 1.0,
   });
 
   @override
@@ -711,8 +927,8 @@ class _Portrait extends StatelessWidget {
             return Transform.scale(scale: scale, child: child);
           },
           child: Container(
-            width: 84 * sf,
-            height: 84 * sf,
+            width: size * sf,
+            height: size * sf,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(color: color.withValues(alpha: 0.5), width: 2),
@@ -732,7 +948,7 @@ class _Portrait extends StatelessWidget {
                 avatarId.isNotEmpty
                     ? FramedAvatar(
                       id: avatarId,
-                      size: 84 * sf,
+                      size: size * sf,
                       radius: 10,
                       idle: true,
                     )
@@ -740,7 +956,7 @@ class _Portrait extends StatelessWidget {
                     ? ClipRRect(
                       borderRadius: BorderRadius.all(Radii.lg),
                       child: AvatarAura(
-                        size: 84 * sf,
+                        size: size * sf,
                         borderRadius: 16,
                         child: _characterImage(character!, sf, color),
                       ),
@@ -748,7 +964,7 @@ class _Portrait extends StatelessWidget {
                     : Center(
                       child: Icon(
                         Icons.person_rounded,
-                        size: 36 * sf,
+                        size: size * sf * 0.43,
                         color: color.withValues(alpha: 0.4),
                       ),
                     ),
@@ -758,9 +974,9 @@ class _Portrait extends StatelessWidget {
         GoopText(
           label,
           style: TextStyle(
-            fontSize: FontSizes.labelMedium * sf,
-            fontWeight: FontWeight.w700,
-            color: Colors.white.withValues(alpha: 0.8),
+            fontSize: FontSizes.labelMedium * sf * textScale,
+            fontWeight: FontWeight.w800,
+            color: Colors.white.withValues(alpha: 0.9),
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -769,9 +985,9 @@ class _Portrait extends StatelessWidget {
         GoopText(
           sub.isNotEmpty ? sub : (isMe ? 'You' : 'Partner'),
           style: TextStyle(
-            fontSize: FontSizes.labelSmall * sf,
-            fontWeight: FontWeight.w600,
-            color: color.withValues(alpha: 0.6),
+            fontSize: FontSizes.labelSmall * sf * textScale,
+            fontWeight: FontWeight.w700,
+            color: color.withValues(alpha: 0.65),
             letterSpacing: 1,
           ),
           maxLines: 1,
@@ -784,32 +1000,240 @@ class _Portrait extends StatelessWidget {
   Widget _characterImage(Gungeoneer c, double sf, Color color) {
     final animPath = gungeoneerAnimatedCardPath(c.name);
     final gifPath = gungeoneerGifPath(c.name);
+    final edge = size * sf;
     return SizedBox(
-      width: 84 * sf,
-      height: 84 * sf,
+      width: edge,
+      height: edge,
       child:
           animPath.isNotEmpty
               ? Image.asset(
                 animPath,
                 fit: BoxFit.contain,
-                cacheWidth: 168,
-                cacheHeight: 168,
+                cacheWidth: (edge * 2).round(),
+                cacheHeight: (edge * 2).round(),
                 errorBuilder:
                     (_, _, _) =>
                         gifPath.isNotEmpty
                             ? Image.asset(
                               gifPath,
                               fit: BoxFit.contain,
-                              cacheWidth: 168,
-                              cacheHeight: 168,
+                              cacheWidth: (edge * 2).round(),
+                              cacheHeight: (edge * 2).round(),
                             )
                             : Icon(
                               Icons.person_rounded,
-                              size: 36 * sf,
+                              size: edge * 0.43,
                               color: color,
                             ),
               )
-              : Icon(Icons.person_rounded, size: 36 * sf, color: color),
+              : Icon(
+                Icons.person_rounded,
+                size: edge * 0.43,
+                color: color,
+              ),
     );
   }
+}
+
+// ── VS splash helpers ───────────────────────────────────────────
+
+/// Small status chip used across the splash (LINKED / run title).
+class _VsChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final double sf;
+
+  const _VsChip({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.sf,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10 * sf, vertical: 4 * sf),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.45), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12 * sf, color: color),
+          SizedBox(width: 5 * sf),
+          Flexible(
+            child: GoopText(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 9.5 * sf,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.4,
+                color: color,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Center medallion — breathing "VS" badge between the two portraits.
+class _VsMedallion extends StatelessWidget {
+  final Animation<double>? ctrl;
+  final double sf;
+  final ThemeFlair flair;
+
+  const _VsMedallion({required this.ctrl, required this.sf, required this.flair});
+
+  @override
+  Widget build(BuildContext context) {
+    final badge = Container(
+      width: 46 * sf,
+      height: 46 * sf,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            flair.primary.withValues(alpha: 0.9),
+            flair.secondary.withValues(alpha: 0.9),
+          ],
+        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.65), width: 1.6),
+        boxShadow: [
+          BoxShadow(
+            color: flair.primary.withValues(alpha: 0.4),
+            blurRadius: 18 * sf,
+            spreadRadius: 2 * sf,
+          ),
+        ],
+      ),
+      child: Center(
+        child: GoopText(
+          'VS',
+          style: TextStyle(
+            fontSize: 15 * sf,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1,
+            color: Colors.white,
+            shadows: const [
+              Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1)),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (ctrl == null) return badge;
+    return AnimatedBuilder(
+      animation: ctrl!,
+      builder:
+          (_, child) => Transform.scale(
+            scale: 0.92 + ctrl!.value * 0.12,
+            child: child,
+          ),
+      child: badge,
+    );
+  }
+}
+
+/// Sidekick handshake state — `WAITING FOR HOST` with staggered
+/// pulsing dots driven by the shared pulse controller.
+class _WaitingForHost extends StatelessWidget {
+  final String name;
+  final AnimationController ctrl;
+  final double sf;
+
+  const _WaitingForHost({
+    required this.name,
+    required this.ctrl,
+    required this.sf,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: ctrl,
+      builder: (context, _) {
+        return Column(
+          children: [
+            GoopText(
+              'WAITING FOR $name',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15 * sf,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.6,
+                color: Colors.white.withValues(alpha: 0.85),
+              ),
+            ),
+            SizedBox(height: 6 * sf),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(3, (i) {
+                final phase = (ctrl.value + i / 3) % 1.0;
+                final a = 0.25 + 0.75 * (0.5 + 0.5 * math.sin(phase * math.pi * 2));
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 3 * sf),
+                  width: 6 * sf,
+                  height: 6 * sf,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: a.clamp(0.0, 1.0)),
+                  ),
+                );
+              }),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// Full-screen ambient wash for the VS splash — each player's color
+/// blooms on their side and slowly drifts, like a fighting-game stage.
+class _VsGlowPainter extends CustomPainter {
+  _VsGlowPainter({required this.left, required this.right, required this.t});
+  final Color left;
+  final Color right;
+  final double t;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final drift = math.sin(t * math.pi * 2) * size.width * 0.06;
+    void orb(Alignment align, Color color, double radiusMul) {
+      final center = align.alongSize(size);
+      final paint = Paint()
+        ..shader = RadialGradient(
+          colors: [color.withValues(alpha: 0.14), Colors.transparent],
+        ).createShader(
+          Rect.fromCircle(
+            center: center + Offset(drift * (align == Alignment.centerLeft ? 1 : -1), 0),
+            radius: size.shortestSide * radiusMul,
+          ),
+        );
+      canvas.drawRect(Offset.zero & size, paint);
+    }
+
+    orb(Alignment.centerLeft, left, 0.85);
+    orb(Alignment.centerRight, right, 0.85);
+    // Faint center vignette keeps the middle readable.
+    final vg = Paint()
+      ..shader = RadialGradient(
+        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.35)],
+        stops: const [0.55, 1.0],
+      ).createShader(Offset.zero & size);
+    canvas.drawRect(Offset.zero & size, vg);
+  }
+
+  @override
+  bool shouldRepaint(_VsGlowPainter old) => old.t != t;
 }

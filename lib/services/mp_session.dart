@@ -484,6 +484,7 @@ class MpSession extends ChangeNotifier
     return _runAccumMs + DateTime.now().millisecondsSinceEpoch - _runStartMs;
   }
 
+  @override
   void _startRunTimer() {
     // Arm only when idle — reconnects must not erase unbanked elapsed
     // time, and a paused run stays frozen (startMs stays 0).
@@ -766,7 +767,10 @@ class MpSession extends ChangeNotifier
     _sync.onPeerHello = _onPeerHello;
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
-    _sync.onStartRun = () => onStartRun?.call();
+    _sync.onStartRun = () {
+      _startRunTimer();
+      onStartRun?.call();
+    };
     _sync.onSurprise = (s) {
       logEvent(
         MpEvent.event(
@@ -899,10 +903,30 @@ class MpSession extends ChangeNotifier
   /// full Nearby Connections flow. Used by widget tests to render
   /// specific states (connecting, error, etc.).
   @visibleForTesting
-  void setPhaseForTest(MpPhase phase, MpConnectReason reason, {String? error}) {
+  void setPhaseForTest(
+    MpPhase phase,
+    MpConnectReason reason, {
+    String? error,
+    MpRole? role,
+    String? nickname,
+    String? character,
+    String? peerNickname,
+    String? peerCharacter,
+    String? avatarId,
+    String? peerAvatarId,
+    String? runTitle,
+  }) {
     _phase = phase;
     _connectReason = reason;
     if (error != null) _error = error;
+    if (role != null) _myRole = role;
+    if (nickname != null) _myNickname = nickname;
+    if (character != null) _myCharacterName = character;
+    if (peerNickname != null) _peerNickname = peerNickname;
+    if (peerCharacter != null) _peerCharacterName = peerCharacter;
+    if (avatarId != null) _avatarId = avatarId;
+    if (peerAvatarId != null) _peerAvatarId = peerAvatarId;
+    if (runTitle != null) _runTitle = runTitle;
     notifyListeners();
   }
 
