@@ -126,6 +126,11 @@ class _MockPreviewScreen extends StatefulWidget {
 
 class _MockPreviewScreenState extends State<_MockPreviewScreen> {
   late RunProvider _previewProvider;
+  // Shields the demo session from the REAL MpSession — ActiveRunScreen
+  // and BrowseScreen resolve MpSession from context, so without this
+  // the preview would show live MP chrome and wire dice/emote/gift
+  // callbacks into the mock run while a real session is connected.
+  late final MpSession _mpShield;
   final math.Random _rng = math.Random();
   final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
   bool _loaded = false;
@@ -144,6 +149,7 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
   @override
   void initState() {
     super.initState();
+    _mpShield = MpSession.placeholder();
     _startSession();
   }
 
@@ -201,6 +207,7 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
 
   @override
   void dispose() {
+    _mpShield.dispose();
     if (_hasProvider) _disposeProvider(_previewProvider);
     super.dispose();
   }
@@ -424,14 +431,17 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                       _loaded
                           ? ChangeNotifierProvider<RunProvider>.value(
                             value: _previewProvider,
-                            child: Navigator(
-                              key: _navKey,
-                              onGenerateRoute:
-                                  (_) => fastRoute(
-                                    ActiveRunScreen(
-                                      onRequestBrowse: _openBrowse,
+                            child: ChangeNotifierProvider<MpSession>.value(
+                              value: _mpShield,
+                              child: Navigator(
+                                key: _navKey,
+                                onGenerateRoute:
+                                    (_) => fastRoute(
+                                      ActiveRunScreen(
+                                        onRequestBrowse: _openBrowse,
+                                      ),
                                     ),
-                                  ),
+                              ),
                             ),
                           )
                           : Center(
