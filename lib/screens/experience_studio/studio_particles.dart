@@ -1102,6 +1102,10 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
   bool _loading = true;
   String _query = '';
 
+  /// Bundled sprite list is static — parse the JSONs once per app run
+  /// instead of on every sheet open (500+ entries).
+  static List<({String name, String path, bool isGun})>? _spriteCache;
+
   @override
   void initState() {
     super.initState();
@@ -1118,6 +1122,14 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
   }
 
   Future<void> _load() async {
+    final cached = _spriteCache;
+    if (cached != null) {
+      setState(() {
+        _sprites = cached;
+        _loading = false;
+      });
+      return;
+    }
     try {
       final gunsRaw = await rootBundle.loadString('assets/data/guns.json');
       final itemsRaw = await rootBundle.loadString('assets/data/items.json');
@@ -1132,6 +1144,7 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
         for (final n in namesOf(itemsRaw))
           (name: n, path: localItemIcon(n), isGun: false),
       ]..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      _spriteCache = entries;
       if (mounted) {
         setState(() {
           _sprites = entries;
