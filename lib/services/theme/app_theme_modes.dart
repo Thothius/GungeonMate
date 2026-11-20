@@ -2130,51 +2130,29 @@ extension AppFontLabel on AppFont {
     return _googleFontNames[this] ?? 'Enter the Gungeon';
   }
 
+  /// Pubspec-declared bundled family for this font — the exact string
+  /// to put in `TextStyle.fontFamily` / `TextTheme.apply`. Google
+  /// Fonts strip spaces ('DM Sans' → 'GoogleFonts.DMSans'); the
+  /// hand-lettered trio uses their plain bundled families.
+  String get bundledFontFamily {
+    return switch (this) {
+      AppFont.gungeon => 'EnterTheGungeonBig',
+      AppFont.shantellSans => 'ShantellSans',
+      AppFont.architectsDaughter => 'ArchitectsDaughter',
+      AppFont.patrickHand => 'PatrickHand',
+      _ => 'GoogleFonts.${label.replaceAll(' ', '')}',
+    };
+  }
+
   String get description {
     if (this == AppFont.gungeon) return 'Official Gungeon chunky pixel';
     return _googleFontDescriptions[this] ?? 'Google Font';
   }
 
-  TextStyle get textStyle {
-    if (this == AppFont.gungeon) {
-      return const TextStyle(fontFamily: 'EnterTheGungeonBig');
-    }
-    if (this == AppFont.shantellSans) {
-      return const TextStyle(fontFamily: 'ShantellSans');
-    }
-    if (this == AppFont.architectsDaughter) {
-      return const TextStyle(fontFamily: 'ArchitectsDaughter');
-    }
-    if (this == AppFont.patrickHand) {
-      return const TextStyle(fontFamily: 'PatrickHand');
-    }
-    try {
-      return GoogleFonts.getFont(label);
-    } catch (_) {
-      return const TextStyle(fontFamily: 'EnterTheGungeonBig');
-    }
-  }
+  TextStyle get textStyle => TextStyle(fontFamily: bundledFontFamily);
 
-  TextTheme get textTheme {
-    final base = ThemeData.dark().textTheme;
-    if (this == AppFont.gungeon) {
-      return base.apply(fontFamily: 'EnterTheGungeonBig');
-    }
-    if (this == AppFont.shantellSans) {
-      return base.apply(fontFamily: 'ShantellSans');
-    }
-    if (this == AppFont.architectsDaughter) {
-      return base.apply(fontFamily: 'ArchitectsDaughter');
-    }
-    if (this == AppFont.patrickHand) {
-      return base.apply(fontFamily: 'PatrickHand');
-    }
-    try {
-      return GoogleFonts.getTextTheme(label, base);
-    } catch (_) {
-      return base.apply(fontFamily: 'EnterTheGungeonBig');
-    }
-  }
+  TextTheme get textTheme =>
+      ThemeData.dark().textTheme.apply(fontFamily: bundledFontFamily);
 }
 
 /// Themes shown in the picker. Keep this list as the single source of

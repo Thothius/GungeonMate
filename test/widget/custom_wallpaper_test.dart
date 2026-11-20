@@ -117,10 +117,13 @@ void main() {
       expect(const VisualPrefs().wallpaperImmersive, isFalse);
     });
 
-    test('JSON round-trip preserves the flag', () {
+    test('JSON omits the flag — app-level pref, not theme identity', () {
+      // wallpaperImmersive is deliberately excluded from preset JSON;
+      // restores go through VisualPrefs.preserveAppLevel instead.
       const prefs = VisualPrefs(wallpaperImmersive: true);
+      expect(prefs.toJson().containsKey('wallpaperImmersive'), isFalse);
       final restored = VisualPrefs.fromJson(prefs.toJson());
-      expect(restored.wallpaperImmersive, isTrue);
+      expect(restored.wallpaperImmersive, isFalse);
     });
   });
 }

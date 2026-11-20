@@ -19,8 +19,6 @@ dependencies:
   shared_preferences: ^2.2.2
 
   # Fonts
-  google_fonts: ^6.2.1
-
   # Multiplayer transport (Google Nearby Connections = BT + WiFi Direct).
   # Android-only; requires Google Play Services, which is present on
   # every non-rooted Android install this app targets.

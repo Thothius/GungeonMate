@@ -1130,6 +1130,14 @@ class VisualPrefs {
     await _persist();
   }
 
+  /// Return [prefs] with app-level fields taken from the live notifier.
+  /// Saved presets snapshot the whole [VisualPrefs], but app-level
+  /// toggles (currently just [wallpaperImmersive]) are not theme
+  /// identity — restoring a preset must not flip them. Apply this to
+  /// any `SavedCustomTheme.prefs` before assigning/persisting it.
+  static VisualPrefs preserveAppLevel(VisualPrefs prefs) =>
+      prefs._with(wallpaperImmersive: notifier.value.wallpaperImmersive);
+
   static Future<void> _persist() async {
     try {
       final p = await SharedPreferences.getInstance();
@@ -1317,7 +1325,8 @@ class VisualPrefs {
     'shaderEnabled': shaderEnabled,
     'shaderPreset': shaderPreset.index,
     'liquidKindIndex': liquidKindIndex,
-    'wallpaperImmersive': wallpaperImmersive,
+    // wallpaperImmersive deliberately omitted — app-level toggle, not
+    // theme identity (restores go through preserveAppLevel).
     'tapSparkles': tapSparkles,
     'panelColor': panelColor,
     'panelOpacity': panelOpacity,

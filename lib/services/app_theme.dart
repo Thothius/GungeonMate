@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../theme/tokens.dart';
 import '../utils/contrast.dart';
 import '../widgets/particle_engine.dart'
@@ -473,27 +472,11 @@ class AppTheme {
     var textTheme = buildAppTextTheme(scheme);
     textTheme = _applyWeightBias(textTheme, bias);
 
-    String? fontFamilyName;
-    if (selectedFont == AppFont.gungeon) {
-      fontFamilyName = 'EnterTheGungeonBig';
-    } else if (selectedFont == AppFont.shantellSans) {
-      // Bundled asset family (offline-first like EnterTheGungeonBig).
-      fontFamilyName = 'ShantellSans';
-    } else if (selectedFont == AppFont.architectsDaughter) {
-      fontFamilyName = 'ArchitectsDaughter';
-    } else if (selectedFont == AppFont.patrickHand) {
-      fontFamilyName = 'PatrickHand';
-    } else {
-      try {
-        // Bundled assets are declared as `GoogleFonts.<Name>` in
-        // pubspec — request that exact family. getFont().fontFamily
-        // returns 'Anton' (no prefix) which never matched the declared
-        // 'GoogleFonts.Anton' — fonts silently fell back offline.
-        fontFamilyName = 'GoogleFonts.${selectedFont.label}';
-      } catch (_) {
-        fontFamilyName = 'EnterTheGungeonBig';
-      }
-    }
+    // Bundled assets are declared as `GoogleFonts.<Name>` in pubspec —
+    // request that exact family. getFont().fontFamily returns the
+    // runtime-fetch name which never matched the declared family —
+    // fonts silently fell back offline.
+    final fontFamilyName = selectedFont.bundledFontFamily;
 
     // CRITICAL: Apply the font family to the textTheme itself, not just
     // ThemeData.fontFamily. ThemeData.fontFamily is a fallback that only

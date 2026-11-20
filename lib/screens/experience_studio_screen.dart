@@ -9,8 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/tokens.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-
 import '../services/app_theme.dart';
 import '../services/color_favorites.dart';
 import '../services/goop_talk_engine.dart';
@@ -248,8 +246,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
   @override
   Widget build(BuildContext context) {
-    final cleanTextTheme = GoogleFonts.montserratTextTheme(
-      ThemeData.dark().textTheme,
+    final cleanTextTheme = ThemeData.dark().textTheme.apply(
+      fontFamily: 'GoogleFonts.Montserrat',
     );
     final cleanTheme = Theme.of(context).copyWith(textTheme: cleanTextTheme);
 
@@ -2584,7 +2582,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             AppTheme.flairFor(s.baseMode),
             name: s.name,
           );
-      VisualPrefs.notifier.value = s.prefs;
+      VisualPrefs.notifier.value = VisualPrefs.preserveAppLevel(s.prefs);
       _draft = d;
       AppTheme.saveCustomThemeData(d);
       _previewTheme(AppThemeMode.custom);
@@ -2643,7 +2641,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       final d =
           s.customData ??
           _customDataFromFlair(AppTheme.flairFor(s.baseMode), name: s.name);
-      await VisualPrefs.replaceAndPersist(s.prefs);
+      await VisualPrefs.replaceAndPersist(
+        VisualPrefs.preserveAppLevel(s.prefs),
+      );
       await AppTheme.saveCustomThemeData(d);
       await AppTheme.setMode(AppThemeMode.custom);
     }
@@ -2678,7 +2678,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       // creating a duplicate — this is the "edit existing" path.
       _editingPresetId = s.id;
       _presetName = s.name;
-      await VisualPrefs.replaceAndPersist(s.prefs);
+      await VisualPrefs.replaceAndPersist(
+        VisualPrefs.preserveAppLevel(s.prefs),
+      );
       setState(() {
         _draft =
             s.customData ??

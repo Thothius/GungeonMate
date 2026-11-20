@@ -132,7 +132,7 @@ class _StickyFontHeader extends SliverPersistentHeaderDelegate {
         letterSpacing: 1.5,
       );
     } else {
-      baseStyle = GoogleFonts.getFont(font.label).copyWith(
+      baseStyle = TextStyle(fontFamily: font.bundledFontFamily).copyWith(
         fontSize: FontSizes.headlineSmall,
         fontWeight: isBold ? FontWeight.w900 : FontWeight.w700,
         color: flair.headlineStat,
