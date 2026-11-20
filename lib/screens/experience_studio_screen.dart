@@ -15,6 +15,7 @@ import '../services/app_theme.dart';
 import '../services/color_favorites.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
+import '../services/mp_session.dart';
 import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import '../widgets/theme_overlay.dart';
@@ -3884,6 +3885,75 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                   ],
                 ),
               ),
+              // Immersive toggle — slow zoom + tilt parallax on the
+              // picked wallpaper. App-level pref (VisualPrefs), not
+              // part of the theme draft.
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (_, prefs, _) {
+                  final on = prefs.wallpaperImmersive;
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Haptics.selection();
+                      VisualPrefs.setWallpaperImmersive(!on);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color:
+                            on
+                                ? flair.primary.withValues(alpha: 0.16)
+                                : Colors.white.withValues(alpha: 0.04),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color:
+                              on
+                                  ? flair.primary
+                                  : Colors.white.withValues(alpha: 0.15),
+                          width: on ? 1.4 : 0.8,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.videocam_outlined,
+                            size: 13,
+                            color:
+                                on
+                                    ? flair.primary
+                                    : Colors.white.withValues(alpha: 0.4),
+                          ),
+                          const SizedBox(width: 5),
+                          GoopText(
+                            'IMMERSIVE',
+                            style: TextStyle(
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.8,
+                              color:
+                                  on
+                                      ? flair.primary
+                                      : Colors.white.withValues(alpha: 0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+                ),
+              ),
+              const SizedBox(height: 8),
               Expanded(
                 child: GridView.builder(
                   padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),

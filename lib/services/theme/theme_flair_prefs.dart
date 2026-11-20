@@ -461,6 +461,11 @@ class VisualPrefs {
   /// bubbly tinted liquid; shells slides brass casings with tilt.
   final int liquidKindIndex;
 
+  /// Wallpaper immersion — slow subtle zoom loop + device-tilt
+  /// parallax on custom-theme wallpapers. App-level viewing pref;
+  /// reduced-motion renders a static frame.
+  final bool wallpaperImmersive;
+
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
 
@@ -590,6 +595,7 @@ class VisualPrefs {
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
     this.liquidKindIndex = 0,
+    this.wallpaperImmersive = false,
   });
 
   static const _kGlow = 'vp.glow_v1';
@@ -638,6 +644,7 @@ class VisualPrefs {
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
   static const _kLiquidKind = 'vp.liquid_kind_v1';
+  static const _kWallpaperImmersive = 'vp.wallpaper_immersive_v1';
 
   static ValueNotifier<VisualPrefs> notifier = ValueNotifier(
     const VisualPrefs(),
@@ -793,6 +800,7 @@ class VisualPrefs {
           0,
           LiquidKind.values.length - 1,
         ),
+        wallpaperImmersive: p.getBool(_kWallpaperImmersive) ?? false,
       );
     } catch (e) {
       debugPrint('[AppTheme] prefs error: $e');
@@ -1109,6 +1117,12 @@ class VisualPrefs {
     _persist();
   }
 
+  /// Wallpaper immersive mode — zoom loop + tilt parallax.
+  static Future<void> setWallpaperImmersive(bool v) async {
+    notifier.value = notifier.value._with(wallpaperImmersive: v);
+    _persist();
+  }
+
   /// Replace the entire VisualPrefs state and persist to disk.
   /// Used when restoring a saved custom theme's preferences.
   static Future<void> replaceAndPersist(VisualPrefs prefs) async {
@@ -1164,6 +1178,7 @@ class VisualPrefs {
       await p.setBool(_kShaderEnabled, v.shaderEnabled);
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
       await p.setInt(_kLiquidKind, v.liquidKindIndex);
+      await p.setBool(_kWallpaperImmersive, v.wallpaperImmersive);
     } catch (e) {
       debugPrint('[AppTheme] prefs error: $e');
     }
@@ -1213,6 +1228,7 @@ class VisualPrefs {
     bool? shaderEnabled,
     ShaderPreset? shaderPreset,
     int? liquidKindIndex,
+    bool? wallpaperImmersive,
   }) => VisualPrefs(
     glowIntensity: glowIntensity ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -1260,6 +1276,7 @@ class VisualPrefs {
     shaderEnabled: shaderEnabled ?? this.shaderEnabled,
     shaderPreset: shaderPreset ?? this.shaderPreset,
     liquidKindIndex: liquidKindIndex ?? this.liquidKindIndex,
+    wallpaperImmersive: wallpaperImmersive ?? this.wallpaperImmersive,
   );
 
   /// Serialize to JSON for custom theme persistence.
@@ -1300,6 +1317,7 @@ class VisualPrefs {
     'shaderEnabled': shaderEnabled,
     'shaderPreset': shaderPreset.index,
     'liquidKindIndex': liquidKindIndex,
+    'wallpaperImmersive': wallpaperImmersive,
     'tapSparkles': tapSparkles,
     'panelColor': panelColor,
     'panelOpacity': panelOpacity,
@@ -1389,6 +1407,7 @@ class VisualPrefs {
             0,
             LiquidKind.values.length - 1,
           ),
+      wallpaperImmersive: j['wallpaperImmersive'] as bool? ?? false,
       tapSparkles: j['tapSparkles'] as bool? ?? true,
       panelColor: j['panelColor'] as int? ?? 0,
       panelOpacity:
