@@ -32,9 +32,10 @@ themed particles), DENSITY 6 (data-rich but card-organized).
 
 Hard rule: typing `Color(0xFF...)`, `fontSize:`, or
 `BorderRadius.circular(...)` inside a screen file means the value
-belongs in a token or the theme. Exceptions are documented one-offs
-(the main-menu logo stroke `#C62828` / fill `#FFD54F` is a fixed brand
-mark, intentionally not themed).
+belongs in a token or the theme. The main-menu palette is the one
+sanctioned exception surface: it derives entirely from
+`AppTheme.flair` (theme/palette/remix/custom-aware) rather than
+holding literals.
 
 ## 2. Spacing — one 4pt scale
 
@@ -230,3 +231,11 @@ SERVE_LAB.bat   →   http://localhost:8619/design-lab/
 - 2026-10-31 — Neo-Skeuo added (§9): alternate skin toggle on home,
   spec-sheet demo at `neo_skeuo_lab_screen.dart`, customization locked
   while active, ambiance suppressed per-mode.
+- 2026-11-20 — Main menu un-locked from the fixed ember palette: every
+  color now derives from `AppTheme.flair` (all themes, Unicorn
+  palettes, remixes, custom presets). `MainMenuBackdrop` tints its
+  gradient/embers/glow the same way and gained two drift layers —
+  distant sprite flocks crossing horizontally + a nearer rising layer
+  (guns/items/bullets, smaller than the old drift). Neo-Skeuo keeps
+  cream paper; hero button + chips take the theme accent via
+  `SkeuoButton.accent`.

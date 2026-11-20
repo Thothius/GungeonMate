@@ -8,6 +8,7 @@ import 'ammonomicon_screen.dart';
 import 'neo_skeuo_lab_screen.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
+import '../utils/contrast.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
@@ -21,10 +22,12 @@ import '../widgets/theme_overlay.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 ///
-/// THEME-LOCKED BY DESIGN: this screen reads no `AppTheme` colors —
-/// the user-facing menu must look identical on every theme, so the
-/// palette below is fixed and shared with [MainMenuBackdrop]. If you
-/// restyle it, keep it theme-free.
+/// PALETTE-DRIVEN BY DESIGN: every color on this screen derives from
+/// the active [AppTheme.flair] — switching themes, Unicorn palettes,
+/// remixes, or custom presets re-skins the menu in the same frame.
+/// [MainMenuBackdrop] follows the same palette for its gradient,
+/// embers, and glow. The Neo-Skeuo skin keeps its cream paper but
+/// picks up the theme accent on its hero button and chips.
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
 
@@ -67,11 +70,32 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   @override
   void didPopNext() => ThemeOverlay.menuOnTop.value = true;
 
-  // Fixed home palette — never theme-driven.
-  static const Color _panel = Color(0xB31A1526); // charcoal glass
-  static const Color _inkOnSolid = Color(0xFF1C1C1E);
-  static const Color _amber = MainMenuBackdrop.ember;
-  static const Color _gold = MainMenuBackdrop.emberGold;
+  // Palette-derived colors — resolved from the active theme's flair
+  // on every build (the AnimatedBuilder on AppTheme.notifier rebuilds
+  // this screen on any theme/palette/remix change).
+  ThemeFlair get _flair => AppTheme.flair;
+
+  /// Translucent panel fill for outline buttons and the skeuo chip.
+  Color get _panel => _flair.card.withValues(alpha: 0.72);
+
+  /// Primary accent — borders, icons, glows (was fixed ember).
+  Color get _accent => _flair.primary;
+
+  /// Bright accent for text and the logo fill (was fixed gold).
+  Color get _accentHi => _flair.headlineStat;
+
+  /// Secondary accent — logo stroke, gradient end.
+  Color get _accent2 => _flair.secondary;
+
+  /// Text/icon color that stays readable on [_accent] fills.
+  Color get _onAccent =>
+      Contrast.luminance(_accent) > 0.35
+          ? const Color(0xFF1C1C1E)
+          : Colors.white;
+
+  /// Skeuo pencil-tone version of the accent — darkened enough to
+  /// read as ink on cream paper.
+  Color get _skeuoAccent => Color.lerp(_accent, Skeuo.ink, 0.45)!;
 
   @override
   Widget build(BuildContext context) {
@@ -166,22 +190,19 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                                   PaintingStyle
                                                                       .stroke
                                                               ..strokeWidth = 7
-                                                              ..color =
-                                                                  const Color(
-                                                                    0xFFC62828,
-                                                                  ),
+                                                              ..color = _accent2,
                                                       ),
                                                     ),
-                                                    const GoopText(
+                                                    GoopText(
                                                       'GUNGEON MATE',
                                                       style: TextStyle(
                                                         fontSize: 48,
                                                         fontWeight:
                                                             FontWeight.w900,
                                                         letterSpacing: 2.0,
-                                                        color: _gold,
+                                                        color: _accentHi,
                                                         shadows: [
-                                                          Shadow(
+                                                          const Shadow(
                                                             offset: Offset(
                                                               0,
                                                               3,
@@ -191,14 +212,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                                 Colors.black54,
                                                           ),
                                                           Shadow(
-                                                            offset: Offset(
+                                                            offset: const Offset(
                                                               0,
                                                               0,
                                                             ),
                                                             blurRadius: 18,
-                                                            color: Color(
-                                                              0x66FFB84D,
-                                                            ),
+                                                            color: _accent
+                                                                .withValues(
+                                                                  alpha: 0.4,
+                                                                ),
                                                           ),
                                                         ],
                                                       ),
@@ -207,14 +229,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                 ),
                                       ),
                                       const SizedBox(height: 8),
-                                      // Sublabel pill — ember chip, or an
+                                      // Sublabel pill — accent chip, or an
                                       // ink-bordered paper chip in skeuo.
                                       if (skeuo)
-                                        const SkeuoSurface(
+                                        SkeuoSurface(
                                           elevation: SkeuoElevation.base,
                                           radius: Skeuo.rSm,
                                           sketchy: false,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                             horizontal: 16,
                                             vertical: 5,
                                           ),
@@ -223,7 +245,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                             style: TextStyle(
                                               fontSize: FontSizes.labelMedium,
                                               fontWeight: FontWeight.w900,
-                                              color: Skeuo.ink,
+                                              color: _skeuoAccent,
                                               letterSpacing: 1.5,
                                             ),
                                           ),
@@ -235,25 +257,25 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                             vertical: 5,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: _amber.withValues(
+                                            color: _accent.withValues(
                                               alpha: 0.10,
                                             ),
                                             borderRadius: BorderRadius.circular(
                                               6,
                                             ),
                                             border: Border.all(
-                                              color: _amber.withValues(
+                                              color: _accent.withValues(
                                                 alpha: 0.55,
                                               ),
                                               width: 1.4,
                                             ),
                                           ),
-                                          child: const GoopText(
+                                          child: GoopText(
                                             'YOUR COMPANION IN THE GUNGEON',
                                             style: TextStyle(
                                               fontSize: FontSizes.labelMedium,
                                               fontWeight: FontWeight.w900,
-                                              color: _gold,
+                                              color: _accentHi,
                                               letterSpacing: 1.5,
                                             ),
                                           ),
@@ -435,6 +457,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         SkeuoButton.primary(
           label: 'Local Run',
           icon: Icons.play_arrow_rounded,
+          accent: AppTheme.flair.primary,
           drawDelay: const Duration(milliseconds: 60),
           onTap: () {
             Navigator.push(context, fastRoute(const CharacterSelectScreen()));
@@ -483,7 +506,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
     );
   }
 
-  /// The Neo-Skeuo mode toggle — ghost pencil chip on the ember menu,
+  /// The Neo-Skeuo mode toggle — ghost pencil chip on the themed menu,
   /// pressed ink chip while the skin is on.
   Widget _skeuoToggleChip(bool active) {
     return Tooltip(
@@ -512,22 +535,22 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                     color: _panel,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: _amber.withValues(alpha: 0.5),
+                      color: _accent.withValues(alpha: 0.5),
                       width: 1.4,
                     ),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.draw_rounded,
                     size: 22,
-                    color: _amber,
+                    color: _accent,
                   ),
                 ),
       ),
     );
   }
 
-  /// Locked menu button — translucent charcoal panel with a warm
-  /// ember border/icon, or a solid amber hero when [solid] is set.
+  /// Menu button — translucent theme panel with an accent
+  /// border/icon, or a gradient accent hero when [solid] is set.
   Widget _menuButton({
     required IconData icon,
     required String label,
@@ -535,36 +558,38 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
     required double sf,
     bool solid = false,
   }) {
-    final fg = solid ? _inkOnSolid : Colors.white;
-    final border =
-        solid ? _amber.withValues(alpha: 0.9) : _amber.withValues(alpha: 0.5);
+    final fg = solid ? _onAccent : Colors.white;
+    final borderWidth = solid ? 1.6 : 1.8;
+    final borderAlpha = solid ? 0.9 : 0.55;
     return ScaleButton(
       onTap: onTap,
       child: Container(
         width: double.infinity,
         height: 62 * sf,
         decoration: BoxDecoration(
+          // Ghost = faint accent wash; hero = solid accent fill.
+          // (DESIGN.md §components — palette-driven menu spec.)
+          color: solid ? _accent : null,
           gradient:
               solid
-                  ? const LinearGradient(
+                  ? null
+                  : LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0xFFFFC966), _amber],
-                  )
-                  : const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [_panel, Color(0x991A1526)],
+                    colors: [
+                      _accent.withValues(alpha: 0.16),
+                      _accent.withValues(alpha: 0.05),
+                    ],
                   ),
           borderRadius: const BorderRadius.all(Radii.lg),
-          border: Border.all(color: border, width: 1.6),
+          border: Border.all(
+            color: _accent.withValues(alpha: borderAlpha),
+            width: borderWidth,
+          ),
           boxShadow: [
             BoxShadow(
-              color:
-                  solid
-                      ? _amber.withValues(alpha: 0.35)
-                      : Colors.black.withValues(alpha: 0.35),
-              blurRadius: solid ? 18 : 10,
+              color: _accent.withValues(alpha: solid ? 0.35 : 0.18),
+              blurRadius: solid ? 18 : 12,
               offset: const Offset(0, 3),
             ),
           ],
@@ -572,7 +597,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 24 * sf, color: solid ? fg : _amber),
+            Icon(icon, size: 24 * sf, color: solid ? fg : _accent),
             const SizedBox(width: 10),
             Flexible(
               child: FittedBox(

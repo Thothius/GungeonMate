@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/main_menu_screen.dart';
+import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/widgets/home/home_backdrop.dart';
 import 'package:gungeon_mate/screens/character_select_screen.dart';
 import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
@@ -12,10 +13,11 @@ import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 /// title, subtitle, and primary action buttons (Local Run, Multiplayer,
 /// Theme, Ammonomicon).
 ///
-/// The menu is theme-locked and its backdrop runs a perpetual ember
-/// animation, so `pumpAndSettle` would never finish — all pumps here
-/// use fixed durations instead (same pattern as the Ammonomicon nav
-/// test, which pumps past SkeletonLoader's perpetual shimmer).
+/// The menu re-skins from the active theme palette and its backdrop
+/// runs perpetual animations, so `pumpAndSettle` would never finish —
+/// all pumps here use fixed durations instead (same pattern as the
+/// Ammonomicon nav test, which pumps past SkeletonLoader's perpetual
+/// shimmer).
 void main() {
   Widget wrap(Widget child) {
     return MultiProvider(
@@ -57,10 +59,28 @@ void main() {
     expect(find.text('Quiz'), findsNothing);
   });
 
-  testWidgets('Renders fixed MainMenuBackdrop (theme-locked)', (tester) async {
+  testWidgets('Renders MainMenuBackdrop', (tester) async {
     await pumpMenu(tester, const MainMenuScreen());
 
     expect(find.byType(MainMenuBackdrop), findsOneWidget);
+  });
+
+  testWidgets('Menu accent follows the active theme palette', (
+    tester,
+  ) async {
+    final original = AppTheme.mode;
+    addTearDown(() => AppTheme.notifier.value = original);
+
+    await pumpMenu(tester, const MainMenuScreen());
+    AppTheme.notifier.value = AppThemeMode.unicorn;
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // Unicorn cotton-candy primary — outline button icons pick it up.
+    final icon = tester.widget<Icon>(
+      find.byIcon(Icons.bluetooth_searching),
+    );
+    expect(icon.color, const Color(0xFFFF69B4));
   });
 
   testWidgets('Renders version label', (tester) async {

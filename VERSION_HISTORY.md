@@ -1,3 +1,17 @@
+## v3.7.0 — Theme-Reactive Menu + Living Backdrop (November 2026)
+
+**Build:** 167
+
+The main menu is no longer theme-locked: every surface derives from `AppTheme.flair`, and the backdrop gained a two-layer sprite drift.
+
+### Features
+- **Theme-reactive menu** — logo, buttons, sublabel chip, and the `MainMenuBackdrop` gradient/embers/glow all resolve from the active `ThemeFlair` (themes, Unicorn palettes, remixes, custom presets). Hero button = solid `flair.primary` with luminance-checked label; ghost buttons = faint accent wash per DESIGN.md.
+- **Living backdrop** — `_FlockDrift` (3 flocks of 5–7 sprites crossing horizontally at varied depths, bird-flock motion) + `_RiseDrift` (11 smaller rising sprites, gun-weighted). Sprite pools: 12 guns, 14 items, 8 bullets — all decode once into `ui.Image`, single `CustomPaint` pass per layer, `RepaintBoundary`-wrapped.
+- **Neo-Skeuo accent** — `SkeuoButton.accent` (optional, primary style only): cream paper stays, hero button fill + sublabel chip + toggle chip take the theme's primary (darkened to a pencil tone for the chip).
+
+### Fixed
+- (none)
+
 ## v3.6.0 — Theme Studio Final Form + MP VS Splash (November 2026)
 
 **Build:** 166

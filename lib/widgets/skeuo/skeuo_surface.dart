@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
+import '../../utils/contrast.dart';
 import 'skeuo_tokens.dart';
 
 /// Surface elevation for the Neo-Skeuo kit — mirrors the reference
@@ -374,6 +375,11 @@ class SkeuoButton extends StatefulWidget {
   /// Stagger delay before the draw-in starts (menu cascades).
   final Duration drawDelay;
 
+  /// Optional accent fill for [SkeuoButtonStyle.primary] — lets the
+  /// main menu's hero button carry the active theme's primary color
+  /// while keeping the ink border + press physics. Null = kit ink.
+  final Color? accent;
+
   const SkeuoButton({
     super.key,
     this.label,
@@ -387,9 +393,10 @@ class SkeuoButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.compact = false,
     this.drawDelay = Duration.zero,
+    this.accent,
   }) : assert(label != null || child != null, 'needs a label or child');
 
-  /// Filled ink hero button — the reference's Primary.
+  /// Filled hero button — the reference's Primary (ink, or [accent]).
   const SkeuoButton.primary({
     super.key,
     this.label,
@@ -402,6 +409,7 @@ class SkeuoButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.compact = false,
     this.drawDelay = Duration.zero,
+    this.accent,
   }) : style = SkeuoButtonStyle.primary,
        assert(label != null || child != null, 'needs a label or child');
 
@@ -416,6 +424,7 @@ class SkeuoButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.compact = false,
     this.drawDelay = Duration.zero,
+    this.accent,
   }) : onTap = null,
        loading = false,
        style = SkeuoButtonStyle.disabled,
@@ -442,7 +451,10 @@ class _SkeuoButtonState extends State<SkeuoButton> {
   Widget build(BuildContext context) {
     final fg =
         _isPrimary
-            ? Skeuo.paper
+            ? (widget.accent != null &&
+                    Contrast.luminance(widget.accent!) > 0.4
+                ? Skeuo.ink
+                : Skeuo.paper)
             : _isDisabled
             ? Skeuo.pencil
             : Skeuo.ink;
@@ -533,7 +545,7 @@ class _SkeuoButtonState extends State<SkeuoButton> {
                               );
                       final fill =
                           _isPrimary
-                              ? Skeuo.ink
+                              ? (widget.accent ?? Skeuo.ink)
                               : _isDisabled
                               ? Skeuo.paper
                               : Skeuo.card;

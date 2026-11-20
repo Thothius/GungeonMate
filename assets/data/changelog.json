@@ -1,5 +1,17 @@
 [
   {
+    "version": "3.7.0",
+    "date": "2026-11",
+    "sections": {
+      "Features": [
+        "Theme-reactive main menu — the whole menu re-skins from the active palette (all themes, Unicorn palettes, remixes, custom presets): buttons, logo, sublabel chip, and backdrop gradient/embers/glow all follow AppTheme.flair",
+        "Living backdrop — distant flocks of small gun/item/bullet sprites drift across the sky like birds, plus a nearer layer of smaller sprites rising slowly; both layers decode once and paint in a single pass",
+        "Neo-Skeuo accent — the cream-paper skin keeps its identity but the hero button and chips pick up the active theme's primary color"
+      ],
+      "Fixed": []
+    }
+  },
+  {
     "version": "3.6.0",
     "date": "2026-11",
     "sections": {
