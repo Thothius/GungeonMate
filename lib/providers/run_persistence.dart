@@ -7,6 +7,10 @@ mixin _RunPersistence on ChangeNotifier {
   RunState get _runState;
   set _runState(RunState s);
 
+  /// Implemented by RunProvider — false skips every prefs write
+  /// (studio mock preview).
+  bool get persistenceEnabled;
+
   /// Names of guns/items the user has favourited. Shared across runs
   /// and both players. Persisted independently of run state so starring
   /// stuff in one run carries over to the next.
@@ -22,12 +26,16 @@ mixin _RunPersistence on ChangeNotifier {
 
   /// Public manual save — triggers the same persistence as [_saveRun]
   /// but can be called from the UI for a "Save Run" button.
-  Future<void> saveRun() => _saveRun();
+  Future<void> saveRun() async {
+    if (!persistenceEnabled) return;
+    await _saveRun();
+  }
 
   /// Debounced save — batches rapid successive state changes into a
   /// single disk write after 400ms of quiet. This prevents 28+
   /// individual SharedPreferences writes when adding/removing items.
   void _scheduleSave() {
+    if (!persistenceEnabled) return;
     _saveDebounce?.cancel();
     _saveDebounce = Timer(const Duration(milliseconds: 400), () {
       _saveRun();
@@ -45,6 +53,7 @@ mixin _RunPersistence on ChangeNotifier {
   }
 
   Future<void> _saveFavourites() async {
+    if (!persistenceEnabled) return;
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setStringList('favourites_v1', _favourites.toList());
@@ -64,6 +73,7 @@ mixin _RunPersistence on ChangeNotifier {
 
   Future<void> _saveLastPlayedChar(String name) async {
     _lastPlayedCharName = name;
+    if (!persistenceEnabled) return;
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('last_played_character', name);
@@ -118,6 +128,7 @@ mixin _RunPersistence on ChangeNotifier {
   }
 
   Future<void> _saveRun() async {
+    if (!persistenceEnabled) return;
     try {
       final jsonMap = _runState.toJson();
       final encoded = await compute(_encodeRunState, jsonMap);

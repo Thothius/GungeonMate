@@ -12,6 +12,7 @@ import 'theme_engines.dart';
 import 'particle_engine.dart';
 import 'particles/touch_particle.dart';
 import 'particles/ambient_glow.dart';
+import 'particles/liquid_tank.dart';
 import 'backgrounds/page_frame.dart';
 import 'backgrounds/ambient_shader.dart';
 import 'backgrounds/custom_wallpaper.dart';
@@ -220,6 +221,13 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                       effectiveGlow,
                     )
                     : const Color(0x00000000);
+            // Liquid tank pick — resolved once per build like the other
+            // layer gates; LiquidKind.off renders nothing.
+            final liquidKind =
+                prefs.liquidKindIndex >= 0 &&
+                        prefs.liquidKindIndex < LiquidKind.values.length
+                    ? LiquidKind.values[prefs.liquidKindIndex]
+                    : LiquidKind.off;
             final particleBackdropBg =
                 skeuo
                     ? null
@@ -313,6 +321,20 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                               ],
                             ),
                           ),
+                        ),
+                      ),
+                    ),
+
+                  // 0.47. Liquid tank — slow rising bubbly fill
+                  // (blood/venom/umbra) or tilt-sliding brass shells.
+                  // Studio AMBIENCE pick; reduced-motion gets a frozen
+                  // composed frame inside the widget itself.
+                  if (!menuVisible && !skeuo && liquidKind != LiquidKind.off)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: LiquidTankField(
+                          kind: liquidKind,
+                          tilt: ThemeOverlay.tiltNotifier,
                         ),
                       ),
                     ),
@@ -519,11 +541,25 @@ Widget? buildBackdropParticleField(
       (prefs.particlesEnabled ||
           (themeAutoOn && !prefs.particlesUserOff));
   if (!particlesOn || menuVisible) return null;
+  // Sprite mode — custom picked sprite (any bundled gun/item asset)
+  // wins over the curated item-icon list, same gate + knobs.
+  if (prefs.particleSpritePath.isNotEmpty) {
+    return ItemIconField(
+      iconPath: prefs.particleSpritePath,
+      count: prefs.particleCount.clamp(6, 18),
+      sizeScale: prefs.particleSizeScale,
+      opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
+    );
+  }
   // Item-icon mode - 12 Gungeon item sprites float instead of shapes.
   // Same gate (particlesOn), same count/size/opacity knobs.
   if (prefs.particleItemIcon >= 0) {
+    final iconIdx = prefs.particleItemIcon.clamp(
+      0,
+      kItemIconParticles.length - 1,
+    );
     return ItemIconField(
-      iconIndex: prefs.particleItemIcon,
+      iconPath: kItemIconParticles[iconIdx].$2,
       count: prefs.particleCount.clamp(6, 18),
       sizeScale: prefs.particleSizeScale,
       opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),

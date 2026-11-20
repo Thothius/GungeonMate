@@ -418,6 +418,12 @@ class VisualPrefs {
   /// -1 keeps the normal typed-shape particle field.
   final int particleItemIcon;
 
+  /// Custom sprite path for the particle field (any bundled
+  /// `assets/images/**` sprite — typically a gun/item icon picked via
+  /// the studio sprite picker). Non-empty wins over [particleItemIcon];
+  /// empty falls back to the curated item-icon list / typed shapes.
+  final String particleSpritePath;
+
   /// Chaotic motion toggle — organic turbulence on top of drift.
   final bool particleChaos;
 
@@ -449,6 +455,11 @@ class VisualPrefs {
   /// Which ambient shader to render when [shaderEnabled] is true.
   /// Defaults to [ShaderPreset.digitalRain].
   final ShaderPreset shaderPreset;
+
+  /// Ambient liquid backdrop pick — index into [LiquidKind.values]
+  /// (0 = off). Blood/venom/umbra fill the screen bottom-up with a
+  /// bubbly tinted liquid; shells slides brass casings with tilt.
+  final int liquidKindIndex;
 
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
@@ -567,6 +578,7 @@ class VisualPrefs {
     this.particleTypeIndex = 0,
     this.particleSchemaIndex = 0,
     this.particleItemIcon = -1,
+    this.particleSpritePath = '',
     this.particleChaos = false,
     this.particleTouch = true,
     this.tapSparkles = true,
@@ -577,6 +589,7 @@ class VisualPrefs {
     this.panelRadius = 0.0,
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
+    this.liquidKindIndex = 0,
   });
 
   static const _kGlow = 'vp.glow_v1';
@@ -613,6 +626,7 @@ class VisualPrefs {
   static const _kParticleTypeIdx = 'vp.particle_type_v1';
   static const _kParticleSchemaIdx = 'vp.particle_schema_idx_v1';
   static const _kParticleItemIcon = 'vp.particle_item_icon_v1';
+  static const _kParticleSpritePath = 'vp.particle_sprite_v1';
   static const _kParticleChaos = 'vp.particle_chaos_v1';
   static const _kParticleTouch = 'vp.particle_touch_v1';
   static const _kTapSparkles = 'vp.tap_sparkles_v1';
@@ -623,6 +637,7 @@ class VisualPrefs {
   static const _kPanelRadius = 'vp.panel_radius_v1';
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
+  static const _kLiquidKind = 'vp.liquid_kind_v1';
 
   static ValueNotifier<VisualPrefs> notifier = ValueNotifier(
     const VisualPrefs(),
@@ -760,6 +775,7 @@ class VisualPrefs {
           kGlobalParticlePalettes.length - 1,
         ),
         particleItemIcon: p.getInt(_kParticleItemIcon) ?? -1,
+        particleSpritePath: p.getString(_kParticleSpritePath) ?? '',
         particleChaos: p.getBool(_kParticleChaos) ?? false,
         particleTouch: p.getBool(_kParticleTouch) ?? true,
         tapSparkles: p.getBool(_kTapSparkles) ?? true,
@@ -773,6 +789,10 @@ class VisualPrefs {
         panelRadius: (p.getDouble(_kPanelRadius) ?? 0.0).clamp(0.0, 48.0),
         shaderEnabled: shaderEnabled,
         shaderPreset: shaderPreset,
+        liquidKindIndex: (p.getInt(_kLiquidKind) ?? 0).clamp(
+          0,
+          LiquidKind.values.length - 1,
+        ),
       );
     } catch (e) {
       debugPrint('[AppTheme] prefs error: $e');
@@ -928,6 +948,63 @@ class VisualPrefs {
     _persist();
   }
 
+  /// Set (or clear with '') the custom particle sprite path. Picking a
+  /// curated item icon or a typed shape should also clear this — the
+  /// callers in the studio handle that pairing.
+  static Future<void> setParticleSpritePath(String v) async {
+    notifier.value = notifier.value._with(particleSpritePath: v);
+    _persist();
+  }
+
+  /// Apply one of the 12 curated [kParticleLooks] in a single persist —
+  /// every knob the look defines is written, the rest untouched.
+  static Future<void> applyParticleLook(ParticleLook look) async {
+    notifier.value = notifier.value._with(
+      particleTypeIndex: look.typeIndex.clamp(
+        0,
+        ParticleType.values.length - 1,
+      ),
+      particleSchemaIndex: look.schemaIndex.clamp(
+        0,
+        kGlobalParticlePalettes.length - 1,
+      ),
+      particleCount: look.count.clamp(0, 200),
+      particleSizeScale: look.sizeScale.clamp(0.3, 2.0),
+      particleOpacity: look.opacity.clamp(0.0, 1.0),
+      particleSpeed: look.speed,
+      particleGlowEffect: look.glow,
+      particleLineLinks: look.lineLinks,
+      particleBounce: look.bounce,
+      particleChaos: look.chaos,
+      particleTouch: look.touch,
+      particleItemIcon: look.itemIcon,
+      particleSpritePath: look.spritePath,
+      particlesEnabled: true,
+      particlesUserOff: false,
+    );
+    _persist();
+  }
+
+  /// True when every field [look] defines currently matches — drives
+  /// the LOOKS tile highlight. Sprite/itemIcon mode compared exactly.
+  static bool matchesParticleLook(VisualPrefs p, ParticleLook look) {
+    return p.particleTypeIndex ==
+            look.typeIndex.clamp(0, ParticleType.values.length - 1) &&
+        p.particleSchemaIndex ==
+            look.schemaIndex.clamp(0, kGlobalParticlePalettes.length - 1) &&
+        p.particleCount == look.count.clamp(0, 200) &&
+        (p.particleSizeScale - look.sizeScale.clamp(0.3, 2.0)).abs() < 0.001 &&
+        (p.particleOpacity - look.opacity.clamp(0.0, 1.0)).abs() < 0.001 &&
+        p.particleSpeed == look.speed &&
+        p.particleGlowEffect == look.glow &&
+        p.particleLineLinks == look.lineLinks &&
+        p.particleBounce == look.bounce &&
+        p.particleChaos == look.chaos &&
+        p.particleTouch == look.touch &&
+        p.particleItemIcon == look.itemIcon &&
+        p.particleSpritePath == look.spritePath;
+  }
+
   static Future<void> setParticleTypeIndex(int v) async {
     notifier.value = notifier.value._with(
       particleTypeIndex: v.clamp(0, ParticleType.values.length - 1),
@@ -1024,6 +1101,14 @@ class VisualPrefs {
     _persist();
   }
 
+  /// Ambient liquid backdrop pick (see [LiquidKind]).
+  static Future<void> setLiquidKindIndex(int v) async {
+    notifier.value = notifier.value._with(
+      liquidKindIndex: v.clamp(0, LiquidKind.values.length - 1),
+    );
+    _persist();
+  }
+
   /// Replace the entire VisualPrefs state and persist to disk.
   /// Used when restoring a saved custom theme's preferences.
   static Future<void> replaceAndPersist(VisualPrefs prefs) async {
@@ -1067,6 +1152,7 @@ class VisualPrefs {
       await p.setInt(_kParticleTypeIdx, v.particleTypeIndex);
       await p.setInt(_kParticleSchemaIdx, v.particleSchemaIndex);
       await p.setInt(_kParticleItemIcon, v.particleItemIcon);
+      await p.setString(_kParticleSpritePath, v.particleSpritePath);
       await p.setBool(_kParticleChaos, v.particleChaos);
       await p.setBool(_kParticleTouch, v.particleTouch);
       await p.setBool(_kTapSparkles, v.tapSparkles);
@@ -1077,6 +1163,7 @@ class VisualPrefs {
       await p.setDouble(_kPanelRadius, v.panelRadius);
       await p.setBool(_kShaderEnabled, v.shaderEnabled);
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
+      await p.setInt(_kLiquidKind, v.liquidKindIndex);
     } catch (e) {
       debugPrint('[AppTheme] prefs error: $e');
     }
@@ -1114,6 +1201,7 @@ class VisualPrefs {
     int? particleTypeIndex,
     int? particleSchemaIndex,
     int? particleItemIcon,
+    String? particleSpritePath,
     bool? particleChaos,
     bool? particleTouch,
     bool? tapSparkles,
@@ -1124,6 +1212,7 @@ class VisualPrefs {
     double? panelRadius,
     bool? shaderEnabled,
     ShaderPreset? shaderPreset,
+    int? liquidKindIndex,
   }) => VisualPrefs(
     glowIntensity: glowIntensity ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -1159,6 +1248,7 @@ class VisualPrefs {
     particleTypeIndex: particleTypeIndex ?? this.particleTypeIndex,
     particleSchemaIndex: particleSchemaIndex ?? this.particleSchemaIndex,
     particleItemIcon: particleItemIcon ?? this.particleItemIcon,
+    particleSpritePath: particleSpritePath ?? this.particleSpritePath,
     particleChaos: particleChaos ?? this.particleChaos,
     particleTouch: particleTouch ?? this.particleTouch,
     tapSparkles: tapSparkles ?? this.tapSparkles,
@@ -1169,6 +1259,7 @@ class VisualPrefs {
     panelRadius: panelRadius ?? this.panelRadius,
     shaderEnabled: shaderEnabled ?? this.shaderEnabled,
     shaderPreset: shaderPreset ?? this.shaderPreset,
+    liquidKindIndex: liquidKindIndex ?? this.liquidKindIndex,
   );
 
   /// Serialize to JSON for custom theme persistence.
@@ -1205,8 +1296,10 @@ class VisualPrefs {
     'particleChaos': particleChaos,
     'particleTouch': particleTouch,
     'particleItemIcon': particleItemIcon,
+    'particleSpritePath': particleSpritePath,
     'shaderEnabled': shaderEnabled,
     'shaderPreset': shaderPreset.index,
+    'liquidKindIndex': liquidKindIndex,
     'tapSparkles': tapSparkles,
     'panelColor': panelColor,
     'panelOpacity': panelOpacity,
@@ -1284,12 +1377,18 @@ class VisualPrefs {
       particleChaos: j['particleChaos'] as bool? ?? false,
       particleTouch: j['particleTouch'] as bool? ?? true,
       particleItemIcon: j['particleItemIcon'] as int? ?? -1,
+      particleSpritePath: j['particleSpritePath'] as String? ?? '',
       shaderEnabled: j['shaderEnabled'] as bool? ?? false,
       shaderPreset: _enumOr(
         ShaderPreset.values,
         j['shaderPreset'] as int?,
         0,
       ),
+      liquidKindIndex:
+          ((j['liquidKindIndex'] as num?)?.toInt() ?? 0).clamp(
+            0,
+            LiquidKind.values.length - 1,
+          ),
       tapSparkles: j['tapSparkles'] as bool? ?? true,
       panelColor: j['panelColor'] as int? ?? 0,
       panelOpacity:

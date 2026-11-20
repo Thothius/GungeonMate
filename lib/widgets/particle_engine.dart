@@ -48,17 +48,18 @@ const kItemIconParticles = <(String, String)>[
   ('SPRUN', 'assets/images/items/sprun.webp'),
 ];
 
-/// Floating game-item icons drifting upward with sway + rotation —
+/// Floating game sprites drifting upward with sway + rotation —
 /// drop-in replacement for [ParticleField] when the user picks an
-/// item icon in the studio. Same opacity/sizeScale/count knobs.
+/// item icon or custom sprite in the studio. Same opacity/sizeScale/
+/// count knobs. [iconPath] is any bundled `assets/images/**` sprite.
 class ItemIconField extends StatefulWidget {
-  final int iconIndex;
+  final String iconPath;
   final int count;
   final double sizeScale;
   final double opacity;
   const ItemIconField({
     super.key,
-    required this.iconIndex,
+    required this.iconPath,
     this.count = 14,
     this.sizeScale = 1.0,
     this.opacity = 0.7,
@@ -99,14 +100,14 @@ class _ItemIconFieldState extends State<ItemIconField>
   }
 
   List<_IconP> _build() {
-    final r = math.Random(widget.iconIndex * 31 + widget.count);
+    final r = math.Random(widget.iconPath.hashCode * 31 + widget.count);
     return [for (var i = 0; i < widget.count; i++) _IconP(r, i)];
   }
 
   @override
   void didUpdateWidget(ItemIconField old) {
     super.didUpdateWidget(old);
-    if (old.iconIndex != widget.iconIndex || old.count != widget.count) {
+    if (old.iconPath != widget.iconPath || old.count != widget.count) {
       _ps = _build();
     }
   }
@@ -119,12 +120,12 @@ class _ItemIconFieldState extends State<ItemIconField>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.iconIndex < 0 ||
-        widget.iconIndex >= kItemIconParticles.length ||
+    if (widget.iconPath.isEmpty ||
+        !widget.iconPath.startsWith('assets/') ||
         widget.opacity <= 0) {
       return const SizedBox.shrink();
     }
-    final path = kItemIconParticles[widget.iconIndex].$2;
+    final path = widget.iconPath;
     return IgnorePointer(
       child: AnimatedBuilder(
         animation: _c,

@@ -15,6 +15,22 @@ extension ShaderPresetX on ShaderPreset {
   };
 }
 
+/// Ambient liquid backdrop — a slow rising fill behind app content
+/// (the "blood tank"). [off] renders nothing; [blood]/[venom]/[umbra]
+/// are tinted bubbly fills; [shells] swaps the liquid for brass
+/// casings that slide with device tilt. Persisted as an int index.
+enum LiquidKind { off, blood, venom, umbra, shells }
+
+extension LiquidKindX on LiquidKind {
+  String get label => switch (this) {
+    LiquidKind.off => 'OFF',
+    LiquidKind.blood => 'BLOOD',
+    LiquidKind.venom => 'VENOM',
+    LiquidKind.umbra => 'UMBRA',
+    LiquidKind.shells => 'SHELLS',
+  };
+}
+
 /// Data model for custom theme settings persisted to SharedPreferences.
 /// Allows users to create their own color palette with optional backdrop/aura/font.
 

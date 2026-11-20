@@ -810,3 +810,247 @@ List<Color> particleSchemaColors(AppThemeMode mode, int schemaIdx) {
   final list = kGlobalParticlePalettes;
   return list[schemaIdx.clamp(0, list.length - 1)].colors;
 }
+
+/// One curated particle look — a complete behavior config applied in a
+/// single tap from the studio's LOOKS row. Every field maps 1:1 onto
+/// [VisualPrefs] so a look is just a named preset of the same knobs the
+/// manual controls expose (users can still tweak afterwards).
+///
+/// [typeIndex] indexes [ParticleType.values]; [schemaIndex] indexes
+/// [kGlobalParticlePalettes]; [itemIcon] indexes [kItemIconParticles]
+/// (-1 = typed shapes); [spritePath] non-empty = custom sprite mode
+/// (any bundled gun/item asset) which wins over [itemIcon].
+typedef ParticleLook = ({
+  String name,
+  String blurb,
+  int typeIndex,
+  int schemaIndex,
+  int count,
+  double sizeScale,
+  double opacity,
+  ParticleSpeed speed,
+  GlowEffect glow,
+  bool lineLinks,
+  bool bounce,
+  bool chaos,
+  bool touch,
+  int itemIcon,
+  String spritePath,
+});
+
+/// The 12 hand-crafted looks — each one a deliberately tuned combo of
+/// shape × palette × physics × glow, covering 11 distinct particle
+/// types + the sprite showcase. Palette indices:
+/// 0 NEON · 1 EMBER · 2 FROST · 3 TOXIN · 4 ROYAL · 5 GOLD · 6 BLOOD ·
+/// 7 VOID · 8 PRISM · 9 STEEL · 10 ABYSS · 11 ETHER · 12 OUBLIETTE ·
+/// 13 KILN KEEP · 14 MIMIC ZEST · 15 GROVE WARDEN · 16 LICH ROYALE ·
+/// 17 PARADOX DRIFT. Type indices: dot 0 · square 1 · glowOrb 2 ·
+/// shell 3 · rainbowDot 4 · voidPixel 5 · glitchPixel 6 · star 7 ·
+/// bolt 8 · heart 9 · skull 10 · paw 11 · crescent 12 · hexagon 13 ·
+/// smoke 14 · scale 15 · triangle 16.
+const kParticleLooks = <ParticleLook>[
+  (
+    name: 'OUBLIETTE MOTES',
+    blurb: 'slow dungeon dust',
+    typeIndex: 0, // dot
+    schemaIndex: 12, // OUBLIETTE
+    count: 24,
+    sizeScale: 0.8,
+    opacity: 0.4,
+    speed: ParticleSpeed.verySlow,
+    glow: GlowEffect.smokey,
+    lineLinks: false,
+    bounce: false,
+    chaos: false,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'NEON RAIN',
+    blurb: 'cyber shards falling',
+    typeIndex: 6, // glitchPixel
+    schemaIndex: 0, // NEON
+    count: 45,
+    sizeScale: 0.7,
+    opacity: 0.6,
+    speed: ParticleSpeed.fast,
+    glow: GlowEffect.neon,
+    lineLinks: true,
+    bounce: false,
+    chaos: false,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'EMBER DRIFT',
+    blurb: 'rising forge sparks',
+    typeIndex: 2, // glowOrb
+    schemaIndex: 1, // EMBER
+    count: 18,
+    sizeScale: 1.1,
+    opacity: 0.8,
+    speed: ParticleSpeed.slow,
+    glow: GlowEffect.ember,
+    lineLinks: false,
+    bounce: false,
+    chaos: true,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'FROSTFALL',
+    blurb: 'bouncing ice shards',
+    typeIndex: 1, // square
+    schemaIndex: 2, // FROST
+    count: 40,
+    sizeScale: 0.9,
+    opacity: 0.7,
+    speed: ParticleSpeed.normal,
+    glow: GlowEffect.smokey,
+    lineLinks: false,
+    bounce: true,
+    chaos: false,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'TOXIC BLOOM',
+    blurb: 'billowing waste haze',
+    typeIndex: 14, // smoke
+    schemaIndex: 3, // TOXIN
+    count: 18,
+    sizeScale: 1.3,
+    opacity: 0.65,
+    speed: ParticleSpeed.slow,
+    glow: GlowEffect.pulse,
+    lineLinks: false,
+    bounce: false,
+    chaos: true,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'VOID WISPS',
+    blurb: 'haunted purple pixels',
+    typeIndex: 5, // voidPixel
+    schemaIndex: 7, // VOID
+    count: 30,
+    sizeScale: 1.0,
+    opacity: 0.65,
+    speed: ParticleSpeed.slow,
+    glow: GlowEffect.cursed,
+    lineLinks: false,
+    bounce: false,
+    chaos: true,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'SHELL CASCADE',
+    blurb: 'tumbling brass casings',
+    typeIndex: 3, // shell
+    schemaIndex: 13, // KILN KEEP
+    count: 16,
+    sizeScale: 1.0,
+    opacity: 0.85,
+    speed: ParticleSpeed.normal,
+    glow: GlowEffect.smokey,
+    lineLinks: false,
+    bounce: true,
+    chaos: false,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'PRISM STORM',
+    blurb: 'rainbow chaos',
+    typeIndex: 4, // rainbowDot
+    schemaIndex: 8, // PRISM
+    count: 50,
+    sizeScale: 0.8,
+    opacity: 0.7,
+    speed: ParticleSpeed.veryFast,
+    glow: GlowEffect.prism,
+    lineLinks: true,
+    bounce: false,
+    chaos: true,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'BLANK STARFALL',
+    blurb: 'golden Blank stars',
+    typeIndex: 7, // star
+    schemaIndex: 5, // GOLD
+    count: 30,
+    sizeScale: 1.0,
+    opacity: 0.85,
+    speed: ParticleSpeed.slow,
+    glow: GlowEffect.smokey,
+    lineLinks: false,
+    bounce: false,
+    chaos: false,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'LICH SKULLDRIFT',
+    blurb: 'cursed bones falling',
+    typeIndex: 10, // skull
+    schemaIndex: 16, // LICH ROYALE
+    count: 18,
+    sizeScale: 1.1,
+    opacity: 0.7,
+    speed: ParticleSpeed.slow,
+    glow: GlowEffect.cursed,
+    lineLinks: false,
+    bounce: false,
+    chaos: true,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'STORM CALLER',
+    blurb: 'electric bolt rain',
+    typeIndex: 8, // bolt
+    schemaIndex: 0, // NEON
+    count: 40,
+    sizeScale: 0.9,
+    opacity: 0.8,
+    speed: ParticleSpeed.veryFast,
+    glow: GlowEffect.plasma,
+    lineLinks: false,
+    bounce: false,
+    chaos: true,
+    touch: true,
+    itemIcon: -1,
+    spritePath: '',
+  ),
+  (
+    name: 'GUNDERFURY STORM',
+    blurb: 'the gun itself',
+    typeIndex: 0, // dot (unused in sprite mode)
+    schemaIndex: 0, // NEON (unused in sprite mode)
+    count: 12,
+    sizeScale: 1.1,
+    opacity: 0.85,
+    speed: ParticleSpeed.slow, // unused in sprite mode
+    glow: GlowEffect.none, // unused in sprite mode
+    lineLinks: false,
+    bounce: false,
+    chaos: false,
+    touch: true,
+    itemIcon: -1,
+    spritePath: 'assets/images/guns/gunderfury.webp',
+  ),
+];

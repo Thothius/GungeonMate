@@ -99,6 +99,37 @@ class _AmbianceStep extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 18),
+              _StepLabel('LIQUID TANK'),
+              const SizedBox(height: 8),
+              // Rising bubbly fill behind all content — blood/venom/
+              // umbra tints, or brass shells that slide with tilt.
+              Row(
+                children: [
+                  for (final kind in LiquidKind.values)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: _ShaderChip(
+                          label: kind.label,
+                          on: prefs.liquidKindIndex == kind.index,
+                          onTap: () {
+                            VisualPrefs.setLiquidKindIndex(kind.index);
+                            Haptics.selection();
+                          },
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              GoopText(
+                'slow fill behind everything · shells slide with tilt',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
+              const SizedBox(height: 18),
               _StepLabel('TAP FX'),
               const SizedBox(height: 8),
               // Sparkles are a VisualPrefs pick (saved with the preset);

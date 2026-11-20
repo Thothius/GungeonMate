@@ -3,6 +3,126 @@ part of '../experience_studio_screen.dart';
 class _ParticlesStep extends StatelessWidget {
   const _ParticlesStep();
 
+  /// Horizontal scroller of the 12 curated looks — tap applies the
+  /// whole config via [VisualPrefs.applyParticleLook].
+  Widget _looksRow(VisualPrefs prefs) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: kParticleLooks.length,
+      separatorBuilder: (_, _) => const SizedBox(width: 8),
+      itemBuilder: (context, i) {
+        final look = kParticleLooks[i];
+        return SizedBox(
+          width: 118,
+          child: _LookTile(
+            look: look,
+            active: VisualPrefs.matchesParticleLook(prefs, look),
+            onTap: () {
+              VisualPrefs.applyParticleLook(look);
+              Haptics.selection();
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  /// "ANY SPRITE…" entry tile — opens the searchable picker over all
+  /// bundled gun/item sprites. Shows the current pick's thumbnail.
+  Widget _anySpriteRow(BuildContext context, VisualPrefs prefs) {
+    final hasSprite = prefs.particleSpritePath.isNotEmpty;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Haptics.selection();
+        _SpritePickerSheet.show(context);
+      },
+      child: Container(
+        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color:
+              hasSprite
+                  ? AppTheme.flair.primary.withValues(alpha: 0.14)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                hasSprite
+                    ? AppTheme.flair.primary
+                    : Colors.white.withValues(alpha: 0.15),
+            width: hasSprite ? 1.4 : 1.0,
+          ),
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 30,
+              height: 30,
+              child:
+                  hasSprite
+                      ? Image.asset(
+                        prefs.particleSpritePath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, _, _) => Icon(
+                          Icons.broken_image_outlined,
+                          size: 18,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      )
+                      : Icon(
+                        Icons.image_search_rounded,
+                        size: 20,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GoopText(
+                    hasSprite ? 'CUSTOM SPRITE' : 'ANY SPRITE…',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.8,
+                      color:
+                          hasSprite
+                              ? AppTheme.flair.primary
+                              : Colors.white.withValues(alpha: 0.75),
+                    ),
+                  ),
+                  GoopText(
+                    hasSprite
+                        ? prefs.particleSpritePath
+                              .split('/')
+                              .last
+                              .replaceAll('.webp', '')
+                              .replaceAll('_', ' ')
+                        : 'search all 500+ gun & item sprites',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 7.5,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 16,
+              color: Colors.white.withValues(alpha: 0.35),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   /// Uniform 4-across tile grid for the shape types — equal cells,
   /// glyph + label, short row padded so widths stay consistent.
   Widget _typeGrid(VisualPrefs prefs) {
@@ -23,9 +143,18 @@ class _ParticlesStep extends StatelessWidget {
                         r * cols + c < types.length
                             ? _ParticleTypeTile(
                               type: types[r * cols + c],
-                              active: r * cols + c == prefs.particleTypeIndex,
+                              // Sprite modes override typed shapes —
+                              // don't highlight a stale type pick.
+                              active:
+                                  r * cols + c == prefs.particleTypeIndex &&
+                                  prefs.particleItemIcon < 0 &&
+                                  prefs.particleSpritePath.isEmpty,
                               onTap: () {
                                 VisualPrefs.setParticleTypeIndex(r * cols + c);
+                                // Typed shapes win — clear sprite modes
+                                // so the pick is actually visible.
+                                VisualPrefs.setParticleItemIcon(-1);
+                                VisualPrefs.setParticleSpritePath('');
                                 Haptics.selection();
                               },
                             )
@@ -61,10 +190,24 @@ class _ParticlesStep extends StatelessWidget {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  // Typed particle system — 7 shapes × per-theme
-                  // schemas × 3 physics flags. Clean, minimal, all
-                  // user-facing (replaces the 37-preset × 16-schema
-                  // layer entirely).
+                  // Curated one-tap looks — 12 hand-tuned combos that
+                  // cover every particle type + the sprite showcase.
+                  // Tapping applies the whole config; knobs below still
+                  // fine-tune afterwards.
+                  _StepLabel('LOOKS'),
+                  const SizedBox(height: 4),
+                  GoopText(
+                    'one tap = full particle config',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(height: 66, child: _looksRow(prefs)),
+                  const SizedBox(height: 16),
+                  // Typed particle system — shapes × per-theme
+                  // schemas × physics flags.
                   _StepLabel('COUNT'),
                   Row(
                     children: [
@@ -109,6 +252,8 @@ class _ParticlesStep extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   _itemIconGrid(prefs),
+                  const SizedBox(height: 12),
+                  _anySpriteRow(context, prefs),
                   const SizedBox(height: 16),
                   _StepLabel('PHYSICS'),
                   const SizedBox(height: 8),
@@ -242,6 +387,11 @@ class _ParticlesStep extends StatelessWidget {
                         ('PULSE', GlowEffect.pulse),
                         ('NEON', GlowEffect.neon),
                         ('CURSED', GlowEffect.cursed),
+                        ('RIPPLE', GlowEffect.ripple),
+                        ('AURORA', GlowEffect.aurora),
+                        ('EMBER', GlowEffect.ember),
+                        ('SPECTRAL', GlowEffect.spectral),
+                        ('PLASMA', GlowEffect.plasma),
                         ('PRISM', GlowEffect.prism),
                       ])
                         _GlowFxChip(
@@ -511,12 +661,19 @@ class _ParticlePreview extends StatelessWidget {
                     child: r * cols + c < total
                         ? _ItemIconTile(
                             index: r * cols + c - 1, // -1 = OFF
+                            // Sprite path wins over item icons —
+                            // don't highlight a stale icon pick.
                             active:
-                                prefs.particleItemIcon == r * cols + c - 1,
+                                prefs.particleItemIcon == r * cols + c - 1 &&
+                                prefs.particleSpritePath.isEmpty,
                             onTap: () {
                               VisualPrefs.setParticleItemIcon(
                                 r * cols + c - 1,
                               );
+                              // Curated icons and custom sprites are
+                              // mutually exclusive — picking here
+                              // clears any custom sprite path.
+                              VisualPrefs.setParticleSpritePath('');
                               Haptics.selection();
                             },
                           )
@@ -725,12 +882,478 @@ class _TypeGlyphPainter extends CustomPainter {
           p..color = color.withValues(alpha: 0.6),
         );
         canvas.drawRect(Rect.fromLTWH(9, 9, 7, 7), p..color = color);
+      case ParticleType.star:
+        final path =
+            Path()
+              ..moveTo(9, 1)
+              ..lineTo(11, 7)
+              ..lineTo(17, 9)
+              ..lineTo(11, 11)
+              ..lineTo(9, 17)
+              ..lineTo(7, 11)
+              ..lineTo(1, 9)
+              ..lineTo(7, 7)
+              ..close();
+        canvas.drawPath(path, p);
+      case ParticleType.bolt:
+        canvas.drawPath(
+          Path()
+            ..moveTo(11, 1)
+            ..lineTo(5, 10)
+            ..lineTo(9, 10)
+            ..lineTo(7, 17)
+            ..lineTo(13, 8)
+            ..lineTo(9, 8)
+            ..close(),
+          p,
+        );
+      case ParticleType.heart:
+        canvas.drawPath(
+          Path()
+            ..moveTo(9, 16)
+            ..cubicTo(16, 11, 14, 4, 9, 7)
+            ..cubicTo(4, 4, 2, 11, 9, 16)
+            ..close(),
+          p,
+        );
+      case ParticleType.skull:
+        canvas.drawCircle(c, 5.5, p);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(center: Offset(9, 13.5), width: 7, height: 4.5),
+            const Radius.circular(1),
+          ),
+          p,
+        );
+      case ParticleType.paw:
+        canvas.drawOval(
+          Rect.fromCenter(center: Offset(9, 13), width: 8, height: 6),
+          p,
+        );
+        for (final dx in [-4.5, -1.5, 1.5, 4.5]) {
+          canvas.drawCircle(Offset(9 + dx, 7.5), 1.8, p);
+        }
+      case ParticleType.crescent:
+        canvas.drawPath(
+          Path()
+            ..addOval(Rect.fromCircle(center: c, radius: 8))
+            ..addOval(
+              Rect.fromCircle(center: const Offset(12, 6.5), radius: 7),
+            )
+            ..fillType = PathFillType.evenOdd,
+          p,
+        );
+      case ParticleType.hexagon:
+        final path = Path();
+        for (var i = 0; i < 6; i++) {
+          final a = (math.pi / 3) * i - math.pi / 2;
+          final pt = Offset(9 + 8 * math.cos(a), 9 + 8 * math.sin(a));
+          i == 0 ? path.moveTo(pt.dx, pt.dy) : path.lineTo(pt.dx, pt.dy);
+        }
+        canvas.drawPath(path..close(), p);
+      case ParticleType.smoke:
+        p.color = color.withValues(alpha: 0.55);
+        canvas.drawCircle(const Offset(6, 10), 4.5, p);
+        canvas.drawCircle(const Offset(12, 8), 5, p);
+        canvas.drawCircle(const Offset(9, 13), 4, p);
+        p.color = color;
+      case ParticleType.scale:
+        canvas.drawPath(
+          Path()
+            ..moveTo(2, 12)
+            ..quadraticBezierTo(2, 4, 9, 3)
+            ..quadraticBezierTo(16, 4, 16, 12)
+            ..quadraticBezierTo(9, 15, 2, 12)
+            ..close(),
+          p,
+        );
+      case ParticleType.triangle:
+        canvas.drawPath(
+          Path()
+            ..moveTo(9, 2)
+            ..lineTo(16, 15)
+            ..lineTo(2, 15)
+            ..close(),
+          p,
+        );
     }
   }
 
   @override
   bool shouldRepaint(_TypeGlyphPainter old) =>
       old.type != type || old.color != color;
+}
+
+/// One curated-look tile — name + blurb + either the look's palette
+/// dots or its sprite thumbnail. Active state comes from
+/// [VisualPrefs.matchesParticleLook].
+class _LookTile extends StatelessWidget {
+  final ParticleLook look;
+  final bool active;
+  final VoidCallback onTap;
+  const _LookTile({
+    required this.look,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final c = active ? flair.primary : Colors.white.withValues(alpha: 0.55);
+    final palette =
+        kGlobalParticlePalettes[look.schemaIndex.clamp(
+          0,
+          kGlobalParticlePalettes.length - 1,
+        )].colors;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color:
+              active
+                  ? flair.primary.withValues(alpha: 0.18)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                active ? flair.primary : Colors.white.withValues(alpha: 0.12),
+            width: active ? 1.6 : 1.0,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GoopText(
+              look.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 7.5,
+                fontWeight: active ? FontWeight.w900 : FontWeight.w700,
+                letterSpacing: 0.4,
+                color: c,
+              ),
+            ),
+            GoopText(
+              look.blurb,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 6.5,
+                color: Colors.white.withValues(alpha: 0.38),
+              ),
+            ),
+            const Spacer(),
+            if (look.spritePath.isNotEmpty)
+              Image.asset(
+                look.spritePath,
+                height: 20,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => const SizedBox(height: 20),
+              )
+            else
+              Row(
+                children: [
+                  for (final col in palette.take(3))
+                    Container(
+                      width: 8,
+                      height: 8,
+                      margin: const EdgeInsets.only(right: 3),
+                      decoration: BoxDecoration(
+                        color: col,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Searchable sprite picker — every bundled gun + item WEBP, filterable
+/// by name. Picking one sets [VisualPrefs.particleSpritePath] and
+/// clears the curated item-icon pick (mutual exclusion).
+class _SpritePickerSheet extends StatefulWidget {
+  const _SpritePickerSheet();
+
+  static Future<void> show(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const _SpritePickerSheet(),
+    );
+  }
+
+  @override
+  State<_SpritePickerSheet> createState() => _SpritePickerSheetState();
+}
+
+class _SpritePickerSheetState extends State<_SpritePickerSheet> {
+  final _searchCtrl = TextEditingController();
+  List<({String name, String path, bool isGun})> _sprites = const [];
+  bool _loading = true;
+  String _query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _searchCtrl.addListener(() {
+      setState(() => _query = _searchCtrl.text.trim().toLowerCase());
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    try {
+      final gunsRaw = await rootBundle.loadString('assets/data/guns.json');
+      final itemsRaw = await rootBundle.loadString('assets/data/items.json');
+      List<String> namesOf(String raw) =>
+          (jsonDecode(raw) as List)
+              .map((e) => (e as Map)['name'] as String? ?? '')
+              .where((n) => n.isNotEmpty)
+              .toList();
+      final entries = <({String name, String path, bool isGun})>[
+        for (final n in namesOf(gunsRaw))
+          (name: n, path: localGunIcon(n), isGun: true),
+        for (final n in namesOf(itemsRaw))
+          (name: n, path: localItemIcon(n), isGun: false),
+      ]..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      if (mounted) {
+        setState(() {
+          _sprites = entries;
+          _loading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  void _pick(String path) {
+    VisualPrefs.setParticleSpritePath(path);
+    VisualPrefs.setParticleItemIcon(-1);
+    Haptics.selection();
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final filtered =
+        _query.isEmpty
+            ? _sprites
+            : _sprites
+                .where((s) => s.name.toLowerCase().contains(_query))
+                .toList();
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.72,
+      decoration: BoxDecoration(
+        color: flair.card,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GoopText(
+                    'PICK A SPRITE',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      color: Colors.white.withValues(alpha: 0.85),
+                    ),
+                  ),
+                ),
+                GoopText(
+                  '${filtered.length}',
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: Colors.white.withValues(alpha: 0.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              controller: _searchCtrl,
+              autofocus: true,
+              style: const TextStyle(fontSize: 13, color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'search guns & items…',
+                hintStyle: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
+                prefixIcon: Icon(
+                  Icons.search_rounded,
+                  size: 18,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+                filled: true,
+                fillColor: Colors.white.withValues(alpha: 0.05),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          // NONE tile — clears custom sprite + curated icon.
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                VisualPrefs.setParticleSpritePath('');
+                VisualPrefs.setParticleItemIcon(-1);
+                Haptics.selection();
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                height: 40,
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.12),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 12),
+                    Icon(
+                      Icons.block_rounded,
+                      size: 16,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                    const SizedBox(width: 10),
+                    GoopText(
+                      'NONE — back to shapes',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child:
+                _loading
+                    ? const Center(
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                    : GridView.builder(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            mainAxisSpacing: 6,
+                            crossAxisSpacing: 6,
+                            childAspectRatio: 0.72,
+                          ),
+                      itemCount: filtered.length,
+                      itemBuilder: (context, i) {
+                        final s = filtered[i];
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => _pick(s.path),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.04),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.08),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  s.path,
+                                  height: 34,
+                                  fit: BoxFit.contain,
+                                  cacheWidth: 128,
+                                  errorBuilder: (_, _, _) => Icon(
+                                    s.isGun
+                                        ? Icons.gps_fixed_rounded
+                                        : Icons.category_rounded,
+                                    size: 20,
+                                    color: Colors.white.withValues(
+                                      alpha: 0.3,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 3,
+                                  ),
+                                  child: GoopText(
+                                    s.name,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 6,
+                                      height: 1.1,
+                                      color: Colors.white.withValues(
+                                        alpha: 0.45,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 /// Physics toggle pill — on/off chip for bounce/chaos/tilt.

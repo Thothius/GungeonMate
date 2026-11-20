@@ -210,6 +210,154 @@ PresetConfig typedParticleConfig(
         wobble: 0.3,
         turbulence: chaos ? 1.4 : 0.6,
       );
+    // ── v3 appended types — each maps a previously dead ParticleShape ──
+    case ParticleType.star:
+      // Blank-bullet stars — slow upward tumble, the ETG signature.
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.star,
+        sizeMin: 2.5,
+        sizeMax: 5.5,
+        speedMin: 4,
+        speedMax: 9,
+        glowEffect: GlowEffect.smokey,
+        lineLinks: false,
+        drift: DriftDirection.up,
+        wobble: 0.5,
+        rotate: true,
+        turbulence: turb,
+      );
+    case ParticleType.bolt:
+      // Lightning shards — fast jittery fall, electric energy.
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.bolt,
+        sizeMin: 3,
+        sizeMax: 6,
+        speedMin: 10,
+        speedMax: 20,
+        glowEffect: GlowEffect.neon,
+        lineLinks: false,
+        drift: DriftDirection.down,
+        wobble: 0.3,
+        turbulence: turb == 0 ? 0.4 : 1.2,
+      );
+    case ParticleType.heart:
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.heart,
+        sizeMin: 3,
+        sizeMax: 6,
+        speedMin: 3,
+        speedMax: 7,
+        glowEffect: GlowEffect.pulse,
+        lineLinks: false,
+        drift: DriftDirection.up,
+        wobble: 0.6,
+        turbulence: turb,
+      );
+    case ParticleType.skull:
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.skull,
+        sizeMin: 3,
+        sizeMax: 6,
+        speedMin: 2,
+        speedMax: 5,
+        glowEffect: GlowEffect.cursed,
+        lineLinks: false,
+        drift: DriftDirection.down,
+        wobble: 0.4,
+        turbulence: turb,
+      );
+    case ParticleType.paw:
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.paw,
+        sizeMin: 3,
+        sizeMax: 6,
+        speedMin: 3,
+        speedMax: 7,
+        glowEffect: GlowEffect.none,
+        lineLinks: false,
+        drift: DriftDirection.random,
+        wobble: 0.5,
+        turbulence: turb,
+      );
+    case ParticleType.crescent:
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.crescent,
+        sizeMin: 3,
+        sizeMax: 6,
+        speedMin: 2,
+        speedMax: 6,
+        glowEffect: GlowEffect.spectral,
+        lineLinks: false,
+        drift: DriftDirection.up,
+        wobble: 0.4,
+        turbulence: turb,
+      );
+    case ParticleType.hexagon:
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.hexagon,
+        sizeMin: 2.5,
+        sizeMax: 5,
+        speedMin: 4,
+        speedMax: 9,
+        glowEffect: GlowEffect.neon,
+        lineLinks: false,
+        drift: DriftDirection.random,
+        wobble: 0.5,
+        rotate: true,
+        turbulence: turb,
+      );
+    case ParticleType.smoke:
+      // Billowing haze — always some turbulence so puffs feel alive.
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.smoke,
+        sizeMin: 4,
+        sizeMax: 9,
+        speedMin: 2,
+        speedMax: 5,
+        glowEffect: GlowEffect.smokey,
+        lineLinks: false,
+        drift: DriftDirection.up,
+        wobble: 0.8,
+        turbulence: turb == 0 ? 0.5 : 1.2,
+      );
+    case ParticleType.scale:
+      // Dragun scales — slow ember-lit tumble downward.
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.scale,
+        sizeMin: 3,
+        sizeMax: 6,
+        speedMin: 3,
+        speedMax: 7,
+        glowEffect: GlowEffect.ember,
+        lineLinks: false,
+        drift: DriftDirection.down,
+        wobble: 0.5,
+        rotate: true,
+        turbulence: turb,
+      );
+    case ParticleType.triangle:
+      return PresetConfig(
+        colors: colors,
+        shape: ParticleShape.triangle,
+        sizeMin: 2.5,
+        sizeMax: 5,
+        speedMin: 4,
+        speedMax: 10,
+        glowEffect: GlowEffect.none,
+        lineLinks: false,
+        drift: DriftDirection.random,
+        wobble: 0.6,
+        turbulence: turb,
+      );
   }
 }
 

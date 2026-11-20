@@ -58,6 +58,12 @@ class RunProvider
   @override
   RunState _runState = RunState();
 
+  /// When false, every SharedPreferences write is skipped — the studio's
+  /// mock preview RunProvider sets this so demo runs never overwrite
+  /// the real `current_run` save, favourites, or special-item trackers.
+  @override
+  bool persistenceEnabled = true;
+
   List<Gun> _allGuns = [];
   List<Item> _allItems = [];
   @override
@@ -583,6 +589,7 @@ class RunProvider
   /// One-shot rewrite of every special.* prefs key — used after a bulk
   /// reset so a reload doesn't resurrect the old counters.
   Future<void> _persistAllSpecials() async {
+    if (!persistenceEnabled) return;
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.triple_gun.form', _tripleGunForm);

@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,27 +22,29 @@ import '../widgets/backgrounds/ambient_shader.dart';
 import '../widgets/particles/ambient_glow.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 import '../providers/run_provider.dart';
-import '../models/gun.dart';
-import '../models/item.dart';
-import '../models/player.dart';
-import '../widgets/active_run/player_page.dart';
+import '../utils/asset_paths.dart';
+import '../utils/fast_route.dart';
+import 'active_run_screen.dart';
 import 'browse_screen.dart';
-import 'item_detail_screen.dart';
 part 'experience_studio/studio_particles.dart';
 part 'experience_studio/studio_typography.dart';
 part 'experience_studio/studio_ambiance.dart';
 part 'experience_studio/studio_widgets.dart';
 part 'experience_studio/studio_flow.dart';
 
-/// Customization — the unified theme hub. One layout for every entry
-/// point: sticky BACK · PREVIEW · APPLY action bar, a 5-tab strip
-/// (PRESETS / CUSTOM / FONTS / PARTICLES / AMBIANCE), a draggable LIVE
-/// LOOK pane rendering a mini-UI with the staged picks, and scrollable
-/// options below. Picks stage live through the whole screen; APPLY
-/// commits, BACK restores the entry snapshot.
+/// Customization — the unified theme hub. Entry stages: CHOOSE
+/// (pick-or-create doors + quick slots), GALLERY (preset browser),
+/// SOURCE (copy-vs-scratch), then the WIZARD dashboard — a sticky
+/// menubar (title + PRESETS + preview shortcut), hero PREVIEW/APPLY
+/// row, current-theme panel and preset actions. EDIT OPTIONS opens
+/// the tabbed editor (DETAILS / COLORS & BG / TYPE / PARTICLES /
+/// AMBIANCE / SAVE) with the draggable LIVE LOOK pane. Picks stage
+/// live through the whole screen; APPLY commits, BACK restores the
+/// entry snapshot.
 ///
-/// [initialTab] selects the opening wizard tab (1=COLORS & BG …
-/// 5=SAVE); 0 opens the pick-or-create CHOOSE stage.
+/// [initialTab] deep-links straight into the tabbed option editor
+/// (tab index 1=COLORS & BG … 5=SAVE); <=0 opens the pick-or-create
+/// CHOOSE stage instead.
 class ExperienceStudioScreen extends StatefulWidget {
   final int initialTab;
   const ExperienceStudioScreen({super.key, this.initialTab = 0});
@@ -103,17 +107,29 @@ List<Widget> _customBgLayers(AppThemeMode previewMode, double scrim) {
   }
 }
 
-class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
+class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
+    with SingleTickerProviderStateMixin {
   late AppThemeMode _previewMode;
-  late final AppThemeMode _originalMode;
-  late final VisualPrefs _originalPrefs;
-  late final CustomThemeData? _originalCustomTheme;
+  // Restore baseline — refreshed on every APPLY so BACK only discards
+  // picks staged after the last commit, never the commit itself.
+  late AppThemeMode _originalMode;
+  late VisualPrefs _originalPrefs;
+  late CustomThemeData? _originalCustomTheme;
   late CustomThemeData _draft;
   // Set right before every intentional pop — PopScope blocks raw
   // system-back so staged picks always route through the restore path.
   bool _allowPop = false;
   int _hubTab = 0;
   double _liveLookH = 0.22;
+  // Gentle pulse on the hero PREVIEW/APPLY buttons — the dashboard's
+  // two primary actions breathe so they read as the main event.
+  late final AnimationController _heroPulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1600),
+  )..repeat(reverse: true);
+  // Gallery opened from the dashboard menubar previews picks instead
+  // of applying+closing — user confirms on the dashboard with APPLY.
+  bool _galleryPreviewOnly = false;
 
   // ── Pick-or-create flow ────────────────────────────────────
   // choose → gallery | source → wizard. Deep links (initialTab>0)
@@ -141,8 +157,17 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   @override
   void initState() {
     super.initState();
-    _stage = widget.initialTab <= 0 ? _StudioStage.choose : _StudioStage.wizard;
+    _stage =
+        widget.initialTab <= 0 ? _StudioStage.choose : _StudioStage.editor;
     _hubTab = widget.initialTab.clamp(0, _hubTabs.length - 1);
+    // Remember the last-used editor tab across sessions (Q12) —
+    // deep links (initialTab>0) keep their explicit target instead.
+    if (widget.initialTab <= 0) {
+      SharedPreferences.getInstance().then((p) {
+        final t = p.getInt('studio.lastTab');
+        if (t != null && mounted) setState(() => _hubTab = t.clamp(0, _hubTabs.length - 1));
+      });
+    }
     _previewMode = AppTheme.mode;
     _originalMode = AppTheme.mode;
     _originalPrefs = VisualPrefs.notifier.value;
@@ -182,6 +207,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   @override
   void dispose() {
     _galleryCtrl.dispose();
+    _heroPulse.dispose();
     AppTheme.previewNotifier.value = null;
     super.dispose();
   }
@@ -199,10 +225,23 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     });
   }
 
-  Future<void> _applyAndClose() async {
+  /// APPLY on the dashboard/editor — commits the staged look but
+  /// stays in the studio (lands on the dashboard) so the user can
+  /// keep previewing or tweak more. Gallery pick-apply still uses
+  /// [_applyEntry]'s apply+exit path.
+  Future<void> _applyAndReturn() async {
     Haptics.success();
+    // Gallery preview of a saved preset only swaps the in-memory
+    // prefs — persist whatever is staged so APPLY survives a restart.
+    await VisualPrefs.replaceAndPersist(VisualPrefs.notifier.value);
     await AppTheme.setMode(_previewMode);
-    _closeAfterCommit();
+    if (!mounted) return;
+    // The commit IS the new baseline — without this, BACK would
+    // restore the pre-studio snapshot and silently un-apply.
+    _originalMode = _previewMode;
+    _originalPrefs = VisualPrefs.notifier.value;
+    _originalCustomTheme = AppTheme.cachedCustomTheme;
+    setState(() => _stage = _StudioStage.wizard);
   }
 
   @override
@@ -292,6 +331,17 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       );
     }
 
+    // The hero pulse only earns its vsync frames on the dashboard —
+    // stop it in the editor/flow stages and under reduced motion.
+    final pulseOn =
+        _stage == _StudioStage.wizard &&
+        !MediaQuery.disableAnimationsOf(context);
+    if (pulseOn) {
+      if (!_heroPulse.isAnimating) _heroPulse.repeat(reverse: true);
+    } else if (_heroPulse.isAnimating) {
+      _heroPulse.stop();
+    }
+
     return Theme(
       data: cleanTheme,
       // System back / iOS swipe must walk the same stage-back path as the
@@ -317,6 +367,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 _StudioStage.gallery => _buildGallery(),
                 _StudioStage.source => _buildSource(),
                 _StudioStage.wizard => _buildHub(),
+                _StudioStage.editor => _buildEditor(),
               },
             ],
           ),
@@ -406,8 +457,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   // ── Unified Customization hub ──────────────────────────────
-  // One layout for every entry point: sticky BACK · PREVIEW · APPLY
-  // bar, tab strip, draggable LIVE LOOK pane, scrollable options.
+  // Dashboard landing: sticky menubar (title + PRESETS + preview
+  // shortcut), hero PREVIEW/APPLY row, current-theme panel, preset
+  // actions. The tabbed option editor lives one tap deeper in
+  // [_buildEditor] — the tabs no longer dominate the top of screen.
+
   // Tabs: DETAILS / COLORS & BG / TYPE / PARTICLES / AMBIANCE / SAVE.
   static const _hubTabs = [
     'DETAILS',
@@ -418,7 +472,470 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     'SAVE',
   ];
 
+  /// Dashboard — the wizard landing. Everything here is one tap from
+  /// the fullscreen preview; detailed picks live in the editor stage.
   Widget _buildHub() {
+    return Column(
+      children: [
+        _buildStudioMenubar(),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(
+              Insets.lg,
+              0,
+              Insets.lg,
+              Insets.lg,
+            ),
+            children: [
+              _buildPreviewHeroRow(),
+              _buildCurrentThemePanel(),
+              const SizedBox(height: 18),
+              _buildPresetActions(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Sticky menubar — BACK, preset-name title (no subtitle), a
+  /// de-emphasized PRESETS shortcut into the gallery, and a small
+  /// preview icon. The big PREVIEW button below is the main path.
+  Widget _buildStudioMenubar() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.lg,
+        Insets.sm,
+        Insets.lg,
+        Insets.xs,
+      ),
+      child: Row(
+        children: [
+          _ghostBarButton(
+            'BACK',
+            Icons.arrow_back_ios_new_rounded,
+            _onFlowBack,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: GoopText(
+              _studioTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: flair.primary,
+              ),
+            ),
+          ),
+          _ghostBarButton(
+            'PRESETS',
+            Icons.auto_awesome_rounded,
+            () => _openGallery(previewOnly: true),
+          ),
+          const SizedBox(width: 8),
+          ScaleButton(
+            onTap: _openMockPreview,
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.all(Radii.md),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.18),
+                  width: 1.2,
+                ),
+              ),
+              child: Icon(
+                Icons.visibility_rounded,
+                size: 18,
+                color: flair.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Dashboard title — same precedence as the DETAILS summary header:
+  /// edit mode > named preset > active theme label.
+  String get _studioTitle {
+    if (_editingPresetId != null) return 'EDITING: $_presetName';
+    if (_presetName.isNotEmpty) return 'PRESET: $_presetName';
+    if (_previewMode == AppThemeMode.custom) return 'CUSTOM LOOK';
+    return _previewMode.label.toUpperCase();
+  }
+
+  /// Hero row — PREVIEW and APPLY carry equal weight (both filled,
+  /// both breathing with the slow pulse). PREVIEW opens the
+  /// fullscreen mock; APPLY commits the staged look and stays.
+  Widget _buildPreviewHeroRow() {
+    final flair = AppTheme.flairFor(_previewMode);
+    final fg =
+        flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
+    final still = MediaQuery.disableAnimationsOf(context);
+    Widget heroButton(IconData icon, String label, VoidCallback onTap) {
+      return Expanded(
+        child: ScaleButton(
+          onTap: onTap,
+          child: AnimatedBuilder(
+            animation: _heroPulse,
+            builder: (_, child) {
+              // Pulse the glow only — the fill stays solid so the
+              // buttons read as one matched pair.
+              final glow = still ? 0.5 : 0.35 + 0.3 * _heroPulse.value;
+              return Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  borderRadius: BorderRadius.all(Radii.md),
+                  boxShadow: [
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: glow),
+                      blurRadius: 16,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: child,
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 18, color: fg),
+                const SizedBox(width: 8),
+                GoopText(
+                  label,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                    color: fg,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        heroButton(
+          Icons.visibility_rounded,
+          'PREVIEW',
+          _openMockPreview,
+        ),
+        const SizedBox(width: 10),
+        heroButton(Icons.check_rounded, 'APPLY', _applyAndReturn),
+      ],
+    );
+  }
+
+  /// Current theme panel — splash art (or palette gradient) for the
+  /// staged look, name + vibe, color strip, ACTIVE/PREVIEW badge.
+  /// Tap opens the fullscreen preview like the hero button.
+  Widget _buildCurrentThemePanel() {
+    final flair = AppTheme.flairFor(_previewMode);
+    final isCustom = _previewMode == AppThemeMode.custom;
+    final isActive = _previewMode == AppTheme.mode;
+    final splash = isCustom ? 'custom' : _previewMode.splashSlug;
+    final colors =
+        isCustom
+            ? [
+              _draft.scaffold,
+              _draft.card,
+              _draft.primary,
+              _draft.secondary,
+              _draft.headlineStat,
+            ]
+            : [
+              flair.scaffold,
+              flair.card,
+              flair.primary,
+              flair.secondary,
+              flair.headlineStat,
+            ];
+    final name =
+        _editingPresetId != null || _presetName.isNotEmpty
+            ? _presetName
+            : _previewMode.label;
+    final subtitle =
+        isCustom
+            ? (_editingPresetId != null ? 'SAVED PRESET' : 'CUSTOM THEME')
+            : '${_previewMode.vibe} · ${_previewMode.elem}';
+    return Padding(
+      padding: const EdgeInsets.only(top: Insets.md),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _openMockPreview,
+        child: Container(
+          height: 108,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: flair.primary.withValues(alpha: 0.35),
+              width: 1.2,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(13),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (splash.isNotEmpty)
+                  Image.asset(
+                    themeSplashPath(splash),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => _themePanelBg(colors),
+                  )
+                else
+                  _themePanelBg(colors),
+                // Bottom scrim so the text strip stays readable.
+                const Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Color(0xCC000000)],
+                        stops: [0.45, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: flair.primary,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: GoopText(
+                      isActive ? 'ACTIVE' : 'UNSAVED',
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color:
+                            flair.primary.computeLuminance() > 0.5
+                                ? Colors.black87
+                                : Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 14,
+                  right: 14,
+                  bottom: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GoopText(
+                        name.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      GoopText(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          color: Colors.white.withValues(alpha: 0.7),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      // Palette bar — the look's colors at a glance,
+                      // under the name like the gallery cards.
+                      Row(
+                        children: [
+                          for (final c in colors)
+                            Expanded(
+                              child: Container(
+                                height: 6,
+                                margin: const EdgeInsets.only(right: 4),
+                                decoration: BoxDecoration(
+                                  color: c,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Palette-gradient fallback for the theme panel when a preset has
+  /// no splash art.
+  Widget _themePanelBg(List<Color> colors) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [colors[0], colors[1], colors[2]],
+        ),
+      ),
+    );
+  }
+
+  /// Saved preset matching the current look — explicit edit target
+  /// first, then a name match against the store so EDIT PRESET also
+  /// appears when the look was reached without the edit-pencil.
+  SavedCustomTheme? _detectSavedPreset() {
+    final themes = CustomThemeStore.themes;
+    if (_editingPresetId != null) {
+      for (final t in themes) {
+        if (t.id == _editingPresetId) return t;
+      }
+    }
+    if (_presetName.isEmpty) return null;
+    for (final t in themes) {
+      if (t.name.toLowerCase() == _presetName.toLowerCase()) return t;
+    }
+    return null;
+  }
+
+  /// Preset actions — EDIT OPTIONS opens the tabbed editor; NEW PRESET
+  /// restarts the name→source flow; EDIT PRESET appears whenever the
+  /// current look matches a saved preset; SAVE AS NEW duplicates the
+  /// look under a fresh name without touching the live draft.
+  Widget _buildPresetActions() {
+    final flair = AppTheme.flairFor(_previewMode);
+    final editable = _detectSavedPreset();
+    return Column(
+      children: [
+        _FlowCard(
+          icon: Icons.tune_rounded,
+          title: 'EDIT OPTIONS',
+          subtitle: 'colors, wallpaper, particles, font & ambiance',
+          accent: flair.secondary,
+          onTap: () {
+            Haptics.selection();
+            setState(() => _stage = _StudioStage.editor);
+          },
+        ),
+        const SizedBox(height: 14),
+        _FlowCard(
+          icon: Icons.add_rounded,
+          title: 'NEW PRESET',
+          subtitle: 'name it, copy an existing preset or start blank',
+          accent: flair.primary,
+          onTap: _onNewPreset,
+        ),
+        if (editable != null) ...[
+          const SizedBox(height: 14),
+          _FlowCard(
+            icon: Icons.edit_rounded,
+            title: 'EDIT PRESET',
+            subtitle: 'update "${editable.name}" in your gallery',
+            accent: flair.headlineStat,
+            onTap: () {
+              Haptics.selection();
+              // Claim the match as the edit target so SAVE updates
+              // this preset instead of creating a duplicate.
+              _editingPresetId = editable.id;
+              _presetName = editable.name;
+              setState(() => _stage = _StudioStage.editor);
+            },
+          ),
+        ],
+        const SizedBox(height: 14),
+        _FlowCard(
+          icon: Icons.copy_rounded,
+          title: 'SAVE AS NEW',
+          subtitle: 'keep this look as a separate preset',
+          accent: flair.secondary,
+          onTap: _onSaveAsNew,
+        ),
+      ],
+    );
+  }
+
+  /// Duplicate the current look into the preset store under a new
+  /// name — does NOT rename the live custom draft or apply/close.
+  Future<void> _onSaveAsNew() async {
+    Haptics.selection();
+    final name = await _promptPresetName();
+    if (name == null || !mounted) return;
+    final isCustom = _previewMode == AppThemeMode.custom;
+    final theme = SavedCustomTheme(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      splashSlug: isCustom ? 'custom' : _previewMode.splashSlug,
+      baseMode: _previewMode,
+      prefs: VisualPrefs.notifier.value,
+      customData: isCustom ? _draft.copyWith(name: name) : null,
+    );
+    final saved = await CustomThemeStore.save(theme);
+    if (!saved && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not save preset — storage error')),
+      );
+      return;
+    }
+    if (mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Saved "$name" to your presets')));
+      setState(() {});
+    }
+  }
+
+  /// Open the preset gallery in browse mode — shared by the CHOOSE
+  /// stage card and the dashboard menubar PRESETS shortcut.
+  /// [previewOnly] (dashboard entry) makes PICK PRESET stage the look
+  /// and return to the dashboard instead of applying+closing.
+  void _openGallery({bool previewOnly = false}) {
+    Haptics.selection();
+    setState(() {
+      _stage = _StudioStage.gallery;
+      _gallerySelect = false;
+      _quickPickSlot = -1;
+      _galleryPreviewOnly = previewOnly;
+      _galleryIndex = 0;
+    });
+    // PageView isn't attached until the gallery builds — jump
+    // post-frame or PageController throws.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
+    });
+  }
+
+  /// Tabbed option editor — the old hub layout (action bar, tab
+  /// strip, LIVE LOOK, tab content) demoted to a sub-view of the
+  /// dashboard. BACK returns to the dashboard instead of popping.
+  Widget _buildEditor() {
     return Column(
       children: [
         _buildActionBar(),
@@ -451,7 +968,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           const SizedBox(width: 10),
           Expanded(
             child: ScaleButton(
-              onTap: _applyAndClose,
+              onTap: _applyAndReturn,
               child: Container(
                 height: 44,
                 decoration: BoxDecoration(
@@ -540,6 +1057,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               onTap: () {
                 setState(() => _hubTab = i);
                 Haptics.selection();
+                SharedPreferences.getInstance().then(
+                  (p) => p.setInt('studio.lastTab', i),
+                );
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 160),
@@ -978,20 +1498,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           title: 'BROWSE PRESETS',
           subtitle: 'swipe through every ready-made theme and saved preset',
           accent: flair.primary,
-          onTap: () {
-            Haptics.selection();
-            setState(() {
-              _stage = _StudioStage.gallery;
-              _gallerySelect = false;
-              _quickPickSlot = -1;
-              _galleryIndex = 0;
-            });
-            // PageView isn't attached until the gallery builds — jump
-            // post-frame or PageController throws.
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
-            });
-          },
+          onTap: _openGallery,
         ),
         const SizedBox(height: 14),
         _FlowCard(
@@ -1012,6 +1519,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     if (name == null || !mounted) return;
     setState(() {
       _presetName = name;
+      // Starting a NEW preset cancels any pending edit target —
+      // otherwise SAVE would overwrite the preset being edited.
+      _editingPresetId = null;
       _stage = _StudioStage.source;
       _cameFromFlow = true;
     });
@@ -1486,7 +1996,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                         ? Icons.star_rounded
                         : (_gallerySelect
                             ? Icons.copy_rounded
-                            : Icons.check_rounded),
+                            : (_galleryPreviewOnly
+                                ? Icons.visibility_rounded
+                                : Icons.check_rounded)),
                     size: 16,
                     color:
                         flair.primary.computeLuminance() > 0.5
@@ -1497,7 +2009,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   GoopText(
                     _quickPickSlot >= 0
                         ? 'SET SLOT'
-                        : (_gallerySelect ? 'USE AS BASE' : 'PICK PRESET'),
+                        : (_gallerySelect
+                            ? 'USE AS BASE'
+                            : (_galleryPreviewOnly
+                                ? 'PREVIEW'
+                                : 'PICK PRESET')),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w900,
@@ -2037,6 +2553,12 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   void _previewGalleryEntry(_PresetEntry e) {
     if (e.mode != null) {
       _previewTheme(e.mode!);
+      // Glue the custom draft to the previewed look — EDIT OPTIONS
+      // must continue from what's on screen, not a stale palette.
+      _draft = _customDataFromFlair(
+        AppTheme.flairFor(e.mode!),
+        name: _presetName,
+      );
     } else if (e.saved != null) {
       final s = e.saved!;
       final d =
@@ -2046,6 +2568,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             name: s.name,
           );
       VisualPrefs.notifier.value = s.prefs;
+      _draft = d;
       AppTheme.saveCustomThemeData(d);
       _previewTheme(AppThemeMode.custom);
     }
@@ -2067,6 +2590,26 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     }
     if (_gallerySelect) {
       await _seedFromEntry(e);
+      return;
+    }
+    if (_galleryPreviewOnly) {
+      // Dashboard entry — stage the pick and return; APPLY on the
+      // dashboard is the commit. Sync preset identity AND the custom
+      // draft to the pick so EDIT PRESET / EDIT OPTIONS / SAVE all
+      // continue from the look now on screen, not a stale draft.
+      _previewGalleryEntry(e);
+      final s = e.saved;
+      setState(() {
+        _galleryPreviewOnly = false;
+        _stage = _StudioStage.wizard;
+        if (s != null) {
+          _editingPresetId = s.id;
+          _presetName = s.name;
+        } else {
+          _editingPresetId = null;
+          _presetName = '';
+        }
+      });
       return;
     }
     await _applyEntry(e);
@@ -2106,8 +2649,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           name: _presetName,
         );
         _previewMode = AppThemeMode.custom;
+        // Copying a premade is a new preset, not an edit of whatever
+        // saved preset was targeted before.
+        _editingPresetId = null;
         _stage = _StudioStage.wizard;
-        _hubTab = 0;
         _gallerySelect = false;
       });
     } else if (e.saved != null) {
@@ -2126,7 +2671,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             );
         _previewMode = AppThemeMode.custom;
         _stage = _StudioStage.wizard;
-        _hubTab = 0;
         _gallerySelect = false;
       });
     }
@@ -2140,8 +2684,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     setState(() {
       _draft = CustomThemeData.defaultTheme.copyWith(name: _presetName);
       _previewMode = AppThemeMode.custom;
+      _editingPresetId = null;
       _stage = _StudioStage.wizard;
-      _hubTab = 0;
       _cameFromFlow = true;
     });
     await AppTheme.saveCustomThemeData(_draft);
@@ -2345,7 +2889,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   void _openMockPreview() {
-    Haptics.selection();
+    Haptics.success();
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const _MockPreviewScreen()),
     );
@@ -2481,6 +3025,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     if (isCustom) {
       await AppTheme.saveCustomThemeData(_draft.copyWith(name: name));
     }
+    // Same hole as _applyAndReturn — a gallery-previewed saved preset
+    // leaves prefs in memory only; SAVE & APPLY must persist them.
+    await VisualPrefs.replaceAndPersist(VisualPrefs.notifier.value);
     await AppTheme.setMode(_previewMode);
     _editingPresetId = null; // clear edit mode after successful save
     _closeAfterCommit();
@@ -2491,6 +3038,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   void _onFlowBack() {
     Haptics.selection();
     switch (_stage) {
+      case _StudioStage.editor:
+        // Tabbed editor → back to the preset dashboard.
+        setState(() => _stage = _StudioStage.wizard);
       case _StudioStage.wizard:
         // Leaving the wizard cancels edit mode — the preset wasn't saved
         _editingPresetId = null;
@@ -2503,8 +3053,15 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         setState(() {
           _quickPickSlot = -1;
           _editingPresetId = null; // leaving gallery cancels any pending edit
+          // Dashboard-preview galleries step back to the dashboard;
+          // browse galleries step back to choose/source as before.
           _stage =
-              _gallerySelect ? _StudioStage.source : _StudioStage.choose;
+              _galleryPreviewOnly
+                  ? _StudioStage.wizard
+                  : (_gallerySelect
+                      ? _StudioStage.source
+                      : _StudioStage.choose);
+          _galleryPreviewOnly = false;
         });
       case _StudioStage.source:
         setState(() {

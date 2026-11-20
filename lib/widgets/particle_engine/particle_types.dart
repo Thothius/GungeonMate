@@ -25,6 +25,18 @@ enum ParticleType {
   rainbowDot, // hue-cycling dots — playful
   voidPixel, // dark purple pixels w/ cursed aura — moody
   glitchPixel, // jittery cyan/magenta shards — paradox
+  // ── Appended (v3): indices 7+ must stay at the END — persisted
+  // particleTypeIndex ints would shift if these were inserted above.
+  star, // tumbling 4-point stars — Blank bullets
+  bolt, // fast lightning shards — storm caller
+  heart, // pulsing hearts drifting up — heart containers
+  skull, // slow cursed skulls falling — lich domain
+  paw, // bullet-kin paw prints — cult of gundead
+  crescent, // ghostly moons rising — moonlit chamber
+  hexagon, // rotating crystal hexes — frost/void tech
+  smoke, // billowing soft puffs — gunpowder/toxic haze
+  scale, // tumbling dragun scales — forge/ember
+  triangle, // soft random triangles — generic shard
 }
 
 enum GlowEffect {
@@ -248,6 +260,16 @@ extension ParticleTypeX on ParticleType {
     ParticleType.rainbowDot => 'RAINBOW',
     ParticleType.voidPixel => 'VOID',
     ParticleType.glitchPixel => 'GLITCH',
+    ParticleType.star => 'STAR',
+    ParticleType.bolt => 'BOLT',
+    ParticleType.heart => 'HEART',
+    ParticleType.skull => 'SKULL',
+    ParticleType.paw => 'PAW',
+    ParticleType.crescent => 'MOON',
+    ParticleType.hexagon => 'HEX',
+    ParticleType.smoke => 'SMOKE',
+    ParticleType.scale => 'SCALE',
+    ParticleType.triangle => 'TRI',
   };
 }
 

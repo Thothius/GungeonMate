@@ -39,8 +39,10 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
   }
 
-  /// Drive the full NEW PRESET flow to the wizard: choose → name →
-  /// source → scratch. Leaves the screen on the DETAILS tab.
+  /// Drive the full NEW PRESET flow to the wizard dashboard:
+  /// choose → name → source → scratch. Leaves the screen on the
+  /// dashboard landing (menubar + hero PREVIEW + theme panel);
+  /// tap EDIT OPTIONS to reach the tabbed editor.
   Future<void> openWizardViaNewPreset(WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(home: ExperienceStudioScreen()),
@@ -245,12 +247,24 @@ void main() {
   });
 
   group('Flow — NEW PRESET wizard', () {
-    testWidgets('name → source → scratch lands on DETAILS tab', (
+    testWidgets('name → source → scratch lands on dashboard', (
       tester,
     ) async {
       await openWizardViaNewPreset(tester);
 
+      // Dashboard landing — menubar title, hero PREVIEW, theme panel,
+      // preset actions. The tab strip lives one tap deeper.
       expect(find.text('PRESET: Test Look'), findsOneWidget);
+      expect(find.text('PREVIEW'), findsWidgets);
+      expect(find.text('EDIT OPTIONS'), findsOneWidget);
+      expect(find.text('NEW PRESET'), findsOneWidget);
+      expect(find.text('DETAILS'), findsNothing);
+      expect(find.text('BACK'), findsOneWidget);
+      expect(find.text('APPLY'), findsOneWidget);
+
+      // EDIT OPTIONS opens the tabbed editor.
+      await tester.tap(find.text('EDIT OPTIONS'));
+      await tester.pump(const Duration(milliseconds: 300));
       for (final tab in [
         'DETAILS',
         'COLORS & BG',
@@ -262,14 +276,14 @@ void main() {
         expect(find.text(tab), findsWidgets, reason: 'missing tab $tab');
       }
       expect(find.text('FULLSCREEN PREVIEW'), findsOneWidget);
-      expect(find.text('BACK'), findsOneWidget);
-      expect(find.text('APPLY'), findsOneWidget);
     });
 
     testWidgets('DETAILS summary shows picks + preview opens mock', (
       tester,
     ) async {
       await openWizardViaNewPreset(tester);
+      await tester.tap(find.text('EDIT OPTIONS'));
+      await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.text('PARTICLES'), findsWidgets);
       await tester.ensureVisible(find.text('FULLSCREEN PREVIEW'));
@@ -345,15 +359,18 @@ void main() {
       await tester.tap(find.text('USE AS BASE'));
       await tester.pump(const Duration(milliseconds: 500));
 
-      // Wizard opens on DETAILS with the new name + custom preview.
+      // Wizard dashboard opens with the new name + custom preview.
       expect(find.text('PRESET: Copy Cat'), findsOneWidget);
-      expect(find.text('DETAILS'), findsWidgets);
+      expect(find.text('EDIT OPTIONS'), findsOneWidget);
       expect(
         VisualPrefs.notifier.value.particlePreset,
         ParticlePreset.unicornSparkles,
       );
 
-      // SAVE tab persists the copied look under the new name.
+      // EDIT OPTIONS → SAVE tab persists the copied look.
+      await tester.tap(find.text('EDIT OPTIONS'));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('DETAILS'), findsWidgets);
       await tester.tap(find.text('SAVE'));
       await tester.pump(const Duration(milliseconds: 300));
       await tester.tap(find.text('SAVE & APPLY'));
@@ -371,6 +388,8 @@ void main() {
     ) async {
       final before = AppTheme.mode;
       await openWizardViaNewPreset(tester);
+      await tester.tap(find.text('EDIT OPTIONS'));
+      await tester.pump(const Duration(milliseconds: 300));
       await tester.tap(find.text('SAVE'));
       await tester.pump(const Duration(milliseconds: 300));
 
@@ -696,12 +715,23 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       expect(VisualPrefs.notifier.value.font, isNot(originalFont));
 
-      // System back → PopScope → _onFlowBack → _onBack (deep link,
-      // didn't come from flow) → restore + pop.
+      // System back → PopScope → _onFlowBack → editor steps back to
+      // the dashboard first (stage back, no pop), second back runs
+      // _onBack (deep link, didn't come from flow) → restore + pop.
       final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
       await nav.maybePop();
       await tester.pump(const Duration(milliseconds: 400));
-      await tester.pumpAndSettle();
+      // Bounded pumps — the dashboard hero pulse is an infinite
+      // animation, so pumpAndSettle would never settle.
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byType(ExperienceStudioScreen), findsOneWidget);
+
+      await nav.maybePop();
+      // _onBack awaits persistence then pops post-frame — give the
+      // async chain several frames (bounded: hero pulse never settles).
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 300));
+      }
 
       expect(VisualPrefs.notifier.value.font, originalFont);
       expect(find.text('open'), findsOneWidget);
@@ -736,6 +766,11 @@ void main() {
       );
 
       final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
+      // First back: editor → dashboard. Second back: dashboard →
+      // restore + pop. Bounded pumps — hero pulse never settles.
+      await nav.maybePop();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 600));
       await nav.maybePop();
       await tester.pump(const Duration(milliseconds: 400));
       await tester.pump(const Duration(milliseconds: 300));
@@ -846,6 +881,79 @@ void main() {
       expect(CustomThemeStore.themes, hasLength(1));
       expect(CustomThemeStore.themes.single.name, 'Good');
       CustomThemeStore.notifier.value = [];
+    });
+  });
+
+  group('Dashboard polish', () {
+    testWidgets('SAVE AS NEW stores a preset without closing', (
+      tester,
+    ) async {
+      await openWizardViaNewPreset(tester);
+
+      await tester.tap(find.text('SAVE AS NEW'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.enterText(find.byType(TextField), 'Dup Look');
+      await tester.tap(find.text('NEXT'));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(CustomThemeStore.themes, hasLength(1));
+      expect(CustomThemeStore.themes.single.name, 'Dup Look');
+      // Still on the dashboard — save-as-new doesn't apply or close.
+      expect(find.text('EDIT OPTIONS'), findsOneWidget);
+      expect(find.text('SAVE AS NEW'), findsOneWidget);
+    });
+
+    testWidgets('menubar PRESETS previews the pick on the dashboard', (
+      tester,
+    ) async {
+      final before = AppTheme.mode;
+      await openWizardViaNewPreset(tester);
+
+      await tester.tap(find.text('PRESETS'));
+      await tester.pump(const Duration(milliseconds: 400));
+      // Preview-mode gallery — the pick bar offers PREVIEW, not
+      // PICK PRESET (no apply+close from the dashboard).
+      expect(find.text('PICK PRESET'), findsNothing);
+      expect(find.text('PREVIEW'), findsWidgets);
+
+      await tester.tap(find.text('PREVIEW').last);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Back on the dashboard with the pick staged — UNSAVED badge,
+      // applied mode untouched until APPLY.
+      expect(find.text('EDIT OPTIONS'), findsOneWidget);
+      expect(find.text('UNSAVED'), findsOneWidget);
+      expect(AppTheme.mode, before);
+    });
+
+    testWidgets('EDIT PRESET shows on dashboard after gallery edit', (
+      tester,
+    ) async {
+      CustomThemeStore.notifier.value = [
+        SavedCustomTheme(
+          id: 'match1',
+          name: 'Test Look',
+          splashSlug: 'custom',
+          baseMode: AppThemeMode.custom,
+          prefs: const VisualPrefs(),
+          customData: CustomThemeData.defaultTheme.copyWith(name: 'Test Look'),
+        ),
+      ];
+
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('BROWSE PRESETS'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Saved row's edit pencil → wizard dashboard in edit mode.
+      await tester.tap(find.byIcon(Icons.edit_outlined));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('EDITING: Test Look'), findsOneWidget);
+      expect(find.text('EDIT PRESET'), findsOneWidget);
+      expect(find.text('update "Test Look" in your gallery'), findsOneWidget);
     });
   });
 

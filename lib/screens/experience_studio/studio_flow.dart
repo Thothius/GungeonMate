@@ -7,8 +7,9 @@ part of '../experience_studio_screen.dart';
 // presentational pieces.
 // =============================================================================
 
-/// Top-level flow stages. [wizard] is the tabbed editor (the old hub).
-enum _StudioStage { choose, gallery, source, wizard }
+/// Top-level flow stages. [wizard] is the preset dashboard landing;
+/// [editor] is the tabbed option editor (the old hub) opened from it.
+enum _StudioStage { choose, gallery, source, wizard, editor }
 
 /// One card in the preset gallery — a premade [AppThemeMode] or a
 /// user-saved [SavedCustomTheme].
@@ -106,9 +107,16 @@ class _FlowCard extends StatelessWidget {
   }
 }
 
-/// Fullscreen preview — 4 swipeable pages using real app widgets with
-/// a mock RunProvider. Pages: active run, browse, item detail, quick-add.
-/// All rendered with the live draft theme via AppTheme/VisualPrefs.
+/// Fullscreen preview — a living demo session, not static page mocks.
+/// Hosts the REAL [ActiveRunScreen] on an isolated mock [RunProvider]
+/// seeded with a random gungeoneer + loot every open (and on RE-ROLL).
+/// Everything is tappable: inventory tiles push real detail screens,
+/// the FAB opens the real quick-add sheet, the run-tools menu works,
+/// dice roll animates — all against the mock run, never the real one.
+/// BACK pops one level at a time (system back, in-app back buttons, or
+/// the dock's RUN tab) before closing the preview. The BROWSE dock tab
+/// pushes the real [BrowseScreen]. All rendered with the live draft
+/// theme via AppTheme/VisualPrefs.
 class _MockPreviewScreen extends StatefulWidget {
   const _MockPreviewScreen();
 
@@ -117,43 +125,83 @@ class _MockPreviewScreen extends StatefulWidget {
 }
 
 class _MockPreviewScreenState extends State<_MockPreviewScreen> {
-  late final RunProvider _previewProvider;
+  late RunProvider _previewProvider;
+  final math.Random _rng = math.Random();
+  final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
   bool _loaded = false;
+  bool _hasProvider = false;
+  int _sessionToken = 0;
+  // Last provider disposed via the deferred reroll path — guards
+  // against double-dispose when a reroll is interrupted mid-load.
+  RunProvider? _disposedProvider;
+
+  void _disposeProvider(RunProvider p) {
+    if (identical(p, _disposedProvider)) return;
+    _disposedProvider = p;
+    p.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    _previewProvider = RunProvider();
-    _loadPreviewData();
+    _startSession();
   }
 
-  Future<void> _loadPreviewData() async {
-    await _previewProvider.loadData();
-    if (!mounted) return;
-    // Start a fake run with sample data for realistic previews
-    final chars = _previewProvider.allGungeoneers;
+  List<T> _sample<T>(List<T> src, int n) {
+    if (src.length <= n) return List.of(src);
+    final copy = List.of(src)..shuffle(_rng);
+    return copy.take(n).toList();
+  }
+
+  Future<void> _startSession() async {
+    final token = ++_sessionToken;
+    final provider = RunProvider()..persistenceEnabled = false;
+    await provider.loadData();
+    if (!mounted || token != _sessionToken) {
+      provider.dispose();
+      return;
+    }
+    final chars = provider.allGungeoneers;
     if (chars.isNotEmpty) {
-      _previewProvider.startNewRun(chars.first);
-      // Add some sample guns and items for a populated look
-      final guns = _previewProvider.allGuns;
-      final items = _previewProvider.allItems;
-      // Add a few iconic guns
-      for (final name in ['Gunderfury', 'Evolver', 'AKEY-47']) {
-        final gun = guns.where((g) => g.name == name).firstOrNull;
-        if (gun != null) _previewProvider.addGun(gun);
+      // Random gungeoneer each session — different starter loadout too.
+      provider.startNewRun(chars[_rng.nextInt(chars.length)]);
+      // Pad the run with a random spread of gear so the active-run
+      // view reads as mid-run loot, not a bare starter inventory.
+      for (final g in _sample(provider.allGuns, 6)) {
+        provider.addGun(g);
       }
-      // Add a few items
-      for (final name in ['Platinum Bullets', 'Iron Coin', 'Spice']) {
-        final item = items.where((i) => i.name == name).firstOrNull;
-        if (item != null) _previewProvider.addItem(item);
+      for (final i in _sample(provider.allItems, 6)) {
+        provider.addItem(i);
       }
     }
+    _previewProvider = provider;
+    _hasProvider = true;
     setState(() => _loaded = true);
+  }
+
+  /// Re-roll the demo run — new character + loot, nav back to RUN.
+  void _reroll() {
+    if (!_hasProvider) return;
+    Haptics.selection();
+    _navKey.currentState?.popUntil((r) => r.isFirst);
+    final old = _previewProvider;
+    setState(() => _loaded = false);
+    // Old routes unmount this frame; dispose once they've let go.
+    if (!identical(old, _disposedProvider)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _disposeProvider(old));
+    }
+    _startSession();
+  }
+
+  void _openBrowse() {
+    _navKey.currentState?.push(
+      fastRoute(const BrowseScreen(showBackButton: true)),
+    );
   }
 
   @override
   void dispose() {
-    _previewProvider.dispose();
+    if (_hasProvider) _disposeProvider(_previewProvider);
     super.dispose();
   }
 
@@ -161,7 +209,15 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
   Widget build(BuildContext context) {
     final mode = AppTheme.displayedMode;
     final flair = AppTheme.displayedFlair;
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final nav = _navKey.currentState;
+        if (nav != null && await nav.maybePop()) return;
+        if (context.mounted) Navigator.of(context).pop();
+      },
+      child: Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
@@ -309,6 +365,29 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                       const Spacer(),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
+                        onTap: _reroll,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.07),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.casino_rounded,
+                            size: 15,
+                            color: flair.primary.withValues(alpha: 0.9),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           Haptics.selection();
                           Navigator.of(context).pop();
@@ -345,13 +424,14 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                       _loaded
                           ? ChangeNotifierProvider<RunProvider>.value(
                             value: _previewProvider,
-                            child: PageView(
-                              children: [
-                                _PreviewActiveRunPage(),
-                                _PreviewBrowsePage(),
-                                _PreviewItemDetailPage(),
-                                _PreviewQuickAddPage(),
-                              ],
+                            child: Navigator(
+                              key: _navKey,
+                              onGenerateRoute:
+                                  (_) => fastRoute(
+                                    ActiveRunScreen(
+                                      onRequestBrowse: _openBrowse,
+                                    ),
+                                  ),
                             ),
                           )
                           : Center(
@@ -380,286 +460,77 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                             ),
                           ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 18),
-                  child: GoopText(
-                    'swipe — run · browse · detail · quick-add',
-                    style: TextStyle(
-                      fontSize: 9.5,
-                      letterSpacing: 0.8,
-                      color: Colors.white.withValues(alpha: 0.4),
-                    ),
-                  ),
-                ),
+                _PreviewDock(navKey: _navKey, onBrowse: _openBrowse),
+                const SizedBox(height: 8),
               ],
             ),
           ),
         ],
       ),
+      ),
     );
   }
 }
 
-/// Page 1 — Active run simulation using real PlayerPage widget.
-class _PreviewActiveRunPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const PlayerPage(slot: PlayerSlot.main);
-  }
-}
+/// Slim bottom dock mirroring the app's tab bar — top-level
+/// look-around for the demo session. RUN pops back to the active-run
+/// home; BROWSE pushes the real browse screen (its own back button
+/// returns to the run).
+class _PreviewDock extends StatelessWidget {
+  const _PreviewDock({required this.navKey, required this.onBrowse});
+  final GlobalKey<NavigatorState> navKey;
+  final VoidCallback onBrowse;
 
-/// Page 2 — Browse view using real BrowseScreen widget.
-class _PreviewBrowsePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const BrowseScreen(
-      targetSlot: PlayerSlot.main,
-      isVisible: true,
-      showBackButton: false,
-    );
-  }
-}
-
-/// Page 3 — Item detail view using real ItemDetailScreen widget.
-class _PreviewItemDetailPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<RunProvider>();
-    // Pick a random gun or item for the detail preview
-    final guns = provider.allGuns;
-    final items = provider.allItems;
-    Gun? gun;
-    Item? item;
-    if (guns.isNotEmpty) {
-      // Prefer a gun with synergies for a richer preview
-      gun = guns.firstWhere(
-        (g) => g.name == 'Gunderfury',
-        orElse: () => guns.first,
-      );
-    } else if (items.isNotEmpty) {
-      item = items.first;
-    }
-    if (gun == null && item == null) {
-      return const Center(child: GoopText('No data loaded'));
-    }
-    return ItemDetailScreen(
-      gun: gun,
-      item: item,
-      ownerSlot: PlayerSlot.main,
-      lebView: false,
-    );
-  }
-}
-
-/// Page 4 — Quick-add menu preview. Shows a simplified version of the
-/// quick-add bottom sheet UI for theme preview purposes.
-class _PreviewQuickAddPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<RunProvider>();
     final flair = AppTheme.displayedFlair;
-    final guns = provider.allGuns.take(8).toList();
-    final items = provider.allItems.take(8).toList();
-
-    return Column(
-      children: [
-        // Header
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-          decoration: BoxDecoration(
-            color: flair.card.withValues(alpha: 0.95),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            border: Border.all(
-              color: flair.primary.withValues(alpha: 0.2),
-              width: 1.5,
+    Widget tab(String label, IconData icon, VoidCallback onTap) {
+      return Expanded(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Haptics.selection();
+            onTap();
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 9),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
             ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: GoopText(
-                  'QUICK ADD',
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 15, color: flair.primary.withValues(alpha: 0.9)),
+                const SizedBox(width: 6),
+                GoopText(
+                  label,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 10,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
-                    color: flair.primary,
+                    letterSpacing: 1.1,
+                    color: Colors.white.withValues(alpha: 0.75),
                   ),
                 ),
-              ),
-              Icon(
-                Icons.close_rounded,
-                size: 20,
-                color: Colors.white.withValues(alpha: 0.5),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-        // Search bar mock
-        Container(
-          margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.search_rounded,
-                size: 18,
-                color: Colors.white.withValues(alpha: 0.4),
-              ),
-              const SizedBox(width: 8),
-              GoopText(
-                'Search guns & items...',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.4),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Sample list
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            children: [
-              for (final gun in guns)
-                _PreviewQuickAddRow(
-                  name: gun.name,
-                  quality: gun.quality,
-                  isGun: true,
-                  iconPath: gun.icon,
-                ),
-              for (final item in items)
-                _PreviewQuickAddRow(
-                  name: item.name,
-                  quality: item.quality,
-                  isGun: false,
-                  iconPath: item.icon,
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
+      );
+    }
 
-class _PreviewQuickAddRow extends StatelessWidget {
-  final String name;
-  final String quality;
-  final bool isGun;
-  final String iconPath;
-
-  const _PreviewQuickAddRow({
-    required this.name,
-    required this.quality,
-    required this.isGun,
-    required this.iconPath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final flair = AppTheme.displayedFlair;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Row(
         children: [
-          // Icon
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: flair.card.withValues(alpha: 0.8),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-            ),
-            child: iconPath.isNotEmpty
-                ? Image.asset(
-                    iconPath,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) => Icon(
-                      isGun ? Icons.gps_fixed : Icons.inventory_2,
-                      size: 20,
-                      color: flair.primary,
-                    ),
-                  )
-                : Icon(
-                    isGun ? Icons.gps_fixed : Icons.inventory_2,
-                    size: 20,
-                    color: flair.primary,
-                  ),
-          ),
-          const SizedBox(width: 12),
-          // Name + type
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GoopText(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-                GoopText(
-                  isGun ? 'GUN' : 'ITEM',
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.5),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Quality badge
-          if (quality.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: _qualityColor(quality).withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(
-                  color: _qualityColor(quality).withValues(alpha: 0.4),
-                ),
-              ),
-              child: GoopText(
-                quality,
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  color: _qualityColor(quality),
-                ),
-              ),
-            ),
+          tab('RUN', Icons.directions_run_rounded, () {
+            navKey.currentState?.popUntil((r) => r.isFirst);
+          }),
+          const SizedBox(width: 10),
+          tab('BROWSE', Icons.inventory_2_outlined, onBrowse),
         ],
       ),
     );
-  }
-
-  Color _qualityColor(String q) {
-    switch (q.toUpperCase()) {
-      case 'S':
-        return const Color(0xFFFFD700);
-      case 'A':
-        return Colors.redAccent;
-      case 'B':
-        return Colors.greenAccent;
-      case 'C':
-        return Colors.blueAccent;
-      case 'D':
-        return Colors.brown;
-      default:
-        return Colors.white38;
-    }
   }
 }
