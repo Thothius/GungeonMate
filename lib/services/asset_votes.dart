@@ -41,7 +41,9 @@ class AssetVotes extends ChangeNotifier {
   static List<AssetEntry> catalog() {
     final entries = <AssetEntry>[];
 
-    for (final f in AppFont.values) {
+    // Only fonts with a bundled asset — deprecated enum members kept
+    // for index-stable prefs have no TTF on disk anymore.
+    for (final f in AppFont.values.where(AppFontLabel.isOffered)) {
       entries.add(
         AssetEntry(
           id: 'font:${f.name}',
