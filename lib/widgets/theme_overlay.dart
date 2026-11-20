@@ -77,6 +77,10 @@ class _ThemeOverlayState extends State<ThemeOverlay>
     // Standard low-pass filter to smooth out gyroscope sways
     _sensorSub = accelerometerEventStream().listen(
       (event) {
+        // NaN.clamp() returns NaN — one bad sensor event would poison
+        // the smoothed tilt and make every tilt-driven particle/shell
+        // fail its boundary checks and vanish.
+        if (!event.x.isFinite || !event.y.isFinite) return;
         final tx = -event.x.clamp(-10.0, 10.0);
         final ty = event.y.clamp(-10.0, 10.0);
         _smoothedTilt = Offset(
@@ -278,11 +282,12 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // its fixed base color and skip all theme layers below.
                   Positioned.fill(
                     child: Container(
-                      color: menuVisible
-                          ? const Color(0xFF0A0710)
-                          : customBgMode == CustomThemeData.bgNone
-                          ? Colors.black
-                          : f.scaffold,
+                      color:
+                          menuVisible
+                              ? const Color(0xFF0A0710)
+                              : customBgMode == CustomThemeData.bgNone
+                              ? Colors.black
+                              : f.scaffold,
                     ),
                   ),
 
@@ -538,8 +543,7 @@ Widget? buildBackdropParticleField(
   // preset picks reset particlesUserOff, so themed looks still auto-on).
   final particlesOn =
       !reduceMotion &&
-      (prefs.particlesEnabled ||
-          (themeAutoOn && !prefs.particlesUserOff));
+      (prefs.particlesEnabled || (themeAutoOn && !prefs.particlesUserOff));
   if (!particlesOn || menuVisible) return null;
   // Sprite mode — custom picked sprite (any bundled gun/item asset)
   // wins over the curated item-icon list, same gate + knobs.

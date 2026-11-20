@@ -33,9 +33,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: SizedBox.expand(
-                child: LiquidTankField(kind: kind),
-              ),
+              body: SizedBox.expand(child: LiquidTankField(kind: kind)),
             ),
           ),
         );
@@ -87,6 +85,28 @@ void main() {
       await tester.pump();
       await tester.pumpWidget(const MaterialApp(home: Scaffold()));
       await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('scene time stays monotonic across the 12s wave cycle', (
+      tester,
+    ) async {
+      // Regression: time was `_wave.value * 12` — a sawtooth that made
+      // the surface, fill and every bubble teleport on each wrap.
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: LiquidTankField(kind: LiquidKind.blood)),
+        ),
+      );
+      double sceneTime() =>
+          (tester.state(find.byType(LiquidTankField)) as dynamic).debugTime
+              as double;
+      for (var i = 0; i < 260; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      // 260 × 50ms ticks ≈ 13s of accumulated time — past one full
+      // wave cycle. The old sawtooth would read ~1s here.
+      expect(sceneTime(), greaterThan(12.0));
       expect(tester.takeException(), isNull);
     });
   });

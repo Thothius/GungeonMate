@@ -45,16 +45,20 @@ class _LiquidTankFieldState extends State<LiquidTankField>
   final List<_Shell> _shells = [];
   final math.Random _rng = math.Random(0xB1005);
 
+  /// Monotonic scene time, accumulated from ticker dt — NOT
+  /// `_wave.value * duration`, which sawtooths every 12s and made the
+  /// surface, fill level and every bubble teleport on the wrap.
+  double _time = 0.0;
+
   static const _waveSeconds = 12;
 
   @override
   void initState() {
     super.initState();
-    _wave =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(seconds: _waveSeconds),
-        )..addListener(_onTick);
+    _wave = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: _waveSeconds),
+    )..addListener(_onTick);
     _fill = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 7),
@@ -88,12 +92,14 @@ class _LiquidTankFieldState extends State<LiquidTankField>
   void _onTilt() => _tilt = widget.tilt?.value ?? Offset.zero;
 
   void _onTick() {
-    if (_still || widget.kind != LiquidKind.shells) return;
+    if (_still) return;
     final dt =
         (_wave.lastElapsedDuration ?? const Duration(milliseconds: 16))
             .inMilliseconds /
         1000.0;
-    _integrateShells(dt.clamp(0.001, 0.05));
+    final clamped = dt.clamp(0.001, 0.05);
+    _time += clamped;
+    if (widget.kind == LiquidKind.shells) _integrateShells(clamped);
   }
 
   void _syncMotion() {
@@ -114,6 +120,10 @@ class _LiquidTankFieldState extends State<LiquidTankField>
     _fill.dispose();
     super.dispose();
   }
+
+  /// Test-only: current accumulated scene time.
+  @visibleForTesting
+  double get debugTime => _time;
 
   void _ensureShells(Size size) {
     if (_shells.isNotEmpty || size.isEmpty) return;
@@ -141,10 +151,7 @@ class _LiquidTankFieldState extends State<LiquidTankField>
     final ay = _tilt.dy * 52.0;
     final damp = math.exp(-1.6 * dt);
     for (final s in _shells) {
-      s.vel = Offset(
-        (s.vel.dx + ax * dt) * damp,
-        (s.vel.dy + ay * dt) * damp,
-      );
+      s.vel = Offset((s.vel.dx + ax * dt) * damp, (s.vel.dy + ay * dt) * damp);
       s.pos += s.vel * dt;
       // Soft walls — casings tumble to a stop against the edges.
       final r = s.radius;
@@ -178,7 +185,7 @@ class _LiquidTankFieldState extends State<LiquidTankField>
           return AnimatedBuilder(
             animation: Listenable.merge([_wave, _fill]),
             builder: (context, _) {
-              final t = _still ? 41.0 : _wave.value * _waveSeconds;
+              final t = _still ? 41.0 : _time;
               final f = _still ? 1.0 : _fill.value;
               return CustomPaint(
                 size: size,
@@ -337,9 +344,7 @@ class _LiquidPainter extends CustomPainter {
               c.bubble.withValues(alpha: 0.5 * pop),
               c.bubble.withValues(alpha: 0.06 * pop),
             ],
-          ).createShader(
-            Rect.fromCircle(center: Offset(x, y), radius: r),
-          ),
+          ).createShader(Rect.fromCircle(center: Offset(x, y), radius: r)),
       );
     }
 
@@ -354,11 +359,12 @@ class _LiquidPainter extends CustomPainter {
         surf.lineTo(x, y);
       }
     }
-    final surfPaint = Paint()
-      ..color = c.surface.withValues(alpha: 0.55)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6
-      ..strokeCap = StrokeCap.round;
+    final surfPaint =
+        Paint()
+          ..color = c.surface.withValues(alpha: 0.55)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.6
+          ..strokeCap = StrokeCap.round;
     canvas.drawPath(surf, surfPaint);
     canvas.drawPath(
       surf,
