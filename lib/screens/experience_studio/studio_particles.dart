@@ -64,11 +64,12 @@ class _ParticlesStep extends StatelessWidget {
                       ? Image.asset(
                         prefs.particleSpritePath,
                         fit: BoxFit.contain,
-                        errorBuilder: (_, _, _) => Icon(
-                          Icons.broken_image_outlined,
-                          size: 18,
-                          color: Colors.white.withValues(alpha: 0.4),
-                        ),
+                        errorBuilder:
+                            (_, _, _) => Icon(
+                              Icons.broken_image_outlined,
+                              size: 18,
+                              color: Colors.white.withValues(alpha: 0.4),
+                            ),
                       )
                       : Icon(
                         Icons.image_search_rounded,
@@ -97,10 +98,10 @@ class _ParticlesStep extends StatelessWidget {
                   GoopText(
                     hasSprite
                         ? prefs.particleSpritePath
-                              .split('/')
-                              .last
-                              .replaceAll('.webp', '')
-                              .replaceAll('_', ' ')
+                            .split('/')
+                            .last
+                            .replaceAll('.webp', '')
+                            .replaceAll('_', ' ')
                         : 'search all 500+ gun & item sprites',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -317,8 +318,7 @@ class _ParticlesStep extends StatelessWidget {
                     min: 0.3,
                     max: 2.0,
                     display: '${(prefs.particleSizeScale * 100).round()}%',
-                    onChanged: (v) =>
-                        VisualPrefs.setParticleSizeScale(v),
+                    onChanged: (v) => VisualPrefs.setParticleSizeScale(v),
                   ),
                   const SizedBox(height: 4),
                   _MiniSlider(
@@ -327,8 +327,7 @@ class _ParticlesStep extends StatelessWidget {
                     min: 0.0,
                     max: 1.0,
                     display: '${(prefs.particleOpacity * 100).round()}%',
-                    onChanged: (v) =>
-                        VisualPrefs.setParticleOpacity(v),
+                    onChanged: (v) => VisualPrefs.setParticleOpacity(v),
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -641,25 +640,24 @@ class _ParticlePreview extends StatelessWidget {
 }
 
 /// Type tile — fixed-size cell with a painted shape glyph + label,
-  /// ITEM ICONS - OFF tile + the 12 Gungeon item sprites. Picking one
-  /// swaps the whole particle field for floating game icons.
-  Widget _itemIconGrid(VisualPrefs prefs) {
-    const cols = 4;
-    final items = kItemIconParticles;
-    final total = items.length + 1; // + OFF
-    return Column(
-      children: [
-        for (var r = 0; r * cols < total; r++)
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: (r + 1) * cols < total ? 8 : 0,
-            ),
-            child: Row(
-              children: [
-                for (var c = 0; c < cols; c++) ...[
-                  Expanded(
-                    child: r * cols + c < total
-                        ? _ItemIconTile(
+/// ITEM ICONS - OFF tile + the 12 Gungeon item sprites. Picking one
+/// swaps the whole particle field for floating game icons.
+Widget _itemIconGrid(VisualPrefs prefs) {
+  const cols = 4;
+  final items = kItemIconParticles;
+  final total = items.length + 1; // + OFF
+  return Column(
+    children: [
+      for (var r = 0; r * cols < total; r++)
+        Padding(
+          padding: EdgeInsets.only(bottom: (r + 1) * cols < total ? 8 : 0),
+          child: Row(
+            children: [
+              for (var c = 0; c < cols; c++) ...[
+                Expanded(
+                  child:
+                      r * cols + c < total
+                          ? _ItemIconTile(
                             index: r * cols + c - 1, // -1 = OFF
                             // Sprite path wins over item icons —
                             // don't highlight a stale icon pick.
@@ -667,9 +665,7 @@ class _ParticlePreview extends StatelessWidget {
                                 prefs.particleItemIcon == r * cols + c - 1 &&
                                 prefs.particleSpritePath.isEmpty,
                             onTap: () {
-                              VisualPrefs.setParticleItemIcon(
-                                r * cols + c - 1,
-                              );
+                              VisualPrefs.setParticleItemIcon(r * cols + c - 1);
                               // Curated icons and custom sprites are
                               // mutually exclusive — picking here
                               // clears any custom sprite path.
@@ -677,16 +673,16 @@ class _ParticlePreview extends StatelessWidget {
                               Haptics.selection();
                             },
                           )
-                        : const SizedBox(),
-                  ),
-                  if (c < cols - 1) const SizedBox(width: 8),
-                ],
+                          : const SizedBox(),
+                ),
+                if (c < cols - 1) const SizedBox(width: 8),
               ],
-            ),
+            ],
           ),
-      ],
-    );
-  }
+        ),
+    ],
+  );
+}
 
 /// used by the uniform TYPE grid.
 /// One ITEM ICONS cell - OFF glyph or the item sprite + label.
@@ -732,16 +728,17 @@ class _ItemIconTile extends StatelessWidget {
                   index < 0
                       ? Icon(Icons.block_rounded, size: 20, color: c)
                       : Image.asset(
-                          kItemIconParticles[index].$2,
-                          width: 22,
-                          height: 22,
-                          cacheWidth: 96,
-                          errorBuilder: (_, _, _) => Icon(
-                            Icons.broken_image_outlined,
-                            size: 18,
-                            color: c,
-                          ),
-                        ),
+                        kItemIconParticles[index].$2,
+                        width: 22,
+                        height: 22,
+                        cacheWidth: 96,
+                        errorBuilder:
+                            (_, _, _) => Icon(
+                              Icons.broken_image_outlined,
+                              size: 18,
+                              color: c,
+                            ),
+                      ),
             ),
             const SizedBox(height: 4),
             GoopText(
@@ -937,9 +934,7 @@ class _TypeGlyphPainter extends CustomPainter {
         canvas.drawPath(
           Path()
             ..addOval(Rect.fromCircle(center: c, radius: 8))
-            ..addOval(
-              Rect.fromCircle(center: const Offset(12, 6.5), radius: 7),
-            )
+            ..addOval(Rect.fromCircle(center: const Offset(12, 6.5), radius: 7))
             ..fillType = PathFillType.evenOdd,
           p,
         );
@@ -1003,9 +998,10 @@ class _LookTile extends StatelessWidget {
     final c = active ? flair.primary : Colors.white.withValues(alpha: 0.55);
     final palette =
         kGlobalParticlePalettes[look.schemaIndex.clamp(
-          0,
-          kGlobalParticlePalettes.length - 1,
-        )].colors;
+              0,
+              kGlobalParticlePalettes.length - 1,
+            )]
+            .colors;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
@@ -1138,12 +1134,21 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
               .map((e) => (e as Map)['name'] as String? ?? '')
               .where((n) => n.isNotEmpty)
               .toList();
-      final entries = <({String name, String path, bool isGun})>[
+      var entries = <({String name, String path, bool isGun})>[
         for (final n in namesOf(gunsRaw))
           (name: n, path: localGunIcon(n), isGun: true),
         for (final n in namesOf(itemsRaw))
           (name: n, path: localItemIcon(n), isGun: false),
       ]..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      // Slug-derived paths can miss the actual bundled file — a pick
+      // that 404s renders zero particles with no feedback. Filter
+      // against the asset manifest so every tile is guaranteed live.
+      // Manifest failure stays permissive (tests / odd bundles).
+      try {
+        final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+        final valid = manifest.listAssets().toSet();
+        entries = entries.where((e) => valid.contains(e.path)).toList();
+      } catch (_) {}
       _spriteCache = entries;
       if (mounted) {
         setState(() {
@@ -1327,15 +1332,16 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
                                   height: 34,
                                   fit: BoxFit.contain,
                                   cacheWidth: 128,
-                                  errorBuilder: (_, _, _) => Icon(
-                                    s.isGun
-                                        ? Icons.gps_fixed_rounded
-                                        : Icons.category_rounded,
-                                    size: 20,
-                                    color: Colors.white.withValues(
-                                      alpha: 0.3,
-                                    ),
-                                  ),
+                                  errorBuilder:
+                                      (_, _, _) => Icon(
+                                        s.isGun
+                                            ? Icons.gps_fixed_rounded
+                                            : Icons.category_rounded,
+                                        size: 20,
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
+                                      ),
                                 ),
                                 const SizedBox(height: 3),
                                 Padding(

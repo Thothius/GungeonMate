@@ -13,7 +13,8 @@ import '../widgets/particle_engine.dart'
         GlowEffect,
         ParticleColorSchema,
         ParticleSpeed,
-        ParticleType;
+        ParticleType,
+        kItemIconParticles;
 
 /// Eight lore-named palettes. Each is a hand-tuned palette + a
 /// [ThemeFlair] record carrying extra styling knobs (numeric typography,

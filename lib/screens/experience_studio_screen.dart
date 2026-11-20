@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -147,6 +147,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   // vs cards (fullscreen swipe). Persisted; list is the default since
   // the swiper doesn't scale past a handful of presets.
   bool _galleryListView = true;
+
   /// 3 quick-slot favorites above the preset doors - encoded refs
   /// `m:<AppThemeMode.name>` / `s:<SavedCustomTheme.id>`. Tap applies
   /// instantly; tap empty assigns via the gallery; long-press removes.
@@ -157,15 +158,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   @override
   void initState() {
     super.initState();
-    _stage =
-        widget.initialTab <= 0 ? _StudioStage.choose : _StudioStage.editor;
+    _stage = widget.initialTab <= 0 ? _StudioStage.choose : _StudioStage.editor;
     _hubTab = widget.initialTab.clamp(0, _hubTabs.length - 1);
     // Remember the last-used editor tab across sessions (Q12) —
     // deep links (initialTab>0) keep their explicit target instead.
     if (widget.initialTab <= 0) {
       SharedPreferences.getInstance().then((p) {
         final t = p.getInt('studio.lastTab');
-        if (t != null && mounted) setState(() => _hubTab = t.clamp(0, _hubTabs.length - 1));
+        if (t != null && mounted) {
+          setState(() => _hubTab = t.clamp(0, _hubTabs.length - 1));
+        }
       });
     }
     _previewMode = AppTheme.mode;
@@ -354,24 +356,24 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           if (!didPop) _onFlowBack();
         },
         child: Scaffold(
-        backgroundColor: Colors.transparent,
-        // Back moved to the bottom thumb zone (task 17 sweep).
-        body: SafeArea(
-          child: Stack(
-            children: [
-              // ── Theme background — skins with the PREVIEW theme, not the
-              // actual app theme, so the whole screen updates on tap ──
-              _buildPreviewBackground(),
-              switch (_stage) {
-                _StudioStage.choose => _buildChoose(),
-                _StudioStage.gallery => _buildGallery(),
-                _StudioStage.source => _buildSource(),
-                _StudioStage.wizard => _buildHub(),
-                _StudioStage.editor => _buildEditor(),
-              },
-            ],
+          backgroundColor: Colors.transparent,
+          // Back moved to the bottom thumb zone (task 17 sweep).
+          body: SafeArea(
+            child: Stack(
+              children: [
+                // ── Theme background — skins with the PREVIEW theme, not the
+                // actual app theme, so the whole screen updates on tap ──
+                _buildPreviewBackground(),
+                switch (_stage) {
+                  _StudioStage.choose => _buildChoose(),
+                  _StudioStage.gallery => _buildGallery(),
+                  _StudioStage.source => _buildSource(),
+                  _StudioStage.wizard => _buildHub(),
+                  _StudioStage.editor => _buildEditor(),
+                },
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );
@@ -390,9 +392,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                 CustomThemeData.bgWallpaper)
             : CustomThemeData.bgWallpaper;
     if (bgMode == CustomThemeData.bgNone) {
-      return Positioned.fill(
-        child: Container(color: Colors.black),
-      );
+      return Positioned.fill(child: Container(color: Colors.black));
     }
     if (bgMode == CustomThemeData.bgGradient) {
       return Positioned.fill(
@@ -628,11 +628,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
     return Row(
       children: [
-        heroButton(
-          Icons.visibility_rounded,
-          'PREVIEW',
-          _openMockPreview,
-        ),
+        heroButton(Icons.visibility_rounded, 'PREVIEW', _openMockPreview),
         const SizedBox(width: 10),
         heroButton(Icons.check_rounded, 'APPLY', _applyAndReturn),
       ],
@@ -963,7 +959,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       ),
       child: Row(
         children: [
-          _ghostBarButton('BACK', Icons.arrow_back_ios_new_rounded, _onFlowBack),
+          _ghostBarButton(
+            'BACK',
+            Icons.arrow_back_ios_new_rounded,
+            _onFlowBack,
+          ),
 
           const SizedBox(width: 10),
           Expanded(
@@ -1223,16 +1223,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                                       colors: [
                                         Colors.transparent,
                                         Colors.black.withValues(
-                                          alpha:
-                                              0.05 * prefs.vignetteIntensity,
+                                          alpha: 0.05 * prefs.vignetteIntensity,
                                         ),
                                         Colors.black.withValues(
-                                          alpha:
-                                              0.25 * prefs.vignetteIntensity,
+                                          alpha: 0.25 * prefs.vignetteIntensity,
                                         ),
                                         Colors.black.withValues(
-                                          alpha:
-                                              0.48 * prefs.vignetteIntensity,
+                                          alpha: 0.48 * prefs.vignetteIntensity,
                                         ),
                                       ],
                                       stops: const [0.0, 0.45, 0.82, 1.0],
@@ -1534,96 +1531,100 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     final flair = AppTheme.flairFor(_previewMode);
     return showDialog<String>(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: flair.card,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: flair.primary.withValues(alpha: 0.4)),
-          ),
-          title: GoopText(
-            'NAME YOUR PRESET',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.2,
-              color: flair.primary,
-            ),
-          ),
-          content: TextField(
-            controller: nameCtrl,
-            autofocus: true,
-            maxLength: 24,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: 'e.g. Neon Cat',
-              counterText: '',
-              errorText: error,
-              filled: true,
-              fillColor: Colors.white.withValues(alpha: 0.06),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: flair.primary.withValues(alpha: 0.3),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: flair.primary.withValues(alpha: 0.7),
-                ),
-              ),
-            ),
-            onChanged: (_) {
-              if (error != null) setDialogState(() => error = null);
-            },
-            onSubmitted:
-                (v) => _submitPresetName(
-                  ctx,
-                  v,
-                  (e) => setDialogState(() => error = e),
-                ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const GoopText(
-                'CANCEL',
-                style: TextStyle(color: Colors.white54),
-              ),
-            ),
-            ScaleButton(
-              onTap:
-                  () => _submitPresetName(
-                    ctx,
-                    nameCtrl.text,
-                    (e) => setDialogState(() => error = e),
+      builder:
+          (ctx) => StatefulBuilder(
+            builder:
+                (ctx, setDialogState) => AlertDialog(
+                  backgroundColor: flair.card,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: flair.primary.withValues(alpha: 0.4),
+                    ),
                   ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: flair.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: GoopText(
-                  'NEXT',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    color:
-                        flair.primary.computeLuminance() > 0.5
-                            ? Colors.black87
-                            : Colors.white,
+                  title: GoopText(
+                    'NAME YOUR PRESET',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      color: flair.primary,
+                    ),
                   ),
+                  content: TextField(
+                    controller: nameCtrl,
+                    autofocus: true,
+                    maxLength: 24,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'e.g. Neon Cat',
+                      counterText: '',
+                      errorText: error,
+                      filled: true,
+                      fillColor: Colors.white.withValues(alpha: 0.06),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: flair.primary.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: flair.primary.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ),
+                    onChanged: (_) {
+                      if (error != null) setDialogState(() => error = null);
+                    },
+                    onSubmitted:
+                        (v) => _submitPresetName(
+                          ctx,
+                          v,
+                          (e) => setDialogState(() => error = e),
+                        ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      child: const GoopText(
+                        'CANCEL',
+                        style: TextStyle(color: Colors.white54),
+                      ),
+                    ),
+                    ScaleButton(
+                      onTap:
+                          () => _submitPresetName(
+                            ctx,
+                            nameCtrl.text,
+                            (e) => setDialogState(() => error = e),
+                          ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: flair.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: GoopText(
+                          'NEXT',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                            color:
+                                flair.primary.computeLuminance() > 0.5
+                                    ? Colors.black87
+                                    : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
     ).then((v) {
       nameCtrl.dispose();
       return v;
@@ -1642,9 +1643,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     } else if (CustomThemeStore.themes.any(
           (t) => t.name.toLowerCase() == name.toLowerCase(),
         ) ||
-        kPickerThemes.any(
-          (t) => t.label.toLowerCase() == name.toLowerCase(),
-        )) {
+        kPickerThemes.any((t) => t.label.toLowerCase() == name.toLowerCase())) {
       err = 'A preset named "$name" exists';
     }
     if (err != null) {
@@ -2083,7 +2082,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [btn(true, Icons.view_list_rounded), btn(false, Icons.grid_view_rounded)],
+      children: [
+        btn(true, Icons.view_list_rounded),
+        btn(false, Icons.grid_view_rounded),
+      ],
     );
   }
 
@@ -2248,7 +2250,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                   ],
                 )
               else if (isCurrent)
-                Icon(Icons.check_circle_rounded, size: 16, color: flair.primary),
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 16,
+                  color: flair.primary,
+                ),
             ],
           ),
         ),
@@ -2336,8 +2342,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       return Image.asset(
         'assets/images/themes/splash/${e.splash}.jpg',
         fit: BoxFit.cover,
-        errorBuilder:
-            (_, _, _) => _presetListThumbFallback(e),
+        errorBuilder: (_, _, _) => _presetListThumbFallback(e),
       );
     }
     return _presetListThumbFallback(e);
@@ -2526,9 +2531,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     if (ok != true || !mounted) return;
     final deleted = await CustomThemeStore.delete(t.id);
     if (!deleted && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not delete preset')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Could not delete preset')));
       return;
     }
     if (mounted) {
@@ -2540,9 +2545,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       }
       final slotRef = 's:${t.id}';
       if (_quickSlots.contains(slotRef)) {
-        _quickSlots = [
-          for (final r in _quickSlots) r == slotRef ? null : r,
-        ];
+        _quickSlots = [for (final r in _quickSlots) r == slotRef ? null : r];
         _saveQuickSlots();
       }
       setState(() {});
@@ -2578,10 +2581,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       final s = e.saved!;
       final d =
           s.customData ??
-          _customDataFromFlair(
-            AppTheme.flairFor(s.baseMode),
-            name: s.name,
-          );
+          _customDataFromFlair(AppTheme.flairFor(s.baseMode), name: s.name);
       VisualPrefs.notifier.value = VisualPrefs.preserveAppLevel(s.prefs);
       _draft = d;
       AppTheme.saveCustomThemeData(d);
@@ -2759,7 +2759,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                   decoration: BoxDecoration(
                     color: dot,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
                   ),
                 ),
               ],
@@ -2853,7 +2855,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             // palette — not the hidden particlePreset curation field.
             chip(
               'PARTICLES',
-              '${prefs.particleItemIcon >= 0 ? 'ITEM: ${kItemIconParticles[prefs.particleItemIcon.clamp(0, kItemIconParticles.length - 1)].$1}' : ParticleType.values[prefs.particleTypeIndex.clamp(0, ParticleType.values.length - 1)].label} · ${kGlobalParticlePalettes[prefs.particleSchemaIndex.clamp(0, kGlobalParticlePalettes.length - 1)].name}',
+              prefs.particleSpritePath.isNotEmpty
+                  ? 'SPRITE: ${prefs.particleSpritePath.split('/').last.replaceAll(RegExp(r'\\.webp$'), '').toUpperCase()}'
+                  : prefs.particleItemIcon >= 0
+                  ? 'ITEM: ${kItemIconParticles[prefs.particleItemIcon.clamp(0, kItemIconParticles.length - 1)].$1}'
+                  : '${ParticleType.values[prefs.particleTypeIndex.clamp(0, ParticleType.values.length - 1)].label} · ${kGlobalParticlePalettes[prefs.particleSchemaIndex.clamp(0, kGlobalParticlePalettes.length - 1)].name}',
             ),
             chip('FONT', prefs.font.label),
             chip('GLOW', '${(prefs.glowIntensity * 100).round()}%'),
@@ -2909,9 +2915,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
   void _openMockPreview() {
     Haptics.success();
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const _MockPreviewScreen()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const _MockPreviewScreen()));
   }
 
   /// SAVE tab — review + persist the preset, then apply & close.
@@ -2920,12 +2926,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     final flair = AppTheme.flairFor(_previewMode);
     final isEditing = _editingPresetId != null;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        Insets.lg,
-        0,
-        Insets.lg,
-        Insets.lg,
-      ),
+      padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.lg),
       children: [
         GoopText(
           isEditing ? 'UPDATE PRESET' : 'SAVE PRESET',
@@ -3394,11 +3395,12 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     return ValueListenableBuilder<VisualPrefs>(
       valueListenable: VisualPrefs.notifier,
       builder: (_, prefs, _) {
-        final borderMode = prefs.panelBorderColor == -1
-            ? 2
-            : prefs.panelBorderColor != 0
-            ? 1
-            : 0;
+        final borderMode =
+            prefs.panelBorderColor == -1
+                ? 2
+                : prefs.panelBorderColor != 0
+                ? 1
+                : 0;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -3461,9 +3463,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                                 : flair.primary,
                           );
                           if (c != null && mounted) {
-                            await VisualPrefs.setPanelBorderColor(
-                              c.toARGB32(),
-                            );
+                            await VisualPrefs.setPanelBorderColor(c.toARGB32());
                           }
                         }
                       },
@@ -3528,10 +3528,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           borderRadius: BorderRadius.circular(flair.cardRadius),
           border:
               hasBorder
-                  ? Border.all(
-                    color: borderColor,
-                    width: flair.cardBorderWidth,
-                  )
+                  ? Border.all(color: borderColor, width: flair.cardBorderWidth)
                   : null,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -3895,64 +3892,64 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ValueListenableBuilder<VisualPrefs>(
-                valueListenable: VisualPrefs.notifier,
-                builder: (_, prefs, _) {
-                  final on = prefs.wallpaperImmersive;
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Haptics.selection();
-                      VisualPrefs.setWallpaperImmersive(!on);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color:
-                            on
-                                ? flair.primary.withValues(alpha: 0.16)
-                                : Colors.white.withValues(alpha: 0.04),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color:
-                              on
-                                  ? flair.primary
-                                  : Colors.white.withValues(alpha: 0.15),
-                          width: on ? 1.4 : 0.8,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.videocam_outlined,
-                            size: 13,
+                    valueListenable: VisualPrefs.notifier,
+                    builder: (_, prefs, _) {
+                      final on = prefs.wallpaperImmersive;
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Haptics.selection();
+                          VisualPrefs.setWallpaperImmersive(!on);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
                             color:
                                 on
-                                    ? flair.primary
-                                    : Colors.white.withValues(alpha: 0.4),
-                          ),
-                          const SizedBox(width: 5),
-                          GoopText(
-                            'IMMERSIVE',
-                            style: TextStyle(
-                              fontSize: 8.5,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.8,
+                                    ? flair.primary.withValues(alpha: 0.16)
+                                    : Colors.white.withValues(alpha: 0.04),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
                               color:
                                   on
                                       ? flair.primary
-                                      : Colors.white.withValues(alpha: 0.5),
+                                      : Colors.white.withValues(alpha: 0.15),
+                              width: on ? 1.4 : 0.8,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.videocam_outlined,
+                                size: 13,
+                                color:
+                                    on
+                                        ? flair.primary
+                                        : Colors.white.withValues(alpha: 0.4),
+                              ),
+                              const SizedBox(width: 5),
+                              GoopText(
+                                'IMMERSIVE',
+                                style: TextStyle(
+                                  fontSize: 8.5,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.8,
+                                  color:
+                                      on
+                                          ? flair.primary
+                                          : Colors.white.withValues(alpha: 0.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -4030,13 +4027,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   Future<void> _applyWallpaper(String? file) async {
     Haptics.selection();
     setState(
-      () => _draft = _draft.copyWith(
-        wallpaper: file,
-        bgMode:
-            file == null
-                ? CustomThemeData.bgSolid
-                : CustomThemeData.bgWallpaper,
-      ),
+      () =>
+          _draft = _draft.copyWith(
+            wallpaper: file,
+            bgMode:
+                file == null
+                    ? CustomThemeData.bgSolid
+                    : CustomThemeData.bgWallpaper,
+          ),
     );
     await AppTheme.saveCustomThemeData(_draft);
     _previewTheme(AppThemeMode.custom);
@@ -4105,7 +4103,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       ),
     );
   }
-
 }
 
 /// A single color field row for the custom palette editor.
@@ -4265,38 +4262,110 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
 
   /// Curated - pinks, magentas, roses, orchids, violets.
   static const _pinkPurple = [
-    0xFFEC4899, 0xFFF472B6, 0xFFDB2777, 0xFFBE185D,
-    0xFF9D174D, 0xFF831843, 0xFFC2185B, 0xFFAD1457,
-    0xFF880E4F, 0xFF6A1B9A, 0xFF7B1FA2, 0xFF8E24AA,
-    0xFF9C27B0, 0xFFAB47BC, 0xFFBA68C8, 0xFFCE93D8,
-    0xFFD81B60, 0xFFE040FB, 0xFFF06292, 0xFFEC407A,
-    0xFFF48FB1, 0xFFB388FF, 0xFF9575CD, 0xFF7E57C2,
-    0xFF4A148C, 0xFF311B92, 0xFFE91E63, 0xFFF50057,
-    0xFFFF4081, 0xFFFF80AB, 0xFFE1BEE7, 0xFF7C4DFF,
+    0xFFEC4899,
+    0xFFF472B6,
+    0xFFDB2777,
+    0xFFBE185D,
+    0xFF9D174D,
+    0xFF831843,
+    0xFFC2185B,
+    0xFFAD1457,
+    0xFF880E4F,
+    0xFF6A1B9A,
+    0xFF7B1FA2,
+    0xFF8E24AA,
+    0xFF9C27B0,
+    0xFFAB47BC,
+    0xFFBA68C8,
+    0xFFCE93D8,
+    0xFFD81B60,
+    0xFFE040FB,
+    0xFFF06292,
+    0xFFEC407A,
+    0xFFF48FB1,
+    0xFFB388FF,
+    0xFF9575CD,
+    0xFF7E57C2,
+    0xFF4A148C,
+    0xFF311B92,
+    0xFFE91E63,
+    0xFFF50057,
+    0xFFFF4081,
+    0xFFFF80AB,
+    0xFFE1BEE7,
+    0xFF7C4DFF,
   ];
 
   /// Curated - azures, sapphires, cyans, teals, ice blues.
   static const _blueCyan = [
-    0xFF0EA5E9, 0xFF38BDF8, 0xFF7DD3FC, 0xFFA5F3FC,
-    0xFF22D3EE, 0xFF67E8F9, 0xFF0891B2, 0xFF06B6D4,
-    0xFF164E63, 0xFF0E7490, 0xFF075985, 0xFF0369A1,
-    0xFF0284C7, 0xFF0C4A6E, 0xFF1565C0, 0xFF1D4ED8,
-    0xFF2563EB, 0xFF3B82F6, 0xFF60A5FA, 0xFF93C5FD,
-    0xFFBEDBFF, 0xFF42A5F5, 0xFF29B6F6, 0xFF00BCD4,
-    0xFF26C6DA, 0xFF4DD0E1, 0xFFB3E5FC, 0xFF82B1FF,
-    0xFF4FC3F7, 0xFF80DEEA, 0xFFBAE6FD, 0xFF0288D1,
+    0xFF0EA5E9,
+    0xFF38BDF8,
+    0xFF7DD3FC,
+    0xFFA5F3FC,
+    0xFF22D3EE,
+    0xFF67E8F9,
+    0xFF0891B2,
+    0xFF06B6D4,
+    0xFF164E63,
+    0xFF0E7490,
+    0xFF075985,
+    0xFF0369A1,
+    0xFF0284C7,
+    0xFF0C4A6E,
+    0xFF1565C0,
+    0xFF1D4ED8,
+    0xFF2563EB,
+    0xFF3B82F6,
+    0xFF60A5FA,
+    0xFF93C5FD,
+    0xFFBEDBFF,
+    0xFF42A5F5,
+    0xFF29B6F6,
+    0xFF00BCD4,
+    0xFF26C6DA,
+    0xFF4DD0E1,
+    0xFFB3E5FC,
+    0xFF82B1FF,
+    0xFF4FC3F7,
+    0xFF80DEEA,
+    0xFFBAE6FD,
+    0xFF0288D1,
   ];
 
   /// Curated - emeralds, mints, teals, limes, seafoam.
   static const _greenMinty = [
-    0xFF22C55E, 0xFF4ADE80, 0xFF86EFAC, 0xFF16A34A,
-    0xFF15803D, 0xFF166534, 0xFF14532D, 0xFF065F46,
-    0xFF047857, 0xFF10B981, 0xFF34D399, 0xFF6EE7B7,
-    0xFFA7F3D0, 0xFF5EEAD4, 0xFF2DD4BF, 0xFF14B8A6,
-    0xFF0D9488, 0xFF99F6E4, 0xFF00E676, 0xFF69F0AE,
-    0xFF00BFA5, 0xFF1DE9B6, 0xFF64FFDA, 0xFF84CC16,
-    0xFF65A30D, 0xFFA3E635, 0xFFD9F99D, 0xFFCCFF90,
-    0xFF8BC34A, 0xFF558B2F, 0xFFC5E1A5, 0xFF33691E,
+    0xFF22C55E,
+    0xFF4ADE80,
+    0xFF86EFAC,
+    0xFF16A34A,
+    0xFF15803D,
+    0xFF166534,
+    0xFF14532D,
+    0xFF065F46,
+    0xFF047857,
+    0xFF10B981,
+    0xFF34D399,
+    0xFF6EE7B7,
+    0xFFA7F3D0,
+    0xFF5EEAD4,
+    0xFF2DD4BF,
+    0xFF14B8A6,
+    0xFF0D9488,
+    0xFF99F6E4,
+    0xFF00E676,
+    0xFF69F0AE,
+    0xFF00BFA5,
+    0xFF1DE9B6,
+    0xFF64FFDA,
+    0xFF84CC16,
+    0xFF65A30D,
+    0xFFA3E635,
+    0xFFD9F99D,
+    0xFFCCFF90,
+    0xFF8BC34A,
+    0xFF558B2F,
+    0xFFC5E1A5,
+    0xFF33691E,
   ];
 
   static const _palettes = [
@@ -4419,19 +4488,19 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 140),
                             padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              _tab == i
-                                  ? Colors.white.withValues(alpha: 0.12)
-                                  : Colors.white.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color:
-                                _tab == i
-                                    ? Colors.white.withValues(alpha: 0.35)
-                                    : Colors.white.withValues(alpha: 0.08),
-                          ),
-                        ),
+                            decoration: BoxDecoration(
+                              color:
+                                  _tab == i
+                                      ? Colors.white.withValues(alpha: 0.12)
+                                      : Colors.white.withValues(alpha: 0.04),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color:
+                                    _tab == i
+                                        ? Colors.white.withValues(alpha: 0.35)
+                                        : Colors.white.withValues(alpha: 0.08),
+                              ),
+                            ),
                             child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -4533,7 +4602,9 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                   style: const TextStyle(fontSize: 13, color: Colors.white),
                 ),
                 content: GoopText(
-                  filled ? 'change or clear this slot?' : 'pick a color for this slot?',
+                  filled
+                      ? 'change or clear this slot?'
+                      : 'pick a color for this slot?',
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.white.withValues(alpha: 0.6),

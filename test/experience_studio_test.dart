@@ -44,9 +44,7 @@ void main() {
   /// dashboard landing (menubar + hero PREVIEW + theme panel);
   /// tap EDIT OPTIONS to reach the tabbed editor.
   Future<void> openWizardViaNewPreset(WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: ExperienceStudioScreen()),
-    );
+    await tester.pumpWidget(const MaterialApp(home: ExperienceStudioScreen()));
     await tester.pump(const Duration(milliseconds: 300));
     await tester.tap(find.text('NEW PRESET'));
     await tester.pump(const Duration(milliseconds: 300));
@@ -152,6 +150,36 @@ void main() {
       expect(r.grainIntensity, 0.0);
     });
 
+    test('fromJson clamps out-of-range numerics to setter ranges', () {
+      // Preset JSON is importable data — an absurd value must not
+      // assert-crash the studio sliders that consume it.
+      final r = VisualPrefs.fromJson(const {
+        'particleCount': 9999,
+        'fontWeightBias': 99999,
+        'fontLetterSpacing': 50,
+        'particleOpacity': 4.0,
+        'particleSizeScale': 0.01,
+        'glowStyleIndex': 500,
+        'particleTypeIndex': 500,
+        'particleSchemaIndex': 500,
+        'particleItemIcon': 500,
+      });
+      expect(r.particleCount, 200);
+      expect(r.fontWeightBias, 800);
+      expect(r.fontLetterSpacing, 2);
+      expect(r.particleOpacity, 1.0);
+      expect(r.particleSizeScale, 0.3);
+      expect(r.glowStyleIndex, GlowStyle.values.length - 1);
+      expect(r.particleTypeIndex, ParticleType.values.length - 1);
+      expect(r.particleSchemaIndex, kGlobalParticlePalettes.length - 1);
+      expect(r.particleItemIcon, kItemIconParticles.length - 1);
+    });
+
+    test('fontLetterSpacing survives preset json round-trip', () {
+      const p = VisualPrefs(fontLetterSpacing: -1);
+      expect(VisualPrefs.fromJson(p.toJson()).fontLetterSpacing, -1);
+    });
+
     test('setGlowColorIndex clears the custom glow color', () async {
       await VisualPrefs.setGlowColor(const Color(0xFF123456));
       expect(VisualPrefs.notifier.value.glowCustomColor, 0xFF123456);
@@ -247,9 +275,7 @@ void main() {
   });
 
   group('Flow — NEW PRESET wizard', () {
-    testWidgets('name → source → scratch lands on dashboard', (
-      tester,
-    ) async {
+    testWidgets('name → source → scratch lands on dashboard', (tester) async {
       await openWizardViaNewPreset(tester);
 
       // Dashboard landing — menubar title, hero PREVIEW, theme panel,
@@ -319,9 +345,7 @@ void main() {
       expect(find.text('START FROM SCRATCH'), findsOneWidget);
     });
 
-    testWidgets('COPY EXISTING opens gallery in select mode', (
-      tester,
-    ) async {
+    testWidgets('COPY EXISTING opens gallery in select mode', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: ExperienceStudioScreen()),
       );
@@ -383,9 +407,7 @@ void main() {
       await AppTheme.setMode(before);
     });
 
-    testWidgets('SAVE tab persists preset + applies + closes', (
-      tester,
-    ) async {
+    testWidgets('SAVE tab persists preset + applies + closes', (tester) async {
       final before = AppTheme.mode;
       await openWizardViaNewPreset(tester);
       await tester.tap(find.text('EDIT OPTIONS'));
@@ -441,23 +463,18 @@ void main() {
       expect(find.text('VERY FAST'), findsOneWidget);
       await tester.tap(find.text('VERY FAST'));
       await tester.pump(const Duration(milliseconds: 200));
-      expect(
-        VisualPrefs.notifier.value.particleSpeed,
-        ParticleSpeed.veryFast,
-      );
+      expect(VisualPrefs.notifier.value.particleSpeed, ParticleSpeed.veryFast);
       // drag the SIZE slider (inside the row labelled SIZE) -> pref moves
-      final sizeRow = find
-          .ancestor(of: find.text('SIZE'), matching: find.byType(Row))
-          .first;
+      final sizeRow =
+          find
+              .ancestor(of: find.text('SIZE'), matching: find.byType(Row))
+              .first;
       await tester.drag(
         find.descendant(of: sizeRow, matching: find.byType(Slider)),
         const Offset(80, 0),
       );
       await tester.pump(const Duration(milliseconds: 200));
-      expect(
-        VisualPrefs.notifier.value.particleSizeScale,
-        isNot(1.0),
-      );
+      expect(VisualPrefs.notifier.value.particleSizeScale, isNot(1.0));
     });
   });
 
@@ -474,9 +491,7 @@ void main() {
       expect(find.text('WALLPAPER'), findsWidgets);
     });
 
-    testWidgets('TYPE shows swipable tiles + bottom controls', (
-      tester,
-    ) async {
+    testWidgets('TYPE shows swipable tiles + bottom controls', (tester) async {
       await openWizard(tester, 2);
       expect(find.byType(PageView), findsWidgets);
       expect(find.text('BASE FONT SIZE'), findsOneWidget);
@@ -540,11 +555,7 @@ void main() {
       expect(circlesInSheet(tester), greaterThanOrEqualTo(24));
 
       // Unique collections — each ships its own 32-swatch palette.
-      for (final tab in [
-        'PINK & PURPLE',
-        'BLUE & CYAN',
-        'GREEN & MINTY',
-      ]) {
+      for (final tab in ['PINK & PURPLE', 'BLUE & CYAN', 'GREEN & MINTY']) {
         await tester.ensureVisible(find.text(tab));
         await tester.tap(find.text(tab), warnIfMissed: false);
         await tester.pump(const Duration(milliseconds: 300));
@@ -579,16 +590,10 @@ void main() {
       await VisualPrefs.setParticleLineLinks(true);
       expect(VisualPrefs.notifier.value.particleLineLinks, isTrue);
       await VisualPrefs.setParticleGlowEffect(GlowEffect.prism);
-      expect(
-        VisualPrefs.notifier.value.particleGlowEffect,
-        GlowEffect.prism,
-      );
+      expect(VisualPrefs.notifier.value.particleGlowEffect, GlowEffect.prism);
       // none = AUTO semantics — overlay maps it to null override.
       await VisualPrefs.setParticleGlowEffect(GlowEffect.none);
-      expect(
-        VisualPrefs.notifier.value.particleGlowEffect,
-        GlowEffect.none,
-      );
+      expect(VisualPrefs.notifier.value.particleGlowEffect, GlowEffect.none);
     });
 
     testWidgets('toggle + physics chips + schema chip', (tester) async {
@@ -679,10 +684,7 @@ void main() {
   group('Polish — back/restore integrity', () {
     /// Push the studio on top of a host route so maybePop has somewhere
     /// real to land after the restore-and-pop.
-    Future<void> openStudioOnRoute(
-      WidgetTester tester, {
-      int tab = 2,
-    }) async {
+    Future<void> openStudioOnRoute(WidgetTester tester, {int tab = 2}) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Builder(
@@ -691,7 +693,8 @@ void main() {
                   onPressed:
                       () => Navigator.of(ctx).push(
                         MaterialPageRoute(
-                          builder: (_) => ExperienceStudioScreen(initialTab: tab),
+                          builder:
+                              (_) => ExperienceStudioScreen(initialTab: tab),
                         ),
                       ),
                   child: const Text('open'),
@@ -750,12 +753,13 @@ void main() {
       // Mutate through the real picker — open PRIME sheet, tap a swatch.
       await tester.tap(find.text('PRIME'));
       await tester.pump(const Duration(milliseconds: 400));
-      final swatch = find
-          .descendant(
-            of: find.byType(GridView),
-            matching: find.byType(GestureDetector),
-          )
-          .first;
+      final swatch =
+          find
+              .descendant(
+                of: find.byType(GridView),
+                matching: find.byType(GestureDetector),
+              )
+              .first;
       await tester.ensureVisible(swatch);
       await tester.pump(const Duration(milliseconds: 200));
       await tester.tap(swatch);
@@ -809,10 +813,7 @@ void main() {
         return;
       }
       for (var i = 0; i < 12 && find.text(text).evaluate().isEmpty; i++) {
-        await tester.drag(
-          find.byType(ListView).first,
-          const Offset(0, -500),
-        );
+        await tester.drag(find.byType(ListView).first, const Offset(0, -500));
         await tester.pump(const Duration(milliseconds: 250));
       }
       await tester.ensureVisible(find.text(text));
@@ -823,9 +824,7 @@ void main() {
       tester,
     ) async {
       const savedPrefs = VisualPrefs(glowIntensity: 0.9);
-      CustomThemeStore.notifier.value = [
-        makePreset('MY NEON', savedPrefs),
-      ];
+      CustomThemeStore.notifier.value = [makePreset('MY NEON', savedPrefs)];
 
       await tester.pumpWidget(
         const MaterialApp(home: ExperienceStudioScreen()),
@@ -885,9 +884,7 @@ void main() {
   });
 
   group('Dashboard polish', () {
-    testWidgets('SAVE AS NEW stores a preset without closing', (
-      tester,
-    ) async {
+    testWidgets('SAVE AS NEW stores a preset without closing', (tester) async {
       await openWizardViaNewPreset(tester);
 
       await tester.tap(find.text('SAVE AS NEW'));

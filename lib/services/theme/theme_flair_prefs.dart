@@ -720,8 +720,7 @@ class VisualPrefs {
 
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final showLichEyeBullets = p.getBool(_kShowLichEyeBullets) ?? true;
-      final browseLichEyeBullets =
-          p.getBool(_kBrowseLichEyeBullets) ?? true;
+      final browseLichEyeBullets = p.getBool(_kBrowseLichEyeBullets) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
       final particleColorSchemaIdx = p.getInt(_kParticleColorSchema) ?? 0;
       final particleColorSchema =
@@ -822,6 +821,7 @@ class VisualPrefs {
 
   static Future<void> setFontWeightBias(int v) async {
     notifier.value = notifier.value._with(fontWeightBias: v.clamp(-800, 800));
+    _persist();
   }
 
   static void setFontLetterSpacing(int v) {
@@ -1048,9 +1048,7 @@ class VisualPrefs {
   }
 
   static Future<void> setPanelOpacity(double v) async {
-    notifier.value = notifier.value._with(
-      panelOpacity: v.clamp(0.05, 1.0),
-    );
+    notifier.value = notifier.value._with(panelOpacity: v.clamp(0.05, 1.0));
     _persist();
   }
 
@@ -1060,9 +1058,7 @@ class VisualPrefs {
   }
 
   static Future<void> setPanelBorderWidth(double v) async {
-    notifier.value = notifier.value._with(
-      panelBorderWidth: v.clamp(0.0, 8.0),
-    );
+    notifier.value = notifier.value._with(panelBorderWidth: v.clamp(0.0, 8.0));
     _persist();
   }
 
@@ -1098,6 +1094,11 @@ class VisualPrefs {
       glowIntensity: c.glowIntensity,
       shaderEnabled: c.shaderEnabled,
       shaderPreset: c.shaderPreset ?? notifier.value.shaderPreset,
+      // A premade curation describes typed particles — clear any
+      // sprite-mode leftovers or they'd silently mask the pick
+      // (spritePath wins over itemIcon wins over typed shapes).
+      particleItemIcon: -1,
+      particleSpritePath: '',
       particlesEnabled: true,
       particlesUserOff: false,
     );
@@ -1293,6 +1294,7 @@ class VisualPrefs {
     'particlesEnabled': particlesEnabled,
     'particlesUserOff': particlesUserOff,
     'fontWeightBias': fontWeightBias,
+    'fontLetterSpacing': fontLetterSpacing,
     'font': font.index,
     'fontSize': fontSize,
     'inventoryFontSize': inventoryFontSize,
@@ -1346,15 +1348,33 @@ class VisualPrefs {
   /// Deserialize from JSON for custom theme restoration.
   factory VisualPrefs.fromJson(Map<String, dynamic> j) {
     return VisualPrefs(
-      glowIntensity: (j['glowIntensity'] as num?)?.toDouble() ?? 0.0,
+      // Every numeric field is clamped to its setter's range — preset
+      // JSON is user/importable data and an out-of-range value would
+      // assert-crash the studio sliders that consume it.
+      glowIntensity: ((j['glowIntensity'] as num?)?.toDouble() ?? 0.0).clamp(
+        0.0,
+        1.0,
+      ),
       particlesEnabled: j['particlesEnabled'] as bool? ?? false,
       particlesUserOff: j['particlesUserOff'] as bool? ?? false,
-      fontWeightBias: j['fontWeightBias'] as int? ?? 0,
+      fontWeightBias: ((j['fontWeightBias'] as num?)?.toInt() ?? 0).clamp(
+        -800,
+        800,
+      ),
+      fontLetterSpacing: ((j['fontLetterSpacing'] as num?)?.toInt() ?? 0).clamp(
+        -2,
+        2,
+      ),
       font: _enumOr(AppFont.values, j['font'] as int?, 0),
-      fontSize: (j['fontSize'] as num?)?.toDouble() ?? 12.0,
-      inventoryFontSize: (j['inventoryFontSize'] as num?)?.toDouble() ?? 11.0,
-      vignetteIntensity: (j['vignetteIntensity'] as num?)?.toDouble() ?? 1.0,
-      grainIntensity: (j['grainIntensity'] as num?)?.toDouble() ?? 0.0,
+      fontSize: ((j['fontSize'] as num?)?.toDouble() ?? 12.0).clamp(6.0, 20.0),
+      inventoryFontSize: ((j['inventoryFontSize'] as num?)?.toDouble() ?? 11.0)
+          .clamp(10.0, 18.0),
+      vignetteIntensity: ((j['vignetteIntensity'] as num?)?.toDouble() ?? 1.0)
+          .clamp(0.0, 1.5),
+      grainIntensity: ((j['grainIntensity'] as num?)?.toDouble() ?? 0.0).clamp(
+        0.0,
+        1.0,
+      ),
       inventoryDisplayMode: _enumOr(
         InventoryDisplayMode.values,
         j['inventoryDisplayMode'] as int?,
@@ -1372,23 +1392,36 @@ class VisualPrefs {
       ),
       particleLineLinks: j['particleLineLinks'] as bool? ?? false,
       particleBounce: j['particleBounce'] as bool? ?? false,
-      glowColorIndex: j['glowColorIndex'] as int? ?? 0,
+      glowColorIndex:
+          (j['glowColorIndex'] as num?)?.toInt().clamp(
+            0,
+            glowColors.length - 1,
+          ) ??
+          0,
       glowCustomColor: j['glowCustomColor'] as int? ?? 0,
-      glowStyleIndex: j['glowStyleIndex'] as int? ?? -1,
+      glowStyleIndex: ((j['glowStyleIndex'] as num?)?.toInt() ?? -1).clamp(
+        -1,
+        GlowStyle.values.length - 1,
+      ),
       customDiceType: _enumOr(
         CustomDiceType.values,
         j['customDiceType'] as int?,
         0,
       ),
-      particleSizeScale: (j['particleSizeScale'] as num?)?.toDouble() ?? 1.0,
-      particleOpacity: (j['particleOpacity'] as num?)?.toDouble() ?? 0.8,
-      particleCount: j['particleCount'] as int? ?? 16,
+      particleSizeScale: ((j['particleSizeScale'] as num?)?.toDouble() ?? 1.0)
+          .clamp(0.3, 2.0),
+      particleOpacity: ((j['particleOpacity'] as num?)?.toDouble() ?? 0.8)
+          .clamp(0.0, 1.0),
+      particleCount: ((j['particleCount'] as num?)?.toInt() ?? 16).clamp(
+        0,
+        200,
+      ),
       showDashboards: j['showDashboards'] as bool? ?? true,
       showLichEyeBulletsSynergies:
           j['showLichEyeBulletsSynergies'] as bool? ?? true,
-      browseShowLichEyeBullets:
-          j['browseShowLichEyeBullets'] as bool? ?? true,
-      periodicGridColumnCount: j['periodicGridColumnCount'] as int? ?? 0,
+      browseShowLichEyeBullets: j['browseShowLichEyeBullets'] as bool? ?? true,
+      periodicGridColumnCount:
+          ((j['periodicGridColumnCount'] as num?)?.toInt() ?? 0).clamp(0, 12),
       particleColorSchema: _enumOr(
         ParticleColorSchema.values,
         j['particleColorSchema'] as int?,
@@ -1399,36 +1432,39 @@ class VisualPrefs {
         j['particleSpeed'] as int?,
         2,
       ),
-      particleTypeIndex: (j['particleTypeIndex'] as int?) ?? 0,
-      particleSchemaIndex: (j['particleSchemaIndex'] as int?) ?? 0,
+      particleTypeIndex: ((j['particleTypeIndex'] as num?)?.toInt() ?? 0).clamp(
+        0,
+        ParticleType.values.length - 1,
+      ),
+      particleSchemaIndex: ((j['particleSchemaIndex'] as num?)?.toInt() ?? 0)
+          .clamp(0, kGlobalParticlePalettes.length - 1),
       particleChaos: j['particleChaos'] as bool? ?? false,
       particleTouch: j['particleTouch'] as bool? ?? true,
-      particleItemIcon: j['particleItemIcon'] as int? ?? -1,
+      particleItemIcon: ((j['particleItemIcon'] as num?)?.toInt() ?? -1).clamp(
+        -1,
+        kItemIconParticles.length - 1,
+      ),
       particleSpritePath: j['particleSpritePath'] as String? ?? '',
       shaderEnabled: j['shaderEnabled'] as bool? ?? false,
-      shaderPreset: _enumOr(
-        ShaderPreset.values,
-        j['shaderPreset'] as int?,
+      shaderPreset: _enumOr(ShaderPreset.values, j['shaderPreset'] as int?, 0),
+      liquidKindIndex: ((j['liquidKindIndex'] as num?)?.toInt() ?? 0).clamp(
         0,
+        LiquidKind.values.length - 1,
       ),
-      liquidKindIndex:
-          ((j['liquidKindIndex'] as num?)?.toInt() ?? 0).clamp(
-            0,
-            LiquidKind.values.length - 1,
-          ),
       wallpaperImmersive: j['wallpaperImmersive'] as bool? ?? false,
       tapSparkles: j['tapSparkles'] as bool? ?? true,
       panelColor: j['panelColor'] as int? ?? 0,
-      panelOpacity:
-          ((j['panelOpacity'] as num?)?.toDouble() ?? 1.0).clamp(0.05, 1.0),
+      panelOpacity: ((j['panelOpacity'] as num?)?.toDouble() ?? 1.0).clamp(
+        0.05,
+        1.0,
+      ),
       panelBorderColor: j['panelBorderColor'] as int? ?? 0,
-      panelBorderWidth:
-          ((j['panelBorderWidth'] as num?)?.toDouble() ?? 0.0).clamp(
-            0.0,
-            8.0,
-          ),
-      panelRadius:
-          ((j['panelRadius'] as num?)?.toDouble() ?? 0.0).clamp(0.0, 48.0),
+      panelBorderWidth: ((j['panelBorderWidth'] as num?)?.toDouble() ?? 0.0)
+          .clamp(0.0, 8.0),
+      panelRadius: ((j['panelRadius'] as num?)?.toDouble() ?? 0.0).clamp(
+        0.0,
+        48.0,
+      ),
     );
   }
 }

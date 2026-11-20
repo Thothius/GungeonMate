@@ -92,10 +92,8 @@ class _ItemIconFieldState extends State<ItemIconField>
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 12),
-    )..repeat();
+    _c = AnimationController(vsync: this, duration: const Duration(seconds: 12))
+      ..repeat();
     _ps = _build();
   }
 
@@ -138,43 +136,45 @@ class _ItemIconFieldState extends State<ItemIconField>
               return Stack(
                 children: [
                   for (final p in _ps)
-                    Builder(builder: (_) {
-                      // Loop vertically: start below, drift up past top.
-                      final span = h + p.size * 2;
-                      final yy =
-                          (p.y * span - t * p.speed * span) % span;
-                      final top = yy - p.size;
-                      final left =
-                          p.x * (w - p.size) +
-                          math.sin(t * math.pi * 2 * p.freq + p.phase) *
-                              p.sway;
-                      final rot =
-                          math.sin(t * math.pi * 2 * p.freq * 0.7 + p.phase) *
-                              p.spin;
-                      final op =
-                          widget.opacity *
-                          p.fade *
-                          (0.6 + 0.4 * math.sin(t * math.pi * 2 + p.phase));
-                      final sz = p.size * widget.sizeScale.clamp(0.4, 2.0);
-                      return Positioned(
-                        left: left.clamp(-sz, w),
-                        top: top,
-                        child: Opacity(
-                          opacity: op.clamp(0.0, 1.0),
-                          child: Transform.rotate(
-                            angle: rot,
-                            child: Image.asset(
-                              path,
-                              width: sz,
-                              height: sz,
-                              cacheWidth: 96,
-                              gaplessPlayback: true,
-                              errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                    Builder(
+                      builder: (_) {
+                        // Loop vertically: start below, drift up past top.
+                        final span = h + p.size * 2;
+                        final yy = (p.y * span - t * p.speed * span) % span;
+                        final top = yy - p.size;
+                        final left =
+                            p.x * (w - p.size) +
+                            math.sin(t * math.pi * 2 * p.freq + p.phase) *
+                                p.sway;
+                        final rot =
+                            math.sin(t * math.pi * 2 * p.freq * 0.7 + p.phase) *
+                            p.spin;
+                        final op =
+                            widget.opacity *
+                            p.fade *
+                            (0.6 + 0.4 * math.sin(t * math.pi * 2 + p.phase));
+                        final sz = p.size * widget.sizeScale.clamp(0.4, 2.0);
+                        return Positioned(
+                          left: left.clamp(-sz, w),
+                          top: top,
+                          child: Opacity(
+                            opacity: op.clamp(0.0, 1.0),
+                            child: Transform.rotate(
+                              angle: rot,
+                              child: Image.asset(
+                                path,
+                                width: sz,
+                                height: sz,
+                                cacheWidth: 96,
+                                gaplessPlayback: true,
+                                errorBuilder:
+                                    (_, _, _) => const SizedBox.shrink(),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      },
+                    ),
                 ],
               );
             },
@@ -270,11 +270,7 @@ class _ParticleFieldState extends State<ParticleField>
     _particles.clear();
     _lastSize = size;
 
-    final cfg =
-        widget.config ??
-        (widget.colorsOverride != null
-            ? _withColors(widget.preset.config, widget.colorsOverride!)
-            : widget.preset.config);
+    final cfg = _resolveConfig();
     for (var i = 0; i < widget.count; i++) {
       _spawnParticle(size, cfg);
     }
@@ -284,6 +280,16 @@ class _ParticleFieldState extends State<ParticleField>
   /// Used for per-palette particle color injection without adding new enum values.
   static PresetConfig _withColors(PresetConfig base, List<Color> colors) {
     return base.copyWith(colors: colors);
+  }
+
+  /// widget.config (typed path) wins over preset.config; the colors
+  /// override then composes on top of EITHER — previously the ternary
+  /// skipped the override whenever config was set, silently killing
+  /// particleColorSchema/themeMatch/unicorn colors on the typed path.
+  PresetConfig _resolveConfig() {
+    final base = widget.config ?? widget.preset.config;
+    final override = widget.colorsOverride;
+    return override != null ? _withColors(base, override) : base;
   }
 
   void _spawnParticle(Size size, PresetConfig cfg) {
@@ -416,11 +422,7 @@ class _ParticleFieldState extends State<ParticleField>
     _lastT = t;
     final tilt =
         widget.tiltEnabled ? ThemeOverlay.tiltNotifier.value : Offset.zero;
-    final cfg =
-        widget.config ??
-        (widget.colorsOverride != null
-            ? _withColors(widget.preset.config, widget.colorsOverride!)
-            : widget.preset.config);
+    final cfg = _resolveConfig();
 
     for (final p in _particles) {
       p.age += dt;
@@ -544,16 +546,9 @@ class _ParticleFieldState extends State<ParticleField>
               final t = _sw.elapsedMilliseconds / 1000.0;
               _update(t, size);
 
-              // Resolve once — widget.config (typed path) wins over
-              // preset.config; colors override composes on top.
-              final effectiveConfig =
-                  widget.config ??
-                  (widget.colorsOverride != null
-                      ? _withColors(
-                        widget.preset.config,
-                        widget.colorsOverride!,
-                      )
-                      : widget.preset.config);
+              // Resolve once per frame — typed config wins over
+              // preset.config, colors override composes on top.
+              final effectiveConfig = _resolveConfig();
 
               return CustomPaint(
                 painter: _ParticlePainter(
