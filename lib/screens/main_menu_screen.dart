@@ -6,6 +6,7 @@ import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
 import 'ammonomicon_screen.dart';
 import 'neo_skeuo_lab_screen.dart';
+import 'asset_viewer_screen.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/contrast.dart';
@@ -442,6 +443,18 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                   ),
                 ),
               ),
+              // Asset Viewer — top-left feedback workbench (fonts /
+              // backgrounds / avatars + YAY-NAY votes + JSON export).
+              Positioned(
+                top: 0,
+                left: 0,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(Insets.md),
+                    child: _assetViewerChip(skeuo),
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -508,6 +521,50 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
 
   /// The Neo-Skeuo mode toggle — ghost pencil chip on the themed menu,
   /// pressed ink chip while the skin is on.
+  /// Top-left chip into the Asset Viewer — same circular chrome as the
+  /// skeuo toggle so the two corner controls read as a pair.
+  Widget _assetViewerChip(bool skeuo) {
+    return Tooltip(
+      message: 'Asset Viewer — vote on fonts, backgrounds & avatars',
+      child: ScaleButton(
+        onTap: () {
+          Haptics.selection();
+          Navigator.push(context, fastRoute(const AssetViewerScreen()));
+        },
+        child:
+            skeuo
+                ? const SkeuoSurface(
+                  elevation: SkeuoElevation.pressed,
+                  radius: Skeuo.rLg,
+                  sketchy: false,
+                  padding: EdgeInsets.all(11),
+                  child: Icon(
+                    Icons.photo_library_rounded,
+                    size: 22,
+                    color: Skeuo.ink,
+                  ),
+                )
+                : Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: _panel,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: _accent.withValues(alpha: 0.5),
+                      width: 1.4,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.photo_library_rounded,
+                    size: 22,
+                    color: _accent,
+                  ),
+                ),
+      ),
+    );
+  }
+
   Widget _skeuoToggleChip(bool active) {
     return Tooltip(
       message: active ? 'Exit Neo-Skeuo' : 'Neo-Skeuo theme',
