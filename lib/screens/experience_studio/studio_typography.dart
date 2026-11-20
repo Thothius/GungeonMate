@@ -30,9 +30,10 @@ class _TypographyStep extends StatelessWidget {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  // 2x4 swipable font pages — no group labels; swipe to
-                  // browse all 29 fonts, controls sit below.
-                  _FontPager(fonts: _fonts, active: prefs.font),
+                  // Curated font list — every face rendered in its own
+                  // type with its character description. No pager, no
+                  // hidden pages: the whole collection fits on screen.
+                  _FontList(fonts: _fonts, active: prefs.font),
                   const SizedBox(height: 18),
                   _StepLabel('BASE FONT SIZE'),
                   const SizedBox(height: 10),
@@ -174,8 +175,9 @@ class _StickyFontHeader extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(_StickyFontHeader old) => prefs != old.prefs;
 }
 
-/// Uniform font tile — the font's name rendered in its own face,
-/// fixed height so all tiles read identically.
+/// One row per curated font — the name set in its own face at poster
+/// scale, its character note beneath, and a role tag so the collection
+/// reads as an authored system rather than a font dump.
 class _FontTile extends StatelessWidget {
   final AppFont font;
   final bool selected;
@@ -184,6 +186,7 @@ class _FontTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
+    final role = _roleFor(font);
     return GestureDetector(
       onTap: () {
         VisualPrefs.setFont(font);
@@ -192,13 +195,14 @@ class _FontTile extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        height: 48,
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color:
               selected
-                  ? flair.primary.withValues(alpha: 0.15)
+                  ? flair.primary.withValues(alpha: 0.12)
                   : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color:
                 selected
@@ -207,23 +211,101 @@ class _FontTile extends StatelessWidget {
             width: selected ? 1.5 : 1.0,
           ),
         ),
-        child: Center(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // The name IS the specimen — set in the face itself.
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: GoopText(
+                      font.label,
+                      maxLines: 1,
+                      style: font.textStyle.copyWith(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            selected
+                                ? Colors.white
+                                : Colors.white.withValues(alpha: 0.75),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  GoopText(
+                    font.description,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: FontSizes.labelSmall,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white.withValues(alpha: 0.38),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: flair.primary.withValues(alpha: selected ? 0.2 : 0.08),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: flair.primary.withValues(alpha: selected ? 0.6 : 0.2),
+                ),
+              ),
               child: GoopText(
-                font.label,
-                style: font.textStyle.copyWith(
-                  fontSize: FontSizes.titleMedium,
-                  fontWeight: FontWeight.bold,
-                  color: selected ? Colors.white : Colors.white54,
+                role,
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.0,
+                  color:
+                      selected
+                          ? flair.primary
+                          : Colors.white.withValues(alpha: 0.4),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+/// Role tag for a curated font — mirrors the section order the
+/// collection was authored in (signature → display → accent → body).
+String _roleFor(AppFont font) {
+  return switch (font) {
+    AppFont.gungeon || AppFont.megrim => 'SIGNATURE',
+    AppFont.bungee ||
+    AppFont.germaniaOne ||
+    AppFont.anton ||
+    AppFont.lilitaOne => 'DISPLAY',
+    AppFont.wallpoet || AppFont.monoton || AppFont.pressStart2p => 'ACCENT',
+    _ => 'READABLE',
+  };
+}
+
+/// The full curated collection as one authored list — ten faces,
+/// each rendered in its own type so the choice is felt, not read.
+class _FontList extends StatelessWidget {
+  final List<AppFont> fonts;
+  final AppFont active;
+  const _FontList({required this.fonts, required this.active});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (final f in fonts) _FontTile(font: f, selected: f == active),
+      ],
     );
   }
 }
@@ -442,91 +524,6 @@ class _LetterRow extends StatelessWidget {
           ),
         );
       }),
-    );
-  }
-}
-
-/// 2x4 swipable font browser — PageView pages of 8 uniform tiles,
-/// with a dot indicator so users know to swipe for all 29 fonts.
-class _FontPager extends StatefulWidget {
-  final List<AppFont> fonts;
-  final AppFont active;
-  const _FontPager({required this.fonts, required this.active});
-
-  @override
-  State<_FontPager> createState() => _FontPagerState();
-}
-
-class _FontPagerState extends State<_FontPager> {
-  int _page = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    const perPage = 8;
-    final pages = (widget.fonts.length / perPage).ceil();
-    final flair = AppTheme.flair;
-    return Column(
-      children: [
-        SizedBox(
-          height: 4 * 48 + 3 * 8, // 4 rows of 48px tiles + gaps
-          child: PageView.builder(
-            itemCount: pages,
-            onPageChanged: (i) => setState(() => _page = i),
-            itemBuilder: (context, p) {
-              final start = p * perPage;
-              final slice = widget.fonts.sublist(
-                start,
-                (start + perPage).clamp(0, widget.fonts.length),
-              );
-              return Column(
-                children: [
-                  for (var r = 0; r < 4; r++)
-                    Padding(
-                      padding: EdgeInsets.only(bottom: r < 3 ? 8 : 0),
-                      child: Row(
-                        children: [
-                          for (var c = 0; c < 2; c++) ...[
-                            Expanded(
-                              child:
-                                  r * 2 + c < slice.length
-                                      ? _FontTile(
-                                        font: slice[r * 2 + c],
-                                        selected:
-                                            slice[r * 2 + c] == widget.active,
-                                      )
-                                      : const SizedBox(),
-                            ),
-                            if (c < 1) const SizedBox(width: 8),
-                          ],
-                        ],
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (var i = 0; i < pages; i++)
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                width: i == _page ? 16 : 5,
-                height: 5,
-                decoration: BoxDecoration(
-                  color:
-                      i == _page
-                          ? flair.primary
-                          : Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-          ],
-        ),
-      ],
     );
   }
 }

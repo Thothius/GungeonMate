@@ -37,7 +37,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF69B4), // pink
       statGroupHandling: Color(0xFFF06292), // rose
       statGroupMeta: Color(0xFFE8A7F0), // lavender
-      font: AppFont.fredoka,
+      font: AppFont.lilitaOne,
     ),
   ),
   unicornII(
@@ -204,7 +204,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF4500), // dragun orange
       statGroupHandling: Color(0xFFFFB74D), // sulfur orange
       statGroupMeta: Color(0xFFFFCC00), // gold
-      font: AppFont.russoOne,
+      font: AppFont.anton,
     ),
   ),
   hollowChill(
@@ -531,7 +531,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF00F5D4), // electric teal
       statGroupHandling: Color(0xFF69F0AE), // neon green
       statGroupMeta: Color(0xFFB2DFDB), // pale teal
-      font: AppFont.audiowide,
+      font: AppFont.bungee,
     ),
   ),
   cultOfGundead(
@@ -723,7 +723,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF69F0AE),
       statGroupHandling: Color(0xFF40C4FF),
       statGroupMeta: Color(0xFFB9F6CA),
-      font: AppFont.jetBrainsMono,
+      font: AppFont.fjallaOne,
     ),
   ),
   valorOfMarines(
@@ -758,7 +758,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFB74D),
       statGroupHandling: Color(0xFFC5E1A5),
       statGroupMeta: Color(0xFFE6EE9C),
-      font: AppFont.blackOpsOne,
+      font: AppFont.wallpoet,
     ),
   ),
   theBullet(
@@ -794,7 +794,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFEF5350),
       statGroupHandling: Color(0xFFFFD740),
       statGroupMeta: Color(0xFFFFE57F),
-      font: AppFont.righteous,
+      font: AppFont.lilitaOne,
     ),
   ),
   theParadox(
@@ -831,7 +831,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF7E57C2),
       statGroupHandling: Color(0xFFCE93D8),
       statGroupMeta: Color(0xFFE1BEE7),
-      font: AppFont.syncopate,
+      font: AppFont.fjallaOne,
     ),
   ),
   gunpowder(
@@ -866,7 +866,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFB71C1C),
       statGroupHandling: Color(0xFF9E9E9E),
       statGroupMeta: Color(0xFFE57373),
-      font: AppFont.rowdies,
+      font: AppFont.bungee,
     ),
   ),
   dragunfire(
@@ -902,7 +902,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF4500),
       statGroupHandling: Color(0xFFFFAB40),
       statGroupMeta: Color(0xFFFFCC00),
-      font: AppFont.archivoBlack,
+      font: AppFont.anton,
     ),
   ),
   lichsDomain(
@@ -937,7 +937,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF2EC4B6),
       statGroupHandling: Color(0xFFE0E0E0),
       statGroupMeta: Color(0xFFF5F5DC),
-      font: AppFont.specialElite,
+      font: AppFont.wallpoet,
     ),
   ),
   catLady(
@@ -972,7 +972,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFB74D), // amber
       statGroupHandling: Color(0xFFD7CCC8), // cream
       statGroupMeta: Color(0xFFFFCC80), // light amber
-      font: AppFont.carterOne,
+      font: AppFont.lilitaOne,
     ),
   ),
   moonlitChamber(
@@ -1048,7 +1048,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFF8BBD0),
       statGroupHandling: Color(0xFFB3E5FC),
       statGroupMeta: Color(0xFFF48FB1),
-      font: AppFont.fredoka,
+      font: AppFont.lilitaOne,
     ),
   ),
   neonPrism(
@@ -1086,7 +1086,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFE040FB),
       statGroupHandling: Color(0xFF00E5FF),
       statGroupMeta: Color(0xFFFFD740),
-      font: AppFont.fredoka,
+      font: AppFont.lilitaOne,
     ),
   ),
   blacksmithsFire(
@@ -1122,7 +1122,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFD84315),
       statGroupHandling: Color(0xFFFF8A65),
       statGroupMeta: Color(0xFFFFB74D),
-      font: AppFont.russoOne,
+      font: AppFont.anton,
     ),
   ),
   moltenSteel(
@@ -1158,7 +1158,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF6E40),
       statGroupHandling: Color(0xFFB0BEC5),
       statGroupMeta: Color(0xFF90A4AE),
-      font: AppFont.russoOne,
+      font: AppFont.anton,
     ),
   ),
   paperInk(
@@ -1268,7 +1268,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFEB3B), // electric yellow
       statGroupHandling: Color(0xFF42A5F5), // voltage blue
       statGroupMeta: Color(0xFFFFFF00), // pure electric
-      font: AppFont.fasterOne,
+      font: AppFont.anton,
     ),
   ),
   // ── 6 Character Themes ─────────────────────────────────────────
@@ -1307,7 +1307,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFD700),
       statGroupHandling: Color(0xFF7B68EE),
       statGroupMeta: Color(0xFFFFE082),
-      font: AppFont.medievalSharp,
+      font: AppFont.germaniaOne,
     ),
   ),
   theGunslinger(
@@ -1343,7 +1343,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFB300),
       statGroupHandling: Color(0xFFFF6F00),
       statGroupMeta: Color(0xFFFFD54F),
-      font: AppFont.cinzel,
+      font: AppFont.germaniaOne,
     ),
   ),
   theConvict(
@@ -1413,7 +1413,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF66BB6A),
       statGroupHandling: Color(0xFFA1887F),
       statGroupMeta: Color(0xFFA5D6A7),
-      font: AppFont.merriweather,
+      font: AppFont.fjallaOne,
     ),
   ),
   thePilot(
@@ -1450,7 +1450,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF42A5F5),
       statGroupHandling: Color(0xFFB0BEC5),
       statGroupMeta: Color(0xFF82B1FF),
-      font: AppFont.orbitron,
+      font: AppFont.fjallaOne,
     ),
   ),
   theRat(
@@ -1524,7 +1524,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF7C4DFF),
       statGroupHandling: Color(0xFF18FFFF),
       statGroupMeta: Color(0xFFB388FF),
-      font: AppFont.rajdhani,
+      font: AppFont.fjallaOne,
     ),
   ),
   leadLordKeep(
@@ -1560,7 +1560,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFC5A05E),
       statGroupHandling: Color(0xFFD4AF37),
       statGroupMeta: Color(0xFFFFD700),
-      font: AppFont.cinzelDecorative,
+      font: AppFont.germaniaOne,
     ),
   ),
   oubliettePit(
@@ -1596,7 +1596,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF8BC34A),
       statGroupHandling: Color(0xFFBF360C),
       statGroupMeta: Color(0xFFAED581),
-      font: AppFont.shareTechMono,
+      font: AppFont.fjallaOne,
     ),
   ),
   blackPowderMine(
@@ -1632,7 +1632,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF6F00),
       statGroupHandling: Color(0xFF795548),
       statGroupMeta: Color(0xFFFFAB40),
-      font: AppFont.blackOpsOne,
+      font: AppFont.wallpoet,
     ),
   ),
   bulletHellFloor(
@@ -1669,7 +1669,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFD32F2F),
       statGroupHandling: Color(0xFFFFC107),
       statGroupMeta: Color(0xFFFF5252),
-      font: AppFont.archivoBlack,
+      font: AppFont.anton,
     ),
   ),
   rgDepartment(
@@ -1704,7 +1704,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF00E676),
       statGroupHandling: Color(0xFFE0E0E0),
       statGroupMeta: Color(0xFF69F0AE),
-      font: AppFont.jetBrainsMono,
+      font: AppFont.fjallaOne,
     ),
   ),
   custom(
@@ -1749,7 +1749,7 @@ enum AppThemeMode {
       headerAllCaps: true,
       headerUnderlineColor: Color(0x44FFFFFF),
       pageFrame: true,
-      font: AppFont.dmSans,
+      font: AppFont.fjallaOne,
     ),
   ),
   // ── Alternate UI skin (toggle-only, never in the picker). Cream
@@ -2010,7 +2010,7 @@ enum UnicornPalette {
 }
 
 enum AppFont {
-  // ── Featured (locked) ──
+  // ── Featured ──
   gungeon,
   megrim,
   // ── Pixel & Retro ──
@@ -2052,39 +2052,31 @@ enum AppFont {
   shantellSans,
   architectsDaughter,
   patrickHand,
+  // ── Curated additions (fat + stylized, still readable) ──
+  bungee,
+  lilitaOne,
+  germaniaOne,
+  monoton,
+  wallpoet,
+  fjallaOne,
+  // ── Deprecated ──
+  // Members above this line that are not in AppFontLabel.curated have no
+  // bundled asset anymore. Enum order is FROZEN — prefs and saved
+  // themes persist AppFont.index; every read path runs values
+  // through AppFontLabel.migrate() so stale picks land on a live font.
 }
 
 extension AppFontLabel on AppFont {
   static const Map<AppFont, String> _googleFontNames = {
     AppFont.pressStart2p: 'Press Start 2P',
-    AppFont.silkscreen: 'Silkscreen',
-    AppFont.vt323: 'VT323',
-    AppFont.pixelifySans: 'Pixelify Sans',
-    AppFont.blackOpsOne: 'Black Ops One',
-    AppFont.orbitron: 'Orbitron',
-    AppFont.shareTechMono: 'Share Tech Mono',
-    AppFont.syncopate: 'Syncopate',
-    AppFont.rajdhani: 'Rajdhani',
-    AppFont.audiowide: 'Audiowide',
-    AppFont.russoOne: 'Russo One',
-    AppFont.fasterOne: 'Faster One',
-    AppFont.jetBrainsMono: 'JetBrains Mono',
-    AppFont.archivoBlack: 'Archivo Black',
     AppFont.anton: 'Anton',
-    AppFont.rowdies: 'Rowdies',
-    AppFont.righteous: 'Righteous',
-    AppFont.bebasNeue: 'Bebas Neue',
-    AppFont.fredoka: 'Fredoka',
-    AppFont.carterOne: 'Carter One',
-    AppFont.dmSans: 'DM Sans',
-    AppFont.montserrat: 'Montserrat',
-    AppFont.medievalSharp: 'MedievalSharp',
-    AppFont.cinzelDecorative: 'Cinzel Decorative',
-    AppFont.cinzel: 'Cinzel',
-    AppFont.merriweather: 'Merriweather',
-    AppFont.specialElite: 'Special Elite',
-    AppFont.playfairDisplay: 'Playfair Display',
     AppFont.megrim: 'Megrim',
+    AppFont.bungee: 'Bungee',
+    AppFont.lilitaOne: 'Lilita One',
+    AppFont.germaniaOne: 'Germania One',
+    AppFont.monoton: 'Monoton',
+    AppFont.wallpoet: 'Wallpoet',
+    AppFont.fjallaOne: 'Fjalla One',
     AppFont.shantellSans: 'Shantell Sans',
     AppFont.architectsDaughter: 'Architects Daughter',
     AppFont.patrickHand: 'Patrick Hand',
@@ -2092,34 +2084,14 @@ extension AppFontLabel on AppFont {
 
   static const Map<AppFont, String> _googleFontDescriptions = {
     AppFont.pressStart2p: 'Classic 8-bit NES arcade pixel',
-    AppFont.silkscreen: 'Crisp tiny 8-bit screen font',
-    AppFont.vt323: 'Nostalgic glowing CRT terminal font',
-    AppFont.pixelifySans: 'Modern hybrid geometric pixel art',
-    AppFont.blackOpsOne: 'Military industrial stencil look',
-    AppFont.orbitron: 'Futuristic sci-fi aerospace tech',
-    AppFont.shareTechMono: 'Clean digital cybernetic HUD console',
-    AppFont.syncopate: 'Wide high-end cyberpunk architecture',
-    AppFont.rajdhani: 'Squarish military armor tech plates',
-    AppFont.audiowide: 'Smooth streamlined robotic lettering',
-    AppFont.russoOne: 'Heavy soviet metal sci-fi gaming',
-    AppFont.fasterOne: 'Wind-tunnel racing speed blur lines',
-    AppFont.jetBrainsMono: 'Elite software engineer monospace editor',
-    AppFont.archivoBlack: 'Ultra heavy high-visibility signage',
     AppFont.anton: 'Thick solid impact display blocks',
-    AppFont.rowdies: 'Edgy casual heavy fighting style',
-    AppFont.righteous: 'Cool geometric art deco bubble-sans',
-    AppFont.bebasNeue: 'Clean condensed billboard display legend',
-    AppFont.fredoka: 'Cute rounded friendly organic blocks',
-    AppFont.carterOne: 'Thick vintage brush logo signwriting',
-    AppFont.dmSans: 'Neutral geometric modern interface sans',
-    AppFont.montserrat: 'Clean urban geometric architectural sans',
-    AppFont.medievalSharp: 'Sharp runic celtic iron broadsword',
-    AppFont.cinzelDecorative: 'Ornate royalty fantasy crown capitals',
-    AppFont.cinzel: 'Formal ancient roman stone carving',
-    AppFont.merriweather: 'Robust highly readable editorial serif',
-    AppFont.specialElite: 'Grungy ink-splattered vintage typewriter',
-    AppFont.playfairDisplay: 'Luxurious high-contrast theatrical display',
     AppFont.megrim: 'Ultra-stylized thin wire outline vector',
+    AppFont.bungee: 'Fat rounded arcade marquee display',
+    AppFont.lilitaOne: 'Chunky rounded sign-painter sans',
+    AppFont.germaniaOne: 'Blackletter gothic broadsheet poster',
+    AppFont.monoton: 'Neon-tube script — display accents only',
+    AppFont.wallpoet: 'Engraved vintage poster block caps',
+    AppFont.fjallaOne: 'Clean readable geometric workhorse sans',
     AppFont.shantellSans: 'Hand-lettered print sketchbook ink',
     AppFont.architectsDaughter: 'Crisp upright architectural hand lettering',
     AppFont.patrickHand: 'Neat felt-tip print handwriting',
@@ -2140,6 +2112,9 @@ extension AppFontLabel on AppFont {
       AppFont.shantellSans => 'ShantellSans',
       AppFont.architectsDaughter => 'ArchitectsDaughter',
       AppFont.patrickHand => 'PatrickHand',
+      // Deprecated members have no bundled TTF — resolve to the
+      // signature face so a missed migrate() still renders real type.
+      _ when !AppFontLabel.isOffered(this) => 'EnterTheGungeonBig',
       _ => 'GoogleFonts.${label.replaceAll(' ', '')}',
     };
   }
@@ -2153,6 +2128,63 @@ extension AppFontLabel on AppFont {
 
   TextTheme get textTheme =>
       ThemeData.dark().textTheme.apply(fontFamily: bundledFontFamily);
+
+  /// The curated picker set — the ONLY fonts offered in the studio
+  /// typography step (plus the Neo-Skeuo trio, which is skin-locked).
+  /// Order here is the display order: signature → fat display →
+  /// stylized accent → readable workhorse.
+  static const List<AppFont> curated = [
+    AppFont.gungeon,
+    AppFont.megrim,
+    AppFont.bungee,
+    AppFont.germaniaOne,
+    AppFont.anton,
+    AppFont.lilitaOne,
+    AppFont.fjallaOne,
+    AppFont.wallpoet,
+    AppFont.monoton,
+    AppFont.pressStart2p,
+  ];
+
+  /// Hand-lettered trio — valid persisted values, but only reachable
+  /// through the Neo-Skeuo skin's own font picker.
+  static const List<AppFont> skeuoOnly = [
+    AppFont.shantellSans,
+    AppFont.architectsDaughter,
+    AppFont.patrickHand,
+  ];
+
+  /// True when [f] has a bundled asset and may be selected/applied.
+  static bool isOffered(AppFont f) =>
+      curated.contains(f) || skeuoOnly.contains(f);
+
+  /// Maps a possibly-deprecated persisted font onto a live one.
+  /// Role-preserving: pixel→pixel, heavy display→heavy display,
+  /// tech/clean→readable sans, gothic→gothic, editorial→readable.
+  static AppFont migrate(AppFont f) {
+    if (isOffered(f)) return f;
+    return switch (f) {
+      AppFont.silkscreen ||
+      AppFont.vt323 ||
+      AppFont.pixelifySans => AppFont.pressStart2p,
+      AppFont.medievalSharp ||
+      AppFont.cinzelDecorative ||
+      AppFont.cinzel => AppFont.germaniaOne,
+      AppFont.merriweather ||
+      AppFont.specialElite ||
+      AppFont.playfairDisplay ||
+      AppFont.orbitron ||
+      AppFont.shareTechMono ||
+      AppFont.syncopate ||
+      AppFont.rajdhani ||
+      AppFont.audiowide ||
+      AppFont.jetBrainsMono ||
+      AppFont.dmSans ||
+      AppFont.montserrat => AppFont.fjallaOne,
+      AppFont.fredoka || AppFont.carterOne => AppFont.lilitaOne,
+      _ => AppFont.anton, // heavy display cluster
+    };
+  }
 }
 
 /// Themes shown in the picker. Keep this list as the single source of

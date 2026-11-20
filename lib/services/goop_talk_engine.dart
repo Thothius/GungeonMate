@@ -44,7 +44,7 @@ class GoopText extends StatelessWidget {
   Widget build(BuildContext context) {
     // Global weight bias — shifts every text's weight ±2 steps so
     // 200/400/600/800/1000 picks actually change the app. Fonts with
-    // a single variant (Gungeon, Megrim, Russo One) render unchanged.
+    // a single variant (Gungeon, Megrim, Bungee…) render unchanged.
     final bias = VisualPrefs.notifier.value.fontWeightBias;
     var effective = style;
     if (bias != 0 && style?.fontWeight != null) {

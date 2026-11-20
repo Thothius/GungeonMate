@@ -1,10 +1,12 @@
-## v3.7.0 — Theme-Reactive Menu + Living Backdrop (November 2026)
+## v3.7.0 — Theme-Reactive Menu + Living Backdrop + Typography Overhaul (November 2026)
 
 **Build:** 167
 
-The main menu is no longer theme-locked: every surface derives from `AppTheme.flair`, and the backdrop gained a two-layer sprite drift.
+The main menu is no longer theme-locked: every surface derives from `AppTheme.flair`, and the backdrop gained a two-layer sprite drift. The font system was rebuilt around a curated collection.
 
 ### Features
+- **Typography overhaul** — the ~30-face font catalog is cut to a curated 10: Enter the Gungeon + Megrim (signature), Bungee / Germania One / Anton / Lilita One (fat display), Wallpoet / Monoton / Press Start 2P (stylized accents), Fjalla One (readable workhorse). Six new bundled typefaces; 24 scrapped TTFs removed from the APK. TYPE step redesigned as an authored list — each name set in its own face with description + role tag (SIGNATURE / DISPLAY / ACCENT / READABLE).
+- **Font migration** — `AppFont` enum order frozen for persisted-index safety; deprecated members remain but every read path (`VisualPrefs` init/JSON, `CustomThemeData` JSON/load, Neo-Skeuo restore, `setFont`, random theme gen) runs `AppFontLabel.migrate()` so stale picks land on the nearest live face by role (pixel→pixel, gothic→gothic, display→display, clean→readable).
 - **Theme-reactive menu** — logo, buttons, sublabel chip, and the `MainMenuBackdrop` gradient/embers/glow all resolve from the active `ThemeFlair` (themes, Unicorn palettes, remixes, custom presets). Hero button = solid `flair.primary` with luminance-checked label; ghost buttons = faint accent wash per DESIGN.md.
 - **Living backdrop** — `_FlockDrift` (3 flocks of 5–7 sprites crossing horizontally at varied depths, bird-flock motion) + `_RiseDrift` (11 smaller rising sprites, gun-weighted). Sprite pools: 12 guns, 14 items, 8 bullets — all decode once into `ui.Image`, single `CustomPaint` pass per layer, `RepaintBoundary`-wrapped.
 - **Neo-Skeuo accent** — `SkeuoButton.accent` (optional, primary style only): cream paper stays, hero button fill + sublabel chip + toggle chip take the theme's primary (darkened to a pencil tone for the chip).

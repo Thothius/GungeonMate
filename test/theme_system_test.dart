@@ -28,7 +28,7 @@ void main() {
         headlineStat: const Color(0xFFFFD54F),
         bulletColor: const Color(0xFFE8A7F0),
         auraStyle: AvatarAuraStyle.pastelPulse,
-        font: AppFont.fredoka,
+        font: AppFont.lilitaOne,
       );
       final json = original.toJson();
       final restored = CustomThemeData.fromJson(json);
@@ -41,7 +41,7 @@ void main() {
       expect(restored.headlineStat, const Color(0xFFFFD54F));
       expect(restored.bulletColor, const Color(0xFFE8A7F0));
       expect(restored.auraStyle, AvatarAuraStyle.pastelPulse);
-      expect(restored.font, AppFont.fredoka);
+      expect(restored.font, AppFont.lilitaOne);
     });
 
     test('fromJson with missing fields uses defaults', () {
@@ -129,7 +129,7 @@ void main() {
         headlineStat: const Color(0xFF555555),
         bulletColor: const Color(0xFF666666),
         auraStyle: AvatarAuraStyle.voidPulse,
-        font: AppFont.montserrat,
+        font: AppFont.fjallaOne,
       );
       final original = SavedCustomTheme(
         id: '67890',
@@ -152,7 +152,7 @@ void main() {
       expect(restored.customData!.scaffold, const Color(0xFF111111));
       expect(restored.customData!.primary, const Color(0xFF333333));
       expect(restored.customData!.auraStyle, AvatarAuraStyle.voidPulse);
-      expect(restored.customData!.font, AppFont.montserrat);
+      expect(restored.customData!.font, AppFont.fjallaOne);
     });
 
     test('fromJson handles legacy entries without customData', () {
@@ -506,6 +506,70 @@ void main() {
       const p = VisualPrefs(particlesUserOff: true);
       expect(VisualPrefs.fromJson(p.toJson()).particlesUserOff, isTrue);
       expect(const VisualPrefs().particlesUserOff, isFalse);
+    });
+  });
+
+  group('Font curation', () {
+    test('curated set keeps signature + new faces, drops the catalog', () {
+      expect(AppFontLabel.curated, containsAll([
+        AppFont.gungeon,
+        AppFont.megrim,
+        AppFont.bungee,
+        AppFont.lilitaOne,
+        AppFont.germaniaOne,
+        AppFont.anton,
+        AppFont.fjallaOne,
+        AppFont.wallpoet,
+        AppFont.monoton,
+        AppFont.pressStart2p,
+      ]));
+      expect(AppFontLabel.curated.length, 10);
+      // Deprecated members exist for index stability but are hidden.
+      expect(AppFontLabel.isOffered(AppFont.orbitron), isFalse);
+      expect(AppFontLabel.isOffered(AppFont.montserrat), isFalse);
+      expect(AppFontLabel.isOffered(AppFont.fjallaOne), isTrue);
+      // Neo-Skeuo trio stays valid but skin-locked.
+      expect(AppFontLabel.isOffered(AppFont.patrickHand), isTrue);
+      expect(AppFontLabel.curated, isNot(contains(AppFont.patrickHand)));
+    });
+
+    test('migrate maps deprecated fonts by role', () {
+      expect(AppFontLabel.migrate(AppFont.orbitron), AppFont.fjallaOne);
+      expect(AppFontLabel.migrate(AppFont.vt323), AppFont.pressStart2p);
+      expect(AppFontLabel.migrate(AppFont.cinzel), AppFont.germaniaOne);
+      expect(AppFontLabel.migrate(AppFont.fredoka), AppFont.lilitaOne);
+      expect(AppFontLabel.migrate(AppFont.archivoBlack), AppFont.anton);
+      // Live fonts pass through untouched.
+      expect(AppFontLabel.migrate(AppFont.bungee), AppFont.bungee);
+      expect(AppFontLabel.migrate(AppFont.gungeon), AppFont.gungeon);
+      expect(AppFontLabel.migrate(AppFont.patrickHand), AppFont.patrickHand);
+    });
+
+    test('every offered font resolves a bundled family that exists', () {
+      for (final f in [...AppFontLabel.curated, ...AppFontLabel.skeuoOnly]) {
+        final fam = f.bundledFontFamily;
+        expect(fam, isNotEmpty);
+        expect(fam, isNot(contains(' ')), reason: '$f family "$fam"');
+      }
+      // Deprecated fonts fall back to the signature face, never a
+      // nonexistent GoogleFonts.* family.
+      expect(AppFont.orbitron.bundledFontFamily, 'EnterTheGungeonBig');
+    });
+
+    test('deprecated persisted font index migrates on load', () {
+      // orbitron.index written by an old build must not survive as
+      // orbitron — it lands on fjallaOne.
+      final j = const VisualPrefs().toJson()
+        ..['font'] = AppFont.orbitron.index;
+      expect(VisualPrefs.fromJson(j).font, AppFont.fjallaOne);
+      // CustomThemeData font field migrates the same way.
+      final d = CustomThemeData.fromJson({'font': AppFont.vt323.index});
+      expect(d.font, AppFont.pressStart2p);
+      // Random themes only ever pick from the curated set.
+      for (var i = 0; i < 50; i++) {
+        final r = CustomThemeData.random();
+        expect(AppFontLabel.curated, contains(r.font));
+      }
     });
   });
 }

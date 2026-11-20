@@ -513,9 +513,31 @@ void main() {
       expect(find.text('WALLPAPER'), findsWidgets);
     });
 
-    testWidgets('TYPE shows swipable tiles + bottom controls', (tester) async {
+    testWidgets('TYPE shows curated font list + bottom controls', (tester) async {
       await openWizard(tester, 2);
-      expect(find.byType(PageView), findsWidgets);
+      final scrollable = find.byType(Scrollable).first;
+      // Curated collection — signature, fat display, accent, readable.
+      // Rows below the fold are lazily built, so scroll to reveal them.
+      await tester.scrollUntilVisible(
+        find.text('Bungee'),
+        120,
+        scrollable: scrollable,
+      );
+      expect(find.text('Enter the Gungeon'), findsWidgets);
+      expect(find.text('Megrim'), findsOneWidget);
+      expect(find.text('Bungee'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Fjalla One'),
+        120,
+        scrollable: scrollable,
+      );
+      expect(find.text('Germania One'), findsOneWidget);
+      expect(find.text('Fjalla One'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('WEIGHT BIAS'),
+        120,
+        scrollable: scrollable,
+      );
       expect(find.text('BASE FONT SIZE'), findsOneWidget);
       expect(find.text('DASHBOARD TEXT'), findsOneWidget);
       expect(find.text('WEIGHT BIAS'), findsOneWidget);

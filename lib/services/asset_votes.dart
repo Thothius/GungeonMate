@@ -125,9 +125,9 @@ class AssetVotes extends ChangeNotifier {
       _votes
         ..clear()
         ..addEntries(
-          map.entries.where((e) => e.value == 'yay' || e.value == 'nay').map(
-            (e) => MapEntry(e.key, e.value as String),
-          ),
+          map.entries
+              .where((e) => e.value == 'yay' || e.value == 'nay')
+              .map((e) => MapEntry(e.key, e.value as String)),
         );
       notifyListeners();
     } catch (_) {

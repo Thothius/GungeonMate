@@ -687,10 +687,11 @@ class VisualPrefs {
     try {
       final p = await SharedPreferences.getInstance();
       final fontIdx = p.getInt(_kFont);
-      final font =
-          (fontIdx != null && fontIdx >= 0 && fontIdx < AppFont.values.length)
-              ? AppFont.values[fontIdx]
-              : AppFont.gungeon;
+      final font = AppFontLabel.migrate(
+        (fontIdx != null && fontIdx >= 0 && fontIdx < AppFont.values.length)
+            ? AppFont.values[fontIdx]
+            : AppFont.gungeon,
+      );
 
       // Migrate from old scale key if present.
       double fontSize;
@@ -864,7 +865,7 @@ class VisualPrefs {
   }
 
   static Future<void> setFont(AppFont f) async {
-    notifier.value = notifier.value._with(font: f);
+    notifier.value = notifier.value._with(font: AppFontLabel.migrate(f));
     _persist();
   }
 
@@ -1436,7 +1437,7 @@ class VisualPrefs {
         -2,
         2,
       ),
-      font: _enumOr(AppFont.values, j['font'] as int?, 0),
+      font: AppFontLabel.migrate(_enumOr(AppFont.values, j['font'] as int?, 0)),
       fontSize: ((j['fontSize'] as num?)?.toDouble() ?? 12.0).clamp(6.0, 20.0),
       inventoryFontSize: ((j['inventoryFontSize'] as num?)?.toDouble() ?? 11.0)
           .clamp(10.0, 18.0),

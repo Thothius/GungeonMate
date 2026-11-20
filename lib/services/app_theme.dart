@@ -384,7 +384,7 @@ class AppTheme {
       }
       final fIdx = prefs.getInt(_skeuoPrevFontKey);
       if (fIdx != null && fIdx >= 0 && fIdx < AppFont.values.length) {
-        prevFont = AppFont.values[fIdx];
+        prevFont = AppFontLabel.migrate(AppFont.values[fIdx]);
       }
     } catch (_) {}
     // setMode applies the restored theme's curated font first, then we

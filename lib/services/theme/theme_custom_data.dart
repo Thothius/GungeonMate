@@ -95,15 +95,17 @@ class CustomThemeData {
         j['headlineStat'] as int? ?? d.headlineStat.toARGB32(),
       ),
       bulletColor: Color(j['bulletColor'] as int? ?? d.bulletColor.toARGB32()),
-      auraStyle: AvatarAuraStyle.values[
-        (j['auraStyle'] as int? ?? 0).clamp(
+      auraStyle:
+          AvatarAuraStyle.values[(j['auraStyle'] as int? ?? 0).clamp(
+            0,
+            AvatarAuraStyle.values.length - 1,
+          )],
+      font: AppFontLabel.migrate(
+        AppFont.values[(j['font'] as int? ?? 0).clamp(
           0,
-          AvatarAuraStyle.values.length - 1,
-        )
-      ],
-      font: AppFont.values[
-        (j['font'] as int? ?? 0).clamp(0, AppFont.values.length - 1)
-      ],
+          AppFont.values.length - 1,
+        )],
+      ),
       wallpaper: normalizeWallpaperFileName(j['wallpaper'] as String?),
       bgMode: ((j['bgMode'] as int?) ?? 0).clamp(0, 3),
     );
@@ -180,18 +182,17 @@ class CustomThemeData {
           secondary: Color(json['secondary'] as int),
           headlineStat: Color(json['headlineStat'] as int),
           bulletColor: Color(json['bulletColor'] as int),
-          auraStyle: AvatarAuraStyle.values[
-            (json['auraStyle'] as int? ?? 0).clamp(
-              0,
-              AvatarAuraStyle.values.length - 1,
-            )
-          ],
-          font: AppFont.values[
-            (json['font'] as int? ?? 0).clamp(
+          auraStyle:
+              AvatarAuraStyle.values[(json['auraStyle'] as int? ?? 0).clamp(
+                0,
+                AvatarAuraStyle.values.length - 1,
+              )],
+          font: AppFontLabel.migrate(
+            AppFont.values[(json['font'] as int? ?? 0).clamp(
               0,
               AppFont.values.length - 1,
-            )
-          ], // Default to Gungeon (index 0)
+            )],
+          ), // Default to Gungeon (index 0)
           wallpaper: normalizeWallpaperFileName(json['wallpaper'] as String?),
         );
       }
@@ -252,7 +253,7 @@ class CustomThemeData {
       bulletColor: colors[5],
       auraStyle:
           AvatarAuraStyle.values[rng.nextInt(AvatarAuraStyle.values.length)],
-      font: AppFont.values[rng.nextInt(AppFont.values.length)],
+      font: AppFontLabel.curated[rng.nextInt(AppFontLabel.curated.length)],
     );
   }
 }
