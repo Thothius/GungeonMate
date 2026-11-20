@@ -118,6 +118,27 @@ class CustomThemeStore {
       return false;
     }
   }
+
+  /// Update an existing preset in-place. Finds by [theme.id] and replaces
+  /// it with the new data. Returns false if the preset doesn't exist or
+  /// persistence fails.
+  static Future<bool> update(SavedCustomTheme theme) async {
+    final exists = notifier.value.any((t) => t.id == theme.id);
+    if (!exists) return false;
+    final updated = notifier.value
+        .map((t) => t.id == theme.id ? theme : t)
+        .toList();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final json = jsonEncode(updated.map((t) => t.toJson()).toList());
+      final ok = await prefs.setString(_key, json);
+      if (!ok) return false;
+      notifier.value = updated;
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 }
 
 /// Static holder for the live [AppThemeMode]. Mutated via [setMode] and

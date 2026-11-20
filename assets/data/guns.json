@@ -156,8 +156,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "The sidearm of choice for investigative efforts.",
-    "game_icon": "assets/images/game/guns/38_special.png"
+    "ammonomicon": "The sidearm of choice for investigative efforts."
   },
   {
     "name": "3rd Party Controller",
@@ -328,8 +327,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Allows for direct control of foes. Purchased as a reward for a child of the Gungeon. Unfortunately, stupid Mom didn't know what kind of controller to buy and got this dumb third-party one. The controller was quickly discarded after one of the sticks became too wiggly.",
-    "game_icon": "assets/images/game/guns/3rd_party_controller.png"
+    "ammonomicon": "Allows for direct control of foes. Purchased as a reward for a child of the Gungeon. Unfortunately, stupid Mom didn't know what kind of controller to buy and got this dumb third-party one. The controller was quickly discarded after one of the sticks became too wiggly."
   },
   {
     "name": "A.W.P.",
@@ -560,8 +558,7 @@
       "Truck shop",
       "Truth chest"
     ],
-    "ammonomicon": "An extremely powerful rifle. Banned in some sectors, its ease of use caused it to be the weapon of choice for thousands of unskilled marksmen. Only handicapped by its long chambering time. Some say that it will fire faster if you put it in your backpack after every shot...",
-    "game_icon": "assets/images/game/guns/a_w_p.png"
+    "ammonomicon": "An extremely powerful rifle. Banned in some sectors, its ease of use caused it to be the weapon of choice for thousands of unskilled marksmen. Only handicapped by its long chambering time. Some say that it will fire faster if you put it in your backpack after every shot..."
   },
   {
     "name": "Abyssal Tentacle",
@@ -772,7 +769,6 @@
       "Shop"
     ],
     "ammonomicon": "A horrifying tentacle, cloven from some abyssal fiend. It moves in very disquieting ways.",
-    "game_icon": "assets/images/game/guns/abyssal_tentacle.png",
     "game_game_type": "Beam"
   },
   {
@@ -1120,8 +1116,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Becomes more powerful while its bearer is armored. The engineers behind this gun originally tried to devise a system to see if a bullet would hit its target, but the math was so unintuitive that they gave up entirely. A few no longer speak to each other!",
-    "game_icon": "assets/images/game/guns/ac_15.png"
+    "ammonomicon": "Becomes more powerful while its bearer is armored. The engineers behind this gun originally tried to devise a system to see if a bullet would hit its target, but the math was so unintuitive that they gave up entirely. A few no longer speak to each other!"
   },
   {
     "name": "AK-47",
@@ -1302,8 +1297,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "The AK-47 is in many ways the gun against which all other guns are judged. This affordable and reliable piece of hardware has proven itself in nearly any terrain or situation. Desert, jungle, snow, and dungeon were all accounted for in its timeless design. It can even fire underwater.",
-    "game_icon": "assets/images/game/guns/ak_47.png"
+    "ammonomicon": "The AK-47 is in many ways the gun against which all other guns are judged. This affordable and reliable piece of hardware has proven itself in nearly any terrain or situation. Desert, jungle, snow, and dungeon were all accounted for in its timeless design. It can even fire underwater."
   },
   {
     "name": "AKEY-47",
@@ -1514,8 +1508,7 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Can unlock chests. The AKey-47 is a masterpiece of Gungeoncraft, perfectly combining the masterful gunplay of an AK-47 with the incredibly useful ability to open locks. An inscription along the frame reads, \"EX ARCHA, LIBERTAS.\"",
-    "game_icon": "assets/images/game/guns/akey_47.png"
+    "ammonomicon": "Can unlock chests. The AKey-47 is a masterpiece of Gungeoncraft, perfectly combining the masterful gunplay of an AK-47 with the incredibly useful ability to open locks. An inscription along the frame reads, \"EX ARCHA, LIBERTAS.\""
   },
   {
     "name": "Alien Engine",
@@ -1908,8 +1901,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The engine of a crashed starship that has been converted into an energy weapon.",
-    "game_icon": "assets/images/game/guns/alien_engine.png"
+    "ammonomicon": "The engine of a crashed starship that has been converted into an energy weapon."
   },
   {
     "name": "Alien Sidearm",
@@ -2038,8 +2030,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The Hegemony of Man has fought, and won, three major wars with alien races. Hundreds of these pistols were salvaged after the second of these wars.",
-    "game_icon": "assets/images/game/guns/alien_sidearm.png"
+    "ammonomicon": "The Hegemony of Man has fought, and won, three major wars with alien races. Hundreds of these pistols were salvaged after the second of these wars."
   },
   {
     "name": "Anvillain",
@@ -2126,8 +2117,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires anvils! A hometown favorite! The Anvillain has been shown to be the safest and most effective means of dispatching foes with an anvil.",
-    "game_icon": "assets/images/game/guns/anvillain.png"
+    "ammonomicon": "Fires anvils! A hometown favorite! The Anvillain has been shown to be the safest and most effective means of dispatching foes with an anvil."
   },
   {
     "name": "AU Gun",
@@ -2328,8 +2318,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Legends tell of a gun that can kill anything with a single shot. This gun doesn't live up to the legends, but it comes close.",
-    "game_icon": "assets/images/game/guns/au_gun.png"
+    "ammonomicon": "Legends tell of a gun that can kill anything with a single shot. This gun doesn't live up to the legends, but it comes close."
   },
   {
     "name": "Bait Launcher",
@@ -2558,8 +2547,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Launches meat that attracts carnivores. This esoteric weapon was devised by Emmitt Calx during one of his famous big game expeditions. The steak thrown by this small catapult will almost certainly draw the attention of any nearby predators.",
-    "game_icon": "assets/images/game/guns/bait_launcher.png"
+    "ammonomicon": "Launches meat that attracts carnivores. This esoteric weapon was devised by Emmitt Calx during one of his famous big game expeditions. The steak thrown by this small catapult will almost certainly draw the attention of any nearby predators."
   },
   {
     "name": "Balloon Gun",
@@ -2865,8 +2853,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Grants flight while held, but pops when damage is taken. Can be reinflated with an ammo box. A common party favor at Gungeon parties. Gungeon parties are, to be fair, fairly uncommon.",
-    "game_icon": "assets/images/game/guns/balloon_gun.png"
+    "ammonomicon": "Grants flight while held, but pops when damage is taken. Can be reinflated with an ammo box. A common party favor at Gungeon parties. Gungeon parties are, to be fair, fairly uncommon."
   },
   {
     "name": "Banana",
@@ -3000,8 +2987,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Bananas resemble guns, and are high in potassium. A convenient snack and/or weapon for Gungeoneers.",
-    "game_icon": "assets/images/game/guns/banana.png"
+    "ammonomicon": "Bananas resemble guns, and are high in potassium. A convenient snack and/or weapon for Gungeoneers."
   },
   {
     "name": "Barrel",
@@ -3126,8 +3112,7 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Even mentioning guns in the Gungeon can have strange effects. This is an old idiom that has been given physical form through simple repetition. Note: Words are the Gungeon's second language, so slight inaccuracies may occur.",
-    "game_icon": "assets/images/game/guns/barrel.png"
+    "ammonomicon": "Even mentioning guns in the Gungeon can have strange effects. This is an old idiom that has been given physical form through simple repetition. Note: Words are the Gungeon's second language, so slight inaccuracies may occur."
   },
   {
     "name": "Bee Hive",
@@ -3242,8 +3227,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Shoots bees. A beehive is nature's gun! Give it a good shake and let the bullets fly.",
-    "game_icon": "assets/images/game/guns/bee_hive.png"
+    "ammonomicon": "Shoots bees. A beehive is nature's gun! Give it a good shake and let the bullets fly."
   },
   {
     "name": "Betrayer's Shield",
@@ -3391,8 +3375,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Generates a protective shield upon reload. Blockner lost his knighthood when he betrayed Ser Manuel, but he did not lose his gun. He did that much later.",
-    "game_icon": "assets/images/game/guns/betrayer_s_shield.png"
+    "ammonomicon": "Generates a protective shield upon reload. Blockner lost his knighthood when he betrayed Ser Manuel, but he did not lose his gun. He did that much later."
   },
   {
     "name": "Big Iron",
@@ -3560,8 +3543,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The Big Iron is a strange revolver, created by attaching additional barrels to a magnum. The barrels are not actually connected to the chamber, but they fire nonetheless. Decades ago, Bullet Kin learned of the existence of human gunsmiths. In the intervening years, they have attempted to replicate the art of guncraft with mixed results.",
-    "game_icon": "assets/images/game/guns/big_iron.png"
+    "ammonomicon": "The Big Iron is a strange revolver, created by attaching additional barrels to a magnum. The barrels are not actually connected to the chamber, but they fire nonetheless. Decades ago, Bullet Kin learned of the existence of human gunsmiths. In the intervening years, they have attempted to replicate the art of guncraft with mixed results."
   },
   {
     "name": "Big Shotgun",
@@ -3728,8 +3710,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "A big shotgun. In comparison with the Regular Shotgun, this one is bigger.",
-    "game_icon": "assets/images/game/guns/big_shotgun.png"
+    "ammonomicon": "A big shotgun. In comparison with the Regular Shotgun, this one is bigger."
   },
   {
     "name": "Black Hole Gun",
@@ -4011,8 +3992,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Shoots Black Holes. A technological marvel, produced by Interstice Technology. Once fully charged, users report seeing the momentary birth, and death, of a star.",
-    "game_icon": "assets/images/game/guns/black_hole_gun.png"
+    "ammonomicon": "Shoots Black Holes. A technological marvel, produced by Interstice Technology. Once fully charged, users report seeing the momentary birth, and death, of a star."
   },
   {
     "name": "Blasphemy",
@@ -4754,8 +4734,7 @@
     "id": 417,
     "infinite_ammo": true,
     "ammonomicon_pos": 6,
-    "ammonomicon": "Betrayer!",
-    "game_icon": "assets/images/game/guns/blasphemy.png"
+    "ammonomicon": "Betrayer!"
   },
   {
     "name": "Blooper",
@@ -4893,8 +4872,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Extremely high knockback. A poor facsimile of the Gun That Can Kill The Past. Seeking an alternate route to past modification, time travelers would use these guns to eliminate their past selves and take their place. Unfortunately, without the power of the true Gun, this always resulted in ironic consequences.",
-    "game_icon": "assets/images/game/guns/blooper.png"
+    "ammonomicon": "Extremely high knockback. A poor facsimile of the Gun That Can Kill The Past. Seeking an alternate route to past modification, time travelers would use these guns to eliminate their past selves and take their place. Unfortunately, without the power of the true Gun, this always resulted in ironic consequences."
   },
   {
     "name": "Blunderbuss",
@@ -5013,8 +4991,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Used mostly by farmers who seek to defend their farms from hungry giants, the Blunderbuss fires anything you put into it. Hold to charge and launch projectiles in an inaccuate short spray. Not as effective against sly dragons.",
-    "game_icon": "assets/images/game/guns/blunderbuss.png"
+    "ammonomicon": "Used mostly by farmers who seek to defend their farms from hungry giants, the Blunderbuss fires anything you put into it. Hold to charge and launch projectiles in an inaccuate short spray. Not as effective against sly dragons."
   },
   {
     "name": "Bow",
@@ -5189,8 +5166,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The classic Bow will never go out of style.",
-    "game_icon": "assets/images/game/guns/bow.png"
+    "ammonomicon": "The classic Bow will never go out of style."
   },
   {
     "name": "Boxing Glove",
@@ -5642,8 +5618,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Shoots a boxing glove, sort of. Crafted by the Resourceful Rat as a way to cheat at fisticuffs, this boxing glove has been modified to spring out in a humorous manner.",
-    "game_icon": "assets/images/game/guns/boxing_glove.png"
+    "ammonomicon": "Shoots a boxing glove, sort of. Crafted by the Resourceful Rat as a way to cheat at fisticuffs, this boxing glove has been modified to spring out in a humorous manner."
   },
   {
     "name": "Brick Breaker",
@@ -5772,8 +5747,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Legends tell of a mysterious alchemist who could turn bricks into coins, turtles, mushrooms, and a wide variety of other things. If true, this gun is a poor facsimile of his abilities, but is still useful nonetheless.",
-    "game_icon": "assets/images/game/guns/brick_breaker.png"
+    "ammonomicon": "Legends tell of a mysterious alchemist who could turn bricks into coins, turtles, mushrooms, and a wide variety of other things. If true, this gun is a poor facsimile of his abilities, but is still useful nonetheless."
   },
   {
     "name": "BSG",
@@ -5982,8 +5956,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Charge to clear rooms. A Gungeon classic, and one of the first to be imported through the Gungeon Acquisitions Dept. The BSG's powerful blast will make short work of nearly any Gundead.",
-    "game_icon": "assets/images/game/guns/bsg.png"
+    "ammonomicon": "Charge to clear rooms. A Gungeon classic, and one of the first to be imported through the Gungeon Acquisitions Dept. The BSG's powerful blast will make short work of nearly any Gundead."
   },
   {
     "name": "Bubble Blaster",
@@ -6502,8 +6475,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Shoots bubbles. Uniquely effective under the right circumstances. Doubles as an amusing toy for babies.",
-    "game_icon": "assets/images/game/guns/bubble_blaster.png"
+    "ammonomicon": "Shoots bubbles. Uniquely effective under the right circumstances. Doubles as an amusing toy for babies."
   },
   {
     "name": "Budget Revolver",
@@ -6645,8 +6617,7 @@
     "infinite_ammo": true,
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 3,
-    "ammonomicon": "This Budget Revolver was brought to the Gungeon by an infamous fugitive. Provided by the Hegemony Regional Magistrate. The Convict won their plea to face the Gungeon in lieu of life imprisonment; undo their crimes, or face an eternity in Gungeon. With no cost to the state, it was an acceptable arrangement. Cheaply made and prone to jams, the Budget Revolver used by only the most desperate Gungeoneers.",
-    "game_icon": "assets/images/game/guns/budget_revolver.png"
+    "ammonomicon": "This Budget Revolver was brought to the Gungeon by an infamous fugitive. Provided by the Hegemony Regional Magistrate. The Convict won their plea to face the Gungeon in lieu of life imprisonment; undo their crimes, or face an eternity in Gungeon. With no cost to the state, it was an acceptable arrangement. Cheaply made and prone to jams, the Budget Revolver used by only the most desperate Gungeoneers."
   },
   {
     "name": "Bullet",
@@ -6832,8 +6803,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "This strange gun, shaped like a bullet, fires bullets that are shaped like guns. Those gun-shaped bullets continue to fire bullets in-flight, but those bullets look like bullets. Straightforward Gungeon engineering!",
-    "game_icon": "assets/images/game/guns/bullet.png"
+    "ammonomicon": "This strange gun, shaped like a bullet, fires bullets that are shaped like guns. Those gun-shaped bullets continue to fire bullets in-flight, but those bullets look like bullets. Straightforward Gungeon engineering!"
   },
   {
     "name": "Bullet Bore",
@@ -6974,8 +6944,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The explosive drills this gun fires will stun enemies before exploding. The Bullet Bore is an exotic weapon from the past, when the only creatures to carry guns were dinosaurs.",
-    "game_icon": "assets/images/game/guns/bullet_bore.png"
+    "ammonomicon": "The explosive drills this gun fires will stun enemies before exploding. The Bullet Bore is an exotic weapon from the past, when the only creatures to carry guns were dinosaurs."
   },
   {
     "name": "Bundle of Wands",
@@ -7171,8 +7140,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Triple magic burst. Magic is unreliable in the Gungeon, unless it is based in the art of Gunjuration. Faced with low ammunition, some ingenious magic user taped several wands together in a crude approximation of a firearm.",
-    "game_icon": "assets/images/game/guns/bundle_of_wands.png"
+    "ammonomicon": "Triple magic burst. Magic is unreliable in the Gungeon, unless it is based in the art of Gunjuration. Faced with low ammunition, some ingenious magic user taped several wands together in a crude approximation of a firearm."
   },
   {
     "name": "Buzzkill",
@@ -7376,8 +7344,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires sawblades. The marketing team assigned to the Saw Blader wanted to call it the Sawed-On Shotgun, but were overruled by the gun's designer. It's more of a handgun, anyway.",
-    "game_icon": "assets/images/game/guns/buzzkill.png"
+    "ammonomicon": "Fires sawblades. The marketing team assigned to the Saw Blader wanted to call it the Sawed-On Shotgun, but were overruled by the gun's designer. It's more of a handgun, anyway."
   },
   {
     "name": "Cactus",
@@ -7551,8 +7518,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Low damage, high rate of fire. Spiny! Remnants of Gun Cacti can be found throughout the Gungeon, but no one is certain as to their source. Perhaps they hail from a yet undiscovered Chamber? Regardless, their impressive needle capacity is a boon to any Gungeoneer.",
-    "game_icon": "assets/images/game/guns/cactus.png"
+    "ammonomicon": "Low damage, high rate of fire. Spiny! Remnants of Gun Cacti can be found throughout the Gungeon, but no one is certain as to their source. Perhaps they hail from a yet undiscovered Chamber? Regardless, their impressive needle capacity is a boon to any Gungeoneer."
   },
   {
     "name": "Camera",
@@ -7778,8 +7744,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A camera brought to the Gungeon by a journalist. The camera is shaped enough like a gun to survive in the Gungeon's depths.",
-    "game_icon": "assets/images/game/guns/camera.png"
+    "ammonomicon": "A camera brought to the Gungeon by a journalist. The camera is shaped enough like a gun to survive in the Gungeon's depths."
   },
   {
     "name": "Casey",
@@ -8435,8 +8400,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "A standard baseball bat, modified to hit bullets instead of balls. Launches enemy projectiles back with a vengeance! Nothing can happen until you swing the bat.",
-    "game_icon": "assets/images/game/guns/casey.png"
+    "ammonomicon": "A standard baseball bat, modified to hit bullets instead of balls. Launches enemy projectiles back with a vengeance! Nothing can happen until you swing the bat."
   },
   {
     "name": "Cat Claw",
@@ -8601,8 +8565,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires explosive homing darts.",
-    "game_icon": "assets/images/game/guns/cat_claw.png"
+    "ammonomicon": "Fires explosive homing darts."
   },
   {
     "name": "Chamber Gun",
@@ -9047,8 +9010,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Transforms based on Chamber. This gun uses an advanced shape-memory alloy. When exposed to different environmental stimuli it reacts with the salts in Gungeoneer’s bodies and transforms into a location-specific gun. Master rounds can also influence the shape of this curious weapon.",
-    "game_icon": "assets/images/game/guns/chamber_gun.png"
+    "ammonomicon": "Transforms based on Chamber. This gun uses an advanced shape-memory alloy. When exposed to different environmental stimuli it reacts with the salts in Gungeoneer’s bodies and transforms into a location-specific gun. Master rounds can also influence the shape of this curious weapon."
   },
   {
     "name": "Charge Shot",
@@ -9179,8 +9141,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The Charge Shot is a weapon from Distant Lands. Legend says it was once used by mutant gladiators in rocket-propelled deathmatches to the rocket-propelled death.",
-    "game_icon": "assets/images/game/guns/charge_shot.png"
+    "ammonomicon": "The Charge Shot is a weapon from Distant Lands. Legend says it was once used by mutant gladiators in rocket-propelled deathmatches to the rocket-propelled death."
   },
   {
     "name": "Charmed Bow",
@@ -9332,8 +9293,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Charms enemies temporarily. The preferred bow of the Pride of Venus before her fall. While its arrows deal little physical damage, they are coated in a potent hallucinogen. Even a slight scratch can confuse friend and foe.",
-    "game_icon": "assets/images/game/guns/charmed_bow.png"
+    "ammonomicon": "Charms enemies temporarily. The preferred bow of the Pride of Venus before her fall. While its arrows deal little physical damage, they are coated in a potent hallucinogen. Even a slight scratch can confuse friend and foe."
   },
   {
     "name": "Cobalt Hammer",
@@ -9512,8 +9472,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Shoots streaks of blue. Chargeable. Brought to the Gungeon by two of the first souls to conquer the Gungeon. Their ceaseless charge was driven by an unquenchable curiosity, and not even fatigue could slow their progress. Sleeping in shifts, the resting partner was carried into the depths on the other's back. Many adventurers throughout the galaxy would first learn of the Gungeon through tales of their exploits.",
-    "game_icon": "assets/images/game/guns/cobalt_hammer.png"
+    "ammonomicon": "Shoots streaks of blue. Chargeable. Brought to the Gungeon by two of the first souls to conquer the Gungeon. Their ceaseless charge was driven by an unquenchable curiosity, and not even fatigue could slow their progress. Sleeping in shifts, the resting partner was carried into the depths on the other's back. Many adventurers throughout the galaxy would first learn of the Gungeon through tales of their exploits."
   },
   {
     "name": "Cold 45",
@@ -9606,8 +9565,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Freezes enemies. This gun's manufacture was outsourced, and due to a typographical error turned out better than expected.",
-    "game_icon": "assets/images/game/guns/cold_45.png"
+    "ammonomicon": "Freezes enemies. This gun's manufacture was outsourced, and due to a typographical error turned out better than expected."
   },
   {
     "name": "Colt 1851",
@@ -9732,8 +9690,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Fires ricochet rounds. The Single Action Army may take some time to reload, but you'll hear no complaints from its users. Documents reclaimed from the Order of the True Gun imply that on occasion, a cultist briefly attains gunvana while chambering its rounds.",
-    "game_icon": "assets/images/game/guns/colt_1851.png"
+    "ammonomicon": "Fires ricochet rounds. The Single Action Army may take some time to reload, but you'll hear no complaints from its users. Documents reclaimed from the Order of the True Gun imply that on occasion, a cultist briefly attains gunvana while chambering its rounds."
   },
   {
     "name": "Com4nd0",
@@ -9932,8 +9889,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Standard box rocket. Capacity: 4. Often found atop military transports or mechanized walkers, this box rocket can be fired manually by the strongest Gungeoneers.",
-    "game_icon": "assets/images/game/guns/com4nd0.png"
+    "ammonomicon": "Standard box rocket. Capacity: 4. Often found atop military transports or mechanized walkers, this box rocket can be fired manually by the strongest Gungeoneers."
   },
   {
     "name": "Combined Rifle",
@@ -10207,8 +10163,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Alternates between firing pulse blasts and an extremely powerful ball of energy. Alien technology, co-opted by the Hegemony of Man after the the successful liberation of Planet 17.",
-    "game_icon": "assets/images/game/guns/combined_rifle.png"
+    "ammonomicon": "Alternates between firing pulse blasts and an extremely powerful ball of energy. Alien technology, co-opted by the Hegemony of Man after the the successful liberation of Planet 17."
   },
   {
     "name": "Composite Gun",
@@ -10693,8 +10648,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This gun is made entirely from composite materials and only holds two rounds. It was brought to the Gungeon by a thoughtless agent, not realizing the affront to the Gun that such a thing implied.",
-    "game_icon": "assets/images/game/guns/composite_gun.png"
+    "ammonomicon": "This gun is made entirely from composite materials and only holds two rounds. It was brought to the Gungeon by a thoughtless agent, not realizing the affront to the Gun that such a thing implied."
   },
   {
     "name": "Compressed Air Tank",
@@ -11013,8 +10967,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Shoots sharks. Really. This gun, a Calx original, fires homing sharks. This would never function under normal circumstances, but the Gungeon respects the pure audacity of its existence.",
-    "game_icon": "assets/images/game/guns/compressed_air_tank.png"
+    "ammonomicon": "Shoots sharks. Really. This gun, a Calx original, fires homing sharks. This would never function under normal circumstances, but the Gungeon respects the pure audacity of its existence."
   },
   {
     "name": "Corsair",
@@ -11180,8 +11133,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Circumnavigates the room, then explodes. Many years ago, Gungeon mariners used wind to propel their bullets instead of combustion. The trips would take so long to cross a room that the bullets would sometimes mutiny and change course entirely.",
-    "game_icon": "assets/images/game/guns/corsair.png"
+    "ammonomicon": "Circumnavigates the room, then explodes. Many years ago, Gungeon mariners used wind to propel their bullets instead of combustion. The trips would take so long to cross a room that the bullets would sometimes mutiny and change course entirely."
   },
   {
     "name": "Crescent Crossbow",
@@ -11511,8 +11463,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires shattering starlight. A crossbow that shines in the moonlight of Gunymede. Charge it up, and watch the shooting stars fly.",
-    "game_icon": "assets/images/game/guns/crescent_crossbow.png"
+    "ammonomicon": "Fires shattering starlight. A crossbow that shines in the moonlight of Gunymede. Charge it up, and watch the shooting stars fly."
   },
   {
     "name": "Crestfaller",
@@ -11799,8 +11750,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Freezes enemies. This unique weapon was brought to the Gungeon by a disgraced warrior who discarded it when he gave up. The projectiles it fires are extremely low-energy, delivering a cold and highly depressing death.",
-    "game_icon": "assets/images/game/guns/crestfaller.png"
+    "ammonomicon": "Freezes enemies. This unique weapon was brought to the Gungeon by a disgraced warrior who discarded it when he gave up. The projectiles it fires are extremely low-energy, delivering a cold and highly depressing death."
   },
   {
     "name": "Crossbow",
@@ -11889,8 +11839,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "One of the earliest examples of trigger fired projectiles.",
-    "game_icon": "assets/images/game/guns/crossbow.png"
+    "ammonomicon": "One of the earliest examples of trigger fired projectiles."
   },
   {
     "name": "Crown of Guns",
@@ -12273,8 +12222,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires rapidly in all directions. This unwieldy crown signifies sovreignty over bullets.",
-    "game_icon": "assets/images/game/guns/crown_of_guns.png"
+    "ammonomicon": "Fires rapidly in all directions. This unwieldy crown signifies sovreignty over bullets."
   },
   {
     "name": "Dark Marker",
@@ -12776,8 +12724,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires two projectiles. If they meet... Matter is composed largely of strong particles, and antimatter is composed of weak particles. When they meet, the strong particles overwhelm the weak particles and then explode in satisfaction. This gun is the favorite gun of the Gunsling King, who somewhat inscrutably says it reminds him of his servant.",
-    "game_icon": "assets/images/game/guns/dark_marker.png"
+    "ammonomicon": "Fires two projectiles. If they meet... Matter is composed largely of strong particles, and antimatter is composed of weak particles. When they meet, the strong particles overwhelm the weak particles and then explode in satisfaction. This gun is the favorite gun of the Gunsling King, who somewhat inscrutably says it reminds him of his servant."
   },
   {
     "name": "Dart Gun",
@@ -12908,8 +12855,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "Just because children are young, doesn't mean they don't have pasts they would like to change. Perhaps some young soul wished to make sure his or her sibling took the blame for spilling grape juice on the couch. Much less worthy causes have been championed in the Gungeon.",
-    "game_icon": "assets/images/game/guns/dart_gun.png"
+    "ammonomicon": "Just because children are young, doesn't mean they don't have pasts they would like to change. Perhaps some young soul wished to make sure his or her sibling took the blame for spilling grape juice on the couch. Much less worthy causes have been championed in the Gungeon."
   },
   {
     "name": "Deck4rd",
@@ -13057,8 +13003,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Fires massive explosive rounds. Following the tragic Ten Days' War, a majority of the Hegemony's Shock Troops were decommissioned. A small number of the combat robots escaped however, and they were pursued relentlessly by special forces. This explosive hand cannon belonged to one such detective who tracked his prey to the Gungeon.",
-    "game_icon": "assets/images/game/guns/deck4rd.png"
+    "ammonomicon": "Fires massive explosive rounds. Following the tragic Ten Days' War, a majority of the Hegemony's Shock Troops were decommissioned. A small number of the combat robots escaped however, and they were pursued relentlessly by special forces. This explosive hand cannon belonged to one such detective who tracked his prey to the Gungeon."
   },
   {
     "name": "Demon Head",
@@ -13155,7 +13100,6 @@
       "Truth chest"
     ],
     "ammonomicon": "Fires a superheated beam that can ignite enemies. The Order of the True Gun tells three tales of the demons that dwell beneath the Gungeon. All end in fire.",
-    "game_icon": "assets/images/game/guns/demon_head.png",
     "game_game_type": "Beam"
   },
   {
@@ -13343,8 +13287,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This tiny pistol packs a correspondingly small punch, but it is well-known for getting its wielders out of tight spots.",
-    "game_icon": "assets/images/game/guns/derringer.png"
+    "ammonomicon": "This tiny pistol packs a correspondingly small punch, but it is well-known for getting its wielders out of tight spots."
   },
   {
     "name": "Devolver",
@@ -13622,8 +13565,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Can reduce any target (or situation) to a more debased state. Smells of rum.",
-    "game_icon": "assets/images/game/guns/devolver.png"
+    "ammonomicon": "Can reduce any target (or situation) to a more debased state. Smells of rum."
   },
   {
     "name": "Directional Pad",
@@ -13838,8 +13780,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "When this gun runs out of ammo, it is destroyed, creating a chest. This pad was once used as the summons for an ancient convocation of wizards. It is crusted from years of use, notably Back, Back, Low Punch. //Below needs translation",
-    "game_icon": "assets/images/game/guns/directional_pad.png"
+    "ammonomicon": "When this gun runs out of ammo, it is destroyed, creating a chest. This pad was once used as the summons for an ancient convocation of wizards. It is crusted from years of use, notably Back, Back, Low Punch. //Below needs translation"
   },
   {
     "name": "Disintegrator",
@@ -13884,7 +13825,6 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Fires a beam that decoheres matter into its constituent particles. This disintegration ray is outlawed on almost every planet with some form of government, and feared by all beings made primarily of matter. It can be fired legally in only two places: the Gungeon, and the waste disposal facilities of Popolon V.",
-    "game_icon": "assets/images/game/guns/disintegrator.png",
     "game_game_type": "Beam"
   },
   {
@@ -14009,8 +13949,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Finely balanced, rapid fire. Can ignite foes. An Edwin original. The Dragunfire was forged deep in the heart of the Gungeon, crafted to emulate the wrath of the beast from which it takes its name.",
-    "game_icon": "assets/images/game/guns/dragunfire.png"
+    "ammonomicon": "Finely balanced, rapid fire. Can ignite foes. An Edwin original. The Dragunfire was forged deep in the heart of the Gungeon, crafted to emulate the wrath of the beast from which it takes its name."
   },
   {
     "name": "Dueling Laser",
@@ -14246,8 +14185,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Uses no ammo, but recharges like an item. A thousand worlds away on a war-torn planet, this pistol is used in duels to the death. Its powerful beam consumes no ammo, but takes time to recharge. A hasty shot comes with a price.",
-    "game_icon": "assets/images/game/guns/dueling_laser.png"
+    "ammonomicon": "Uses no ammo, but recharges like an item. A thousand worlds away on a war-torn planet, this pistol is used in duels to the death. Its powerful beam consumes no ammo, but takes time to recharge. A hasty shot comes with a price."
   },
   {
     "name": "Dueling Pistol",
@@ -14343,8 +14281,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "Fires ricocheting musket balls. This most ancient of pistols has settled many a lovers' quarrel. This particular flintlock would be fairly useless in a duel, as the ricochet would probably kill several bystanders.",
-    "game_icon": "assets/images/game/guns/dueling_pistol.png"
+    "ammonomicon": "Fires ricocheting musket balls. This most ancient of pistols has settled many a lovers' quarrel. This particular flintlock would be fairly useless in a duel, as the ricochet would probably kill several bystanders."
   },
   {
     "name": "Dungeon Eagle",
@@ -14425,8 +14362,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A powerful, unwieldy handgun. Can be charged for more power. A favorite more for its image than its efficiency, the Dungeon Eagle is capable of delivering massive damage. Not terribly accurate, but highly memorable.",
-    "game_icon": "assets/images/game/guns/dungeon_eagle.png"
+    "ammonomicon": "A powerful, unwieldy handgun. Can be charged for more power. A favorite more for its image than its efficiency, the Dungeon Eagle is capable of delivering massive damage. Not terribly accurate, but highly memorable."
   },
   {
     "name": "Elephant Gun",
@@ -14603,8 +14539,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An inelegant weapon for a less civilized age. These guns were once used to make pianos out of teeth.",
-    "game_icon": "assets/images/game/guns/elephant_gun.png"
+    "ammonomicon": "An inelegant weapon for a less civilized age. These guns were once used to make pianos out of teeth."
   },
   {
     "name": "Elimentaler",
@@ -14829,8 +14764,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Encheeses enemies. A favorite of the Resourceful Rat. He doesn't typically favor any one gun in particular, as he usually collects only to grow his hoard, but he finds this one particularly appetizing.",
-    "game_icon": "assets/images/game/guns/elimentaler.png"
+    "ammonomicon": "Encheeses enemies. A favorite of the Resourceful Rat. He doesn't typically favor any one gun in particular, as he usually collects only to grow his hoard, but he finds this one particularly appetizing."
   },
   {
     "name": "Evolver",
@@ -14978,8 +14912,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "This gun adapts. While some have disputed the claim that a gun can change shape or adapt to its new environment within the Gungeon, this weapon appears to be irrefutable proof of the phenomenon. Since its discovery, the number of self-proclaimed gunvolution deniers has increased by 4%.",
-    "game_icon": "assets/images/game/guns/evolver.png"
+    "ammonomicon": "This gun adapts. While some have disputed the claim that a gun can change shape or adapt to its new environment within the Gungeon, this weapon appears to be irrefutable proof of the phenomenon. Since its discovery, the number of self-proclaimed gunvolution deniers has increased by 4%."
   },
   {
     "name": "Excaliber",
@@ -15332,8 +15265,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Reload to clear the air of bullets. This abominable weapon angers the Jammed. The weapon of a mythical hero, said to have mastered the Gungeon. Reloading initiates a defensive flurry of slashes, each positioned to carve a bullet from the air.",
-    "game_icon": "assets/images/game/guns/excaliber.png"
+    "ammonomicon": "Reload to clear the air of bullets. This abominable weapon angers the Jammed. The weapon of a mythical hero, said to have mastered the Gungeon. Reloading initiates a defensive flurry of slashes, each positioned to carve a bullet from the air."
   },
   {
     "name": "Eye of the Beholster",
@@ -15489,8 +15421,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The reproductive gun of the terrible Beholster. When wielded by its creator, it summons young Beholster spawn from the void.",
-    "game_icon": "assets/images/game/guns/eye_of_the_beholster.png"
+    "ammonomicon": "The reproductive gun of the terrible Beholster. When wielded by its creator, it summons young Beholster spawn from the void."
   },
   {
     "name": "Face Melter",
@@ -15714,8 +15645,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A normal electric guitar. Drops an amplifier on reload for double the power! Unfortunately, musical talent and Gungeoneering skill do not often overlap. Any damage caused by this \"gun\" has little to do with the Gungeon.",
-    "game_icon": "assets/images/game/guns/face_melter.png"
+    "ammonomicon": "A normal electric guitar. Drops an amplifier on reload for double the power! Unfortunately, musical talent and Gungeoneering skill do not often overlap. Any damage caused by this \"gun\" has little to do with the Gungeon."
   },
   {
     "name": "Fightsabre",
@@ -15944,8 +15874,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Reload to reflect nearby bullets. An ancient weapon, composed entirely of hardened light.",
-    "game_icon": "assets/images/game/guns/fightsabre.png"
+    "ammonomicon": "Reload to reflect nearby bullets. An ancient weapon, composed entirely of hardened light."
   },
   {
     "name": "Finished Gun",
@@ -16209,8 +16138,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A gun to rule them all. The swan-song of a prolific gunsmith. Though only recently completed, it somehow feels very familiar. A small hourglass is embossed on the cylinder, the sands fully filling the bottom half.",
-    "game_icon": "assets/images/game/guns/finished_gun.png"
+    "ammonomicon": "A gun to rule them all. The swan-song of a prolific gunsmith. Though only recently completed, it somehow feels very familiar. A small hourglass is embossed on the cylinder, the sands fully filling the bottom half."
   },
   {
     "name": "Flame Hand",
@@ -16454,8 +16382,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Sets enemies aflame. Alben Smallbore, enthralled with the variety of guns he found in the Gungeon, created this spell. Upon casting, the wielder's hand bursts into flame, allowing fireballs to be thrown like bullets.",
-    "game_icon": "assets/images/game/guns/flame_hand.png"
+    "ammonomicon": "Sets enemies aflame. Alben Smallbore, enthralled with the variety of guns he found in the Gungeon, created this spell. Upon casting, the wielder's hand bursts into flame, allowing fireballs to be thrown like bullets."
   },
   {
     "name": "Flare Gun",
@@ -16574,8 +16501,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Sets targets aflame! Unfortunately, deep in the Gungeon, no one will see this flare but you.",
-    "game_icon": "assets/images/game/guns/flare_gun.png"
+    "ammonomicon": "Sets targets aflame! Unfortunately, deep in the Gungeon, no one will see this flare but you."
   },
   {
     "name": "Flash Ray",
@@ -16809,8 +16735,7 @@
     "id": 383,
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 120,
-    "ammonomicon": "The trusty sidearm of a spacefaring hero. Featuring a stylish design and solid performance, this blaster is almost always worth keeping around.",
-    "game_icon": "assets/images/game/guns/flash_ray.png"
+    "ammonomicon": "The trusty sidearm of a spacefaring hero. Featuring a stylish design and solid performance, this blaster is almost always worth keeping around."
   },
   {
     "name": "Fossilized Gun",
@@ -17004,7 +16929,6 @@
       "Shop"
     ],
     "ammonomicon": "Reloading this skull produces a gout of flame that can ignite oil. This is a spectacularly preserved specimen of a gun that went extinct during the Ballistac era.",
-    "game_icon": "assets/images/game/guns/fossilized_gun.png",
     "game_game_type": "Beam"
   },
   {
@@ -17081,7 +17005,6 @@
     "content_source": "CONTENT_UPDATE_02",
     "ammonomicon_pos": 177,
     "ammonomicon": "Freezes enemies in their tracks.",
-    "game_icon": "assets/images/game/guns/freeze_ray.png",
     "game_damage": "20",
     "game_game_type": "Beam"
   },
@@ -17202,8 +17125,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The arctic blast this gun emits can freeze enemies at close range. This gun was carried by a frost giant, long ago. Though they no longer rule the icy depths, a few of their artifacts remain.",
-    "game_icon": "assets/images/game/guns/frost_giant.png"
+    "ammonomicon": "The arctic blast this gun emits can freeze enemies at close range. This gun was carried by a frost giant, long ago. Though they no longer rule the icy depths, a few of their artifacts remain."
   },
   {
     "name": "Gamma Ray",
@@ -17474,7 +17396,6 @@
       "Wooden chests"
     ],
     "ammonomicon": "This archaic laser has been studied for centuries. Gungeonologists can only conclude that it was used by primitive people to poison each other with radiation.",
-    "game_icon": "assets/images/game/guns/gamma_ray.png",
     "game_game_type": "Beam"
   },
   {
@@ -17655,8 +17576,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increased clip capacity with damage taken. The Gilded Hydra is a masterwork shotgun created by Edwin, the legendary gunsmith. Its capacity grows every time its bearer is wounded. Revolvations 2:1 These are the words of Kaliber, she who grips the seven sidearms in her hands and walks among the six loaded chambers. When the Gun is drawn to the heart of the pacifist, and when the chambers are empty and the shells are spent, the Last of the Jammed will ascend to seal the Breach forever.",
-    "game_icon": "assets/images/game/guns/gilded_hydra.png"
+    "ammonomicon": "Increased clip capacity with damage taken. The Gilded Hydra is a masterwork shotgun created by Edwin, the legendary gunsmith. Its capacity grows every time its bearer is wounded. Revolvations 2:1 These are the words of Kaliber, she who grips the seven sidearms in her hands and walks among the six loaded chambers. When the Gun is drawn to the heart of the pacifist, and when the chambers are empty and the shells are spent, the Last of the Jammed will ascend to seal the Breach forever."
   },
   {
     "name": "Glacier",
@@ -17822,8 +17742,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Projectiles shatter and freeze enemies.",
-    "game_icon": "assets/images/game/guns/glacier.png"
+    "ammonomicon": "Projectiles shatter and freeze enemies."
   },
   {
     "name": "Glass Cannon",
@@ -18127,8 +18046,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Powerful, but shatters upon taking damage. Normally, a gun made of glass would shatter instantaneously, but the Gungeon's energies have reinforced this inadvisable device to the point of near usability.",
-    "game_icon": "assets/images/game/guns/glass_cannon.png"
+    "ammonomicon": "Powerful, but shatters upon taking damage. Normally, a gun made of glass would shatter instantaneously, but the Gungeon's energies have reinforced this inadvisable device to the point of near usability."
   },
   {
     "name": "Grasschopper",
@@ -18232,8 +18150,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This petite weapon packs a punch, and the recoil can knock the user backwards.",
-    "game_icon": "assets/images/game/guns/grasschopper.png"
+    "ammonomicon": "This petite weapon packs a punch, and the recoil can knock the user backwards."
   },
   {
     "name": "Grenade Launcher",
@@ -18386,8 +18303,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Fires grenades that can bounce. A difficult weapon to use effectively, but powerful in the right hands. The distinctive noise this gun makes is beloved by Pinheads.",
-    "game_icon": "assets/images/game/guns/grenade_launcher.png"
+    "ammonomicon": "Fires grenades that can bounce. A difficult weapon to use effectively, but powerful in the right hands. The distinctive noise this gun makes is beloved by Pinheads."
   },
   {
     "name": "Grey Mauser",
@@ -18639,8 +18555,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Favored by the prolific thief of the same name. Renders the wielder invisible when reloading an empty clip. Extra damage while stealthed.",
-    "game_icon": "assets/images/game/guns/grey_mauser.png"
+    "ammonomicon": "Favored by the prolific thief of the same name. Renders the wielder invisible when reloading an empty clip. Extra damage while stealthed."
   },
   {
     "name": "Gunbow",
@@ -18692,8 +18607,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires a large ricochet round. In an attempt to combine the combat efficiency of bullets with the stealth and recoverability of arrows, modern archers developed the Gunbow. Though it proved ineffective in normal combat, it has taken on new life in the Gungeon.",
-    "game_icon": "assets/images/game/guns/gunbow.png"
+    "ammonomicon": "Fires a large ricochet round. In an attempt to combine the combat efficiency of bullets with the stealth and recoverability of arrows, modern archers developed the Gunbow. Though it proved ineffective in normal combat, it has taken on new life in the Gungeon."
   },
   {
     "name": "Gunderfury",
@@ -18939,7 +18853,6 @@
       "Shop"
     ],
     "ammonomicon": "Blessed Gun of the Gunseeker. This gun gains experience with every kill, and is strangely resistant to the Gungeon's temporal rifts. Any accrued experience will persist throughout time. A gun spoken of in legend. Once wielded by Gunderaan, Prince of Guns, this weapon ultimately found its way to the Gungeon after being mishandled by millions of idiots for countless hours.",
-    "game_icon": "assets/images/game/guns/gunderfury.png",
     "game_game_type": "Automatic"
   },
   {
@@ -19010,8 +18923,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Alternates between oily bursts and fiery blasts! When the great Bullet fell from the sky, not even the earth beneath the Gungeon was spared. The ants that made their home beneath the floors became terrifying in size, and capable of projectile spit. Nearly extinct, the last of the species occasionally hide in chests.",
-    "game_icon": "assets/images/game/guns/gungeon_ant.png"
+    "ammonomicon": "Alternates between oily bursts and fiery blasts! When the great Bullet fell from the sky, not even the earth beneath the Gungeon was spared. The ants that made their home beneath the floors became terrifying in size, and capable of projectile spit. Nearly extinct, the last of the species occasionally hide in chests."
   },
   {
     "name": "Gungine",
@@ -19393,8 +19305,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Move faster. Reloading converts goop into ammo. Old technology, but reliable. The Gungine, once revved up, emits 40x more bullets than it was rated for.",
-    "game_icon": "assets/images/game/guns/gungine.png"
+    "ammonomicon": "Move faster. Reloading converts goop into ammo. Old technology, but reliable. The Gungine, once revved up, emits 40x more bullets than it was rated for."
   },
   {
     "name": "GuNNER",
@@ -19911,8 +19822,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Releases a vengeful, and armed, spirit. The precise methods needed to preserve a body with gun intact have been lost to time, but the High Priest, First of the Gun, still remembers...",
-    "game_icon": "assets/images/game/guns/gunslinger_s_ashes.png"
+    "ammonomicon": "Releases a vengeful, and armed, spirit. The precise methods needed to preserve a body with gun intact have been lost to time, but the High Priest, First of the Gun, still remembers..."
   },
   {
     "name": "Gunther",
@@ -20225,8 +20135,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Grows more powerful with each room cleared. This distrustful gun has gained sentience. As with all intelligent weapons, he should be treated with respect and care.",
-    "game_icon": "assets/images/game/guns/gunther.png"
+    "ammonomicon": "Grows more powerful with each room cleared. This distrustful gun has gained sentience. As with all intelligent weapons, he should be treated with respect and care."
   },
   {
     "name": "Gunzheng",
@@ -20375,8 +20284,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An ancient zither instrument possessed by vengeful spirits. Difficult to play, but deadly in the hands of a master.",
-    "game_icon": "assets/images/game/guns/gunzheng.png"
+    "ammonomicon": "An ancient zither instrument possessed by vengeful spirits. Difficult to play, but deadly in the hands of a master."
   },
   {
     "name": "H4mmer",
@@ -20482,8 +20390,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Originally crafted by a gunsmith who favored revolvers but was envious of the automatic weaponry being developed by his peers. It seems like he accidentally left one of his tools in the clip...?",
-    "game_icon": "assets/images/game/guns/h4mmer.png"
+    "ammonomicon": "Originally crafted by a gunsmith who favored revolvers but was envious of the automatic weaponry being developed by his peers. It seems like he accidentally left one of his tools in the clip...?"
   },
   {
     "name": "Heck Blaster",
@@ -20763,8 +20670,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Extremely rapid fire. Used by a wiggly hero in the early days of the Gungeon.",
-    "game_icon": "assets/images/game/guns/heck_blaster.png"
+    "ammonomicon": "Extremely rapid fire. Used by a wiggly hero in the early days of the Gungeon."
   },
   {
     "name": "Hegemony Carbine",
@@ -20859,8 +20765,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An advanced issue rifle for Hegemony troops. Primarily wielded by elite human soldiers, as the Hegemony combat robots have superior weaponry.",
-    "game_icon": "assets/images/game/guns/hegemony_carbine.png"
+    "ammonomicon": "An advanced issue rifle for Hegemony troops. Primarily wielded by elite human soldiers, as the Hegemony combat robots have superior weaponry."
   },
   {
     "name": "Hegemony Rifle",
@@ -20968,8 +20873,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The standard issue rifle for all Hegemony of Man soldiers. Packs a decent punch, but the accuracy leaves much to be desired. Typical Hegemony work.",
-    "game_icon": "assets/images/game/guns/hegemony_rifle.png"
+    "ammonomicon": "The standard issue rifle for all Hegemony of Man soldiers. Packs a decent punch, but the accuracy leaves much to be desired. Typical Hegemony work."
   },
   {
     "name": "Helix",
@@ -21100,8 +21004,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires two wave projectiles. Inspired by real science, the Helix is extremely useful for hitting two things at once, as long as they are a certain distance apart.",
-    "game_icon": "assets/images/game/guns/helix.png"
+    "ammonomicon": "Fires two wave projectiles. Inspired by real science, the Helix is extremely useful for hitting two things at once, as long as they are a certain distance apart."
   },
   {
     "name": "Heroine",
@@ -21262,8 +21165,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The arm of a famous bounty hunter. This arm cannon has seen substantial use, but its upkeep has been immaculate.",
-    "game_icon": "assets/images/game/guns/heroine.png"
+    "ammonomicon": "The arm of a famous bounty hunter. This arm cannon has seen substantial use, but its upkeep has been immaculate."
   },
   {
     "name": "Hexagun",
@@ -21474,8 +21376,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Can transmogrify foes. The Hexagun was created by a vengeful Gunjuror after his apprentices were slain by a Gungeoneer wielding the humble Bundle of Wands. The stock is formed from what was once his staff, and each piece of metal was enchanted thrice before assembly. His revenge came swiftly, and from a great distance.",
-    "game_icon": "assets/images/game/guns/hexagun.png"
+    "ammonomicon": "Can transmogrify foes. The Hexagun was created by a vengeful Gunjuror after his apprentices were slain by a Gungeoneer wielding the humble Bundle of Wands. The stock is formed from what was once his staff, and each piece of metal was enchanted thrice before assembly. His revenge came swiftly, and from a great distance."
   },
   {
     "name": "High Kaliber",
@@ -22013,8 +21914,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Can sever enemies' souls. This pocked and swollen gun splits and rends the spirit from the body.",
-    "game_icon": "assets/images/game/guns/high_kaliber.png"
+    "ammonomicon": "Can sever enemies' souls. This pocked and swollen gun splits and rends the spirit from the body."
   },
   {
     "name": "Huntsman",
@@ -22225,8 +22125,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Reload for momentary safety. A misbegotten attempt to combine melee and ranged combat, the axe portion of this gun is mostly worthless. Reloading it involves swinging the blade around wildly, which might protect you from a stray bullet.",
-    "game_icon": "assets/images/game/guns/huntsman.png"
+    "ammonomicon": "Reload for momentary safety. A misbegotten attempt to combine melee and ranged combat, the axe portion of this gun is mostly worthless. Reloading it involves swinging the blade around wildly, which might protect you from a stray bullet."
   },
   {
     "name": "Hyper Light Blaster",
@@ -22718,8 +22617,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Shots that impact foes are refunded. A weapon once carried by a brave wanderer, whose exploits are lost to the drifts of time. Initially designed to work in tandem with a blade, this one has been modified to recharge itself.",
-    "game_icon": "assets/images/game/guns/hyper_light_blaster.png"
+    "ammonomicon": "Shots that impact foes are refunded. A weapon once carried by a brave wanderer, whose exploits are lost to the drifts of time. Initially designed to work in tandem with a blade, this one has been modified to recharge itself."
   },
   {
     "name": "Ice Breaker",
@@ -23070,8 +22968,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Alternates between frigid blasts and explosive slugs. The Ice Breaker was designed by Edwin, the legendary gunsmith. The only gun to combine freezing and shattering technology into one convenient package!",
-    "game_icon": "assets/images/game/guns/ice_breaker.png"
+    "ammonomicon": "Alternates between frigid blasts and explosive slugs. The Ice Breaker was designed by Edwin, the legendary gunsmith. The only gun to combine freezing and shattering technology into one convenient package!"
   },
   {
     "name": "JK-47",
@@ -23227,8 +23124,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Noodle shaped like a gun. Frightens enemies. Long, flat, gun shaped noodle. A staple of gundead cuisine. However, Gundead have a culturally embedded fear of being hit by a spinning gun-noodle, as adolescent Gundead claim that the limp and wiggly properties of the noodle are transferred to new carriers on contact.",
-    "game_icon": "assets/images/game/guns/jk_47.png"
+    "ammonomicon": "Noodle shaped like a gun. Frightens enemies. Long, flat, gun shaped noodle. A staple of gundead cuisine. However, Gundead have a culturally embedded fear of being hit by a spinning gun-noodle, as adolescent Gundead claim that the limp and wiggly properties of the noodle are transferred to new carriers on contact."
   },
   {
     "name": "Jolter",
@@ -23332,8 +23228,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Originally built to kill thick-skinned space mutants, the Jolter fires unreasonably large shells.",
-    "game_icon": "assets/images/game/guns/jolter.png"
+    "ammonomicon": "Originally built to kill thick-skinned space mutants, the Jolter fires unreasonably large shells."
   },
   {
     "name": "Klobbe",
@@ -23569,8 +23464,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Gungeonologists have long debated what is truly the worst gun in the Gungeon. More Gungeoneers have perished with Klobbes in their inventory than any other gun. Coincidence?",
-    "game_icon": "assets/images/game/guns/klobbe.png"
+    "ammonomicon": "Gungeonologists have long debated what is truly the worst gun in the Gungeon. More Gungeoneers have perished with Klobbes in their inventory than any other gun. Coincidence?"
   },
   {
     "name": "Knight's Gun",
@@ -23851,8 +23745,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Unloads firepower at foes, digs. This trusty shovel was gifted to one of the first Gungeoneers, by a traveling race of sentient yachts.",
-    "game_icon": "assets/images/game/guns/knight_s_gun.png"
+    "ammonomicon": "Unloads firepower at foes, digs. This trusty shovel was gifted to one of the first Gungeoneers, by a traveling race of sentient yachts."
   },
   {
     "name": "Kruller Glaive",
@@ -24067,8 +23960,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "This shiny piece of die-cast metal was purchased from an ancient mall kiosk. The buyer’s mom sold it at a flea market when they moved out to a middle-aged collector. That person swore it would eventually be worth many times what he paid for it. Unfortunately, he was disappointed, and it was valueless at the time of his death. Now it's in the Gungeon!",
-    "game_icon": "assets/images/game/guns/kruller_glaive.png"
+    "ammonomicon": "This shiny piece of die-cast metal was purchased from an ancient mall kiosk. The buyer’s mom sold it at a flea market when they moved out to a middle-aged collector. That person swore it would eventually be worth many times what he paid for it. Unfortunately, he was disappointed, and it was valueless at the time of his death. Now it's in the Gungeon!"
   },
   {
     "name": "Laser Lotus",
@@ -24168,8 +24060,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Pierce Weapon. Gifted to any who reach Level 5 in the Order of the True Gun.",
-    "game_icon": "assets/images/game/guns/laser_lotus.png"
+    "ammonomicon": "Pierce Weapon. Gifted to any who reach Level 5 in the Order of the True Gun."
   },
   {
     "name": "Laser Rifle",
@@ -24334,8 +24225,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A commonplace energy weapon. The Laser Rifle is the AK-47 of the future! Known for its low manufacturing costs and lower maintenance requirements, the Laser Rifle is used throughout the galaxy by hunters and miscreants alike.",
-    "game_icon": "assets/images/game/guns/laser_rifle.png"
+    "ammonomicon": "A commonplace energy weapon. The Laser Rifle is the AK-47 of the future! Known for its low manufacturing costs and lower maintenance requirements, the Laser Rifle is used throughout the galaxy by hunters and miscreants alike."
   },
   {
     "name": "Life Orb",
@@ -24435,7 +24325,6 @@
       "Shop"
     ],
     "ammonomicon": "Drains will from foes. An item to be held by a Gungeoneer. Can be used to weaponize stolen will against the holder's enemies.",
-    "game_icon": "assets/images/game/guns/life_orb.png",
     "game_game_type": "Beam"
   },
   {
@@ -24584,8 +24473,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Each clip finishes with a homing bird. After a clumsy child of the Gungeon accidentally dropped this toy into a pit, they were forced to amuse themselves with the Dart Gun.",
-    "game_icon": "assets/images/game/guns/light_gun.png"
+    "ammonomicon": "Each clip finishes with a homing bird. After a clumsy child of the Gungeon accidentally dropped this toy into a pit, they were forced to amuse themselves with the Dart Gun."
   },
   {
     "name": "Lil' Bomber",
@@ -24861,8 +24749,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Charge to fire bombs. A forgetful adventurer left a pouch full of bombs deep in the Gungeon, and they eventually sprouted into this amusing weapon. A favorite of the Gunsling King, who often sends Manservantes to pick up the bombs.",
-    "game_icon": "assets/images/game/guns/lil_bomber.png"
+    "ammonomicon": "Charge to fire bombs. A forgetful adventurer left a pouch full of bombs deep in the Gungeon, and they eventually sprouted into this amusing weapon. A favorite of the Gunsling King, who often sends Manservantes to pick up the bombs."
   },
   {
     "name": "Lower Case r",
@@ -25174,8 +25061,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The letter r looks like a gun. It is rare, but not unheard of, for abstract concepts to take gun form when discussed near the Gungeon.",
-    "game_icon": "assets/images/game/guns/lower_case_r.png"
+    "ammonomicon": "The letter r looks like a gun. It is rare, but not unheard of, for abstract concepts to take gun form when discussed near the Gungeon."
   },
   {
     "name": "Luxin Cannon",
@@ -25288,8 +25174,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Rapid fire with a big finale. This tricky prism requires guile to wield, but with the right lens, fires shreds of solidified light that slice enemies in their path. Falsely rumored to have natural healing abilities.",
-    "game_icon": "assets/images/game/guns/luxin_cannon.png"
+    "ammonomicon": "Rapid fire with a big finale. This tricky prism requires guile to wield, but with the right lens, fires shreds of solidified light that slice enemies in their path. Falsely rumored to have natural healing abilities."
   },
   {
     "name": "M1",
@@ -25410,8 +25295,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The most famous rifle in history. This gun's usefulness and reliability have become legend. Though not native to the Gungeon, its arrival seemed to be expected by the Gundead.",
-    "game_icon": "assets/images/game/guns/m1.png"
+    "ammonomicon": "The most famous rifle in history. This gun's usefulness and reliability have become legend. Though not native to the Gungeon, its arrival seemed to be expected by the Gundead."
   },
   {
     "name": "M16",
@@ -25555,8 +25439,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Alternates with grenades. The M16 is a classic military-issue machine gun that upon reload, switches projectiles to grenade launcher.",
-    "game_icon": "assets/images/game/guns/m16.png"
+    "ammonomicon": "Alternates with grenades. The M16 is a classic military-issue machine gun that upon reload, switches projectiles to grenade launcher."
   },
   {
     "name": "M1911",
@@ -25731,8 +25614,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "The ancient design fires simple lead projectiles from a moderately-sized clip. In the right hands, this weapon is a force to be reckoned with.",
-    "game_icon": "assets/images/game/guns/m1911.png"
+    "ammonomicon": "The ancient design fires simple lead projectiles from a moderately-sized clip. In the right hands, this weapon is a force to be reckoned with."
   },
   {
     "name": "MAC10",
@@ -25844,8 +25726,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "High rate of fire and relatively compact, making it a favorite among Gungeoneers and criminals alike.",
-    "game_icon": "assets/images/game/guns/mac10.png"
+    "ammonomicon": "High rate of fire and relatively compact, making it a favorite among Gungeoneers and criminals alike."
   },
   {
     "name": "Machine Fist",
@@ -25976,8 +25857,7 @@
       "Boss drops",
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Alternates between rapid-fire machine gun and a wire-guided explosive fist. According to legend, two men were each fitted with one of these hands. One the left, and the other the right. The next time they met, only one walked away.",
-    "game_icon": "assets/images/game/guns/machine_fist.png"
+    "ammonomicon": "Alternates between rapid-fire machine gun and a wire-guided explosive fist. According to legend, two men were each fitted with one of these hands. One the left, and the other the right. The next time they met, only one walked away."
   },
   {
     "name": "Machine Pistol",
@@ -26140,8 +26020,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "The Machine Pistol is a small but powerful hand-held machine gun. It is a favorite of Bandana wearing Gundead, whose impatience with reloading is legendary.",
-    "game_icon": "assets/images/game/guns/machine_pistol.png"
+    "ammonomicon": "The Machine Pistol is a small but powerful hand-held machine gun. It is a favorite of Bandana wearing Gundead, whose impatience with reloading is legendary."
   },
   {
     "name": "Magic Lamp",
@@ -26754,8 +26633,7 @@
     "game_fire_rate": "0.15",
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 20,
-    "ammonomicon": "This gun is unusually filthy for a handgun in the Gungeon. The Gundead spend much of their time polishing and greasing guns, though they conspicuously leave the Magnum alone.",
-    "game_icon": "assets/images/game/guns/magnum.png"
+    "ammonomicon": "This gun is unusually filthy for a handgun in the Gungeon. The Gundead spend much of their time polishing and greasing guns, though they conspicuously leave the Magnum alone."
   },
   {
     "name": "Mahoguny",
@@ -26805,8 +26683,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This leafy blaster is made of Mahoguny, a strange wood which will only take root near the Gungeon.",
-    "game_icon": "assets/images/game/guns/mahoguny.png"
+    "ammonomicon": "This leafy blaster is made of Mahoguny, a strange wood which will only take root near the Gungeon."
   },
   {
     "name": "Mailbox",
@@ -26936,8 +26813,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Contains junk mail and one untrustworthy package. It was a wise and hopeful Gungeoneer who observed that mailboxes share the same basic shape of guns. When they sought to change their past, they wondered whether any gun shaped object would operate as guns do, within the Gungeons walls.",
-    "game_icon": "assets/images/game/guns/mailbox.png"
+    "ammonomicon": "Contains junk mail and one untrustworthy package. It was a wise and hopeful Gungeoneer who observed that mailboxes share the same basic shape of guns. When they sought to change their past, they wondered whether any gun shaped object would operate as guns do, within the Gungeons walls."
   },
   {
     "name": "Makarov",
@@ -27045,8 +26921,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The Makarov was brought to the Gungeon by a lost Cosmonaut. Some say that brave, lost soul still wanders the Gungeon. This gun is no better or worse than any other gun.",
-    "game_icon": "assets/images/game/guns/makarov.png"
+    "ammonomicon": "The Makarov was brought to the Gungeon by a lost Cosmonaut. Some say that brave, lost soul still wanders the Gungeon. This gun is no better or worse than any other gun."
   },
   {
     "name": "Makeshift Cannon",
@@ -27332,8 +27207,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A makeshift weapon filled with gunpowder and shrapnel. Immensely powerful, but it can only be fired once.",
-    "game_icon": "assets/images/game/guns/makeshift_cannon.png"
+    "ammonomicon": "A makeshift weapon filled with gunpowder and shrapnel. Immensely powerful, but it can only be fired once."
   },
   {
     "name": "Marine Sidearm",
@@ -27464,8 +27338,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The Marine Sidearm was brought to the Gungeon by a low-ranking Primerdyne soldier. Though this gun appears sturdy, it has been known to fail when it is most needed.",
-    "game_icon": "assets/images/game/guns/marine_sidearm.png"
+    "ammonomicon": "The Marine Sidearm was brought to the Gungeon by a low-ranking Primerdyne soldier. Though this gun appears sturdy, it has been known to fail when it is most needed."
   },
   {
     "name": "Mass Shotgun",
@@ -27808,8 +27681,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A shotgun used by the highest ranking soldiers of the Hegemony. Designed for rapid deployment and easy storage, the Mass Shotgun fires a single large slug that bursts into smaller pellets.",
-    "game_icon": "assets/images/game/guns/mass_shotgun.png"
+    "ammonomicon": "A shotgun used by the highest ranking soldiers of the Hegemony. Designed for rapid deployment and easy storage, the Mass Shotgun fires a single large slug that bursts into smaller pellets."
   },
   {
     "name": "Mega Douser",
@@ -28077,7 +27949,6 @@
       "Truth chest"
     ],
     "ammonomicon": "A water gun might seem to be a poor weapon for Gungeoneering, and in most cases that is true. But a well-placed blast of water can douse a raging inferno; a soaked enemy can be electrified; a dazed foe can be pushed into the abyss. In the Gungeon, creativity is key to victory.",
-    "game_icon": "assets/images/game/guns/mega_douser.png",
     "game_game_type": "Beam"
   },
   {
@@ -28515,8 +28386,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The Megahand is a relic of the Ten Days' War against the robots. The most powerful robot masters would modify it for their own styles of combat. This one is basic, but it still works well.",
-    "game_icon": "assets/images/game/guns/megahand.png"
+    "ammonomicon": "The Megahand is a relic of the Ten Days' War against the robots. The most powerful robot masters would modify it for their own styles of combat. This one is basic, but it still works well."
   },
   {
     "name": "Microtransaction Gun",
@@ -28684,7 +28554,6 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Everyone involved in the production of this gun thought it was a bad idea, but the higher-ups made them build it anyway. Later, management shut down that gun factory for making a gun no one liked.",
-    "game_icon": "assets/images/game/guns/microtransaction_gun.png",
     "game_magazine_size": "30",
     "game_spread": "8°",
     "game_damage": "15",
@@ -29052,8 +28921,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This laser was designed to precisely cut rocks in the Gungeon's Black Powder Mining operations, but its powerful blasts are just as effective on Gundead.",
-    "game_icon": "assets/images/game/guns/mine_cutter.png"
+    "ammonomicon": "This laser was designed to precisely cut rocks in the Gungeon's Black Powder Mining operations, but its powerful blasts are just as effective on Gundead."
   },
   {
     "name": "Molotov Launcher",
@@ -29209,8 +29077,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Launches Molotovs. The Molotov Launcher takes the principle of incendiary bottles and removes arm pain.",
-    "game_icon": "assets/images/game/guns/molotov_launcher.png"
+    "ammonomicon": "Launches Molotovs. The Molotov Launcher takes the principle of incendiary bottles and removes arm pain."
   },
   {
     "name": "Moonscraper",
@@ -29353,7 +29220,6 @@
       "Truth chest"
     ],
     "ammonomicon": "This powerful laser was designed to carve moon rock at high speed during terraforming projects.",
-    "game_icon": "assets/images/game/guns/moonscraper.png",
     "game_game_type": "Beam"
   },
   {
@@ -29617,7 +29483,6 @@
       "Truck shop"
     ],
     "ammonomicon": "Fires a tracking beam which, when held on an enemy target, calls down an orbital strike. Persists while the trigger is held. Can be guided.",
-    "game_icon": "assets/images/game/guns/mourning_star.png",
     "game_game_type": "Beam"
   },
   {
@@ -29893,8 +29758,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires replicas of planets from a fictional solar system. Collect all eight! Due to a trick of perspective, these two-dimensional planets appear sphereical. Though much smaller than the source material, the planets created by this device still pack quite a punch.",
-    "game_icon": "assets/images/game/guns/mr_accretion_jr.png"
+    "ammonomicon": "Fires replicas of planets from a fictional solar system. Collect all eight! Due to a trick of perspective, these two-dimensional planets appear sphereical. Though much smaller than the source material, the planets created by this device still pack quite a punch."
   },
   {
     "name": "Mutation",
@@ -30014,7 +29878,6 @@
       "Shop"
     ],
     "ammonomicon": "A horrific consequence of radiation exposure. At least the arm is still somewhat useful.",
-    "game_icon": "assets/images/game/guns/mutation.png",
     "game_game_type": "Beam"
   },
   {
@@ -30104,8 +29967,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "This ancient tool is theorized to have been used in bizarre pagan rituals involving spiders and flame.",
-    "game_icon": "assets/images/game/guns/nail_gun.png"
+    "ammonomicon": "This ancient tool is theorized to have been used in bizarre pagan rituals involving spiders and flame."
   },
   {
     "name": "Old Goldie",
@@ -30278,8 +30140,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A masterwork shotgun. The right answer isn't always a gun that shoots bees, a water gun, or a flaming hand. Sometimes, all you need is a simple concept executed immaculately. This gold trimmed, double-barreled shotgun represents the best of traditional guncraft.",
-    "game_icon": "assets/images/game/guns/old_goldie.png"
+    "ammonomicon": "A masterwork shotgun. The right answer isn't always a gun that shoots bees, a water gun, or a flaming hand. Sometimes, all you need is a simple concept executed immaculately. This gold trimmed, double-barreled shotgun represents the best of traditional guncraft."
   },
   {
     "name": "Origuni",
@@ -30566,8 +30427,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This gun, incredibly enough, has been folded entirely out of paper. Only a true master gunsmith could create something this elegant.",
-    "game_icon": "assets/images/game/guns/origuni.png"
+    "ammonomicon": "This gun, incredibly enough, has been folded entirely out of paper. Only a true master gunsmith could create something this elegant."
   },
   {
     "name": "Particulator",
@@ -30696,8 +30556,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An initial burst of exotic particles triggers additional homing blasts. A weapon from the future. Perhaps a Gungeoneer from the distant future succeeded, and brought this gun back? Gunesis 1:1 In the beginning, the Gungeon was formless and void, and bullets moved over the face of the deep.",
-    "game_icon": "assets/images/game/guns/particulator.png"
+    "ammonomicon": "An initial burst of exotic particles triggers additional homing blasts. A weapon from the future. Perhaps a Gungeoneer from the distant future succeeded, and brought this gun back? Gunesis 1:1 In the beginning, the Gungeon was formless and void, and bullets moved over the face of the deep."
   },
   {
     "name": "Patriot",
@@ -31023,8 +30882,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "A powerful machine gun that once belonged to a forgotten hero. This gun's mechanism is overly complicated, but it proves extremely effective in the field. Beloved by many, despite its flaws.",
-    "game_icon": "assets/images/game/guns/patriot.png"
+    "ammonomicon": "A powerful machine gun that once belonged to a forgotten hero. This gun's mechanism is overly complicated, but it proves extremely effective in the field. Beloved by many, despite its flaws."
   },
   {
     "name": "Pea Shooter",
@@ -31153,8 +31011,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Traditionally given to Gungeoneers when they first arrive at the Gungeon. It is incredibly weak.",
-    "game_icon": "assets/images/game/guns/pea_shooter.png"
+    "ammonomicon": "Traditionally given to Gungeoneers when they first arrive at the Gungeon. It is incredibly weak."
   },
   {
     "name": "Phoenix",
@@ -31370,8 +31227,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The muzzle flare from this fiery handgun can ignite enemies. Return enemies to dust. Famously wielded by Two-Shot Erias on her final Gungeon attempt.",
-    "game_icon": "assets/images/game/guns/phoenix.png"
+    "ammonomicon": "The muzzle flare from this fiery handgun can ignite enemies. Return enemies to dust. Famously wielded by Two-Shot Erias on her final Gungeon attempt."
   },
   {
     "name": "Pitchfork",
@@ -31480,8 +31336,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "A favorite of Fallen Bullet Kin, who learned everything about being devils from television.",
-    "game_icon": "assets/images/game/guns/pitchfork.png"
+    "ammonomicon": "A favorite of Fallen Bullet Kin, who learned everything about being devils from television."
   },
   {
     "name": "Plague Pistol",
@@ -31604,8 +31459,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Fires poisonous rounds.",
-    "game_icon": "assets/images/game/guns/plague_pistol.png"
+    "ammonomicon": "Fires poisonous rounds."
   },
   {
     "name": "Plunger",
@@ -31808,7 +31662,6 @@
       "Shop"
     ],
     "ammonomicon": "Fires a stream of toxic goop. Ammo can be reused. The Syringe Gun was ordered for the Gungeon by the Médecins Sans Diplôme to perform complete blood transfusions all at once. When that proved dangerous, a crafty Gungeoneer filled the giant Syringe with a live Poisbulon.",
-    "game_icon": "assets/images/game/guns/plunger.png",
     "game_game_type": "Beam"
   },
   {
@@ -32205,8 +32058,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A mysterious gun that grows in strength on each kill. Substantial power is lost any time its wielder is damaged. Stories are told of a rebellious android that once used this gun in a conflict deep underground. The handle is marked with two small tick marks.",
-    "game_icon": "assets/images/game/guns/polaris.png"
+    "ammonomicon": "A mysterious gun that grows in strength on each kill. Substantial power is lost any time its wielder is damaged. Stories are told of a rebellious android that once used this gun in a conflict deep underground. The handle is marked with two small tick marks."
   },
   {
     "name": "Poxcannon",
@@ -32336,8 +32188,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This souped-up T-Shirt Cannon fires tainted apparel. Enemies defeated after contracting the pox will leave a pool of deadly goop behind.",
-    "game_icon": "assets/images/game/guns/poxcannon.png"
+    "ammonomicon": "This souped-up T-Shirt Cannon fires tainted apparel. Enemies defeated after contracting the pox will leave a pool of deadly goop behind."
   },
   {
     "name": "Proton Backpack",
@@ -32510,7 +32361,6 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Deals extra damage to ghosts and spectres. Originally brought to the Gungeon by a team of investigators who suspected that something strange was going on.",
-    "game_icon": "assets/images/game/guns/proton_backpack.png",
     "game_game_type": "Beam"
   },
   {
@@ -32738,8 +32588,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Launches a dense metal slug at incredible speeds. A secret military prototype, built at great cost by the Hegemony of Man. A single shot can punch a hole in anything up to a Destroyer-class starship.",
-    "game_icon": "assets/images/game/guns/prototype_railgun.png"
+    "ammonomicon": "Launches a dense metal slug at incredible speeds. A secret military prototype, built at great cost by the Hegemony of Man. A single shot can punch a hole in anything up to a Destroyer-class starship."
   },
   {
     "name": "Pulse Cannon",
@@ -32844,8 +32693,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires several pulses of decoherent energy. An early, less controlled version of modern energy weaponry.",
-    "game_icon": "assets/images/game/guns/pulse_cannon.png"
+    "ammonomicon": "Fires several pulses of decoherent energy. An early, less controlled version of modern energy weaponry."
   },
   {
     "name": "Quad Laser",
@@ -32990,8 +32838,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This strange artifact fires an extremely powerful blast of Moon energy. While incredibly slow, it cannot be halted.",
-    "game_icon": "assets/images/game/guns/quad_laser.png"
+    "ammonomicon": "This strange artifact fires an extremely powerful blast of Moon energy. While incredibly slow, it cannot be halted."
   },
   {
     "name": "Rad Gun",
@@ -33302,8 +33149,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Active reload provides stacking benefits for bad enough dudes (and chicks).",
-    "game_icon": "assets/images/game/guns/rad_gun.png"
+    "ammonomicon": "Active reload provides stacking benefits for bad enough dudes (and chicks)."
   },
   {
     "name": "Raiden Coil",
@@ -33454,7 +33300,6 @@
     "content_source": "CONTENT_UPDATE_02",
     "ammonomicon_pos": 183,
     "ammonomicon": "Damages all enemies on screen, no matter what. This cannon was built for mounting on Supersonic Attack Fighters, but has been retrofitted to be carried by infantry. An inscription on the barrel reads, \"Know thy own position, and all others inevitably fall.\"",
-    "game_icon": "assets/images/game/guns/raiden_coil.png",
     "game_damage": "17.5",
     "game_shot_speed": "-1",
     "game_type": "Beam"
@@ -33657,8 +33502,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Launches a dense metal slug at incredible speeds. Ricochets will loosely track enemies. This railgun has moved beyond the prototype stage into production. The slug has been reduced in mass to cut costs, resulting in weaker relative performance but high ricochet potential.",
-    "game_icon": "assets/images/game/guns/railgun.png"
+    "ammonomicon": "Launches a dense metal slug at incredible speeds. Ricochets will loosely track enemies. This railgun has moved beyond the prototype stage into production. The slug has been reduced in mass to cut costs, resulting in weaker relative performance but high ricochet potential."
   },
   {
     "name": "Rattler",
@@ -33832,8 +33676,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The Rattler was one of Emmitt Calx's worst, and last, ideas. This is a Winchester shotgun with an extremely venomous snake wrapped around it, adding a poisonous blast to each volley. Requires extreme dexterity to reload.",
-    "game_icon": "assets/images/game/guns/rattler.png"
+    "ammonomicon": "The Rattler was one of Emmitt Calx's worst, and last, ideas. This is a Winchester shotgun with an extremely venomous snake wrapped around it, adding a poisonous blast to each volley. Requires extreme dexterity to reload."
   },
   {
     "name": "RC Rocket",
@@ -33975,8 +33818,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Fires wire-guided missiles, controlled by aiming. These missiles are excellent for catching an enemy off guard, or perhaps for traversing an electrified corridor.",
-    "game_icon": "assets/images/game/guns/rc_rocket.png"
+    "ammonomicon": "Fires wire-guided missiles, controlled by aiming. These missiles are excellent for catching an enemy off guard, or perhaps for traversing an electrified corridor."
   },
   {
     "name": "Really Special Lute",
@@ -34385,8 +34227,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Energizes companionable listeners. Barely a gun at all, but a very, very special lute. Or so we’re told. Seems to get out of tune when blue fire is around.",
-    "game_icon": "assets/images/game/guns/really_special_lute.png"
+    "ammonomicon": "Energizes companionable listeners. Barely a gun at all, but a very, very special lute. Or so we’re told. Seems to get out of tune when blue fire is around."
   },
   {
     "name": "Regular Shotgun",
@@ -34553,8 +34394,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "A regular shotgun. There's nothing special about it! Favored by the Shotgun Kin that roam the Gungeon, as it reminds them of their home.",
-    "game_icon": "assets/images/game/guns/regular_shotgun.png"
+    "ammonomicon": "A regular shotgun. There's nothing special about it! Favored by the Shotgun Kin that roam the Gungeon, as it reminds them of their home."
   },
   {
     "name": "Robot's Left Hand",
@@ -34712,8 +34552,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The left hand of an assault robot that fled to the Gungeon. It turns out most robots are left-handed. //second update?",
-    "game_icon": "assets/images/game/guns/robot_s_left_hand.png"
+    "ammonomicon": "The left hand of an assault robot that fled to the Gungeon. It turns out most robots are left-handed. //second update?"
   },
   {
     "name": "Robot's Right Hand",
@@ -34846,8 +34685,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The right hand of an assault robot that fled to the Gungeon. When weilded by the Robot, combines with Junk to increase all damage output. It is a simple projectile delivery system. Reliable, but it's short barrel is lacking in intricacy. Under the control of a targeting AI it becomes fearsome indeed.",
-    "game_icon": "assets/images/game/guns/robot_s_right_hand.png"
+    "ammonomicon": "The right hand of an assault robot that fled to the Gungeon. When weilded by the Robot, combines with Junk to increase all damage output. It is a simple projectile delivery system. Reliable, but it's short barrel is lacking in intricacy. Under the control of a targeting AI it becomes fearsome indeed."
   },
   {
     "name": "Rogue Special",
@@ -35034,8 +34872,7 @@
     "infinite_ammo": true,
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 2,
-    "ammonomicon": "The Rogue Special, given to the Pilot by his partner. It's never let him down. This hip shooter has been known to fire half-cocked and often gets itself into more trouble than it can handle.",
-    "game_icon": "assets/images/game/guns/rogue_special.png"
+    "ammonomicon": "The Rogue Special, given to the Pilot by his partner. It's never let him down. This hip shooter has been known to fire half-cocked and often gets itself into more trouble than it can handle."
   },
   {
     "name": "RPG",
@@ -35227,8 +35064,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Fires rocket propelled grenades that accelerate over a short distance.",
-    "game_icon": "assets/images/game/guns/rpg.png"
+    "ammonomicon": "Fires rocket propelled grenades that accelerate over a short distance."
   },
   {
     "name": "RUBE-ADYNE MK.II",
@@ -35397,8 +35233,7 @@
       "Boss drops",
       "Gungeon loot pool"
     ],
-    "ammonomicon": "After mostly confirming the functionality of bounce physics, work was done to improve the design. Smaller, lighter, and in an attractive shade of purple, the RUBE-ADYNE MK. II delivers on the promise of the original prototype.",
-    "game_icon": "assets/images/game/guns/rube_adyne_mk_ii.png"
+    "ammonomicon": "After mostly confirming the functionality of bounce physics, work was done to improve the design. Smaller, lighter, and in an attractive shade of purple, the RUBE-ADYNE MK. II delivers on the promise of the original prototype."
   },
   {
     "name": "RUBE-ADYNE Prototype",
@@ -35540,8 +35375,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A prototype ricochet blaster. This blaster was created to test the limits of projectile impact and ricochet physics.",
-    "game_icon": "assets/images/game/guns/rube_adyne_prototype.png"
+    "ammonomicon": "A prototype ricochet blaster. This blaster was created to test the limits of projectile impact and ricochet physics."
   },
   {
     "name": "Rubenstein's Monster",
@@ -35767,8 +35601,7 @@
     "id": 609,
     "content_source": "CONTENT_UPDATE_02",
     "ammonomicon_pos": 110,
-    "ammonomicon": "An extremely powerful ricochet rifle. Cobbled together from the compatible parts of the RUBE-ADYNE and its prototype, this makeshift gun provides maximum lethality in one convenient package.",
-    "game_icon": "assets/images/game/guns/rubenstein_s_monster.png"
+    "ammonomicon": "An extremely powerful ricochet rifle. Cobbled together from the compatible parts of the RUBE-ADYNE and its prototype, this makeshift gun provides maximum lethality in one convenient package."
   },
   {
     "name": "Rusty Sidearm",
@@ -35908,8 +35741,7 @@
       "Gungeon loot pool",
       "Wooden chests"
     ],
-    "ammonomicon": "The Rusty Sidearm was brought to the Gungeon by the Hunter. Despite its extremely dated design and some signs of rust, this gun appears relatively new. Very strange...",
-    "game_icon": "assets/images/game/guns/rusty_sidearm.png"
+    "ammonomicon": "The Rusty Sidearm was brought to the Gungeon by the Hunter. Despite its extremely dated design and some signs of rust, this gun appears relatively new. Very strange..."
   },
   {
     "name": "SAA",
@@ -36079,8 +35911,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Fires ricochet rounds. The Single Action Army may take some time to reload, but you'll hear no complaints from its users. Documents reclaimed from the Order of the True Gun imply that on occasion, a cultist briefly attains gunvana while chambering its rounds.",
-    "game_icon": "assets/images/game/guns/saa.png"
+    "ammonomicon": "Fires ricochet rounds. The Single Action Army may take some time to reload, but you'll hear no complaints from its users. Documents reclaimed from the Order of the True Gun imply that on occasion, a cultist briefly attains gunvana while chambering its rounds."
   },
   {
     "name": "Sawed-Off",
@@ -36221,7 +36052,6 @@
       "Wooden chests"
     ],
     "ammonomicon": "A shotgun modified for easy concealment. The shorter barrel widens the spread, but up-close, it's just as deadly as its full-barreled cousin.",
-    "game_icon": "assets/images/game/guns/sawed_off.png",
     "game_damage": "4",
     "ammonomicon_pos": 43
   },
@@ -36316,7 +36146,6 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "This immense beam cannon was developed as part of a bid to win the Hegemony's military contracts. The steady stream of intense science energy it fires is a true testament to what physics and engineering can accomplish.",
-    "game_icon": "assets/images/game/guns/science_cannon.png",
     "game_damage": "26",
     "game_reload_time": "0",
     "game_type": "Beam",
@@ -36483,8 +36312,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An overcharged anti-loitering and mob dispersal device. Forces enemies to forget their purpose and conviction.",
-    "game_icon": "assets/images/game/guns/screecher.png"
+    "ammonomicon": "An overcharged anti-loitering and mob dispersal device. Forces enemies to forget their purpose and conviction."
   },
   {
     "name": "Serious Cannon",
@@ -36651,8 +36479,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A cannon of serious power! This launches cannonballs that cannot be stopped by anything but a solid wall. The Serious Cannon was brought to the Gungeon by Sam \"Serious\" Stone.",
-    "game_icon": "assets/images/game/guns/serious_cannon.png"
+    "ammonomicon": "A cannon of serious power! This launches cannonballs that cannot be stopped by anything but a solid wall. The Serious Cannon was brought to the Gungeon by Sam \"Serious\" Stone."
   },
   {
     "name": "Shades's Revolver",
@@ -36793,8 +36620,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The cooler bullet brother's handgun. The barrel has 17 notches carved along its length, and somewhat incongruously, a picture of a smiling Bullet Kin. Anyone who uses this handgun would look pretty cool.",
-    "game_icon": "assets/images/game/guns/shades_s_revolver.png"
+    "ammonomicon": "The cooler bullet brother's handgun. The barrel has 17 notches carved along its length, and somewhat incongruously, a picture of a smiling Bullet Kin. Anyone who uses this handgun would look pretty cool."
   },
   {
     "name": "Shell",
@@ -36898,8 +36724,7 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "This strange gun, shaped like a shotgun shell, fires bullets that are shaped like shotguns. Those shotgun-shaped bullets will fire a spray of rounds upon impact, much like a shotgun would.",
-    "game_icon": "assets/images/game/guns/shell.png"
+    "ammonomicon": "This strange gun, shaped like a shotgun shell, fires bullets that are shaped like shotguns. Those shotgun-shaped bullets will fire a spray of rounds upon impact, much like a shotgun would."
   },
   {
     "name": "Shellegun",
@@ -37034,8 +36859,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The pinnacle of Nuign's investigations into necromantic guns. Forged from a dying Shelleton, this gun reconstitutes itself when reloaded. Revolvations 22:12 As with all things, the Gun must eventually end; the final Bullet will leave the chamber, and all will be reloaded.",
-    "game_icon": "assets/images/game/guns/shellegun.png"
+    "ammonomicon": "The pinnacle of Nuign's investigations into necromantic guns. Forged from a dying Shelleton, this gun reconstitutes itself when reloaded. Revolvations 22:12 As with all things, the Gun must eventually end; the final Bullet will leave the chamber, and all will be reloaded."
   },
   {
     "name": "Shock Rifle",
@@ -37216,8 +37040,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The Shock Rifle uses a modified battery and coil to propel electricity.",
-    "game_icon": "assets/images/game/guns/shock_rifle.png"
+    "ammonomicon": "The Shock Rifle uses a modified battery and coil to propel electricity."
   },
   {
     "name": "Shotbow",
@@ -37356,8 +37179,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The shotbow fires crossbow bolts in a shotgun burst. The shotbow is the result of a failed experiment using the Gungeon's teleportation network.",
-    "game_icon": "assets/images/game/guns/shotbow.png"
+    "ammonomicon": "The shotbow fires crossbow bolts in a shotgun burst. The shotbow is the result of a failed experiment using the Gungeon's teleportation network."
   },
   {
     "name": "Shotgrub",
@@ -37616,8 +37438,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The infant Shotgrub is typically wielded by an adult Shotgrub, a guardian of Bullet Hell. It fires bullets in unnerving patterns. Gungeoneers should take care that it not attach to their brainstem.",
-    "game_icon": "assets/images/game/guns/shotgrub.png"
+    "ammonomicon": "The infant Shotgrub is typically wielded by an adult Shotgrub, a guardian of Bullet Hell. It fires bullets in unnerving patterns. Gungeoneers should take care that it not attach to their brainstem."
   },
   {
     "name": "Shotgun Full of Hate",
@@ -37793,8 +37614,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A merciless shotgun variant, packed with skulls, nails, and poison. After Hespera fell, her shotgun grew dark and corrupted by rage.",
-    "game_icon": "assets/images/game/guns/shotgun_full_of_hate.png"
+    "ammonomicon": "A merciless shotgun variant, packed with skulls, nails, and poison. After Hespera fell, her shotgun grew dark and corrupted by rage."
   },
   {
     "name": "Shotgun Full of Love",
@@ -37997,8 +37817,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Deals damage and potentially charms enemies. The preferred weapon of Hespera, the Pride of Venus, a beloved Gungeoneer.",
-    "game_icon": "assets/images/game/guns/shotgun_full_of_love.png"
+    "ammonomicon": "Deals damage and potentially charms enemies. The preferred weapon of Hespera, the Pride of Venus, a beloved Gungeoneer."
   },
   {
     "name": "Silencer",
@@ -38131,8 +37950,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Can stun enemies at close range. Alben Smallbore was known for enchanting mundane objects to make them more gun-like. This pillow, which once decorated his guest chambers, is a perfect example of his unique strain of madness.",
-    "game_icon": "assets/images/game/guns/silencer.png"
+    "ammonomicon": "Can stun enemies at close range. Alben Smallbore was known for enchanting mundane objects to make them more gun-like. This pillow, which once decorated his guest chambers, is a perfect example of his unique strain of madness."
   },
   {
     "name": "Siren",
@@ -38391,8 +38209,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Prevents goop effects. The Siren's watery blasts can be a lifesaver when faced with toxic pools or patches of flame.",
-    "game_icon": "assets/images/game/guns/siren.png"
+    "ammonomicon": "Prevents goop effects. The Siren's watery blasts can be a lifesaver when faced with toxic pools or patches of flame."
   },
   {
     "name": "Skull Spitter",
@@ -38496,8 +38313,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Even in death, bullets fly. This gun was crafted by Nuign the Cursed, from the skeleton of a Gundead that had become a Spectre. Nuign's body still remains somewhere deep in the Hollow, and it is from his bones that all Curse arises.",
-    "game_icon": "assets/images/game/guns/skull_spitter.png"
+    "ammonomicon": "Even in death, bullets fly. This gun was crafted by Nuign the Cursed, from the skeleton of a Gundead that had become a Spectre. Nuign's body still remains somewhere deep in the Hollow, and it is from his bones that all Curse arises."
   },
   {
     "name": "Sling",
@@ -38646,8 +38462,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Sometimes the old ways are the best ways. Deals more damage to powerful foes. This is not one of those old, best ways. The lowly sling is barely a gun, even by Gungeon standards. Only recommended as a last resort for serious Gungeoneers.",
-    "game_icon": "assets/images/game/guns/sling.png"
+    "ammonomicon": "Sometimes the old ways are the best ways. Deals more damage to powerful foes. This is not one of those old, best ways. The lowly sling is barely a gun, even by Gungeon standards. Only recommended as a last resort for serious Gungeoneers."
   },
   {
     "name": "Slinger",
@@ -38885,8 +38700,7 @@
     "infinite_ammo": true,
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 10,
-    "ammonomicon": "Brought to the Gungeon by a legendary gunplay expert. Called the gunslinger by his foes not because of his ability to aim and shoot but because of his unusual habit of literally slinging his gun once it is out of ammo and replacing it with another from his magical belt of a million guns. ///end of file",
-    "game_icon": "assets/images/game/guns/slinger.png"
+    "ammonomicon": "Brought to the Gungeon by a legendary gunplay expert. Called the gunslinger by his foes not because of his ability to aim and shoot but because of his unusual habit of literally slinging his gun once it is out of ammo and replacing it with another from his magical belt of a million guns. ///end of file"
   },
   {
     "name": "Smiley's Revolver",
@@ -38965,8 +38779,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The younger bullet brother's handgun. It is unhelpfully labelled with an 'S'. Shopkeepers found Smiley's good nature disarming, often giving him the advantage when negotiating prices.",
-    "game_icon": "assets/images/game/guns/smiley_s_revolver.png"
+    "ammonomicon": "The younger bullet brother's handgun. It is unhelpfully labelled with an 'S'. Shopkeepers found Smiley's good nature disarming, often giving him the advantage when negotiating prices."
   },
   {
     "name": "Snakemaker",
@@ -39123,8 +38936,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Chance to transmogrify enemies. The Snakemaker was an attempt to replicate the strange transformative power of certain magics with technology. Though the experiment was a success, further research into transfigurative weaponry seemed excessive.",
-    "game_icon": "assets/images/game/guns/snakemaker.png"
+    "ammonomicon": "Chance to transmogrify enemies. The Snakemaker was an attempt to replicate the strange transformative power of certain magics with technology. Though the experiment was a success, further research into transfigurative weaponry seemed excessive."
   },
   {
     "name": "Sniper Rifle",
@@ -39243,8 +39055,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Low rate of fire, piercing. Handcrafted by the Rifle Gundead, each Sniper Rifle performs slightly differently. Though the Gungeon rarely offers many opportunites for distance shooting, this gun still rewards a steady hand.",
-    "game_icon": "assets/images/game/guns/sniper_rifle.png"
+    "ammonomicon": "Low rate of fire, piercing. Handcrafted by the Rifle Gundead, each Sniper Rifle performs slightly differently. Though the Gungeon rarely offers many opportunites for distance shooting, this gun still rewards a steady hand."
   },
   {
     "name": "Snowballer",
@@ -39375,8 +39186,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This weapon was constructed the single time the Gungeon experienced a snow day. New Gundead simply appeared with these cannons strapped to their bodies and pelted everything in sight with powdery projectiles. There were also many chipped teeth.",
-    "game_icon": "assets/images/game/guns/snowballer.png"
+    "ammonomicon": "This weapon was constructed the single time the Gungeon experienced a snow day. New Gundead simply appeared with these cannons strapped to their bodies and pelted everything in sight with powdery projectiles. There were also many chipped teeth."
   },
   {
     "name": "Staff of Firepower",
@@ -39550,8 +39360,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Reload to transform. One of the earliest gun experiments, before the fires of the Forge were lit. This \"magic revolver\" was created when the then-master of the Gungeon taped one of his staves of power to the top of the barrel.",
-    "game_icon": "assets/images/game/guns/staff_of_firepower.png"
+    "ammonomicon": "Reload to transform. One of the earliest gun experiments, before the fires of the Forge were lit. This \"magic revolver\" was created when the then-master of the Gungeon taped one of his staves of power to the top of the barrel."
   },
   {
     "name": "Starpew",
@@ -39900,8 +39709,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Charge sequentially for more shots! A watering can used by the Bullet Kin, who lack even a fundamental understanding of agriculture.",
-    "game_icon": "assets/images/game/guns/starpew.png"
+    "ammonomicon": "Charge sequentially for more shots! A watering can used by the Bullet Kin, who lack even a fundamental understanding of agriculture."
   },
   {
     "name": "Sticky Crossbow",
@@ -40030,7 +39838,6 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Darts explode on reload. A favorite of the adventurer Frifle, who appreciates traditional weaponry but isn't opposed to a few combustible upgrades.",
-    "game_icon": "assets/images/game/guns/sticky_crossbow.png",
     "game_damage": "5",
     "game_range": "1000",
     "ammonomicon_pos": 66
@@ -40342,8 +40149,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Originally used to swat down bothersome aircraft, the Stinger has become a favorite of the aim deficient Gungeoneer.",
-    "game_icon": "assets/images/game/guns/stinger.png"
+    "ammonomicon": "Originally used to swat down bothersome aircraft, the Stinger has become a favorite of the aim deficient Gungeoneer."
   },
   {
     "name": "Stone Dome",
@@ -40620,8 +40426,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Spits bullets, fear. Chiseled from a large slab of the rare element Cranium, this terrifying stony visage is a totem of an angry god.",
-    "game_icon": "assets/images/game/guns/stone_dome.png"
+    "ammonomicon": "Spits bullets, fear. Chiseled from a large slab of the rare element Cranium, this terrifying stony visage is a totem of an angry god."
   },
   {
     "name": "Strafe Gun",
@@ -40835,8 +40640,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Fires explosive nails that detonate when the trigger is released, or after a brief period of time. This particular model is from the 1996 Gun of the year re-release edition.",
-    "game_icon": "assets/images/game/guns/strafe_gun.png"
+    "ammonomicon": "Fires explosive nails that detonate when the trigger is released, or after a brief period of time. This particular model is from the 1996 Gun of the year re-release edition."
   },
   {
     "name": "Sunlight Javelin",
@@ -41092,8 +40896,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Makes enemies grossly incandescent. This javelin was born from the chemistry of two heroes who conquered the Gungeon together.",
-    "game_icon": "assets/images/game/guns/sunlight_javelin.png"
+    "ammonomicon": "Makes enemies grossly incandescent. This javelin was born from the chemistry of two heroes who conquered the Gungeon together."
   },
   {
     "name": "Super Meat Gun",
@@ -41345,8 +41148,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Made of meat. Holding this gun allows its wielder to move just a little bit faster.",
-    "game_icon": "assets/images/game/guns/super_meat_gun.png"
+    "ammonomicon": "Made of meat. Holding this gun allows its wielder to move just a little bit faster."
   },
   {
     "name": "T-Shirt Cannon",
@@ -41423,8 +41225,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires T-Shirts. Gungeon Merch was a shortlived startup enterprise founded by a few misguided Gundead. After shooting their fourth consecutive customer, they turned their sights away from business.",
-    "game_icon": "assets/images/game/guns/t_shirt_cannon.png"
+    "ammonomicon": "Fires T-Shirts. Gungeon Merch was a shortlived startup enterprise founded by a few misguided Gundead. After shooting their fourth consecutive customer, they turned their sights away from business."
   },
   {
     "name": "Tangler",
@@ -41621,8 +41422,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Rectangles enemies. The Tangler shotgun fires particles from a dimension where matter exists only in rectilinear form.",
-    "game_icon": "assets/images/game/guns/tangler.png"
+    "ammonomicon": "Rectangles enemies. The Tangler shotgun fires particles from a dimension where matter exists only in rectilinear form."
   },
   {
     "name": "Teapot",
@@ -41746,8 +41546,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Ignites nearby enemies while reloading. Reloading this teapot heats up the contained water's H2O monocules.",
-    "game_icon": "assets/images/game/guns/teapot.png"
+    "ammonomicon": "Ignites nearby enemies while reloading. Reloading this teapot heats up the contained water's H2O monocules."
   },
   {
     "name": "Tear Jerker",
@@ -41935,8 +41734,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires tears with momentum. This grotesque gun is made of eyeballs bound together in a gun-like shape. Tears are a surprisingly effective projectile for exploring dungeons!",
-    "game_icon": "assets/images/game/guns/tear_jerker.png"
+    "ammonomicon": "Fires tears with momentum. This grotesque gun is made of eyeballs bound together in a gun-like shape. Tears are a surprisingly effective projectile for exploring dungeons!"
   },
   {
     "name": "Tetrominator",
@@ -42257,8 +42055,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "The tetrominator shoots every possible configuration of four bullets. Strangely, the \"line\" configuration seems rarer than others.",
-    "game_icon": "assets/images/game/guns/tetrominator.png"
+    "ammonomicon": "The tetrominator shoots every possible configuration of four bullets. Strangely, the \"line\" configuration seems rarer than others."
   },
   {
     "name": "The Emperor",
@@ -42418,8 +42215,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires linked projectiles. This gun fires powerful electron bursts that imitate ancient spells of chained lightning.",
-    "game_icon": "assets/images/game/guns/the_emperor.png"
+    "ammonomicon": "Fires linked projectiles. This gun fires powerful electron bursts that imitate ancient spells of chained lightning."
   },
   {
     "name": "The Exotic",
@@ -42577,8 +42373,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Fires homing rockets that erupt into short-range swarms. Comes with a helpful pal. Though this gun was built unimaginably far away, it seems it was destined to eventually find its way to the Gungeon.",
-    "game_icon": "assets/images/game/guns/the_exotic.png"
+    "ammonomicon": "Fires homing rockets that erupt into short-range swarms. Comes with a helpful pal. Though this gun was built unimaginably far away, it seems it was destined to eventually find its way to the Gungeon."
   },
   {
     "name": "The Fat Line",
@@ -42816,8 +42611,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires projectiles from the target position towards the gun. Because Tachyons are particles that move faster than light, the Hegemony of Man has long used them for interstellar communication. As with all technology, it was eventually weaponized. However- tachyons travel backward in time, making this gun hard to aim.",
-    "game_icon": "assets/images/game/guns/the_fat_line.png"
+    "ammonomicon": "Fires projectiles from the target position towards the gun. Because Tachyons are particles that move faster than light, the Hegemony of Man has long used them for interstellar communication. As with all technology, it was eventually weaponized. However- tachyons travel backward in time, making this gun hard to aim."
   },
   {
     "name": "The Judge",
@@ -42957,8 +42751,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Each clip contains a final shot with varying effects. Pass judgement on your enemies.",
-    "game_icon": "assets/images/game/guns/the_judge.png"
+    "ammonomicon": "Each clip contains a final shot with varying effects. Pass judgement on your enemies."
   },
   {
     "name": "The Kiln",
@@ -43061,8 +42854,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Gungeoneers tend to have little regard for the decorative pottery found throughout the Gungeon. To help quickly replace the broken decorations, custodians commissioned this pot producing pistol. This earliest version fired the pots with too much velocity, and was therefore discarded.",
-    "game_icon": "assets/images/game/guns/the_kiln.png"
+    "ammonomicon": "Gungeoneers tend to have little regard for the decorative pottery found throughout the Gungeon. To help quickly replace the broken decorations, custodians commissioned this pot producing pistol. This earliest version fired the pots with too much velocity, and was therefore discarded."
   },
   {
     "name": "The Membrane",
@@ -43210,8 +43002,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Fires a splitting burst of mucus. Brought to the Gungeon by the warlike Blobulonians, its suppressive fire helped King Visc Osbro III win back the province of Goopscone from the rebel forces led by his brother, Gel Osbro.",
-    "game_icon": "assets/images/game/guns/the_membrane.png"
+    "ammonomicon": "Fires a splitting burst of mucus. Brought to the Gungeon by the warlike Blobulonians, its suppressive fire helped King Visc Osbro III win back the province of Goopscone from the rebel forces led by his brother, Gel Osbro."
   },
   {
     "name": "The Predator",
@@ -43402,8 +43193,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Locks on. Tracks enemy heat signatures. This shoulder-mounted plasma cannon was used by an alien hunter. Generally, the Gundead do not bleed, but this gun can still make short work of them.",
-    "game_icon": "assets/images/game/guns/the_predator.png"
+    "ammonomicon": "Locks on. Tracks enemy heat signatures. This shoulder-mounted plasma cannon was used by an alien hunter. Generally, the Gundead do not bleed, but this gun can still make short work of them."
   },
   {
     "name": "The Scrambler",
@@ -43724,8 +43514,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The Scrambler fires unhatched bullet eggs, each close to hatching. Upon impact, a swarm of newborn bullets is released, hungry for their first meal!",
-    "game_icon": "assets/images/game/guns/the_scrambler.png"
+    "ammonomicon": "The Scrambler fires unhatched bullet eggs, each close to hatching. Upon impact, a swarm of newborn bullets is released, hungry for their first meal!"
   },
   {
     "name": "Thompson Sub-Machinegun",
@@ -43866,8 +43655,7 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "A favorite of organized criminals and Hollow Points, this gun has accumulated nicknames over its hundreds of years of use. Known affectionately as the \"Tommy Gun,\" the \"Trench Broom\", the \"Chicago Typewriter\", and the \"Teetotaller's Thursday.\"",
-    "game_icon": "assets/images/game/guns/thompson_sub_machinegun.png"
+    "ammonomicon": "A favorite of organized criminals and Hollow Points, this gun has accumulated nicknames over its hundreds of years of use. Known affectionately as the \"Tommy Gun,\" the \"Trench Broom\", the \"Chicago Typewriter\", and the \"Teetotaller's Thursday.\""
   },
   {
     "name": "Thunderclap",
@@ -44237,8 +44025,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "One of the first energy weapons created in the Gungeon. When lightning struck an old gunsmith's gun-rack, he decided to sand it down into a gun. The result is crude, as far as energy weapons go, but effective.",
-    "game_icon": "assets/images/game/guns/thunderclap.png"
+    "ammonomicon": "One of the first energy weapons created in the Gungeon. When lightning struck an old gunsmith's gun-rack, he decided to sand it down into a gun. The result is crude, as far as energy weapons go, but effective."
   },
   {
     "name": "Trank Gun",
@@ -44415,8 +44202,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "This pistol is often modified to use tranquilizer rounds. This one has not been.",
-    "game_icon": "assets/images/game/guns/trank_gun.png"
+    "ammonomicon": "This pistol is often modified to use tranquilizer rounds. This one has not been."
   },
   {
     "name": "Trashcannon",
@@ -44647,8 +44433,7 @@
       "Boss drops",
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An improvised gun that fires trash, sending poison in all directions. A threat to anyone in the room, including the wielder. Becomes more powerful the more Junk a Gungeoneer is carrying.",
-    "game_icon": "assets/images/game/guns/trashcannon.png"
+    "ammonomicon": "An improvised gun that fires trash, sending poison in all directions. A threat to anyone in the room, including the wielder. Becomes more powerful the more Junk a Gungeoneer is carrying."
   },
   {
     "name": "Trick Gun",
@@ -44949,8 +44734,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Alternates between handgun and shotgun forms. Legend tells of demon bullets that inhabit the lowest level of the Gungeon, making their lairs beneath the great Forge. The Trick Gun is a favorite of the Gungeoneers who style themselves as demon hunters.",
-    "game_icon": "assets/images/game/guns/trick_gun.png"
+    "ammonomicon": "Alternates between handgun and shotgun forms. Legend tells of demon bullets that inhabit the lowest level of the Gungeon, making their lairs beneath the great Forge. The Trick Gun is a favorite of the Gungeoneers who style themselves as demon hunters."
   },
   {
     "name": "Trident",
@@ -45127,8 +44911,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This trident is immaculately crafted, and powerful runes etched into its length allow it to channel mighty bullet magics. Sometimes when the Gungeon shifts, entire regions are submerged.",
-    "game_icon": "assets/images/game/guns/trident.png"
+    "ammonomicon": "This trident is immaculately crafted, and powerful runes etched into its length allow it to channel mighty bullet magics. Sometimes when the Gungeon shifts, entire regions are submerged."
   },
   {
     "name": "Triple Crossbow",
@@ -45241,8 +45024,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The triple crossbow represents the pinnacle of multiple bolt technology. This one alternates between slowing bolts and a triple volley.",
-    "game_icon": "assets/images/game/guns/triple_crossbow.png"
+    "ammonomicon": "The triple crossbow represents the pinnacle of multiple bolt technology. This one alternates between slowing bolts and a triple volley."
   },
   {
     "name": "Triple Gun",
@@ -45533,8 +45315,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Transforms between three forms based on current ammo. Though it appears at first to be a gun like any other, this gun is in actuality a very rare plant.",
-    "game_icon": "assets/images/game/guns/triple_gun.png"
+    "ammonomicon": "Transforms between three forms based on current ammo. Though it appears at first to be a gun like any other, this gun is in actuality a very rare plant."
   },
   {
     "name": "Turbo-Gun",
@@ -45713,8 +45494,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "While reloading, any further attempts to reload increase a damage multiplier. Years ago, savvy Gungeoneers built devices to automatically pull the trigger faster than a human hand. For some reason, they have fallen out of favor.",
-    "game_icon": "assets/images/game/guns/turbo_gun.png"
+    "ammonomicon": "While reloading, any further attempts to reload increase a damage multiplier. Years ago, savvy Gungeoneers built devices to automatically pull the trigger faster than a human hand. For some reason, they have fallen out of favor."
   },
   {
     "name": "Unfinished Gun",
@@ -45923,8 +45703,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This gun is still in the process of being forged! It barely functions in its current state, but could be a viable choice in a truly desperate situation. A small hourglass is embossed on the cylinder.",
-    "game_icon": "assets/images/game/guns/unfinished_gun.png"
+    "ammonomicon": "This gun is still in the process of being forged! It barely functions in its current state, but could be a viable choice in a truly desperate situation. A small hourglass is embossed on the cylinder."
   },
   {
     "name": "Unicorn Horn",
@@ -46088,7 +45867,6 @@
       "Truth chest"
     ],
     "ammonomicon": "This magic horn is proof that at least one unicorn existed, and now is either dead or hornless.",
-    "game_icon": "assets/images/game/guns/unicorn_horn.png",
     "game_game_type": "Beam"
   },
   {
@@ -46236,8 +46014,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "An abomination. This dark weapon was assembled from a fallen adventurer's spinal column and an AK-47 frame. When Nuign was first exiled from his homeland, he was heartbroken. In his pain, he turned to the Gungeon.",
-    "game_icon": "assets/images/game/guns/vertebraek_47.png"
+    "ammonomicon": "An abomination. This dark weapon was assembled from a fallen adventurer's spinal column and an AK-47 frame. When Nuign was first exiled from his homeland, he was heartbroken. In his pain, he turned to the Gungeon."
   },
   {
     "name": "Void Core Assault Rifle",
@@ -46387,8 +46164,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Before the Void Core was disbanded by the Hegemony of Man, they were renowned throughout the sector for their feats on and off the battlefield. Following their dissolution, the famed Void Core captain known as the Thunderbolt made his way to the Gungeon.",
-    "game_icon": "assets/images/game/guns/void_core_assault_rifle.png"
+    "ammonomicon": "Before the Void Core was disbanded by the Hegemony of Man, they were renowned throughout the sector for their feats on and off the battlefield. Following their dissolution, the famed Void Core captain known as the Thunderbolt made his way to the Gungeon."
   },
   {
     "name": "Void Core Cannon",
@@ -46583,8 +46359,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Traditionally used by the Void Core for ship-to-ship combat, the VCC weapon fires an accelerating ball of plasma that delivers a devestating punch. This hand-held model is a retrofit design made specifically for the Thunderbolt.",
-    "game_icon": "assets/images/game/guns/void_core_cannon.png"
+    "ammonomicon": "Traditionally used by the Void Core for ship-to-ship combat, the VCC weapon fires an accelerating ball of plasma that delivers a devestating punch. This hand-held model is a retrofit design made specifically for the Thunderbolt."
   },
   {
     "name": "Void Marshal",
@@ -46656,8 +46431,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Compact, but highly accurate, the Void Marshal is a favorite of smugglers and rogues across the galaxy.",
-    "game_icon": "assets/images/game/guns/void_marshal.png"
+    "ammonomicon": "Compact, but highly accurate, the Void Marshal is a favorite of smugglers and rogues across the galaxy."
   },
   {
     "name": "Void Shotgun",
@@ -46814,8 +46588,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "The favored weapon of the Void Core's frontline soldiers. Its short range ensures that any encounter will be lethal, one way or another.",
-    "game_icon": "assets/images/game/guns/void_shotgun.png"
+    "ammonomicon": "The favored weapon of the Void Core's frontline soldiers. Its short range ensures that any encounter will be lethal, one way or another."
   },
   {
     "name": "Vorpal Gun",
@@ -47164,8 +46937,7 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Occasionally deals massive damage. This striking handgun was forged hundreds of years ago by a forgotten gunsmith. Though its power has weakened, it occasionally recalls its former might.",
-    "game_icon": "assets/images/game/guns/vorpal_gun.png"
+    "ammonomicon": "Occasionally deals massive damage. This striking handgun was forged hundreds of years ago by a forgotten gunsmith. Though its power has weakened, it occasionally recalls its former might."
   },
   {
     "name": "Vulcan Cannon",
@@ -47357,8 +47129,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Favored by the huge predatory bird that nests in the Gungeon, it is a weapon to be feared.",
-    "game_icon": "assets/images/game/guns/vulcan_cannon.png"
+    "ammonomicon": "Favored by the huge predatory bird that nests in the Gungeon, it is a weapon to be feared."
   },
   {
     "name": "Winchester",
@@ -47473,8 +47244,7 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "This modified shotgun has been refitted for one-handed use. The Winchester shotgun packs the same punch as a regular shotgun, but chambers more efficiently.",
-    "game_icon": "assets/images/game/guns/winchester.png"
+    "ammonomicon": "This modified shotgun has been refitted for one-handed use. The Winchester shotgun packs the same punch as a regular shotgun, but chambers more efficiently."
   },
   {
     "name": "Winchester Rifle",
@@ -47603,8 +47373,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The Winchester Rifle was used to famous effect by Frifle during his first adventures with the Grey Mauser. It might be a bit dated, but still packs quite the punch.",
-    "game_icon": "assets/images/game/guns/winchester_rifle.png"
+    "ammonomicon": "The Winchester Rifle was used to famous effect by Frifle during his first adventures with the Grey Mauser. It might be a bit dated, but still packs quite the punch."
   },
   {
     "name": "Wind Up Gun",
@@ -47751,8 +47520,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Decreases in damage output as the clip empties. You gotta wind it!",
-    "game_icon": "assets/images/game/guns/wind_up_gun.png"
+    "ammonomicon": "Decreases in damage output as the clip empties. You gotta wind it!"
   },
   {
     "name": "Witch Pistol",
@@ -47871,8 +47639,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Chance to transmogrify. The Witch Pistol is a hexed variant of a standard magnum. A favorite of magic users seeking to become familiar with gunplay.",
-    "game_icon": "assets/images/game/guns/witch_pistol.png"
+    "ammonomicon": "Chance to transmogrify. The Witch Pistol is a hexed variant of a standard magnum. A favorite of magic users seeking to become familiar with gunplay."
   },
   {
     "name": "Wood Beam",
@@ -48106,7 +47873,6 @@
       "Truck shop"
     ],
     "ammonomicon": "A wooden beam, often used in construction. Not technically a gun, but you could probably smack some Bullet Kin around with it.",
-    "game_icon": "assets/images/game/guns/wood_beam.png",
     "game_game_type": "Beam"
   },
   {
@@ -48285,7 +48051,6 @@
       "Truth chest"
     ],
     "ammonomicon": "Chain-fires homing rockets. A legendary weapon manufactured by Zilla Industries. This one was created bespoke for a powerful warrior, whose name has been lost to shadow.",
-    "game_icon": "assets/images/game/guns/yari_launcher.png",
     "ammonomicon_pos": 145
   },
   {
@@ -48428,8 +48193,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A four-barreled shotgun that can be fired all at once. Zilla Industries is famous for crafting bespoke weapons for highly talented gunslingers. This shotgun was created with only one concept in mind: maximum destructive potential.",
-    "game_icon": "assets/images/game/guns/zilla_shotgun.png"
+    "ammonomicon": "A four-barreled shotgun that can be fired all at once. Zilla Industries is famous for crafting bespoke weapons for highly talented gunslingers. This shotgun was created with only one concept in mind: maximum destructive potential."
   },
   {
     "name": "Zorgun",
@@ -48623,7 +48387,6 @@
       "Boss drops",
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Each clip contains an explosive final shot! The Zorgun is a mass-produced all-purpose machine gun. Its eggshell design allows it to be stored easily in intergalactic cruise ship compartments.",
-    "game_icon": "assets/images/game/guns/zorgun.png"
+    "ammonomicon": "Each clip contains an explosive final shot! The Zorgun is a mass-produced all-purpose machine gun. Its eggshell design allows it to be stored easily in intergalactic cruise ship compartments."
   }
 ]

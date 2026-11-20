@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/tokens.dart';
@@ -17,8 +18,14 @@ import '../widgets/theme_overlay.dart';
 import '../widgets/backgrounds/custom_wallpaper.dart';
 import '../widgets/backgrounds/ambient_shader.dart';
 import '../widgets/particles/ambient_glow.dart';
-import '../utils/asset_paths.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
+import '../providers/run_provider.dart';
+import '../models/gun.dart';
+import '../models/item.dart';
+import '../models/player.dart';
+import '../widgets/active_run/player_page.dart';
+import 'browse_screen.dart';
+import 'item_detail_screen.dart';
 part 'experience_studio/studio_particles.dart';
 part 'experience_studio/studio_typography.dart';
 part 'experience_studio/studio_ambiance.dart';
@@ -117,6 +124,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   bool _gallerySelect = false; // gallery doubles as copy-source picker
   bool _cameFromFlow = false; // wizard entered via NEW PRESET
   String _presetName = '';
+  // Set when editing an existing saved preset — SAVE overwrites it
+  // instead of creating a new one. Null = creating new preset.
+  String? _editingPresetId;
   // Gallery presentation — list (official/custom sections, easy scan)
   // vs cards (fullscreen swipe). Persisted; list is the default since
   // the swiper doesn't scale past a handful of presets.
@@ -1690,17 +1700,36 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 ),
               ),
               if (e.saved != null && !_gallerySelect && _quickPickSlot < 0)
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => _confirmDeletePreset(e.saved!),
-                  child: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Icon(
-                      Icons.delete_outline_rounded,
-                      size: 17,
-                      color: Colors.white.withValues(alpha: 0.4),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Edit button — loads preset into wizard for modification
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => _onEditPreset(e.saved!),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.edit_outlined,
+                          size: 17,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
                     ),
-                  ),
+                    // Delete button — removes preset from gallery
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => _confirmDeletePreset(e.saved!),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.delete_outline_rounded,
+                          size: 17,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               else if (isCurrent)
                 Icon(Icons.check_circle_rounded, size: 16, color: flair.primary),
@@ -2083,6 +2112,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       });
     } else if (e.saved != null) {
       final s = e.saved!;
+      // Track the source preset so SAVE overwrites it instead of
+      // creating a duplicate — this is the "edit existing" path.
+      _editingPresetId = s.id;
+      _presetName = s.name;
       await VisualPrefs.replaceAndPersist(s.prefs);
       setState(() {
         _draft =
@@ -2113,6 +2146,23 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     });
     await AppTheme.saveCustomThemeData(_draft);
     AppTheme.previewNotifier.value = _previewMode;
+  }
+
+  /// Edit an existing saved preset — loads it into the wizard with
+  /// [_editingPresetId] set so SAVE overwrites instead of duplicating.
+  Future<void> _onEditPreset(SavedCustomTheme preset) async {
+    Haptics.selection();
+    _editingPresetId = preset.id;
+    _presetName = preset.name;
+    _cameFromFlow = false; // editing goes straight to wizard, no source step
+    final entry = _PresetEntry(
+      name: preset.name,
+      subtitle: 'SAVED PRESET',
+      colors: _savedColors(preset),
+      saved: preset,
+      splash: preset.splashSlug.isEmpty ? null : preset.splashSlug,
+    );
+    await _seedFromEntry(entry);
   }
 
   /// DETAILS tab — compact summary of every pick + fullscreen preview.
@@ -2176,7 +2226,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           ),
           children: [
             GoopText(
-              _presetName.isEmpty ? 'CURRENT LOOK' : 'PRESET: $_presetName',
+              _editingPresetId != null
+                  ? 'EDITING: $_presetName'
+                  : (_presetName.isEmpty
+                      ? 'CURRENT LOOK'
+                      : 'PRESET: $_presetName'),
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
@@ -2298,8 +2352,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   /// SAVE tab — review + persist the preset, then apply & close.
+  /// Shows "UPDATE PRESET" when editing an existing saved preset.
   Widget _buildSaveStep() {
     final flair = AppTheme.flairFor(_previewMode);
+    final isEditing = _editingPresetId != null;
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         Insets.lg,
@@ -2309,7 +2365,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       ),
       children: [
         GoopText(
-          'SAVE PRESET',
+          isEditing ? 'UPDATE PRESET' : 'SAVE PRESET',
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w900,
@@ -2319,9 +2375,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         ),
         const SizedBox(height: 8),
         GoopText(
-          _presetName.isEmpty
-              ? 'this look will be saved under a name you pick'
-              : '"$_presetName" joins your preset gallery',
+          isEditing
+              ? '"$_presetName" will be updated in your gallery'
+              : (_presetName.isEmpty
+                  ? 'this look will be saved under a name you pick'
+                  : '"$_presetName" joins your preset gallery'),
           style: TextStyle(
             fontSize: 11,
             height: 1.4,
@@ -2348,7 +2406,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.bookmark_added_rounded,
+                  isEditing
+                      ? Icons.update_rounded
+                      : Icons.bookmark_added_rounded,
                   size: 18,
                   color:
                       flair.primary.computeLuminance() > 0.5
@@ -2357,7 +2417,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 ),
                 const SizedBox(width: 10),
                 GoopText(
-                  'SAVE & APPLY',
+                  isEditing ? 'UPDATE & APPLY' : 'SAVE & APPLY',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w900,
@@ -2386,6 +2446,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   /// Persist the staged look as a [SavedCustomTheme], apply it, close.
+  /// When [_editingPresetId] is set, overwrites the existing preset
+  /// instead of creating a new one.
   Future<void> _onSavePreset() async {
     var name = _presetName;
     if (name.isEmpty) {
@@ -2396,15 +2458,20 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     }
     Haptics.success();
     final isCustom = _previewMode == AppThemeMode.custom;
+    final editingId = _editingPresetId;
     final theme = SavedCustomTheme(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      // Keep the original ID when editing so we overwrite in-place
+      id: editingId ?? DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
       splashSlug: isCustom ? 'custom' : _previewMode.splashSlug,
       baseMode: _previewMode,
       prefs: VisualPrefs.notifier.value,
       customData: isCustom ? _draft.copyWith(name: name) : null,
     );
-    final saved = await CustomThemeStore.save(theme);
+    final saved =
+        editingId != null
+            ? await CustomThemeStore.update(theme)
+            : await CustomThemeStore.save(theme);
     if (!saved && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Could not save preset — storage error')),
@@ -2415,6 +2482,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       await AppTheme.saveCustomThemeData(_draft.copyWith(name: name));
     }
     await AppTheme.setMode(_previewMode);
+    _editingPresetId = null; // clear edit mode after successful save
     _closeAfterCommit();
   }
 
@@ -2424,6 +2492,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     Haptics.selection();
     switch (_stage) {
       case _StudioStage.wizard:
+        // Leaving the wizard cancels edit mode — the preset wasn't saved
+        _editingPresetId = null;
         if (_cameFromFlow) {
           setState(() => _stage = _StudioStage.source);
         } else {
@@ -2432,11 +2502,15 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       case _StudioStage.gallery:
         setState(() {
           _quickPickSlot = -1;
+          _editingPresetId = null; // leaving gallery cancels any pending edit
           _stage =
               _gallerySelect ? _StudioStage.source : _StudioStage.choose;
         });
       case _StudioStage.source:
-        setState(() => _stage = _StudioStage.choose);
+        setState(() {
+          _editingPresetId = null;
+          _stage = _StudioStage.choose;
+        });
       case _StudioStage.choose:
         _onBack();
     }

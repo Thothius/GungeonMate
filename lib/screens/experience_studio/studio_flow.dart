@@ -106,11 +106,56 @@ class _FlowCard extends StatelessWidget {
   }
 }
 
-/// Fullscreen mock preview — two swipeable pages: a fake active-run
-/// view and a fake gun-detail view, both rendered with the live draft
-/// theme (colors, wallpaper, particles, font) via AppTheme/VisualPrefs.
-class _MockPreviewScreen extends StatelessWidget {
+/// Fullscreen preview — 4 swipeable pages using real app widgets with
+/// a mock RunProvider. Pages: active run, browse, item detail, quick-add.
+/// All rendered with the live draft theme via AppTheme/VisualPrefs.
+class _MockPreviewScreen extends StatefulWidget {
   const _MockPreviewScreen();
+
+  @override
+  State<_MockPreviewScreen> createState() => _MockPreviewScreenState();
+}
+
+class _MockPreviewScreenState extends State<_MockPreviewScreen> {
+  late final RunProvider _previewProvider;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _previewProvider = RunProvider();
+    _loadPreviewData();
+  }
+
+  Future<void> _loadPreviewData() async {
+    await _previewProvider.loadData();
+    if (!mounted) return;
+    // Start a fake run with sample data for realistic previews
+    final chars = _previewProvider.allGungeoneers;
+    if (chars.isNotEmpty) {
+      _previewProvider.startNewRun(chars.first);
+      // Add some sample guns and items for a populated look
+      final guns = _previewProvider.allGuns;
+      final items = _previewProvider.allItems;
+      // Add a few iconic guns
+      for (final name in ['Gunderfury', 'Evolver', 'AKEY-47']) {
+        final gun = guns.where((g) => g.name == name).firstOrNull;
+        if (gun != null) _previewProvider.addGun(gun);
+      }
+      // Add a few items
+      for (final name in ['Platinum Bullets', 'Iron Coin', 'Spice']) {
+        final item = items.where((i) => i.name == name).firstOrNull;
+        if (item != null) _previewProvider.addItem(item);
+      }
+    }
+    setState(() => _loaded = true);
+  }
+
+  @override
+  void dispose() {
+    _previewProvider.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +180,7 @@ class _MockPreviewScreen extends StatelessWidget {
             ),
           ),
           ..._customBgLayers(mode, 0.72),
-          // Ambient shader — FOG/RAIN picks render here too, same
-          // layer order as ThemeOverlay (above wallpaper, below
-          // particles).
+          // Ambient shader — FOG/RAIN picks render here too
           Positioned.fill(
             child: IgnorePointer(
               child: ValueListenableBuilder<VisualPrefs>(
@@ -167,9 +210,7 @@ class _MockPreviewScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Ambient glow — same resolution as the app overlay / LIVE
-          // LOOK so AMBIANCE picks show in the mock too (incl. the
-          // theme auto-glow when the user hasn't set one).
+          // Ambient glow
           Positioned.fill(
             child: IgnorePointer(
               child: ValueListenableBuilder<VisualPrefs>(
@@ -201,7 +242,7 @@ class _MockPreviewScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Vignette + film grain — the AMBIANCE depth sliders.
+          // Vignette + film grain
           Positioned.fill(
             child: IgnorePointer(
               child: ValueListenableBuilder<VisualPrefs>(
@@ -209,7 +250,6 @@ class _MockPreviewScreen extends StatelessWidget {
                 builder:
                     (_, prefs, _) => Stack(
                       children: [
-                        // Exact ThemeOverlay vignette (4-stop radial).
                         if (prefs.vignetteIntensity > 0.01)
                           Positioned.fill(
                             child: DecoratedBox(
@@ -301,14 +341,49 @@ class _MockPreviewScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Expanded(
-                  child: PageView(
-                    children: const [_MockRunPage(), _MockDetailPage()],
-                  ),
+                  child:
+                      _loaded
+                          ? ChangeNotifierProvider<RunProvider>.value(
+                            value: _previewProvider,
+                            child: PageView(
+                              children: [
+                                _PreviewActiveRunPage(),
+                                _PreviewBrowsePage(),
+                                _PreviewItemDetailPage(),
+                                _PreviewQuickAddPage(),
+                              ],
+                            ),
+                          )
+                          : Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 32,
+                                  height: 32,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: flair.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                GoopText(
+                                  'LOADING PREVIEW...',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.2,
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 18),
                   child: GoopText(
-                    'swipe — run view ⇄ gun detail',
+                    'swipe — run · browse · detail · quick-add',
                     style: TextStyle(
                       fontSize: 9.5,
                       letterSpacing: 0.8,
@@ -325,363 +400,266 @@ class _MockPreviewScreen extends StatelessWidget {
   }
 }
 
-/// Mock page 1 — a fake active-run dashboard: player header, gun row,
-/// item row, stat chips. Pure mock data, real theme.
-class _MockRunPage extends StatelessWidget {
-  const _MockRunPage();
+/// Page 1 — Active run simulation using real PlayerPage widget.
+class _PreviewActiveRunPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const PlayerPage(slot: PlayerSlot.main);
+  }
+}
 
-  static const _guns = ['Gunderfury', 'Evolver', 'AKEY-47'];
-  static const _items = ['Platinum Bullets', 'Iron Coin', 'Spice'];
+/// Page 2 — Browse view using real BrowseScreen widget.
+class _PreviewBrowsePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const BrowseScreen(
+      targetSlot: PlayerSlot.main,
+      isVisible: true,
+      showBackButton: false,
+    );
+  }
+}
+
+/// Page 3 — Item detail view using real ItemDetailScreen widget.
+class _PreviewItemDetailPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<RunProvider>();
+    // Pick a random gun or item for the detail preview
+    final guns = provider.allGuns;
+    final items = provider.allItems;
+    Gun? gun;
+    Item? item;
+    if (guns.isNotEmpty) {
+      // Prefer a gun with synergies for a richer preview
+      gun = guns.firstWhere(
+        (g) => g.name == 'Gunderfury',
+        orElse: () => guns.first,
+      );
+    } else if (items.isNotEmpty) {
+      item = items.first;
+    }
+    if (gun == null && item == null) {
+      return const Center(child: GoopText('No data loaded'));
+    }
+    return ItemDetailScreen(
+      gun: gun,
+      item: item,
+      ownerSlot: PlayerSlot.main,
+      lebView: false,
+    );
+  }
+}
+
+/// Page 4 — Quick-add menu preview. Shows a simplified version of the
+/// quick-add bottom sheet UI for theme preview purposes.
+class _PreviewQuickAddPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<RunProvider>();
+    final flair = AppTheme.displayedFlair;
+    final guns = provider.allGuns.take(8).toList();
+    final items = provider.allItems.take(8).toList();
+
+    return Column(
+      children: [
+        // Header
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          decoration: BoxDecoration(
+            color: flair.card.withValues(alpha: 0.95),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            border: Border.all(
+              color: flair.primary.withValues(alpha: 0.2),
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: GoopText(
+                  'QUICK ADD',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                    color: flair.primary,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.close_rounded,
+                size: 20,
+                color: Colors.white.withValues(alpha: 0.5),
+              ),
+            ],
+          ),
+        ),
+        // Search bar mock
+        Container(
+          margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.search_rounded,
+                size: 18,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+              const SizedBox(width: 8),
+              GoopText(
+                'Search guns & items...',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Sample list
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            children: [
+              for (final gun in guns)
+                _PreviewQuickAddRow(
+                  name: gun.name,
+                  quality: gun.quality,
+                  isGun: true,
+                  iconPath: gun.icon,
+                ),
+              for (final item in items)
+                _PreviewQuickAddRow(
+                  name: item.name,
+                  quality: item.quality,
+                  isGun: false,
+                  iconPath: item.icon,
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PreviewQuickAddRow extends StatelessWidget {
+  final String name;
+  final String quality;
+  final bool isGun;
+  final String iconPath;
+
+  const _PreviewQuickAddRow({
+    required this.name,
+    required this.quality,
+    required this.isGun,
+    required this.iconPath,
+  });
 
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.displayedFlair;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-      children: [
-        _mockCard(
-          flair,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: flair.primary.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: flair.primary.withValues(alpha: 0.6),
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.person_rounded,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Row(
+        children: [
+          // Icon
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: flair.card.withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: iconPath.isNotEmpty
+                ? Image.asset(
+                    iconPath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) => Icon(
+                      isGun ? Icons.gps_fixed : Icons.inventory_2,
+                      size: 20,
                       color: flair.primary,
-                      size: 24,
                     ),
+                  )
+                : Icon(
+                    isGun ? Icons.gps_fixed : Icons.inventory_2,
+                    size: 20,
+                    color: flair.primary,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GoopText(
-                          'WANDERER',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.0,
-                            color: flair.primary,
-                          ),
-                        ),
-                        GoopText(
-                          'HP  6.0 / 6.5     ARMOR  2',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: flair.secondary.withValues(alpha: 0.85),
-                          ),
-                        ),
-                      ],
-                    ),
+          ),
+          const SizedBox(width: 12),
+          // Name + type
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
                   ),
-                  _mockPill('COOP', flair),
-                ],
+                ),
+                GoopText(
+                  isGun ? 'GUN' : 'ITEM',
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Quality badge
+          if (quality.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: _qualityColor(quality).withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: _qualityColor(quality).withValues(alpha: 0.4),
+                ),
               ),
-              const SizedBox(height: 14),
-              GoopText(
-                'GUNS',
+              child: GoopText(
+                quality,
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w900,
-                  letterSpacing: 1.4,
-                  color: Colors.white.withValues(alpha: 0.45),
+                  color: _qualityColor(quality),
                 ),
               ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  for (final g in _guns)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: _mockIconTile(flair, localGunIcon(g), g),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              GoopText(
-                'ITEMS',
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.4,
-                  color: Colors.white.withValues(alpha: 0.45),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  for (final i in _items)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: _mockIconTile(flair, localItemIcon(i), i),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _mockPill('SYN 3/7', flair),
-                  _mockPill('DPS 42.6', flair),
-                  _mockPill('FLOOR 2', flair),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _mockIconTile(ThemeFlair flair, String path, String name) {
-    return Container(
-      height: 74,
-      decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 34,
-            child: Image.asset(
-              path,
-              fit: BoxFit.contain,
-              errorBuilder:
-                  (_, _, _) => Icon(
-                    Icons.image_outlined,
-                    size: 22,
-                    color: flair.primary.withValues(alpha: 0.6),
-                  ),
             ),
-          ),
-          const SizedBox(height: 3),
-          GoopText(
-            name.toUpperCase(),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 7.5,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.4,
-              color: Colors.white.withValues(alpha: 0.65),
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _mockPill(String label, ThemeFlair flair) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: flair.primary.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: flair.primary.withValues(alpha: 0.4)),
-      ),
-      child: GoopText(
-        label,
-        style: TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w900,
-          letterSpacing: 0.8,
-          color: flair.primary,
-        ),
-      ),
-    );
+  Color _qualityColor(String q) {
+    switch (q.toUpperCase()) {
+      case 'S':
+        return const Color(0xFFFFD700);
+      case 'A':
+        return Colors.redAccent;
+      case 'B':
+        return Colors.greenAccent;
+      case 'C':
+        return Colors.blueAccent;
+      case 'D':
+        return Colors.brown;
+      default:
+        return Colors.white38;
+    }
   }
-}
-
-/// Mock page 2 — a fake gun-detail view: name, stat block, synergy rows.
-class _MockDetailPage extends StatelessWidget {
-  const _MockDetailPage();
-
-  @override
-  Widget build(BuildContext context) {
-    final flair = AppTheme.displayedFlair;
-    Widget stat(String k, String v) => Expanded(
-      child: Column(
-        children: [
-          GoopText(
-            v,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w900,
-              color: flair.headlineStat,
-            ),
-          ),
-          GoopText(
-            k,
-            style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
-              color: Colors.white.withValues(alpha: 0.45),
-            ),
-          ),
-        ],
-      ),
-    );
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-      children: [
-        _mockCard(
-          flair,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SizedBox(
-                    height: 64,
-                    width: 64,
-                    child: Image.asset(
-                      localGunIcon('Gunderfury'),
-                      fit: BoxFit.contain,
-                      errorBuilder:
-                          (_, _, _) => Icon(
-                            Icons.gps_fixed_rounded,
-                            size: 40,
-                            color: flair.primary,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GoopText(
-                          'GUNDERFURY',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.0,
-                            color: flair.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        GoopText(
-                          'S rank · Evolve gun · Synergy core',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: flair.secondary.withValues(alpha: 0.8),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  stat('DMG', '45'),
-                  stat('ROF', '4.0'),
-                  stat('ACC', '92%'),
-                  stat('BLT', '20'),
-                ],
-              ),
-              const SizedBox(height: 14),
-              GoopText(
-                'SYN',
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.4,
-                  color: Colors.white.withValues(alpha: 0.45),
-                ),
-              ),
-              const SizedBox(height: 8),
-              for (final s in const [
-                ('BULLET BOY', 'COMPLETE', true),
-                ('PINCUSHION', 'PARTIAL', false),
-                ('GUNGEON COAT', 'LOCKED', false),
-              ])
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GoopText(
-                          s.$1,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white.withValues(alpha: 0.85),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              s.$3
-                                  ? flair.primary.withValues(alpha: 0.15)
-                                  : Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color:
-                                s.$3
-                                    ? flair.primary.withValues(alpha: 0.5)
-                                    : Colors.white.withValues(alpha: 0.15),
-                          ),
-                        ),
-                        child: GoopText(
-                          s.$2,
-                          style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.6,
-                            color:
-                                s.$3
-                                    ? flair.primary
-                                    : Colors.white.withValues(alpha: 0.45),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-Widget _mockCard(ThemeFlair flair, {required Widget child}) {
-  return Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: flair.card.withValues(alpha: 0.92),
-      borderRadius: BorderRadius.circular(14),
-      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-    ),
-    child: child,
-  );
 }
