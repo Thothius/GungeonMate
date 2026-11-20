@@ -12,6 +12,7 @@ import '../theme/tokens.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../services/app_theme.dart';
+import '../services/color_favorites.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
@@ -2531,7 +2532,22 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       );
       return;
     }
-    if (mounted) setState(() {});
+    if (mounted) {
+      // Don't leave dangling references — a deleted preset can't stay
+      // the edit target or occupy a quick slot.
+      if (_editingPresetId == t.id) {
+        _editingPresetId = null;
+        _presetName = '';
+      }
+      final slotRef = 's:${t.id}';
+      if (_quickSlots.contains(slotRef)) {
+        _quickSlots = [
+          for (final r in _quickSlots) r == slotRef ? null : r,
+        ];
+        _saveQuickSlots();
+      }
+      setState(() {});
+    }
   }
 
   Widget _presetCardBg(_PresetEntry e) {
@@ -3148,6 +3164,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.lg),
       children: [
         if (_previewMode == AppThemeMode.unicorn) _buildUnicornStrip(),
+        _buildElementsMock(),
+        const SizedBox(height: 10),
         ...rows,
         const SizedBox(height: 14),
         _buildPanelChromeSection(),
@@ -3161,6 +3179,131 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           ),
         ),
       ],
+    );
+  }
+
+  /// Live element mock — one composite "app slice" painted entirely
+  /// from [_draft] so every color role shows its real effect at once:
+  /// CANVAS = backdrop, PANEL = card, PRIME = button/border,
+  /// SECOND = hint text, STAT = big number, BULLETS = bullet glyph.
+  Widget _buildElementsMock() {
+    final d = _draft;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 128,
+            decoration: BoxDecoration(
+              color: d.scaffold,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Stat headline — STAT role.
+                GoopText(
+                  '12.4',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
+                    height: 1.0,
+                    color: d.headlineStat,
+                  ),
+                ),
+                GoopText(
+                  'DPS',
+                  style: TextStyle(fontSize: 8, color: d.secondary),
+                ),
+                const SizedBox(height: 8),
+                // Panel card — PANEL role; PRIME accents it.
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: d.card,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: d.primary.withValues(alpha: 0.55),
+                        width: 1.2,
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            // Bullet glyph — BULLETS role.
+                            GoopText(
+                              '•',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                                color: d.bulletColor,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: GoopText(
+                                'Hegemony Credit',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: d.primary,
+                                ),
+                              ),
+                            ),
+                            // Prime button — PRIME role.
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: d.primary,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: GoopText(
+                                'EQUIP',
+                                style: TextStyle(
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w900,
+                                  color: d.scaffold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        GoopText(
+                          'secondary hint text',
+                          style: TextStyle(fontSize: 9, color: d.secondary),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 5),
+          GoopText(
+            'live mock — every color below repaints this',
+            style: TextStyle(
+              fontSize: 8.5,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -3274,6 +3417,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               ),
             ),
             const SizedBox(height: 8),
+            _panelChromeMock(flair),
+            const SizedBox(height: 10),
             _chromeColorRow(
               'PANEL COLOR',
               'fill for all panels',
@@ -3362,6 +3507,110 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           ],
         );
       },
+    );
+  }
+
+  /// Mini "app slice" painted from the RESOLVED flair — [flairFor]
+  /// already folds panelColor/opacity/border/radius into card +
+  /// cardRadius + cardBorder*, so this mock is literally what every
+  /// panel in the app looks like right now.
+  Widget _panelChromeMock(ThemeFlair flair) {
+    final borderColor = flair.cardBorderColor;
+    final hasBorder = borderColor != null && borderColor.a > 0.01;
+    Widget panel({required double height, required Widget child}) {
+      return Container(
+        height: height,
+        decoration: BoxDecoration(
+          color: flair.card,
+          borderRadius: BorderRadius.circular(flair.cardRadius),
+          border:
+              hasBorder
+                  ? Border.all(
+                    color: borderColor,
+                    width: flair.cardBorderWidth,
+                  )
+                  : null,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: child,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Dashboard-style card.
+        panel(
+          height: 52,
+          child: Row(
+            children: [
+              Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  color: flair.primary.withValues(alpha: 0.25),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      'RUN DASHBOARD',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.8,
+                        color: Colors.white.withValues(alpha: 0.75),
+                      ),
+                    ),
+                    GoopText(
+                      'card surface mock',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 7,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Bottom-nav pill — same chrome, narrower.
+        panel(
+          height: 30,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              for (final l in ['GUNS', 'ITEMS', 'SETTINGS'])
+                GoopText(
+                  l,
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.6,
+                    color: Colors.white.withValues(alpha: 0.55),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 5),
+        GoopText(
+          'live — sliders & picks below repaint this',
+          style: TextStyle(
+            fontSize: 8.5,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+      ],
     );
   }
 
@@ -3990,7 +4239,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
   Widget build(BuildContext context) {
     final colors = _palettes[_tab];
     return Container(
-      height: 440,
+      height: 478,
       decoration: BoxDecoration(
         color: const Color(0xFF16161C),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
@@ -4050,6 +4299,35 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                 ),
               ],
             ),
+          ),
+          // Favorite slots — tap a filled one to use it, tap an empty
+          // one to fill it, long-press for change/clear. Persisted
+          // app-wide via ColorFavorites (survives preset switches).
+          ValueListenableBuilder<List<int>>(
+            valueListenable: ColorFavorites.slots,
+            builder: (_, favs, _) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                child: Row(
+                  children: [
+                    GoopText(
+                      'FAVORITES',
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    for (var i = 0; i < ColorFavorites.slotCount; i++) ...[
+                      if (i > 0) const SizedBox(width: 7),
+                      _favSlot(i, favs[i]),
+                    ],
+                  ],
+                ),
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -4150,6 +4428,106 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// One favorite slot — filled = use on tap; empty = fill on tap;
+  /// long-press opens CHANGE / CLEAR regardless of state.
+  Widget _favSlot(int index, int argb) {
+    final filled = argb != 0;
+    final color = filled ? Color(argb) : null;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () async {
+        if (filled) {
+          Haptics.selection();
+          if (mounted) Navigator.of(context).pop(color);
+          return;
+        }
+        // Empty slot — pick a color to fill it.
+        final c = await _PaletteColorSheet.show(context, widget.current);
+        if (c != null) await ColorFavorites.setSlot(index, c.toARGB32());
+      },
+      onLongPress: () async {
+        Haptics.selection();
+        final action = await showDialog<String>(
+          context: context,
+          builder:
+              (ctx) => AlertDialog(
+                backgroundColor: const Color(0xFF1A1A22),
+                title: GoopText(
+                  'FAVORITE ${index + 1}',
+                  style: const TextStyle(fontSize: 13, color: Colors.white),
+                ),
+                content: GoopText(
+                  filled ? 'change or clear this slot?' : 'pick a color for this slot?',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop('cancel'),
+                    child: const Text('CANCEL'),
+                  ),
+                  if (filled)
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop('clear'),
+                      child: const Text('CLEAR'),
+                    ),
+                  FilledButton(
+                    onPressed: () => Navigator.of(ctx).pop('change'),
+                    child: const Text('CHANGE'),
+                  ),
+                ],
+              ),
+        );
+        if (!mounted) return;
+        if (action == 'clear') {
+          await ColorFavorites.setSlot(index, 0);
+        } else if (action == 'change') {
+          final c = await _PaletteColorSheet.show(
+            context,
+            color ?? widget.current,
+          );
+          if (c != null) await ColorFavorites.setSlot(index, c.toARGB32());
+        }
+      },
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: color ?? Colors.transparent,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color:
+                filled
+                    ? Colors.white.withValues(alpha: 0.55)
+                    : Colors.white.withValues(alpha: 0.18),
+            width: filled ? 1.4 : 1.0,
+          ),
+          boxShadow:
+              filled && color != null
+                  ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.55),
+                      blurRadius: 7,
+                    ),
+                  ]
+                  : null,
+        ),
+        child:
+            filled
+                ? null
+                : Center(
+                  child: Icon(
+                    Icons.add_rounded,
+                    size: 14,
+                    color: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'providers/run_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/app_theme.dart';
+import 'services/color_favorites.dart';
 import 'services/home_customization.dart';
 import 'services/mp/mp_store.dart' as mp_store;
 import 'services/mp/mp_foreground_service.dart';
@@ -28,6 +29,7 @@ void main() async {
   // failures internally — a broken plugin can't block app startup.
   await AppTheme.init();
   await VisualPrefs.init();
+  await ColorFavorites.init();
   await CustomThemeStore.load();
   await HomeCustomization.load();
   await mp_store.MpStore.cleanupOldKeys();
