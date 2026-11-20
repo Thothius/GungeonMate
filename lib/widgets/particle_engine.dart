@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'theme_overlay.dart' show ThemeOverlay;
 import 'skeuo/skeuo_tokens.dart';
@@ -88,6 +89,10 @@ class _ItemIconFieldState extends State<ItemIconField>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
   late List<_IconP> _ps;
+  ui.Image? _image;
+  ImageStream? _stream;
+  ImageStreamListener? _listener;
+  String? _loadedPath;
 
   @override
   void initState() {
@@ -97,14 +102,45 @@ class _ItemIconFieldState extends State<ItemIconField>
     _ps = _build();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Image decode needs an ImageConfiguration (MediaQuery) — can't
+    // run in initState.
+    if (_loadedPath != widget.iconPath) {
+      _loadedPath = widget.iconPath;
+      _loadImage();
+    }
+  }
+
   List<_IconP> _build() {
     final r = math.Random(widget.iconPath.hashCode * 31 + widget.count);
     return [for (var i = 0; i < widget.count; i++) _IconP(r, i)];
   }
 
+  /// Decode the sprite once — the old Stack-of-Image.asset version
+  /// built N image widgets per tick; now one ui.Image feeds a single
+  /// CustomPaint that draws every sprite in one pass.
+  void _loadImage() {
+    _stream?.removeListener(_listener!);
+    final stream = AssetImage(
+      widget.iconPath,
+    ).resolve(createLocalImageConfiguration(context));
+    late final ImageStreamListener listener;
+    listener = ImageStreamListener((info, _) {
+      if (mounted) setState(() => _image = info.image);
+    }, onError: (_, _) {});
+    _listener = listener;
+    _stream = stream..addListener(listener);
+  }
+
   @override
   void didUpdateWidget(ItemIconField old) {
     super.didUpdateWidget(old);
+    if (old.iconPath != widget.iconPath) {
+      _loadedPath = widget.iconPath;
+      _loadImage(); // keeps the old frame until the new decode lands
+    }
     if (old.iconPath != widget.iconPath || old.count != widget.count) {
       _ps = _build();
     }
@@ -112,6 +148,7 @@ class _ItemIconFieldState extends State<ItemIconField>
 
   @override
   void dispose() {
+    if (_listener != null) _stream?.removeListener(_listener!);
     _c.dispose();
     super.dispose();
   }
@@ -120,62 +157,28 @@ class _ItemIconFieldState extends State<ItemIconField>
   Widget build(BuildContext context) {
     if (widget.iconPath.isEmpty ||
         !widget.iconPath.startsWith('assets/') ||
-        widget.opacity <= 0) {
+        widget.opacity <= 0 ||
+        _image == null) {
       return const SizedBox.shrink();
     }
-    final path = widget.iconPath;
+    final img = _image!;
     return IgnorePointer(
       child: AnimatedBuilder(
         animation: _c,
         builder: (context, _) {
-          final t = _c.value;
           return LayoutBuilder(
             builder: (ctx, box) {
               final w = box.maxWidth, h = box.maxHeight;
               if (w <= 0 || h <= 0) return const SizedBox.shrink();
-              return Stack(
-                children: [
-                  for (final p in _ps)
-                    Builder(
-                      builder: (_) {
-                        // Loop vertically: start below, drift up past top.
-                        final span = h + p.size * 2;
-                        final yy = (p.y * span - t * p.speed * span) % span;
-                        final top = yy - p.size;
-                        final left =
-                            p.x * (w - p.size) +
-                            math.sin(t * math.pi * 2 * p.freq + p.phase) *
-                                p.sway;
-                        final rot =
-                            math.sin(t * math.pi * 2 * p.freq * 0.7 + p.phase) *
-                            p.spin;
-                        final op =
-                            widget.opacity *
-                            p.fade *
-                            (0.6 + 0.4 * math.sin(t * math.pi * 2 + p.phase));
-                        final sz = p.size * widget.sizeScale.clamp(0.4, 2.0);
-                        return Positioned(
-                          left: left.clamp(-sz, w),
-                          top: top,
-                          child: Opacity(
-                            opacity: op.clamp(0.0, 1.0),
-                            child: Transform.rotate(
-                              angle: rot,
-                              child: Image.asset(
-                                path,
-                                width: sz,
-                                height: sz,
-                                cacheWidth: 96,
-                                gaplessPlayback: true,
-                                errorBuilder:
-                                    (_, _, _) => const SizedBox.shrink(),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                ],
+              return CustomPaint(
+                size: Size(w, h),
+                painter: _IconSpritePainter(
+                  image: img,
+                  particles: _ps,
+                  t: _c.value,
+                  sizeScale: widget.sizeScale,
+                  opacity: widget.opacity,
+                ),
               );
             },
           );
@@ -183,6 +186,69 @@ class _ItemIconFieldState extends State<ItemIconField>
       ),
     );
   }
+}
+
+/// Single-pass sprite field — same drift/sway/spin math the old
+/// Positioned+Opacity+Transform stack used, painted directly.
+class _IconSpritePainter extends CustomPainter {
+  _IconSpritePainter({
+    required this.image,
+    required this.particles,
+    required this.t,
+    required this.sizeScale,
+    required this.opacity,
+  });
+
+  final ui.Image image;
+  final List<_IconP> particles;
+  final double t;
+  final double sizeScale;
+  final double opacity;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width, h = size.height;
+    final src = Rect.fromLTWH(
+      0,
+      0,
+      image.width.toDouble(),
+      image.height.toDouble(),
+    );
+    for (final p in particles) {
+      // Loop vertically: start below, drift up past top.
+      final span = h + p.size * 2;
+      final yy = (p.y * span - t * p.speed * span) % span;
+      final top = yy - p.size;
+      final left = (p.x * (w - p.size) +
+              math.sin(t * math.pi * 2 * p.freq + p.phase) * p.sway)
+          .clamp(-p.size * sizeScale, w);
+      final rot = math.sin(t * math.pi * 2 * p.freq * 0.7 + p.phase) * p.spin;
+      final op =
+          opacity * p.fade * (0.6 + 0.4 * math.sin(t * math.pi * 2 + p.phase));
+      final sz = p.size * sizeScale.clamp(0.4, 2.0);
+      canvas.save();
+      canvas.translate(left + sz / 2, top + sz / 2);
+      canvas.rotate(rot);
+      canvas.drawImageRect(
+        image,
+        src,
+        Rect.fromCenter(center: Offset.zero, width: sz, height: sz),
+        // modulate: white keeps hue, alpha fades — same as Opacity().
+        Paint()
+          ..color = Colors.white.withValues(alpha: op.clamp(0.0, 1.0))
+          ..blendMode = BlendMode.modulate,
+      );
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_IconSpritePainter old) =>
+      old.t != t ||
+      old.opacity != opacity ||
+      old.sizeScale != sizeScale ||
+      !identical(old.image, image) ||
+      !identical(old.particles, particles);
 }
 
 // =============================================================================

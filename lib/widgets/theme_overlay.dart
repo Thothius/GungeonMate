@@ -501,6 +501,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                                 mode,
                                 prefs,
                                 reduceMotion: reduceMotion,
+                                dust: true,
                               ) ??
                               const SizedBox.shrink(),
                         ),
@@ -526,6 +527,7 @@ Widget? buildBackdropParticleField(
   bool menuVisible = false,
   bool reduceMotion = false,
   double opacityScale = 1.0,
+  bool dust = false,
 }) {
   final f = AppTheme.flairFor(mode);
   // auto-bind particles to the active theme. Every visible theme has a
@@ -550,7 +552,10 @@ Widget? buildBackdropParticleField(
   if (prefs.particleSpritePath.isNotEmpty) {
     return ItemIconField(
       iconPath: prefs.particleSpritePath,
-      count: prefs.particleCount.clamp(6, 18),
+      count: (dust ? prefs.particleCount ~/ 2 : prefs.particleCount).clamp(
+        6,
+        18,
+      ),
       sizeScale: prefs.particleSizeScale,
       opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
     );
@@ -564,7 +569,10 @@ Widget? buildBackdropParticleField(
     );
     return ItemIconField(
       iconPath: kItemIconParticles[iconIdx].$2,
-      count: prefs.particleCount.clamp(6, 18),
+      count: (dust ? prefs.particleCount ~/ 2 : prefs.particleCount).clamp(
+        6,
+        18,
+      ),
       sizeScale: prefs.particleSizeScale,
       opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
     );
@@ -597,7 +605,11 @@ Widget? buildBackdropParticleField(
     preset: effectivePreset,
     config: typedCfg,
     tiltEnabled: prefs.particleTouch,
-    count: prefs.particleCount,
+    // Foreground dust runs half density and never links — the O(n²)
+    // pair check is the priciest part of a frame and invisible at
+    // 18% opacity anyway.
+    count:
+        dust ? (prefs.particleCount ~/ 2).clamp(1, 200) : prefs.particleCount,
     sizeScale: prefs.particleSizeScale,
     opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
     // none = AUTO (let the typed config's own glow show). Passing the
@@ -607,7 +619,7 @@ Widget? buildBackdropParticleField(
         prefs.particleGlowEffect == GlowEffect.none
             ? null
             : prefs.particleGlowEffect,
-    lineLinksOverride: prefs.particleLineLinks ? true : null,
+    lineLinksOverride: dust ? false : (prefs.particleLineLinks ? true : null),
     colorsOverride: colorOverride,
     bounce: prefs.particleBounce,
     speedMultiplier: prefs.particleSpeed.multiplier,

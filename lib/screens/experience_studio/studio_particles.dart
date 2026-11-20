@@ -206,6 +206,25 @@ class _ParticlesStep extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   SizedBox(height: 66, child: _looksRow(prefs)),
+                  // Honest state — after hand-tweaking a look (or
+                  // picking NONE) no tile is highlighted; say so.
+                  if (prefs.particleSpritePath.isEmpty &&
+                      prefs.particleItemIcon < 0 &&
+                      !kParticleLooks.any(
+                        (l) => VisualPrefs.matchesParticleLook(prefs, l),
+                      ))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: GoopText(
+                        'CUSTOM — knobs below define this look',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.8,
+                          color: Colors.white.withValues(alpha: 0.45),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 16),
                   // Typed particle system — shapes × per-theme
                   // schemas × physics flags.

@@ -150,6 +150,8 @@ class _AvatarIdleState extends State<_AvatarIdle>
     super.didChangeDependencies();
     // Don't burn vsync under reduced-motion — build returns the
     // static child, so the controller has nothing to drive.
+    // (Offscreen TickerMode-muted tickers already stop scheduling
+    // frames on their own — no extra gating needed.)
     if (MediaQuery.disableAnimationsOf(context)) {
       _ctrl.stop();
     } else if (!_ctrl.isAnimating) {
