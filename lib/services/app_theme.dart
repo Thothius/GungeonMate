@@ -46,9 +46,9 @@ part 'theme/theme_flair_prefs.dart';
 part 'theme/theme_store.dart';
 
 class AppTheme {
-  /// Neo-Skeuo is parked — the toggle stays hidden until the
-  /// Phase-B skin pass is ready to ship. Flip to true to restore.
-  static const bool kNeoSkeuoEnabled = false;
+  /// Neo-Skeuo skin toggle — visible on the home menu (top-right) and
+  /// in run tools. Set false to park the feature again.
+  static const bool kNeoSkeuoEnabled = true;
   const AppTheme._();
 
   static const String _prefsKey = 'theme.mode.v2';
