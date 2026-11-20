@@ -62,7 +62,7 @@ void main() {
   group('enter/exit restore', skip: !AppTheme.kNeoSkeuoEnabled, () {
     test('enterSkeuo saves prev mode + font, exit restores both', () async {
       AppTheme.notifier.value = AppThemeMode.unicorn;
-      await VisualPrefs.setFont(AppFont.fredoka);
+      await VisualPrefs.setFont(AppFont.bungee);
 
       await AppTheme.enterSkeuo();
       expect(AppTheme.mode, AppThemeMode.neoSkeuo);
@@ -71,7 +71,7 @@ void main() {
       await AppTheme.exitSkeuo();
       expect(AppTheme.mode, AppThemeMode.unicorn);
       expect(AppTheme.isSkeuo, isFalse);
-      expect(VisualPrefs.notifier.value.font, AppFont.fredoka);
+      expect(VisualPrefs.notifier.value.font, AppFont.bungee);
     });
 
     test('exit without a saved prev falls back to defaults', () async {

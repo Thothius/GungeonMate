@@ -736,7 +736,7 @@ void main() {
       await openStudioOnRoute(tester, tab: 2); // TYPE tab
 
       // Mutate a pref through real UI — pick a different font tile.
-      await tester.tap(find.text('Orbitron'));
+      await tester.tap(find.text('Bungee'));
       await tester.pump(const Duration(milliseconds: 300));
       expect(VisualPrefs.notifier.value.font, isNot(originalFont));
 

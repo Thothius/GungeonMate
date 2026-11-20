@@ -3,40 +3,11 @@ part of '../experience_studio_screen.dart';
 class _TypographyStep extends StatelessWidget {
   const _TypographyStep();
 
-  /// All 29 fonts in enum order — FEATURED first, then the category
-  /// groups flat (no group labels per user feedback).
-  static const _fonts = [
-    AppFont.gungeon,
-    AppFont.megrim,
-    AppFont.pressStart2p,
-    AppFont.silkscreen,
-    AppFont.vt323,
-    AppFont.pixelifySans,
-    AppFont.blackOpsOne,
-    AppFont.orbitron,
-    AppFont.shareTechMono,
-    AppFont.syncopate,
-    AppFont.rajdhani,
-    AppFont.audiowide,
-    AppFont.russoOne,
-    AppFont.fasterOne,
-    AppFont.jetBrainsMono,
-    AppFont.archivoBlack,
-    AppFont.anton,
-    AppFont.rowdies,
-    AppFont.righteous,
-    AppFont.bebasNeue,
-    AppFont.fredoka,
-    AppFont.carterOne,
-    AppFont.dmSans,
-    AppFont.montserrat,
-    AppFont.medievalSharp,
-    AppFont.cinzelDecorative,
-    AppFont.cinzel,
-    AppFont.merriweather,
-    AppFont.specialElite,
-    AppFont.playfairDisplay,
-  ];
+  /// Live fonts only — the curated set with bundled assets.
+  /// Deprecated enum members have no TTF and share the fallback
+  /// label, so listing them would render duplicate 'Enter the
+  /// Gungeon' tiles (and migrate on tap).
+  static final _fonts = AppFontLabel.curated;
 
   @override
   Widget build(BuildContext context) {
