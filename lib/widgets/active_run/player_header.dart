@@ -127,7 +127,12 @@ class BigPlayerTab extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8),
                   child:
                       avatarId != null && avatarId!.isNotEmpty
-                          ? FramedAvatar(id: avatarId!, size: 36, radius: 8)
+                          ? FramedAvatar(
+                            id: avatarId!,
+                            size: 36,
+                            radius: 8,
+                            idle: true,
+                          )
                           : () {
                             final iconName = gungeoneerName ?? characterName;
                             return Image.asset(

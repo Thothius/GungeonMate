@@ -730,7 +730,12 @@ class _Portrait extends StatelessWidget {
             ),
             child:
                 avatarId.isNotEmpty
-                    ? FramedAvatar(id: avatarId, size: 84 * sf, radius: 10)
+                    ? FramedAvatar(
+                      id: avatarId,
+                      size: 84 * sf,
+                      radius: 10,
+                      idle: true,
+                    )
                     : character != null
                     ? ClipRRect(
                       borderRadius: BorderRadius.all(Radii.lg),

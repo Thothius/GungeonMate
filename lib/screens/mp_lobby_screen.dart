@@ -336,6 +336,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                 id: _avatarId,
                 size: 84 * sf,
                 radius: 42 * sf,
+                idle: true,
               ),
             ),
             SizedBox(height: 6 * sf),

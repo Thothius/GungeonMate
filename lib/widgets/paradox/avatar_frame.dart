@@ -60,17 +60,24 @@ AvatarFrameStyle? avatarFrameStyleOf(String id) {
 
 /// Framed avatar portrait — resolves `avatarPath`, paints the picked
 /// frame (animated for specials), falls back to a person icon.
+///
+/// `idle: true` adds a subtle alive-loop — slow breathing scale, a
+/// gentle sway, and a soft bob — so portraits feel present during a
+/// run instead of frozen. Honors reduced-motion; the phase is derived
+/// from [id] so two avatars on screen never move in sync.
 class FramedAvatar extends StatelessWidget {
   const FramedAvatar({
     super.key,
     required this.id,
     this.size = 48,
     this.radius = 10,
+    this.idle = false,
   });
 
   final String id;
   final double size;
   final double radius;
+  final bool idle;
 
   @override
   Widget build(BuildContext context) {
@@ -92,25 +99,77 @@ class FramedAvatar extends StatelessWidget {
         ),
       ),
     );
+    Widget avatar;
     if (frame == null || frame.id.isEmpty) {
-      return SizedBox(width: w, height: w, child: inner);
-    }
-    return SizedBox(
-      width: w,
-      height: w,
-      child:
-          frame.special
-              ? _AnimatedSpecialFrame(
-                frame: frame,
-                radius: radius,
-                child: inner,
-              )
-              : Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: frame.color, width: 2.2),
+      avatar = SizedBox(width: w, height: w, child: inner);
+    } else {
+      avatar = SizedBox(
+        width: w,
+        height: w,
+        child:
+            frame.special
+                ? _AnimatedSpecialFrame(
+                  frame: frame,
+                  radius: radius,
+                  child: inner,
+                )
+                : Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: frame.color, width: 2.2),
+                  ),
+                  child: inner,
                 ),
-                child: inner,
-              ),
+      );
+    }
+    if (!idle) return avatar;
+    return _AvatarIdle(phase: (id.hashCode.abs() % 628) / 100.0, child: avatar);
+  }
+}
+
+/// Idle life for [FramedAvatar] — one slow loop (~4s): the portrait
+/// breathes (scale ±1.8%), sways ±1.3°, and bobs ~1px on the
+/// double-time. Static under reduced-motion.
+class _AvatarIdle extends StatefulWidget {
+  const _AvatarIdle({required this.phase, required this.child});
+  final double phase;
+  final Widget child;
+
+  @override
+  State<_AvatarIdle> createState() => _AvatarIdleState();
+}
+
+class _AvatarIdleState extends State<_AvatarIdle>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 4000),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) return widget.child;
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, child) {
+        final t = _ctrl.value * math.pi * 2 + widget.phase;
+        return Transform.translate(
+          offset: Offset(0, math.sin(t * 2) * 0.9),
+          child: Transform.rotate(
+            angle: math.sin(t) * 0.022,
+            child: Transform.scale(
+              scale: 1 + math.sin(t) * 0.018,
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: widget.child,
     );
   }
 }

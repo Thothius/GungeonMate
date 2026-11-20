@@ -65,7 +65,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Avatar — tap to open SurpriseSheet
+          // Avatar + name side-by-side — tap avatar for SurpriseSheet.
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap:
@@ -80,7 +80,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   ),
                   builder: (_) => const SurpriseSheet(),
                 ),
-            child: Column(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
@@ -97,75 +97,95 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     id: avatarId,
                     size: double.infinity,
                     radius: 8,
+                    idle: true,
                   ),
                 ),
-                SizedBox(height: 2 * sf),
+                SizedBox(width: 7 * sf),
                 SizedBox(
-                  width: 64 * sf,
-                  child: GoopText(
-                    isMyPage
-                        ? session.myNickname
-                        : (session.peerNickname ?? 'P2'),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 8.5 * sf,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.4,
-                      color: Colors.white.withValues(alpha: 0.75),
-                    ),
+                  width: 58 * sf,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GoopText(
+                        isMyPage
+                            ? session.myNickname
+                            : (session.peerNickname ?? 'P2'),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10 * sf,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.3,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
+                      ),
+                      GoopText(
+                        isMyPage ? 'YOU' : 'PARTNER',
+                        style: TextStyle(
+                          fontSize: 7 * sf,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.1,
+                          color: const Color(0xFFB388FF).withValues(
+                            alpha: 0.7,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(width: 8 * sf),
-          // Stats scroll horizontally if the row exceeds available
-          // width — avatar + menu stay pinned at the ends.
+          const Spacer(),
+          // Stats pinned right — FittedBox shrinks the row on narrow
+          // screens instead of scrolling it out of reach.
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  // Avatar tap opens the surprise composer (chat removed).
-                  // COOL
-                  _PanelStat(
-                    label: 'COOL',
-                    value: p.runState.totalCoolness.toStringAsFixed(0),
-                    color: const Color(0xFF4DD0E1),
-                    sf: sf,
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          fastRoute(const CoolCurseScreen()),
-                        ),
-                  ),
-                  // CURSE
-                  _PanelStat(
-                    label: 'CURSE',
-                    value: p.runState.totalCurse.toStringAsFixed(0),
-                    color: const Color(0xFFBA68C8),
-                    sf: sf,
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          fastRoute(const CoolCurseScreen()),
-                        ),
-                  ),
-                  // SYN — active synergy count (combined)
-                  _PanelStat(
-                    label: 'SYN',
-                    value: p.activeSynergyGlowColors.length.toString(),
-                    color: const Color(0xFFB388FF),
-                    sf: sf,
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          fastRoute(const AllSynergiesScreen()),
-                        ),
-                  ),
-                ],
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
+              children: [
+                // Avatar tap opens the surprise composer (chat removed).
+                // COOL
+                _PanelStat(
+                  label: 'COOL',
+                  value: p.runState.totalCoolness.toStringAsFixed(0),
+                  color: const Color(0xFF4DD0E1),
+                  sf: sf,
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        fastRoute(const CoolCurseScreen()),
+                      ),
+                ),
+                // CURSE
+                _PanelStat(
+                  label: 'CURSE',
+                  value: p.runState.totalCurse.toStringAsFixed(0),
+                  color: const Color(0xFFBA68C8),
+                  sf: sf,
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        fastRoute(const CoolCurseScreen()),
+                      ),
+                ),
+                // SYN — active synergy count (combined)
+                _PanelStat(
+                  label: 'SYN',
+                  value: p.activeSynergyGlowColors.length.toString(),
+                  color: const Color(0xFFB388FF),
+                  sf: sf,
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        fastRoute(const AllSynergiesScreen()),
+                      ),
+                ),
+              ],
+            ),
               ),
             ),
           ),
