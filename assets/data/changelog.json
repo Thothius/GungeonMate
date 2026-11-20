@@ -1,5 +1,25 @@
 [
   {
+    "version": "3.6.0",
+    "date": "2026-11",
+    "sections": {
+      "Features": [
+        "Living preview session — the studio PREVIEW now runs a real ActiveRunScreen on an isolated mock run: random character + loot every open, casino re-roll, RUN/BROWSE dock, and every interaction (quick-add, item detail, dice) works; back pops levels like the real app",
+        "Particle final form — 10 new shapes appended (star, bolt, heart, skull, paw, crescent, hexagon, smoke, scale, triangle) so all 14 drawable types are reachable; all 11 glow effects exposed; LOOKS row with 12 curated one-tap configs; ANY SPRITE picker searches every bundled gun/item sprite",
+        "Liquid tank ambience — new AMBIENCE control: BLOOD / VENOM / UMBRA bubbly rising fills and SHELLS mode where brass casings slide with phone tilt",
+        "Color favorites — 6 persistent favorite slots inside every color picker (tap to use, long-press to change/clear); live element mocks show color roles and panel chrome updating in real time",
+        "Immersive wallpaper — new toggle in the wallpaper picker: slow breathing zoom + device-tilt parallax on custom wallpapers (reduced-motion safe)",
+        "MP polish — player nicknames now sit beside avatars with YOU/PARTNER tags, COOL/CURSE/SYN pinned right; custom avatars idle-breathe during runs, lobby, and connect",
+        "MP VS splash + READY handshake — fresh pairings get a versus screen with huge portraits and a pulsing VS medallion; the host must confirm READY before both players drop into the run (MpStartRun wire message, synced run timers); reconnects skip the gate"
+      ],
+      "Fixed": [
+        "Studio demo preview can no longer leak live MP chrome or wire dice/emote/gift callbacks into the mock run",
+        "Sprite orientation — removed rotated game_icon PNG references; all gun/item icons resolve through consistently-oriented WEBP assets",
+        "Saved presets are directly editable — UPDATE PRESET vs SAVE PRESET, and APPLY/SAVE now persist staged gallery-preview prefs"
+      ]
+    }
+  },
+  {
     "version": "3.5.0",
     "date": "2026-11",
     "sections": {

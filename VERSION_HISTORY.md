@@ -1,3 +1,23 @@
+## v3.6.0 — Theme Studio Final Form + MP VS Splash (November 2026)
+
+**Build:** 166
+
+Customization masterplan S1–S6: living studio preview, particle final form, liquid tank ambience, color favorites, immersive wallpapers, MP identity polish, and the host-confirmed VS handshake.
+
+### Features
+- **Living preview** — studio PREVIEW hosts a real `ActiveRunScreen` on an isolated mock `RunProvider` (`persistenceEnabled = false`, `MpSession.placeholder()` shield): random character + loot every open, casino re-roll, RUN/BROWSE dock, real quick-add/item-detail/dice interactions, back pops levels.
+- **Particles final form** — 10 new `ParticleType`s appended (star, bolt, heart, skull, paw, crescent, hexagon, smoke, scale, triangle — persisted indices untouched); all 11 `GlowEffect`s exposed; 12 curated `ParticleLook`s; ANY SPRITE picker over all bundled gun/item WEBPs with typed/icon/sprite mutual exclusion.
+- **Liquid tank** — `LiquidTankField` ambient layer: BLOOD / VENOM / UMBRA wavy rising fills with bubbles + SHELLS tilt-physics casings; `liquidKindIndex` pref; reduced-motion static frame.
+- **Color favorites** — `ColorFavorites` service, 6 stable slots, tap-to-use / long-press edit, app-level persistence; live color-role + panel-chrome mocks in the studio.
+- **Immersive wallpaper** — `wallpaperImmersive` pref: 18s breathing zoom + accelerometer parallax at 1.18× overscan; toggle in wallpaper sheet; reduced-motion static.
+- **MP polish A** — `ParadoxPlayerPanel` shows nickname beside avatar with YOU/PARTNER tag, COOL/CURSE/SYN pinned right via scale-down FittedBox; `FramedAvatar idle` breathing/sway/bob loop (phase-offset per id, reduced-motion safe) on run panel, player tab, lobby, connect.
+- **MP VS splash + handshake** — fresh pairings get a versus screen (108sf portraits, pulsing VS medallion, drifting player-color glows, LINKED/run-title chips); host taps READY → `MpStartRun` wire message → sidekick enters via `onStartRun`; both run timers arm on receipt. Reconnects/restores/demo skip the gate; ENTERING THE GUNGEON beat follows.
+
+### Fixed
+- **Preset editing** — saved presets editable in place (UPDATE PRESET vs SAVE PRESET); APPLY/SAVE persist staged gallery-preview prefs; `_draft`/identity sync on gallery picks.
+- **Sprite orientation** — removed 499 rotated `game_icon` PNG references from guns/items JSON; slugged WEBPs are the single icon source.
+- **Studio preview isolation** — demo session can no longer touch real saves or live MP callbacks.
+
 ## v3.5.0 — Preset Save Hardening (November 2026)
 
 **Build:** 165
