@@ -274,34 +274,22 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   icon: Icons.hub_outlined,
                   flair: flair,
                   initiallyExpanded: false,
-                  child: Row(
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GoopText(
-                              "Lich's Eye Bullets",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            GoopText(
-                              'Show simulated synergies for all guns',
-                              style: TextStyle(
-                                fontSize: FontSizes.labelMedium,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.6),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Switch(
+                      _SynergyToggleRow(
+                        title: "Lich's Eye Bullets",
+                        subtitle: 'Show simulated synergies for all guns',
                         value: prefs.showLichEyeBulletsSynergies,
-                        activeThumbColor: flair.primary,
+                        flair: flair,
                         onChanged: VisualPrefs.setShowLichEyeBulletsSynergies,
+                      ),
+                      const SizedBox(height: 10),
+                      _SynergyToggleRow(
+                        title: 'Co-op scope tags',
+                        subtitle: 'Tag synergies as CO-OP / TEAM / ONE PLAYER',
+                        value: prefs.showSynergyCoopTags,
+                        flair: flair,
+                        onChanged: VisualPrefs.setShowSynergyCoopTags,
                       ),
                     ],
                   ),
@@ -607,5 +595,52 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
           flair.primary.withValues(alpha: 0.3),
         );
     }
+  }
+}
+
+/// One labelled toggle row inside the SYNERGIES settings card.
+class _SynergyToggleRow extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ThemeFlair flair;
+  final ValueChanged<bool> onChanged;
+
+  const _SynergyToggleRow({
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.flair,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GoopText(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+              GoopText(
+                subtitle,
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: value,
+          activeThumbColor: flair.primary,
+          onChanged: onChanged,
+        ),
+      ],
+    );
   }
 }

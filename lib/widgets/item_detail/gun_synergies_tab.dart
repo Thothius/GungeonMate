@@ -72,15 +72,27 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
     if (!oldWidget.lebView && widget.lebView) _didInitLeb = false;
   }
 
-  List<SynergyStatus> _statusesFor(RunProvider p, List<String> ownedNames) {
+  List<SynergyStatus> _statusesFor(
+    RunProvider p,
+    List<String> ownedNames, {
+    bool perPlayerActive = false,
+  }) {
     final ownedLower = ownedNames.map((n) => n.toLowerCase()).toSet();
+    final coop = p.runState.coop;
     return p
         .getSynergiesFor(widget.currentName)
         .map(
           (s) => SynergyStatus(
             synergy: s,
             missing: s.missingFor(ownedLower),
-            active: s.matchesItems(ownedNames),
+            // The game evaluates synergies strictly per player — a
+            // combined-inventory "active" would mark split pieces as
+            // complete when neither player actually has the synergy.
+            active: perPlayerActive
+                ? (s.matchesItems(p.runState.main.allItemNames) ||
+                      (coop != null &&
+                          s.matchesItems(coop.allItemNames)))
+                : s.matchesItems(ownedNames),
           ),
         )
         .toList()
@@ -188,7 +200,7 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
         final owned = p.runState.allItemNames;
         return _scrollable(
           EntitySynergiesView(
-            statuses: _statusesFor(p, owned),
+            statuses: _statusesFor(p, owned, perPlayerActive: hasCoop),
             currentName: widget.currentName,
             ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
           ),
@@ -294,6 +306,13 @@ class _EmptyPlayerNote extends StatelessWidget {
 // LEB simulated page
 // ---------------------------------------------------------------------------
 
+/// Synergies the game hard-excludes from Lich's Eye Bullets simulation
+/// (`IgnoreLichEyeBullets` in the synergy database). Verified: Rubenstein's
+/// Monster is flagged so the Gunslinger can't instantly fuse a floor-1
+/// RUBE-ADY into the S-tier fusion weapon. Add names as further
+/// exceptions are confirmed.
+const kLebExcludedSynergies = {'Rubenstein\'s Monster'};
+
 /// True when the synergy's effect text implies extra requirements under
 /// Lich's Eye Bullets (conditionals, per-count scaling, replacements).
 /// Heuristic — the JSON carries no structured requirement flag.
@@ -360,7 +379,15 @@ class _LebPageState extends State<_LebPage>
   Widget build(BuildContext context) {
     final currentName = widget.currentName;
     final p = context.read<RunProvider>();
-    final synergies = p.getSynergiesFor(currentName);
+    final allSynergies = p.getSynergiesFor(currentName);
+    final synergies =
+        allSynergies
+            .where((s) => !kLebExcludedSynergies.contains(s.name))
+            .toList();
+    final blocked =
+        allSynergies
+            .where((s) => kLebExcludedSynergies.contains(s.name))
+            .toList();
     final lebIcon = p.itemByName("Lich's Eye Bullets")?.icon ?? '';
     final curGun = p.gunByName(currentName);
 
@@ -383,6 +410,10 @@ class _LebPageState extends State<_LebPage>
                   march: _march,
                   statDeltas: _lebDeltas(p, curGun, s),
                   meta: p.synergyMeta(s.name),
+                ),
+              if (blocked.isNotEmpty)
+                _LebBlockedNote(
+                  names: [for (final s in blocked) s.name],
                 ),
             ],
           ],
@@ -561,6 +592,38 @@ class _NoLebSynergies extends StatelessWidget {
           height: 1.4,
           fontStyle: FontStyle.italic,
           color: Colors.white.withValues(alpha: 0.55),
+        ),
+      ),
+    );
+  }
+}
+
+/// Footnote under the LEB list naming synergies the game excludes
+/// from simulation (IgnoreLichEyeBullets) so users know the ghost
+/// list isn't claiming them.
+class _LebBlockedNote extends StatelessWidget {
+  final List<String> names;
+  const _LebBlockedNote({required this.names});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.all(Radii.md),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: GoopText(
+        "LEB can't simulate: ${names.join(', ')} "
+        '(excluded by the game).',
+        style: TextStyle(
+          fontSize: 11.5,
+          height: 1.4,
+          fontStyle: FontStyle.italic,
+          color: Colors.white.withValues(alpha: 0.5),
         ),
       ),
     );

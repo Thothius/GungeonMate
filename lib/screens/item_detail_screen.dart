@@ -93,6 +93,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
     final ownedList = runProvider.runState.allItemNames;
     final owned = ownedList.map((n) => n.toLowerCase()).toSet();
+    // Synergies evaluate per-player in co-op — a piece split across
+    // P1+P2 does not activate. `active` checks each player's own
+    // inventory; `missing`/grouping stay on the combined set so rows
+    // still show team progress.
+    final runMain = runProvider.runState.main.allItemNames;
+    final runCoop = runProvider.runState.coop?.allItemNames;
     final synergyStatuses =
         runProvider
             .getSynergiesFor(name)
@@ -100,7 +106,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               (s) => SynergyStatus(
                 synergy: s,
                 missing: s.missingFor(owned),
-                active: s.matchesItems(ownedList),
+                active:
+                    s.matchesItems(runMain) ||
+                    (runCoop != null && s.matchesItems(runCoop)),
               ),
             )
             .toList()

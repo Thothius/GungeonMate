@@ -399,6 +399,11 @@ class VisualPrefs {
   /// the simulated view. Defaults to true.
   final bool browseShowLichEyeBullets;
 
+  /// Whether synergy rows show a co-op scope tag (CO-OP / TEAM / ONE
+  /// PLAYER) from synergy_meta.json's `coop` classification.
+  /// Defaults to true.
+  final bool showSynergyCoopTags;
+
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
@@ -577,6 +582,7 @@ class VisualPrefs {
     this.showDashboards = true,
     this.showLichEyeBulletsSynergies = true,
     this.browseShowLichEyeBullets = true,
+    this.showSynergyCoopTags = true,
     this.periodicGridColumnCount = 0,
     this.particleColorSchema = ParticleColorSchema.presetDefault,
     this.particleSpeed = ParticleSpeed.normal,
@@ -626,6 +632,7 @@ class VisualPrefs {
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kShowLichEyeBullets = 'vp.show_lich_eye_bullets_v1';
   static const _kBrowseLichEyeBullets = 'vp.browse_lich_eye_bullets_v1';
+  static const _kShowSynergyCoopTags = 'vp.show_synergy_coop_tags_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
   static const _kParticleSpeed = 'vp.particle_speed_v1';
@@ -721,6 +728,7 @@ class VisualPrefs {
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final showLichEyeBullets = p.getBool(_kShowLichEyeBullets) ?? true;
       final browseLichEyeBullets = p.getBool(_kBrowseLichEyeBullets) ?? true;
+      final showCoopTags = p.getBool(_kShowSynergyCoopTags) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
       final particleColorSchemaIdx = p.getInt(_kParticleColorSchema) ?? 0;
       final particleColorSchema =
@@ -769,6 +777,7 @@ class VisualPrefs {
         showDashboards: showDashboards,
         showLichEyeBulletsSynergies: showLichEyeBullets,
         browseShowLichEyeBullets: browseLichEyeBullets,
+        showSynergyCoopTags: showCoopTags,
         periodicGridColumnCount: periodicGridColumnCount,
         particleColorSchema: particleColorSchema,
         particleSpeed: particleSpeed,
@@ -936,6 +945,11 @@ class VisualPrefs {
 
   static Future<void> setBrowseShowLichEyeBullets(bool v) async {
     notifier.value = notifier.value._with(browseShowLichEyeBullets: v);
+    _persist();
+  }
+
+  static Future<void> setShowSynergyCoopTags(bool v) async {
+    notifier.value = notifier.value._with(showSynergyCoopTags: v);
     _persist();
   }
 
@@ -1169,6 +1183,7 @@ class VisualPrefs {
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setBool(_kShowLichEyeBullets, v.showLichEyeBulletsSynergies);
       await p.setBool(_kBrowseLichEyeBullets, v.browseShowLichEyeBullets);
+      await p.setBool(_kShowSynergyCoopTags, v.showSynergyCoopTags);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
       await p.setInt(_kParticleSpeed, v.particleSpeed.index);
@@ -1219,6 +1234,7 @@ class VisualPrefs {
     bool? showDashboards,
     bool? showLichEyeBulletsSynergies,
     bool? browseShowLichEyeBullets,
+    bool? showSynergyCoopTags,
     int? periodicGridColumnCount,
     ParticleColorSchema? particleColorSchema,
     ParticleSpeed? particleSpeed,
@@ -1266,6 +1282,7 @@ class VisualPrefs {
         showLichEyeBulletsSynergies ?? this.showLichEyeBulletsSynergies,
     browseShowLichEyeBullets:
         browseShowLichEyeBullets ?? this.browseShowLichEyeBullets,
+    showSynergyCoopTags: showSynergyCoopTags ?? this.showSynergyCoopTags,
     periodicGridColumnCount:
         periodicGridColumnCount ?? this.periodicGridColumnCount,
     particleColorSchema: particleColorSchema ?? this.particleColorSchema,

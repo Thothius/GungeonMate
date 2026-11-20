@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/synergy_stats.dart';
 
@@ -98,9 +99,25 @@ class SynergyMetaChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final m = meta;
-    if (m == null || (m.qb.isEmpty && m.fx.isEmpty)) {
-      return const SizedBox.shrink();
-    }
+    return ValueListenableBuilder<VisualPrefs>(
+      valueListenable: VisualPrefs.notifier,
+      builder: (context, prefs, _) {
+        // BOTH is the common case — still worth tagging since the user
+        // asked for a "works in co-op for both" marker.
+        final coopChip =
+            (m != null && prefs.showSynergyCoopTags && m.coop.isNotEmpty)
+            ? _coopChip(m.coop)
+            : null;
+        if (m == null ||
+            (m.qb.isEmpty && m.fx.isEmpty && coopChip == null)) {
+          return const SizedBox.shrink();
+        }
+        return _chipsColumn(m, coopChip);
+      },
+    );
+  }
+
+  Widget _chipsColumn(SynergyMeta m, Widget? coopChip) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -179,7 +196,51 @@ class SynergyMetaChips extends StatelessWidget {
             ],
           ),
         ],
+        if (coopChip != null) ...[
+          const SizedBox(height: 4),
+          coopChip,
+        ],
       ],
+    );
+  }
+
+  static Widget _coopChip(String scope) {
+    final (label, tip, color) = switch (scope) {
+      'TEAM' => (
+        'TEAM',
+        'Co-op: benefits or requires the whole team',
+        Colors.cyanAccent,
+      ),
+      'P1' => (
+        'ONE PLAYER',
+        'Co-op: scoped to a single player — pieces must sit on one inventory',
+        Colors.orangeAccent,
+      ),
+      _ => (
+        'CO-OP',
+        'Co-op: works for either player — all pieces on ONE inventory',
+        Colors.lightGreenAccent,
+      ),
+    };
+    return Tooltip(
+      message: tip,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: color.withValues(alpha: 0.4), width: 0.7),
+        ),
+        child: GoopText(
+          label,
+          style: TextStyle(
+            fontSize: 9.5,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.5,
+            color: color,
+          ),
+        ),
+      ),
     );
   }
 

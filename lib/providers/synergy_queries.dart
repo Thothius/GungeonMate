@@ -90,17 +90,20 @@ mixin _SynergyQueries on ChangeNotifier {
     return ItemSynergies(itemName: name, isGun: isGun, entries: synergies);
   }
 
-  /// Full-run active synergies (looks across BOTH players' inventories).
-  /// Memoized on the inventory signature — activeSynergyGlowColors and
-  /// panel stats call this per-build; without the cache each build
-  /// re-scans every synergy (~440 × matchesItems).
+  /// Run-wide active synergies — a synergy counts when EITHER player's
+  /// own inventory satisfies it. The game evaluates synergies strictly
+  /// per-player (no cross-player union), so a synergy split across P1+P2
+  /// is NOT active. Memoized on the combined inventory signature.
   List<Synergy> getActiveSynergiesCombined() {
-    final names = _runState.allItemNames; // main + coop
-    final sig = names.join('\n');
+    final mainNames = _runState.main.allItemNames;
+    final coopNames = _runState.coop?.allItemNames ?? const <String>[];
+    final sig = '${mainNames.join('\n')}|${coopNames.join('\n')}';
     if (sig != _activeCombinedSig) {
       _activeCombinedSig = sig;
-      _activeCombinedCache =
-          _allSynergies.where((s) => s.matchesItems(names)).toList();
+      _activeCombinedCache = _allSynergies.where((s) {
+        if (s.matchesItems(mainNames)) return true;
+        return coopNames.isNotEmpty && s.matchesItems(coopNames);
+      }).toList();
     }
     return _activeCombinedCache!;
   }
