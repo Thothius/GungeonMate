@@ -4004,11 +4004,36 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       onTap: () => _applyWallpaper(file),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          CustomWallpaper.assetPath(file),
-                          fit: BoxFit.cover,
-                          cacheWidth: 240,
-                          errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                        // Honest preview — the app paints a 62% scaffold
+                        // scrim + bottom shade over the art; show the
+                        // same treatment or picks mislead.
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.asset(
+                              CustomWallpaper.assetPath(file),
+                              fit: BoxFit.cover,
+                              cacheWidth: 240,
+                              errorBuilder:
+                                  (_, _, _) => const SizedBox.shrink(),
+                            ),
+                            ColoredBox(
+                              color: flair.scaffold.withValues(alpha: 0.62),
+                            ),
+                            const DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.transparent,
+                                    Color(0x29000000),
+                                  ],
+                                  stops: [0.55, 1.0],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

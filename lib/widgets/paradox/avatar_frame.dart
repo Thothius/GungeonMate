@@ -208,7 +208,18 @@ class _AnimatedSpecialFrameState extends State<_AnimatedSpecialFrame>
   late final AnimationController _ctrl = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 2400),
-  )..repeat();
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reduced-motion renders one composed frame — don't burn vsync.
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _ctrl.stop();
+    } else if (!_ctrl.isAnimating) {
+      _ctrl.repeat();
+    }
+  }
 
   @override
   void dispose() {
@@ -218,19 +229,22 @@ class _AnimatedSpecialFrameState extends State<_AnimatedSpecialFrame>
 
   @override
   Widget build(BuildContext context) {
+    Widget frame(double t) => CustomPaint(
+      painter: _SpecialFramePainter(
+        style: widget.frame.id,
+        t: t,
+        radius: widget.radius,
+      ),
+      child: Padding(padding: const EdgeInsets.all(3), child: widget.child),
+    );
+    if (MediaQuery.disableAnimationsOf(context)) {
+      // Static composed frame at a pleasant mid-animation point.
+      return RepaintBoundary(child: frame(0.37));
+    }
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: _ctrl,
-        builder:
-            (_, child) => CustomPaint(
-              painter: _SpecialFramePainter(
-                style: widget.frame.id,
-                t: _ctrl.value,
-                radius: widget.radius,
-              ),
-              child: Padding(padding: const EdgeInsets.all(3), child: child),
-            ),
-        child: widget.child,
+        builder: (_, _) => frame(_ctrl.value),
       ),
     );
   }
