@@ -905,8 +905,17 @@ class MpSync {
 
   // ── Paradox v3 senders ─────────────────────────────────────────
 
-  Future<void> sendStartRun() async {
-    if (_link.isConnected) await _link.sendMessage(const MpStartRun());
+  /// Returns true only when the message actually left the device.
+  /// The UI must not enter the run on false — the peer would wait on
+  /// the VS splash forever for a start that never arrived.
+  Future<bool> sendStartRun() async {
+    if (!_link.isConnected) return false;
+    try {
+      await _link.sendMessage(const MpStartRun());
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> sendPause() async {

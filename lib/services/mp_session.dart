@@ -226,6 +226,17 @@ class MpSession extends ChangeNotifier
   @override
   void Function()? onStartRun;
 
+  /// Latched when [MpStartRun] arrives — set at the session layer so a
+  /// message that lands before `MpConnectScreen` mounts its
+  /// [onStartRun] callback isn't lost forever (the wire message is
+  /// allowed pre-handshake, so it can beat `initState`).
+  @override
+  bool _runStartReceived = false;
+
+  /// True once the peer's start-run message has been received this
+  /// session. Reset on teardown ([cancel] / peer [MpEndRun]).
+  bool get runStartReceived => _runStartReceived;
+
   // ── Slots ──────────────────────────────────────────────────────
   PlayerSlot? get mySlot =>
       _myRole == MpRole.main
@@ -438,10 +449,12 @@ class MpSession extends ChangeNotifier
         _runAccumMs += DateTime.now().millisecondsSinceEpoch - _runStartMs;
         _runStartMs = 0;
       }
-    } else if (_runAccumMs > 0 || _runStartMs != 0) {
-      // Resume the live segment — only when a run is actually armed
-      // (accum>0 means banked time exists, startMs!=0 can't happen
-      // here since banking zeroes it, kept for belt-and-braces).
+    } else if (_runAccumMs > 0 ||
+        _runStartMs != 0 ||
+        _runProvider.runState.main.character != null) {
+      // Resume the live segment whenever a run is actually active —
+      // not only when time was previously banked. A restored run that
+      // never paused has accum==0 && startMs==0 but is still live.
       _runStartMs = DateTime.now().millisecondsSinceEpoch;
     }
     unawaited(
@@ -524,9 +537,12 @@ class MpSession extends ChangeNotifier
       _sync.sendPeerEdit(const MpPeerEdit(op: 'clear'));
 
   /// Main → both sides: leave the pre-run lobby and begin the run.
-  Future<void> sendStartRun() async {
-    _startRunTimer();
-    await _sync.sendStartRun();
+  /// Returns false when the message couldn't be sent — the caller
+  /// must not enter the run on failure or the peer waits forever.
+  Future<bool> sendStartRun() async {
+    final sent = await _sync.sendStartRun();
+    if (sent) _startRunTimer();
+    return sent;
   }
 
   /// Re-check permissions and resume the connection flow if granted.
@@ -621,6 +637,7 @@ class MpSession extends ChangeNotifier
     pausedNotifier.value = false;
     _runStartMs = 0;
     _runAccumMs = 0;
+    _runStartReceived = false;
     wipeSessionActivity();
     _sync.setSessionMeta(avatarId: '', runTitle: '', sessionNumber: 0);
   }
@@ -768,7 +785,11 @@ class MpSession extends ChangeNotifier
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
     _sync.onStartRun = () {
+      // Latch at session level first — the UI callback may not be
+      // registered yet (message can land before the screen mounts).
+      _runStartReceived = true;
       _startRunTimer();
+      notifyListeners();
       onStartRun?.call();
     };
     _sync.onSurprise = (s) {
@@ -889,6 +910,15 @@ class MpSession extends ChangeNotifier
     _saveTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (_phase != MpPhase.connected) return;
       unawaited(MpStore.saveRunState(_runProvider.runState));
+      // Persist run timing too — pause-state is otherwise only written
+      // on pause/resume, so an app-kill mid-run restored 0:00 forever.
+      unawaited(
+        MpStore.savePauseState(
+          paused: pausedNotifier.value,
+          runStartMs: _runStartMs,
+          runAccumMs: _runAccumMs,
+        ),
+      );
     });
   }
 
@@ -928,6 +958,16 @@ class MpSession extends ChangeNotifier
     if (peerAvatarId != null) _peerAvatarId = peerAvatarId;
     if (runTitle != null) _runTitle = runTitle;
     notifyListeners();
+  }
+
+  /// Test-only: simulate the peer's `MpStartRun` arriving — latches
+  /// [runStartReceived] exactly like the wire handler does.
+  @visibleForTesting
+  void debugReceiveStartRun() {
+    _runStartReceived = true;
+    _startRunTimer();
+    notifyListeners();
+    onStartRun?.call();
   }
 
   // ── Cleanup ────────────────────────────────────────────────────

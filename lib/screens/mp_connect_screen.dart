@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import '../theme/tokens.dart';
@@ -50,6 +51,11 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   bool _peerStarted = false;
   bool _still = false;
 
+  /// Sidekick watchdog — if the host never confirms, surface an escape
+  /// hint instead of an infinite silent WAITING.
+  Timer? _hostWaitTimer;
+  bool _hostWaitHint = false;
+
   @override
   void initState() {
     super.initState();
@@ -86,7 +92,9 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   }
 
   /// Fresh pairings need the host's confirm; reconnects and app-kill
-  /// restores already had their handshake — enter immediately.
+  /// restores already had their handshake — enter immediately. The
+  /// session-level [MpSession.runStartReceived] latch covers the case
+  /// where `MpStartRun` arrived before this screen mounted.
   bool _needsHandshake(MpSession session) {
     if (session.demoMode) return false;
     return session.connectReason != MpConnectReason.reconnecting &&
@@ -97,33 +105,81 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     if (session.phase != MpPhase.connected || !_needsHandshake(session)) {
       return false;
     }
-    return session.myRole == MpRole.main ? !_mainConfirmed : !_peerStarted;
+    return session.myRole == MpRole.main
+        ? !_mainConfirmed
+        : !_peerStarted && !session.runStartReceived;
+  }
+
+  /// Arms/cancels the sidekick "host never confirmed" watchdog. Called
+  /// from build — cheap flag check, timer does the real work.
+  void _syncHostWaitTimer(bool waitingForHost) {
+    if (waitingForHost) {
+      _hostWaitTimer ??= Timer(const Duration(seconds: 25), () {
+        if (mounted) setState(() => _hostWaitHint = true);
+      });
+    } else {
+      _hostWaitTimer?.cancel();
+      _hostWaitTimer = null;
+      _hostWaitHint = false;
+    }
+  }
+
+  /// System back / bottom bar — one path: cancel the session and pop,
+  /// except during the entering beat where the start already fired
+  /// (cancelling there would `MpEndRun` the peer's live run).
+  void _handleSystemBack() {
+    if (_navigatedToRun) return;
+    final session = _session;
+    if (session.isActive) session.cancel();
+    final nav = Navigator.of(context);
+    if (nav.canPop()) nav.pop();
   }
 
   void _enterRun() {
     if (_navigatedToRun) return;
     _navigatedToRun = true;
     _checkPopCtrl.forward();
-    final navigator = Navigator.of(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       Haptics.success();
       Future.delayed(const Duration(milliseconds: 600), () {
         if (!mounted) return;
-        navigator.popUntil((route) => route.isFirst);
+        // This route was pushReplacement'd — a single pop lands on
+        // home. Never popUntil(isFirst): it would also pop routes the
+        // user pushed on top during the beat.
+        final nav = Navigator.of(context);
+        if (nav.canPop()) nav.pop();
       });
     });
   }
 
   Future<void> _confirmAndStart() async {
-    Haptics.success();
+    Haptics.selection();
     setState(() => _mainConfirmed = true);
-    await _session.sendStartRun();
+    final sent = await _session.sendStartRun();
+    if (!sent && mounted) {
+      // Delivery failed — revert so READY re-enables and the peer
+      // isn't left waiting on a message that never left.
+      setState(() => _mainConfirmed = false);
+      _session.logEvent(
+        MpEvent.event(
+          kind: 'system',
+          from: _session.myNickname,
+          text: 'Could not reach your partner — try READY again.',
+          mine: true,
+        ),
+      );
+    }
   }
 
   @override
   void dispose() {
-    _session.onStartRun = null;
+    _hostWaitTimer?.cancel();
+    // Identity-guarded — a stacked screen must not null a callback
+    // it doesn't own.
+    if (_session.onStartRun == _onPeerStartRun) {
+      _session.onStartRun = null;
+    }
     _pulseCtrl.dispose();
     _checkPopCtrl.dispose();
     super.dispose();
@@ -136,6 +192,16 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     final sf = Responsive.factor(context);
     final flair = AppTheme.flair;
 
+    // Sidekick watchdog — arm while we're genuinely waiting on the
+    // host's READY, cancel the moment it resolves (or the phase ends).
+    _syncHostWaitTimer(
+      session.phase == MpPhase.connected &&
+          _needsHandshake(session) &&
+          session.myRole == MpRole.sidekick &&
+          !_peerStarted &&
+          !session.runStartReceived,
+    );
+
     // Enter the run once the handshake resolves: main after READY,
     // sidekick after the peer's MpStartRun, reconnects immediately.
     if (session.phase == MpPhase.connected &&
@@ -144,14 +210,23 @@ class _MpConnectScreenState extends State<MpConnectScreen>
       _enterRun();
     }
 
-    return Scaffold(
-      backgroundColor: flair.scaffold.withValues(alpha: 0.3),
-      bottomNavigationBar: BottomBackBar(
-        onPressed: () {
-          if (session.isActive) session.cancel();
-          Navigator.of(context).pop();
-        },
-      ),
+    return PopScope(
+      // System back must not bypass session.cancel() — a bare pop
+      // leaves zombie radios and can drop the sidekick into the run
+      // without the host's confirmation.
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _handleSystemBack();
+      },
+      child: Scaffold(
+        backgroundColor: flair.scaffold.withValues(alpha: 0.3),
+        // Hidden during the entering beat — a stray tap there would
+        // send MpEndRun and tear down the peer's just-started run.
+        bottomNavigationBar:
+            _navigatedToRun
+                ? null
+                : BottomBackBar(onPressed: _handleSystemBack),
       body: Stack(
         children: [
           // Atmospheric glow — same backdrop as the lobby.
@@ -205,6 +280,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             ),
           ),
         ],
+        ),
       ),
     );
   }
@@ -324,15 +400,17 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _Portrait(
-                character: myChar,
-                label: session.myNickname,
-                isMe: true,
-                pulse: _still ? null : _pulseCtrl,
-                sf: sf,
-                flair: flair,
-                avatarId: session.avatarId,
-                sub: session.myCharacterName,
+              Flexible(
+                child: _Portrait(
+                  character: myChar,
+                  label: session.myNickname,
+                  isMe: true,
+                  pulse: _still ? null : _pulseCtrl,
+                  sf: sf,
+                  flair: flair,
+                  avatarId: session.avatarId,
+                  sub: session.myCharacterName,
+                ),
               ),
               SizedBox(width: 20 * sf),
               // Pulsing link icon with animated glow ring
@@ -367,15 +445,17 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 ),
               ),
               SizedBox(width: 20 * sf),
-              _Portrait(
-                character: null,
-                label: session.peerNickname ?? 'Partner',
-                isMe: false,
-                pulse: _still ? null : _pulseCtrl,
-                sf: sf,
-                flair: flair,
-                avatarId: session.peerAvatarId,
-                sub: session.peerCharacterName ?? '',
+              Flexible(
+                child: _Portrait(
+                  character: null,
+                  label: session.peerNickname ?? 'Partner',
+                  isMe: false,
+                  pulse: _still ? null : _pulseCtrl,
+                  sf: sf,
+                  flair: flair,
+                  avatarId: session.peerAvatarId,
+                  sub: session.peerCharacterName ?? '',
+                ),
               ),
             ],
           ),
@@ -527,17 +607,19 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _Portrait(
-                      character: myChar,
-                      label: session.myNickname,
-                      isMe: true,
-                      pulse: _still ? null : _pulseCtrl,
-                      sf: sf,
-                      flair: flair,
-                      avatarId: session.avatarId,
-                      sub: session.myCharacterName,
-                      size: 108,
-                      textScale: 1.45,
+                    Flexible(
+                      child: _Portrait(
+                        character: myChar,
+                        label: session.myNickname,
+                        isMe: true,
+                        pulse: _still ? null : _pulseCtrl,
+                        sf: sf,
+                        flair: flair,
+                        avatarId: session.avatarId,
+                        sub: session.myCharacterName,
+                        size: 108,
+                        textScale: 1.45,
+                      ),
                     ),
                     SizedBox(width: 10 * sf),
                     _VsMedallion(
@@ -546,17 +628,19 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                       flair: flair,
                     ),
                     SizedBox(width: 10 * sf),
-                    _Portrait(
-                      character: peerChar,
-                      label: session.peerNickname ?? 'Partner',
-                      isMe: false,
-                      pulse: _still ? null : _pulseCtrl,
-                      sf: sf,
-                      flair: flair,
-                      avatarId: session.peerAvatarId,
-                      sub: session.peerCharacterName ?? '',
-                      size: 108,
-                      textScale: 1.45,
+                    Flexible(
+                      child: _Portrait(
+                        character: peerChar,
+                        label: session.peerNickname ?? 'Partner',
+                        isMe: false,
+                        pulse: _still ? null : _pulseCtrl,
+                        sf: sf,
+                        flair: flair,
+                        avatarId: session.peerAvatarId,
+                        sub: session.peerCharacterName ?? '',
+                        size: 108,
+                        textScale: 1.45,
+                      ),
                     ),
                   ],
                 ),
@@ -594,10 +678,17 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                     ),
                   ),
                 ] else ...[
-                  _WaitingForHost(name: peerName, ctrl: _pulseCtrl, sf: sf),
+                  _WaitingForHost(
+                    name: peerName,
+                    ctrl: _still ? null : _pulseCtrl,
+                    sf: sf,
+                  ),
                   SizedBox(height: 10 * sf),
                   GoopText(
-                    'The host confirms to start the run.',
+                    _hostWaitHint
+                        ? 'Taking long? The host may have cancelled — '
+                            'you can back out safely.'
+                        : 'The host confirms to start the run.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11 * sf,
@@ -1145,10 +1236,11 @@ class _VsMedallion extends StatelessWidget {
 }
 
 /// Sidekick handshake state — `WAITING FOR HOST` with staggered
-/// pulsing dots driven by the shared pulse controller.
+/// pulsing dots driven by the shared pulse controller. [ctrl] is
+/// null under reduced motion — renders a static mid-frame dot row.
 class _WaitingForHost extends StatelessWidget {
   final String name;
-  final AnimationController ctrl;
+  final AnimationController? ctrl;
   final double sf;
 
   const _WaitingForHost({
@@ -1159,41 +1251,48 @@ class _WaitingForHost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: ctrl,
-      builder: (context, _) {
-        return Column(
-          children: [
-            GoopText(
-              'WAITING FOR $name',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15 * sf,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.6,
-                color: Colors.white.withValues(alpha: 0.85),
-              ),
+    Widget dots(double t) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(3, (i) {
+          final phase = (t + i / 3) % 1.0;
+          final a =
+              0.25 +
+              0.75 * (0.5 + 0.5 * math.sin(phase * math.pi * 2));
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 3 * sf),
+            width: 6 * sf,
+            height: 6 * sf,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: a.clamp(0.0, 1.0)),
             ),
-            SizedBox(height: 6 * sf),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(3, (i) {
-                final phase = (ctrl.value + i / 3) % 1.0;
-                final a = 0.25 + 0.75 * (0.5 + 0.5 * math.sin(phase * math.pi * 2));
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 3 * sf),
-                  width: 6 * sf,
-                  height: 6 * sf,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: a.clamp(0.0, 1.0)),
-                  ),
-                );
-              }),
-            ),
-          ],
-        );
-      },
+          );
+        }),
+      );
+    }
+
+    return Column(
+      children: [
+        GoopText(
+          'WAITING FOR $name',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15 * sf,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.6,
+            color: Colors.white.withValues(alpha: 0.85),
+          ),
+        ),
+        SizedBox(height: 6 * sf),
+        if (ctrl == null)
+          dots(0.5)
+        else
+          AnimatedBuilder(
+            animation: ctrl!,
+            builder: (context, _) => dots(ctrl!.value),
+          ),
+      ],
     );
   }
 }

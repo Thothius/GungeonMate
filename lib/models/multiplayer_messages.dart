@@ -135,13 +135,16 @@ final class MpHello extends MpMessage {
     required this.character,
     required this.userLabel,
     required this.appVersion,
-    this.protocolVersion = 3,
+    this.protocolVersion = 4,
     this.avatarId = '',
     this.runTitle = '',
     this.sessionNumber = 0,
   });
 
-  static const int currentProtocolVersion = 3;
+  // v4: the VS-splash handshake makes the Sidekick hard-depend on
+  // MpStartRun — v3 peers auto-entered on connect and would deadlock
+  // against a v4 host waiting for READY (and vice versa).
+  static const int currentProtocolVersion = 4;
 
   @override
   String get type => 'hello';
@@ -163,7 +166,7 @@ final class MpHello extends MpMessage {
     character: j['character'] as String? ?? '',
     userLabel: j['userLabel'] as String? ?? 'Player',
     appVersion: j['appVersion'] as String? ?? '',
-    protocolVersion: j['protocolVersion'] as int? ?? 3,
+    protocolVersion: j['protocolVersion'] as int? ?? currentProtocolVersion,
     avatarId: j['avatarId'] as String? ?? '',
     runTitle: j['runTitle'] as String? ?? '',
     sessionNumber: (j['sessionNumber'] as num?)?.toInt() ?? 0,

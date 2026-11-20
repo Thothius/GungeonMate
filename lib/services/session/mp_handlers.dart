@@ -36,6 +36,7 @@ mixin _MpSessionHandlers on ChangeNotifier {
   bool get _peerGoneHinted;
   set _peerGoneHinted(bool v);
   void Function()? get onStartRun;
+  set _runStartReceived(bool v);
   void Function(MpSurprise)? get onSurpriseReceived;
   void _setPhase(MpPhase p);
   void _applyPaused(bool paused, {required bool notifyPeer});
@@ -60,9 +61,13 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
     _sync.onStartRun = () {
-      // Peer confirmed the run start — arm our clock on the same
-      // beat so both timers measure the same run.
+      // Peer confirmed the run start — latch at session level FIRST
+      // so a message that lands before MpConnectScreen mounts its
+      // onStartRun callback isn't lost, then arm our clock on the
+      // same beat so both timers measure the same run.
+      _runStartReceived = true;
       _startRunTimer();
+      notifyListeners();
       onStartRun?.call();
     };
     _sync.onSurprise = (s) {
@@ -260,6 +265,14 @@ mixin _MpSessionHandlers on ChangeNotifier {
     pausedNotifier.value = paused;
     _runStartMs = runStartMs;
     _runAccumMs = runAccumMs;
+    // A run killed mid-flight may never have paused — its timing was
+    // never persisted, so both values restore as 0 and the clock
+    // stays dead. Re-arm when the restored run is actually live.
+    if (!paused &&
+        runStartMs == 0 &&
+        _runProvider.runState.main.character != null) {
+      _startRunTimer();
+    }
     _connectReason = MpConnectReason.restoring;
     if (role == MpRole.sidekick) {
       _preSidekickRun = preSidekickRun;

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/multiplayer_messages.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/mp_connect_screen.dart';
+
+import '../helpers/fake_mp_link.dart';
 
 /// Widget tests for MpConnectScreen — the connecting/connected/error view.
 ///
@@ -18,6 +21,27 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => session ?? MpSession.placeholder(),
         ),
+      ],
+      child: MaterialApp(home: child),
+    );
+  }
+
+  /// Session backed by a connected FakeMpLink pair — sendStartRun
+  /// actually delivers instead of hitting the not-connected guard.
+  (MpSession, RunProvider) connectedSession() {
+    final rp = RunProvider();
+    final host = FakeMpLink();
+    final guest = FakeMpLink();
+    host.connectTo(guest);
+    host.forceConnect();
+    return (MpSession.withLink(rp, host), rp);
+  }
+
+  Widget wrapWithRp(Widget child, RunProvider rp, MpSession session) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: rp),
+        ChangeNotifierProvider.value(value: session),
       ],
       child: MaterialApp(home: child),
     );
@@ -196,6 +220,36 @@ void main() {
   testWidgets('READY tap flips to STARTING and fires sendStartRun', (
     tester,
   ) async {
+    final (session, rp) = connectedSession();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.hosting,
+      role: MpRole.main,
+      nickname: 'Hosty',
+      peerNickname: 'Sidekick',
+    );
+
+    await tester.pumpWidget(
+      wrapWithRp(const MpConnectScreen(), rp, session),
+    );
+    await tester.pump();
+
+    await tester.tap(find.textContaining('READY'));
+    await tester.pump();
+    // Flush the 600ms enter-run delay so no Timer leaks past teardown.
+    await tester.pump(const Duration(milliseconds: 800));
+
+    // Confirmed → handshake resolves → entering beat replaces READY.
+    expect(find.textContaining('ENTERING THE GUNGEON'), findsOneWidget);
+    expect(find.textContaining('READY'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('READY failure reverts the button — no silent desync', (
+    tester,
+  ) async {
+    // Placeholder session's real MpLink is never connected —
+    // sendStartRun returns false and READY must re-enable.
     final session = MpSession.placeholder();
     session.setPhaseForTest(
       MpPhase.connected,
@@ -212,12 +266,96 @@ void main() {
 
     await tester.tap(find.textContaining('READY'));
     await tester.pump();
-    // Flush the 600ms enter-run delay so no Timer leaks past teardown.
+    await tester.pump();
+
+    expect(find.textContaining('READY'), findsOneWidget);
+    expect(find.textContaining('STARTING'), findsNothing);
+    expect(find.textContaining('ENTERING THE GUNGEON'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('MpStartRun latched before mount — sidekick still enters', (
+    tester,
+  ) async {
+    final (session, rp) = connectedSession();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.joining,
+      role: MpRole.sidekick,
+      nickname: 'Sidekick',
+      peerNickname: 'Hosty',
+    );
+    // The wire message landed before initState could register
+    // onStartRun — the session-level latch must carry it.
+    session.debugReceiveStartRun();
+
+    await tester.pumpWidget(
+      wrapWithRp(const MpConnectScreen(), rp, session),
+    );
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 800));
 
-    // Confirmed → handshake resolves → entering beat replaces READY.
+    expect(find.textContaining('WAITING FOR'), findsNothing);
     expect(find.textContaining('ENTERING THE GUNGEON'), findsOneWidget);
-    expect(find.textContaining('READY'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Sidekick watchdog surfaces escape hint after 25s', (
+    tester,
+  ) async {
+    final (session, rp) = connectedSession();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.joining,
+      role: MpRole.sidekick,
+      nickname: 'Sidekick',
+      peerNickname: 'Hosty',
+    );
+
+    await tester.pumpWidget(
+      wrapWithRp(const MpConnectScreen(), rp, session),
+    );
+    await tester.pump();
+    expect(find.textContaining('The host confirms'), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 26));
+    expect(find.textContaining('Taking long?'), findsOneWidget);
+
+    // A late MpStartRun still resolves the wait — hint state is
+    // cosmetic only.
+    session.debugReceiveStartRun();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('System back cancels the session and pops', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final (session, rp) = connectedSession();
+    session.setPhaseForTest(
+      MpPhase.connected,
+      MpConnectReason.hosting,
+      role: MpRole.main,
+      nickname: 'Hosty',
+      peerNickname: 'Sidekick',
+    );
+
+    await tester.pumpWidget(
+      wrapWithRp(const MpConnectScreen(), rp, session),
+    );
+    await tester.pump();
+
+    // Android system back → PopScope.onPopInvokedWithResult.
+    await tester.binding.handlePopRoute();
+    // cancel() is async (prefs + transport teardown) — flush it.
+    for (var i = 0; i < 8; i++) {
+      await tester.pump();
+    }
+    // cancel() → endCoopPlayer schedules a 400ms save debounce —
+    // flush it so no Timer leaks past teardown.
+    await tester.pump(const Duration(milliseconds: 600));
+
+    expect(session.phase, MpPhase.idle);
     expect(tester.takeException(), isNull);
   });
 

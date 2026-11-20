@@ -28,15 +28,15 @@ void main() {
       expect(decoded.protocolVersion, 2);
     });
 
-    test('MpHello — default protocol version is 3', () {
+    test('MpHello — default protocol version is current', () {
       const hello = MpHello(
         role: MpRole.main,
         character: '',
         userLabel: '',
         appVersion: '',
       );
-      expect(hello.protocolVersion, 3);
-      expect(MpHello.currentProtocolVersion, 3);
+      expect(hello.protocolVersion, MpHello.currentProtocolVersion);
+      expect(MpHello.currentProtocolVersion, 4);
     });
 
     test('MpSnapshot — full state round-trip', () {

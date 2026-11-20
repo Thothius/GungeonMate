@@ -23,7 +23,7 @@ void main() {
       expect(d.avatarId, 'the_paradox');
       expect(d.runTitle, 'Cursed Bullet of the Forge');
       expect(d.sessionNumber, 3);
-      expect(d.protocolVersion, 3);
+      expect(d.protocolVersion, MpHello.currentProtocolVersion);
     });
 
     test('MpHello classic mode omits v3 fields on the wire', () {
