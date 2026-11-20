@@ -45,7 +45,7 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   final Stopwatch _stopwatch = Stopwatch();
-  ui.FragmentProgram? _program;
+  ui.FragmentShader? _frag;
   bool _loadFailed = false;
 
   // Cache loaded programs so switching shaders doesn't reload from disk.
@@ -74,7 +74,7 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
     final path = widget.shader.assetPath;
     if (_programCache.containsKey(path)) {
       setState(() {
-        _program = _programCache[path];
+        _frag = _programCache[path]!.fragmentShader();
         _loadFailed = false;
       });
       return;
@@ -84,7 +84,9 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
       _programCache[path] = prog;
       if (mounted) {
         setState(() {
-          _program = prog;
+          // fragmentShader() links a GPU program — do it ONCE here,
+          // not per frame inside the AnimatedBuilder.
+          _frag = prog.fragmentShader();
           _loadFailed = false;
         });
       }
@@ -103,7 +105,8 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
 
   @override
   Widget build(BuildContext context) {
-    if (_loadFailed || _program == null) {
+    final frag = _frag;
+    if (_loadFailed || frag == null) {
       return const SizedBox.shrink();
     }
     return RepaintBoundary(
@@ -112,7 +115,7 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
         builder:
             (_, _) => CustomPaint(
               painter: _ShaderPainter(
-                shader: _program!.fragmentShader(),
+                shader: frag,
                 time: _stopwatch.elapsedMilliseconds / 1000.0,
               ),
             ),
