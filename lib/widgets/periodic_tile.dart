@@ -193,7 +193,7 @@ class _PeriodicTileState extends State<PeriodicTile>
     final card = _buildCard(context);
     // Reduced-motion: skip the animated synergy glow overlay — the card
     // still shows its quality border and content, just without the glow.
-    if (widget.synergyGlowColor == null || _glow == null) return card;
+    if (widget.synergyGlowColor == null) return card;
     // Uniform blue synergy badge — replaces the color-coded animated
     // glow border; one marker meaning "in a synergy" for all tiles.
     return Stack(
@@ -231,8 +231,8 @@ class _PeriodicTileState extends State<PeriodicTile>
             : pBorder != 0
             ? Color(pBorder)
             : (isS
-                  ? const Color(0xFFFFD700)
-                  : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35));
+                ? const Color(0xFFFFD700)
+                : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35));
     final effBorderWidth =
         pBorder != 0 && prefs.panelBorderWidth > 0
             ? prefs.panelBorderWidth

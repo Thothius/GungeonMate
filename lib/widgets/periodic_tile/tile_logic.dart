@@ -10,12 +10,10 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
 
   /// Slow ambient pulse that drives the "fast active" green dot. Only
   /// allocated for tiles that actually need it (active items with a
-  /// short recharge), so the rest of the grid stays cheap.
+  /// short recharge), so the rest of the grid stays cheap. Created
+  /// without repeating — [_syncPulse] starts/stops it based on
+  /// [ReduceMotion] so the ticker never runs under reduced motion.
   AnimationController? _pulse;
-
-  /// Repeating pulse controller for the synergy glow ring. Allocated only
-  /// when [PeriodicTile.synergyGlowColor] is non-null.
-  AnimationController? _glow;
 
   bool _longPressArmed = false;
 
@@ -34,22 +32,39 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
       vsync: this,
       duration: const Duration(milliseconds: 380),
     );
-    if (_isFastActive) {
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncPulse();
+  }
+
+  /// Reconciles the pulse controller with [_isFastActive] and the
+  /// platform reduced-motion flag — creates/disposes as needed and only
+  /// repeats when animation is allowed.
+  void _syncPulse() {
+    final wantsPulse = _isFastActive;
+    if (wantsPulse && _pulse == null) {
       _pulse = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 1400),
-      )..repeat(reverse: true);
+      );
+    } else if (!wantsPulse && _pulse != null) {
+      _pulse!.dispose();
+      _pulse = null;
     }
-    if (widget.synergyGlowColor != null) {
-      final idx = _effectIndex;
-      _glow = AnimationController(
-        vsync: this,
-        duration: synergyEffectDuration(idx),
-      )..repeat(reverse: synergyEffectReverse(idx));
+    final pulse = _pulse;
+    if (pulse == null) return;
+    final animate = wantsPulse && !ReduceMotion.of(context);
+    if (animate && !pulse.isAnimating) {
+      pulse.repeat(reverse: true);
+    } else if (!animate && pulse.isAnimating) {
+      pulse
+        ..stop()
+        ..value = 0;
     }
   }
-
-  int get _effectIndex => _name.hashCode.abs() % 10;
 
   @override
   void didUpdateWidget(covariant PeriodicTile oldWidget) {
@@ -59,33 +74,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
     // whether the *current* widget warrants a pulse dot and reconcile the
     // controller — without this, a slot that originally held a non-fast
     // active never grows the dot when promoted to a fast active.
-    final wantsPulse = _isFastActive;
-    if (wantsPulse && _pulse == null) {
-      _pulse = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 1400),
-      )..repeat(reverse: true);
-    } else if (!wantsPulse && _pulse != null) {
-      _pulse!.dispose();
-      _pulse = null;
-    }
-    // Sync glow controller with current synergyGlowColor.
-    // If the name changed the effect index may differ — recreate.
-    final wantsGlow = widget.synergyGlowColor != null;
-    final nameChanged =
-        oldWidget.gun?.name != widget.gun?.name ||
-        oldWidget.item?.name != widget.item?.name;
-    if (wantsGlow && (_glow == null || nameChanged)) {
-      _glow?.dispose();
-      final idx = _effectIndex;
-      _glow = AnimationController(
-        vsync: this,
-        duration: synergyEffectDuration(idx),
-      )..repeat(reverse: synergyEffectReverse(idx));
-    } else if (!wantsGlow && _glow != null) {
-      _glow!.dispose();
-      _glow = null;
-    }
+    _syncPulse();
   }
 
   @override
@@ -93,7 +82,6 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
     _shake.dispose();
     _poof.dispose();
     _pulse?.dispose();
-    _glow?.dispose();
     super.dispose();
   }
 

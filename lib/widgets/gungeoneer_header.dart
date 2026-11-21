@@ -8,6 +8,7 @@ import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/asset_paths.dart';
+import '../utils/reduce_motion.dart';
 import 'active_run/run_effects_block.dart';
 import '../utils/responsive.dart';
 import 'skeuo/skeuo_tokens.dart';
@@ -212,11 +213,34 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader>
     _wobbleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
-    )..repeat();
+    );
     _borderPulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 4500),
-    )..repeat(reverse: true);
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reduced-motion: freeze both ambient loops at a neutral value —
+    // the border keeps a static hairline and the cool/curse glow stops
+    // wobbling instead of animating under the user's setting.
+    final still = ReduceMotion.of(context);
+    if (still) {
+      for (final c in [_wobbleController, _borderPulseController]) {
+        if (c.isAnimating) {
+          c
+            ..stop()
+            ..value = 0;
+        }
+      }
+    } else {
+      if (!_wobbleController.isAnimating) _wobbleController.repeat();
+      if (!_borderPulseController.isAnimating) {
+        _borderPulseController.repeat(reverse: true);
+      }
+    }
   }
 
   @override
