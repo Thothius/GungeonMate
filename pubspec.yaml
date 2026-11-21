@@ -127,9 +127,6 @@ flutter:
     - assets/images/wallpapers/custom/
     - assets/images/themes/splash/
     - assets/images/game/guns/
-    - assets/images/game/items/
-    - assets/images/game/enemies/
-    - assets/images/game/bosses/
 
   fonts:
     - family: EnterTheGungeonBig
