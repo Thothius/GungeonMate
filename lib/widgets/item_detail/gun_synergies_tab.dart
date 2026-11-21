@@ -307,11 +307,20 @@ class _EmptyPlayerNote extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 /// Synergies the game hard-excludes from Lich's Eye Bullets simulation
-/// (`IgnoreLichEyeBullets` in the synergy database). Verified: Rubenstein's
-/// Monster is flagged so the Gunslinger can't instantly fuse a floor-1
-/// RUBE-ADY into the S-tier fusion weapon. Add names as further
-/// exceptions are confirmed.
-const kLebExcludedSynergies = {'Rubenstein\'s Monster'};
+/// (`IgnoreLichEyeBullets` / documented non-simulated cases on the official
+/// wiki). Verified: Rubenstein's Monster is flagged so the Gunslinger
+/// can't instantly fuse a floor-1 RUBE-ADY into the S-tier fusion weapon;
+/// The Submachinist is a dual-wield synergy (both guns must be held —
+/// LEB can't simulate that); Detective Mode still requires the Badge for
+/// the policeman chest-reveal. Add names as further exceptions are
+/// confirmed. Note: 3+-component synergies aren't excluded — LEB counts
+/// as ONE component there (e.g. Resourceful Indeed needs Elimentaler +
+/// 2 of the 3 rat items), which the simulated view approximates.
+const kLebExcludedSynergies = {
+  'Rubenstein\'s Monster',
+  'The Submachinist',
+  'Detective Mode',
+};
 
 /// True when the synergy's effect text implies extra requirements under
 /// Lich's Eye Bullets (conditionals, per-count scaling, replacements).

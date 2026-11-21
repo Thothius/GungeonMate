@@ -313,7 +313,10 @@
     "any_of": [
       "Drum Clip",
       "Melted Rock",
-      "Gilded Bullets"
+      "Gilded Bullets",
+      "Platinum Bullets",
+      "Heavy Bullets",
+      "Ruby Bracelet"
     ],
     "effect_tokens": [
       {
@@ -733,8 +736,7 @@
     "icon": "",
     "any_of": [
       "Honeycomb",
-      "Bumbullets",
-      "Jar of Bees"
+      "Bumbullets"
     ],
     "effect_tokens": [
       {
@@ -1000,7 +1002,7 @@
     "name": "Blade Runner",
     "items": [
       "Deck4rd",
-      "Origuni"
+      "Knife Shield"
     ],
     "effect": "Increases the magazine size of both weapons by 50%.",
     "icon": "",
@@ -2669,7 +2671,7 @@
   {
     "name": "Deadly Distraction",
     "items": [
-      "Decoy",
+      "Explosive Decoy",
       "Monster Blood"
     ],
     "effect": "Decoy creates a large poison pool when attacked.",
@@ -3819,7 +3821,7 @@
   {
     "name": "Frosty Distraction",
     "items": [
-      "Decoy",
+      "Explosive Decoy",
       "Heart of Ice"
     ],
     "effect": "Decoy freezes enemies that attack it.",
@@ -3889,8 +3891,7 @@
   {
     "name": "Full Circle",
     "items": [
-      "Tangler",
-      "Rolling Eye"
+      "Tangler"
     ],
     "effect": "Tangler becomes round, turns enemies round instead of rectangular, and gains increased damage and reload time.",
     "icon": "",
@@ -3908,6 +3909,10 @@
     "game_name_key": "#FULLCIRCLE",
     "game_ids": [
       175
+    ],
+    "any_of": [
+      "Life Orb",
+      "Rolling Eye"
     ]
   },
   {
@@ -5507,7 +5512,9 @@
     "any_of": [
       "Cigarettes",
       "Box",
-      "Ration"
+      "Ration",
+      "Wolf",
+      "Ancient Hero's Bandana"
     ],
     "effect_tokens": [
       {
@@ -6665,8 +6672,9 @@
     "effect": "Laser Lotus gains the appearance of a flower. Its magazine size increases to 32, its maximum ammo increases to 250, its fire rate greatly increases, and it deals half damage.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/01/Lotus_Bloom.png",
     "any_of": [
-      "Rolling Eye",
-      "Shock Rounds"
+      "Starpew",
+      "Shock Rounds",
+      "Rolling Eye"
     ],
     "effect_tokens": [
       {
@@ -7420,6 +7428,7 @@
     "effect": "Evolver evolves after every 3 unique enemy types killed instead of 5.",
     "icon": "",
     "any_of": [
+      "Gamma Ray",
       "Big Boy",
       "Irradiated Lead",
       "Monster Blood"
@@ -7772,7 +7781,10 @@
       "Ballot",
       "Table Tech Blanks",
       "Table Tech Money",
-      "Table Tech Rocket"
+      "Table Tech Rocket",
+      "Table Tech Rage",
+      "Table Tech Sight",
+      "Table Tech Stun"
     ],
     "effect_tokens": [
       {
@@ -7932,16 +7944,19 @@
   {
     "name": "Pea Cannon",
     "items": [
-      "Pea Shooter",
-      "Wood Beam"
+      "Pea Shooter"
     ],
     "effect": "Pea Shooter shots become larger, deal more damage, and explode.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/7a/Pea_Cannon.png",
     "any_of": [
-      "Old Knight's Helm",
-      "Old Knight's Shield",
+      "Starpew",
+      "Wood Beam",
       "Mahoguny",
-      "Starpew"
+      "Cactus",
+      "Broccoli",
+      "Crutch",
+      "Old Knight's Shield",
+      "Old Knight's Helm"
     ],
     "effect_tokens": [
       {
@@ -8154,8 +8169,7 @@
   {
     "name": "Plant Power",
     "items": [
-      "Triple Gun",
-      "Broccoli"
+      "Triple Gun"
     ],
     "effect": "Triple Gun reaches its laser beam phase earlier.",
     "icon": "",
@@ -8173,6 +8187,11 @@
     "game_name_key": "#PLANTPOWER",
     "game_ids": [
       516
+    ],
+    "any_of": [
+      "Pea Shooter",
+      "Mahoguny",
+      "Broccoli"
     ]
   },
   {
@@ -8744,10 +8763,12 @@
     "effect": "After Relodestone's effect ends, the bullets that were absorbed are shot out of the player dealing damage to enemies.",
     "icon": "",
     "any_of": [
-      "Chaos Ammolet",
+      "Lodestone Ammolet",
+      "Gold Ammolet",
       "Copper Ammolet",
       "Frost Ammolet",
-      "Gold Ammolet"
+      "Uranium Ammolet",
+      "Chaos Ammolet"
     ],
     "effect_tokens": [
       {
@@ -9790,12 +9811,12 @@
   },
   {
     "name": "Smart Bombs",
-    "items": [],
+    "items": [
+      "Bomb"
+    ],
     "effect": "Bombs home in on enemies.",
     "icon": "",
     "any_of": [
-      "Bomb",
-      "Ice Bomb",
       "Crutch",
       "Homing Bullets"
     ],
@@ -9810,16 +9831,6 @@
       108,
       240,
       284
-    ],
-    "groups": [
-      [
-        "Bomb",
-        "Ice Bomb"
-      ],
-      [
-        "Crutch",
-        "Homing Bullets"
-      ]
     ]
   },
   {
@@ -9878,7 +9889,8 @@
       "A.W.P.",
       "Sniper Rifle",
       "Hexagun",
-      "M1"
+      "M1",
+      "Bow"
     ],
     "effect_tokens": [
       {
@@ -11081,10 +11093,13 @@
     "effect": "When the player fires Tetrominator, each Guon Stone has a chance to shoot a Tetromino corresponding to the type of Guon Stone.",
     "icon": "",
     "any_of": [
+      "Orange Guon Stone",
       "Blue Guon Stone",
-      "Clear Guon Stone",
       "Green Guon Stone",
-      "Orange Guon Stone"
+      "Clear Guon Stone",
+      "Pink Guon Stone",
+      "Red Guon Stone",
+      "White Guon Stone"
     ],
     "effect_tokens": [
       {
@@ -11616,8 +11631,8 @@
   {
     "name": "The Void Corps",
     "items": [
-      "Void Shotgun",
-      "Void Core Assault Rifle"
+      "Void Core Cannon",
+      "Void Shotgun"
     ],
     "effect": "When one of the guns is held, the other(s) orbit the player. Whenever the player reloads, the orbiting gun(s) fire towards the crosshair.",
     "icon": "",
@@ -11797,7 +11812,9 @@
     "any_of": [
       "Ration",
       "Cigarettes",
-      "Fortune's Favor"
+      "Fortune's Favor",
+      "Ancient Hero's Bandana",
+      "Box"
     ],
     "effect_tokens": [
       {
