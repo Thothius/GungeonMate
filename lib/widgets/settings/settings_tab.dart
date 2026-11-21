@@ -1,33 +1,31 @@
 import '../../theme/tokens.dart';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/multiplayer_messages.dart';
-import '../../models/player.dart';
 import '../../providers/run_provider.dart';
-import '../../services/mp_session.dart';
 import '../../services/run_lifecycle.dart';
 import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/character_select_screen.dart';
-import '../../screens/shrine_picker_screen.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../utils/fast_route.dart';
 import 'debug_tab.dart';
-import '../active_run/active_run_helpers.dart';
 import '../active_run/dice_roll.dart';
 import 'swipe_picker.dart';
 import '../skeuo/skeuo_tokens.dart';
 part 'settings_sections.dart';
 part 'settings_widgets.dart';
 
-/// Unified settings tab — gameplay preferences, multiplayer status,
-/// account/data, developer tools, and danger zone.
+/// Unified settings screen — gameplay preferences, studio shortcut,
+/// developer tools, and danger zone.
 ///
-/// Formerly split across GameplayTab + AppTab. Unified into a single
-/// scrollable view with modern grouped sections (v1.9.62).
+/// Prefs-only by design (v3.7.x IA split): run-scoped actions —
+/// shrines, co-op, save run, MP status/leave, per-player inventory
+/// resets — live in the active-run tools sheet instead. Reachable
+/// from the main-menu settings chip AND the in-run sheet's Settings
+/// row, so gameplay prefs (dice type, synergy toggles, panels) no
+/// longer require an active run.
 class SettingsTab extends StatefulWidget {
   const SettingsTab({super.key});
 
@@ -41,88 +39,6 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
   @override
   void _confirmEndRun(BuildContext context, RunProvider p) {
     RunLifecycle.confirmEndRun(context);
-  }
-
-  void _confirmLeaveMp(BuildContext context, MpSession session) {
-    final isSidekick = session.myRole == MpRole.sidekick;
-    showDialog(
-      context: context,
-      builder:
-          (c) => AlertDialog(
-            icon: Icon(
-              Icons.bluetooth_disabled,
-              color: Skeuo.inkIf(Colors.lightBlueAccent),
-            ),
-            title: const GoopText('Leave Multiplayer?'),
-            content: GoopText(
-              isSidekick
-                  ? 'You will disconnect from the host. Your inventory will be restored to your pre-MP state.'
-                  : 'You will disconnect and end the multiplayer session.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(c),
-                child: const GoopText('Cancel'),
-              ),
-              FilledButton.tonal(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Skeuo.inkIf(
-                    Colors.lightBlueAccent,
-                  ).withValues(alpha: 0.15),
-                  foregroundColor: Skeuo.inkIf(Colors.lightBlueAccent),
-                ),
-                onPressed: () {
-                  session.cancel();
-                  Navigator.pop(c);
-                },
-                child: const GoopText('Leave'),
-              ),
-            ],
-          ),
-    );
-  }
-
-  void _handleAddCoop(BuildContext context, RunProvider p) {
-    if (p.runState.hasCoop) {
-      showDialog(
-        context: context,
-        builder:
-            (c) => AlertDialog(
-              icon: Icon(
-                Icons.remove_circle_outline,
-                color: Skeuo.inkIf(Colors.redAccent),
-              ),
-              title: const GoopText('Remove Co-op Player?'),
-              content: GoopText(
-                'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(c),
-                  child: const GoopText('Cancel'),
-                ),
-                FilledButton.tonal(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Skeuo.inkIf(Colors.red.shade900),
-                  ),
-                  onPressed: () {
-                    p.endCoopPlayer();
-                    Navigator.pop(c);
-                  },
-                  child: const GoopText('Remove'),
-                ),
-              ],
-            ),
-      );
-    } else {
-      // Don't pre-seed a Cultist — the picker's onPick calls
-      // startCoopPlayer(char) itself. Seeding first meant backing out
-      // of the picker left a phantom Player 2 in the run.
-      Navigator.push(
-        context,
-        fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
-      );
-    }
   }
 
   @override
@@ -181,11 +97,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
-    final hasCoop = p.runState.hasCoop;
-    final player1Name = p.runState.main.character?.name ?? 'Player 1';
-    final player2Name = p.runState.coop?.character?.name ?? 'Player 2';
-    final mpSession = context.watch<MpSession>();
-    final mpActive = mpSession.isActive;
+    final hasRun = p.runState.main.character != null;
     final flair = AppTheme.flair;
 
     return ListenableBuilder(
@@ -195,75 +107,10 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
         final screenWidth = MediaQuery.sizeOf(context).width;
         final isWide = screenWidth >= 600;
 
-        // Build all section widgets
+        // Build all section widgets — prefs-only; run-scoped actions
+        // live in the active-run tools sheet (shrines, co-op, save,
+        // MP leave, per-player resets).
         final List<Widget> sections = [
-          _SettingsSection(
-            label: 'RUN',
-            flair: flair,
-            child: _CollapsibleCard(
-              title: 'RUN TOOLS',
-              icon: Icons.build_rounded,
-              flair: flair,
-              initiallyExpanded: true,
-              child: _buildGrid([
-                _TileData(
-                  icon: Icons.temple_buddhist,
-                  label: 'Shrine Picker',
-                  color: Skeuo.inkIf(Colors.amber),
-                  onTap:
-                      () => Navigator.push(
-                        context,
-                        fastRoute(const ShrinePickerScreen()),
-                      ),
-                ),
-                _TileData(
-                  icon:
-                      p.runState.hasCoop
-                          ? Icons.remove_circle_outline
-                          : Icons.person_add_alt_1,
-                  label: p.runState.hasCoop ? 'Remove Co-op' : 'Add Co-op',
-                  color:
-                      p.runState.hasCoop
-                          ? Skeuo.inkIf(Colors.redAccent)
-                          : Skeuo.inkIf(Colors.pinkAccent),
-                  onTap: () => _handleAddCoop(context, p),
-                ),
-                _TileData(
-                  icon: Icons.save_outlined,
-                  label: 'Save Run',
-                  color: Skeuo.inkIf(Colors.greenAccent),
-                  onTap: () {
-                    unawaited(
-                      p
-                          .saveRun()
-                          .then((_) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: GoopText('Run saved'),
-                                  duration: Duration(seconds: 2),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          })
-                          .catchError((e) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: GoopText('Failed to save run: $e'),
-                                  duration: const Duration(seconds: 3),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          }),
-                    );
-                  },
-                ),
-              ]),
-            ),
-          ),
           _SettingsSection(
             label: 'GAMEPLAY',
             flair: flair,
@@ -358,77 +205,8 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ],
             ),
           ),
-          if (mpActive || hasCoop)
-            _SettingsSection(
-              label: 'MULTIPLAYER',
-              flair: flair,
-              child: _CollapsibleCard(
-                title: 'MULTIPLAYER',
-                icon: Icons.bluetooth_rounded,
-                flair: flair,
-                initiallyExpanded: mpActive,
-                child: Column(
-                  children: [
-                    _buildMpStatusBar(
-                      context,
-                      p,
-                      hasCoop,
-                      player2Name,
-                      mpActive,
-                    ),
-                    if (mpActive) ...[
-                      const SizedBox(height: 10),
-                      _buildGrid([
-                        if (mpSession.myRole == MpRole.sidekick)
-                          _TileData(
-                            icon: Icons.bluetooth_disabled,
-                            label: 'Leave MP',
-                            color: Skeuo.inkIf(Colors.lightBlueAccent),
-                            onTap: () => _confirmLeaveMp(context, mpSession),
-                          ),
-                      ]),
-                    ],
-                  ],
-                ),
-              ),
-            ),
           _SettingsSection(
-            label: 'DATA',
-            flair: flair,
-            child: _CollapsibleCard(
-              title: 'DATA & STORAGE',
-              icon: Icons.storage_rounded,
-              flair: flair,
-              initiallyExpanded: false,
-              child: _buildGrid([
-                _TileData(
-                  icon: Icons.restart_alt_rounded,
-                  label: 'Reset $player1Name',
-                  color: Skeuo.inkIf(Colors.cyanAccent),
-                  onTap:
-                      () => confirmClearInventoryDialog(
-                        context,
-                        p,
-                        PlayerSlot.main,
-                      ),
-                ),
-                if (hasCoop)
-                  _TileData(
-                    icon: Icons.restart_alt_rounded,
-                    label: 'Reset $player2Name',
-                    color: Skeuo.inkIf(Colors.pinkAccent),
-                    onTap:
-                        () => confirmClearInventoryDialog(
-                          context,
-                          p,
-                          PlayerSlot.coop,
-                        ),
-                  ),
-              ]),
-            ),
-          ),
-          _SettingsSection(
-            label: 'CUSTOMIZATION',
+            label: 'STUDIO',
             flair: flair,
             child: _CompactActionTile(
               data: _TileData(
@@ -522,11 +300,15 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                 ]),
               ),
 
-              // DANGER ZONE — always last, full-width
+              // DANGER ZONE — always last, full-width. End Run only
+              // appears while a run is actually active (this screen is
+              // also reachable from the main menu with no run).
               const SizedBox(height: 12),
               _sectionLabel('DANGER ZONE', flair),
-              _buildEndRunButton(context, p),
-              const SizedBox(height: 10),
+              if (hasRun) ...[
+                _buildEndRunButton(context, p),
+                const SizedBox(height: 10),
+              ],
               _buildResetDataButton(context),
 
               const SizedBox(height: 24),

@@ -7,11 +7,13 @@ import '../../theme/tokens.dart';
 import '../../services/haptics.dart';
 import '../../services/effect_tagger.dart';
 import '../../services/mp_session.dart';
+import '../../models/multiplayer_messages.dart';
 import '../../utils/fast_route.dart';
 import '../../screens/ammonomicon_screen.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/effects_summary_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
+import '../../screens/character_select_screen.dart';
 import 'sort_picker.dart';
 import 'dice_roll.dart';
 import '../paradox/surprise_sheet.dart';
@@ -305,7 +307,7 @@ class _RunToolsSheet extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final flair = AppTheme.flair;
-    // Parked feature — hide the Neo-Skeuo row until Phase B ships.
+    // Hidden entirely when the Neo-Skeuo flag is off.
     if (label.startsWith('Neo-Skeuo') && !AppTheme.kNeoSkeuoEnabled) {
       return const SizedBox.shrink();
     }
@@ -420,6 +422,93 @@ class _RunToolsSheet extends StatelessWidget {
             ),
             _action(
               sheetCtx,
+              icon:
+                  hasCoop
+                      ? Icons.remove_circle_outline
+                      : Icons.person_add_alt_1,
+              label: hasCoop ? 'Remove Co-op' : 'Add Co-op',
+              iconColor:
+                  hasCoop
+                      ? Skeuo.inkIf(Colors.redAccent)
+                      : Skeuo.inkIf(Colors.pinkAccent),
+              onTap: () {
+                if (hasCoop) {
+                  showDialog(
+                    context: sheetCtx,
+                    builder:
+                        (c) => AlertDialog(
+                          icon: Icon(
+                            Icons.remove_circle_outline,
+                            color: Skeuo.inkIf(Colors.redAccent),
+                          ),
+                          title: const GoopText('Remove Co-op Player?'),
+                          content: GoopText(
+                            'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(c),
+                              child: const GoopText('Cancel'),
+                            ),
+                            FilledButton.tonal(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Skeuo.inkIf(
+                                  Colors.red.shade900,
+                                ),
+                              ),
+                              onPressed: () {
+                                p.endCoopPlayer();
+                                Navigator.pop(c);
+                              },
+                              child: const GoopText('Remove'),
+                            ),
+                          ],
+                        ),
+                  );
+                } else {
+                  Navigator.push(
+                    sheetCtx,
+                    fastRoute(
+                      const CharacterSelectScreen(mode: CharSelectMode.coop),
+                    ),
+                  );
+                }
+              },
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.save_outlined,
+              label: 'Save Run',
+              iconColor: Skeuo.inkIf(Colors.greenAccent),
+              onTap: () {
+                p
+                    .saveRun()
+                    .then((_) {
+                      if (sheetCtx.mounted) {
+                        ScaffoldMessenger.of(sheetCtx).showSnackBar(
+                          const SnackBar(
+                            content: GoopText('Run saved'),
+                            duration: Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    })
+                    .catchError((e) {
+                      if (sheetCtx.mounted) {
+                        ScaffoldMessenger.of(sheetCtx).showSnackBar(
+                          SnackBar(
+                            content: GoopText('Failed to save run: $e'),
+                            duration: const Duration(seconds: 3),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    });
+              },
+            ),
+            _action(
+              sheetCtx,
               icon: Icons.casino_rounded,
               label: 'Dice Roller',
               iconColor: const Color(0xFFFFD54F),
@@ -443,6 +532,51 @@ class _RunToolsSheet extends StatelessWidget {
                       ),
                       builder: (_) => const SurpriseSheet(),
                     ),
+              ),
+            if (mpSession.isActive &&
+                mpSession.myRole == MpRole.sidekick)
+              _action(
+                sheetCtx,
+                icon: Icons.bluetooth_disabled,
+                label: 'Leave MP',
+                iconColor: Skeuo.inkIf(Colors.lightBlueAccent),
+                onTap: () {
+                  showDialog(
+                    context: sheetCtx,
+                    builder:
+                        (c) => AlertDialog(
+                          icon: Icon(
+                            Icons.bluetooth_disabled,
+                            color: Skeuo.inkIf(Colors.lightBlueAccent),
+                          ),
+                          title: const GoopText('Leave Multiplayer?'),
+                          content: const GoopText(
+                            'You will disconnect from the host. Your inventory will be restored to your pre-MP state.',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(c),
+                              child: const GoopText('Cancel'),
+                            ),
+                            FilledButton.tonal(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Skeuo.inkIf(
+                                  Colors.lightBlueAccent,
+                                ).withValues(alpha: 0.15),
+                                foregroundColor: Skeuo.inkIf(
+                                  Colors.lightBlueAccent,
+                                ),
+                              ),
+                              onPressed: () {
+                                mpSession.cancel();
+                                Navigator.pop(c);
+                              },
+                              child: const GoopText('Leave'),
+                            ),
+                          ],
+                        ),
+                  );
+                },
               ),
             Divider(
               height: 1,
@@ -505,8 +639,8 @@ class _RunToolsSheet extends StatelessWidget {
                       : Icons.palette_rounded,
               label:
                   AppTheme.isSkeuo
-                      ? 'Customize (locked in Neo-Skeuo)'
-                      : 'Customize',
+                      ? 'Customization (locked in Neo-Skeuo)'
+                      : 'Customization',
               iconColor:
                   AppTheme.isSkeuo
                       ? flair.primary.withValues(alpha: 0.35)
@@ -536,7 +670,7 @@ class _RunToolsSheet extends StatelessWidget {
             _action(
               sheetCtx,
               icon: Icons.settings_outlined,
-              label: 'Preferences',
+              label: 'Settings',
               iconColor: flair.primary.withValues(alpha: 0.6),
               onTap: () {
                 if (sheetCtx.mounted) {

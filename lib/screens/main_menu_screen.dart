@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
 import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
+import 'settings_screen.dart';
 import 'ammonomicon_screen.dart';
 import 'neo_skeuo_lab_screen.dart';
 import 'asset_viewer_screen.dart';
@@ -443,15 +444,22 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                   ),
                 ),
               ),
-              // Asset Viewer — top-left feedback workbench (fonts /
-              // backgrounds / avatars + YAY-NAY votes + JSON export).
+              // Top-left corner controls — Settings gear + Asset Viewer,
+              // same circular chrome as the skeuo toggle top-right.
               Positioned(
                 top: 0,
                 left: 0,
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(Insets.md),
-                    child: _assetViewerChip(skeuo),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _settingsChip(skeuo),
+                        const SizedBox(width: 8),
+                        _assetViewerChip(skeuo),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -521,6 +529,50 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
 
   /// The Neo-Skeuo mode toggle — ghost pencil chip on the themed menu,
   /// pressed ink chip while the skin is on.
+  /// Settings chip — gear in the same circular chrome as the other
+  /// corner controls; pushes the prefs-only Settings screen.
+  Widget _settingsChip(bool skeuo) {
+    return Tooltip(
+      message: 'Settings',
+      child: ScaleButton(
+        onTap: () {
+          Haptics.selection();
+          Navigator.push(context, fastRoute(const SettingsScreen()));
+        },
+        child:
+            skeuo
+                ? const SkeuoSurface(
+                  elevation: SkeuoElevation.pressed,
+                  radius: Skeuo.rLg,
+                  sketchy: false,
+                  padding: EdgeInsets.all(11),
+                  child: Icon(
+                    Icons.settings_outlined,
+                    size: 22,
+                    color: Skeuo.ink,
+                  ),
+                )
+                : Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: _panel,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: _accent.withValues(alpha: 0.5),
+                      width: 1.4,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.settings_outlined,
+                    size: 22,
+                    color: _accent,
+                  ),
+                ),
+      ),
+    );
+  }
+
   /// Top-left chip into the Asset Viewer — same circular chrome as the
   /// skeuo toggle so the two corner controls read as a pair.
   Widget _assetViewerChip(bool skeuo) {

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/settings_screen.dart';
 
-/// Widget tests for SettingsScreen — the tabbed settings screen.
+/// Widget tests for SettingsScreen — the prefs-only settings screen.
 ///
-/// SettingsScreen wraps SettingsTab which renders collapsible cards:
-/// RUN TOOLS, DICE, DATA & STORAGE, DEV TOOLS. MULTIPLAYER is only
-/// shown when MP is active or a co-op slot exists.
-/// DANGER ZONE was removed in the 10-item rework — END RUN and
-/// RESET DATA are now full-width buttons, always visible at the
-/// bottom (no collapsible wrapper, no "DANGER ZONE" header).
+/// IA split (v3.7.x): run-scoped actions (RUN TOOLS, MULTIPLAYER status,
+/// per-player DATA resets) moved to the active-run tools sheet. What
+/// remains: GAMEPLAY prefs (SYNERGIES / DICE / PANELS), a STUDIO
+/// shortcut to the Experience Studio, DEV TOOLS, and DANGER ZONE
+/// (END RUN only while a run is active + RESET DATA always).
 ///
 /// SettingsTab uses AnimatedCrossFade for expand/collapse and
 /// AnimatedRotation for the chevron — short one-shot animations.
@@ -22,13 +22,15 @@ import 'package:gungeon_mate/screens/settings_screen.dart';
 /// animations, so we use pump() after opening it.
 ///
 /// The settings content is scrollable. Sections below the fold
-/// (DATA & STORAGE, DEV TOOLS, END RUN, RESET DATA) need scrollUntilVisible
+/// (DEV TOOLS, END RUN, RESET DATA) need scrollUntilVisible
 /// to be brought on-screen before tapping.
 void main() {
-  Widget wrap(Widget child) {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  Widget wrap(Widget child, {RunProvider? provider}) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => RunProvider()),
+        ChangeNotifierProvider.value(value: provider ?? RunProvider()),
         ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
       ],
       child: MaterialApp(home: child),
@@ -49,50 +51,29 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Renders all four collapsible section headers (solo mode)', (
+  testWidgets('Renders gameplay + studio sections, no run-scoped cards', (
     tester,
   ) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // First two are on-screen
-    expect(find.text('RUN TOOLS'), findsOneWidget);
+    // Gameplay collapsible cards
+    expect(find.text('SYNERGIES'), findsOneWidget);
     expect(find.text('DICE'), findsOneWidget);
-    // MULTIPLAYER is hidden when solo (no MP, no co-op)
+    expect(find.text('PANELS'), findsOneWidget);
+
+    // Studio shortcut tile
+    expect(find.text('Customization'), findsOneWidget);
+
+    // Run-scoped sections moved to the active-run tools sheet —
+    // none of these may render here anymore.
+    expect(find.text('RUN TOOLS'), findsNothing);
+    expect(find.text('Shrine Picker'), findsNothing);
+    expect(find.text('Add Co-op'), findsNothing);
+    expect(find.text('Save Run'), findsNothing);
     expect(find.text('MULTIPLAYER'), findsNothing);
-
-    // Scroll to find the rest
-    await tester.scrollUntilVisible(
-      find.text('DATA & STORAGE'),
-      100.0,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('DATA & STORAGE'), findsOneWidget);
-
-    await tester.scrollUntilVisible(
-      find.text('DEV TOOLS'),
-      100.0,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('DEV TOOLS'), findsOneWidget);
-
-    // DANGER ZONE header was removed — END RUN and RESET DATA are
-    // now full-width buttons, always visible (no collapsible).
-  });
-
-  testWidgets('RUN TOOLS is expanded by default and shows tiles', (
-    tester,
-  ) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    // RUN TOOLS is initiallyExpanded: true
-    expect(find.text('Shrine Picker'), findsOneWidget);
-    expect(find.text('Add Co-op'), findsOneWidget);
-    // Save Run is always visible now (no MP guard)
-    expect(find.text('Save Run'), findsOneWidget);
+    expect(find.text('DATA & STORAGE'), findsNothing);
+    expect(find.text('Reset Player 1'), findsNothing);
   });
 
   testWidgets('DICE is collapsed by default', (tester) async {
@@ -118,28 +99,6 @@ void main() {
     expect(find.text('5'), findsOneWidget);
   });
 
-  testWidgets('MULTIPLAYER section is hidden when solo (no MP, no coop)', (
-    tester,
-  ) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    // MULTIPLAYER card is not rendered when !mpActive && !hasCoop
-    expect(find.text('MULTIPLAYER'), findsNothing);
-    expect(find.text('SOLO'), findsNothing);
-  });
-
-  testWidgets('DATA & STORAGE shows Reset Player 1 tile', (tester) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    // Scroll to DATA & STORAGE and expand it
-    await scrollAndTap(tester, find.text('DATA & STORAGE'));
-
-    // With no loaded run, player1Name defaults to 'Player 1'
-    expect(find.text('Reset Player 1'), findsOneWidget);
-  });
-
   testWidgets('DEV TOOLS section shows Dev Tools tile', (tester) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
@@ -150,22 +109,15 @@ void main() {
     expect(find.text('Dev Tools'), findsOneWidget);
   });
 
-  testWidgets('END RUN and RESET DATA buttons are always visible', (
+  testWidgets('RESET DATA is always visible; END RUN hidden with no run', (
     tester,
   ) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // Scroll to the bottom — END RUN and RESET DATA are full-width
-    // buttons, always visible (no DANGER ZONE collapsible anymore).
-    await tester.scrollUntilVisible(
-      find.text('END RUN'),
-      100.0,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('END RUN'), findsOneWidget);
-
+    // Scroll to the bottom — RESET DATA is always visible; END RUN
+    // only renders while a run is active (screen is reachable from
+    // the main menu with no run).
     await tester.scrollUntilVisible(
       find.text('RESET DATA'),
       100.0,
@@ -173,6 +125,33 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('RESET DATA'), findsOneWidget);
+    expect(find.text('END RUN'), findsNothing);
+  });
+
+  testWidgets('END RUN appears and opens dialog while a run is active', (
+    tester,
+  ) async {
+    final p = _LoadedRunProvider();
+    p.startNewRun(Gungeoneer(name: 'Marine'));
+
+    await tester.pumpWidget(wrap(const SettingsScreen(), provider: p));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('END RUN'),
+      100.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('END RUN'), warnIfMissed: false);
+    // Use pump() not pumpAndSettle() — the dialog has perpetual animations.
+    await tester.pump(const Duration(milliseconds: 300));
+    // Pump extra frames to let flutter_animate one-shot timers complete
+    // so they don't leave pending timers during test cleanup.
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(find.byType(Dialog), findsOneWidget);
   });
 
   testWidgets('Tapping Dev Tools with no active run shows snackbar', (
@@ -220,32 +199,6 @@ void main() {
     expect(find.text('Reset All App Data?'), findsNothing);
   });
 
-  testWidgets('Tapping END RUN opens confirmation dialog', (tester) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    // Scroll to END RUN — use manual scroll+tap with pump() instead
-    // of scrollAndTap because the EndRunConfirmDialog that opens on
-    // tap has perpetual float/glow animations that would cause
-    // pumpAndSettle() to time out.
-    await tester.scrollUntilVisible(
-      find.text('END RUN'),
-      100.0,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('END RUN'), warnIfMissed: false);
-    // Use pump() not pumpAndSettle() — the dialog has perpetual animations.
-    await tester.pump(const Duration(milliseconds: 300));
-    // Pump extra frames to let flutter_animate one-shot timers complete
-    // so they don't leave pending timers during test cleanup.
-    await tester.pump(const Duration(milliseconds: 100));
-    await tester.pump(const Duration(milliseconds: 100));
-
-    // The dialog should be visible — look for a Dialog widget
-    expect(find.byType(Dialog), findsOneWidget);
-  });
-
   testWidgets('Screen renders without crashing with empty provider data', (
     tester,
   ) async {
@@ -255,4 +208,14 @@ void main() {
     // Just verify the scaffold exists
     expect(find.byType(Scaffold), findsWidgets);
   });
+}
+
+/// Test-only RunProvider that bypasses the loading state — same
+/// pattern as active_run_screen_test.
+class _LoadedRunProvider extends RunProvider {
+  @override
+  bool get isLoading => false;
+
+  @override
+  String? get error => null;
 }
