@@ -29,7 +29,7 @@ class ThemeOverlay extends StatefulWidget {
   const ThemeOverlay({super.key, required this.child});
 
   /// Whether the main menu is the topmost route. Theme layers are
-  /// suppressed only while the locked home menu is actually visible —
+  /// suppressed only while the menu is actually visible —
   /// screens pushed above it (Studio, Ammonomicon, character select…)
   /// keep their themed backdrop. Set by MainMenuScreen's RouteAware
   /// callbacks; defaults true (covers the pre-menu loading state).
@@ -39,13 +39,10 @@ class ThemeOverlay extends StatefulWidget {
   /// x is tilt left/right (-10 to 10), y is tilt up/down (-10 to 10).
   static final ValueNotifier<Offset> tiltNotifier = ValueNotifier(Offset.zero);
 
-  /// Static global notifier for the current screen index (0=Home, 1=Browse, 2=Settings).
-  /// Used to force the Galaxy animated background on the Home screen only.
+  /// Tracks whether the home (no-run) state is showing: 0 = home/menu,
+  /// -1 = inside a run. Used to suppress touch sparkles over the menu —
+  /// the menu has its own backdrop and shouldn't get overlay particles.
   static final ValueNotifier<int> currentScreenIndex = ValueNotifier(0);
-
-  /// The animated wallpaper asset that always plays on the Home screen.
-  /// This is the orbiting purple vortex from gungeonmate-animation-02.mp4.
-  static const String kHomeGalaxyAsset = 'gungeonmate-animation-02.mp4';
 
   @override
   State<ThemeOverlay> createState() => _ThemeOverlayState();
@@ -188,7 +185,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
             final reduceMotion = MediaQuery.disableAnimationsOf(context);
             _reduceMotion = reduceMotion;
             // Determine isHomeScreen directly from RunProvider so the
-            // galaxy background disappears the instant a run starts —
+            // menu state flips the instant a run starts —
             // no 1-frame lag from a child-set ValueNotifier.
             final runProvider = context.watch<RunProvider>();
             final isHomeScreen =
@@ -281,7 +278,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
             Widget content = widget.child;
 
             // Apply visual customizer wrappers based on active Theme Mode!
-            // Locked on home — the menu must look identical on every theme.
+            // Skipped on the menu — MainMenuBackdrop owns that look.
             if (!reduceMotion &&
                 !menuVisible &&
                 mode == AppThemeMode.bulletHell) {
@@ -301,23 +298,17 @@ class _ThemeOverlayState extends State<ThemeOverlay>
               child: Stack(
                 children: [
                   // 0. Absolute Base Solid Background Color (since scaffolds are transparent)
-                  // The home menu is theme-locked — its own backdrop
-                  // (MainMenuBackdrop) owns the whole look, so we use
-                  // its fixed base color and skip all theme layers below.
+                  // On the menu, MainMenuBackdrop's opaque gradient owns
+                  // the whole look and theme layers below are suppressed —
+                  // the scaffold color here is just a safety fill.
                   Positioned.fill(
                     child: Container(
                       color:
-                          menuVisible
-                              ? const Color(0xFF0A0710)
-                              : customBgMode == CustomThemeData.bgNone
+                          customBgMode == CustomThemeData.bgNone
                               ? Colors.black
                               : f.scaffold,
                     ),
                   ),
-
-                  // Home screen vortex animation removed — default to
-                  // Minimalist. ThemeOverlay provides only the base color
-                  // and themed layers (particles, glow, shader).
 
                   // 0.4. Custom-theme wallpaper — image + scrim over the
                   // base color. Particles/glow/shader layers stay above.
