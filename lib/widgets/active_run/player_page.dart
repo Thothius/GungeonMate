@@ -563,16 +563,7 @@ class PlayerPageState extends State<PlayerPage> {
     // the saved display-mode pref. Other renderers stay dormant.
     switch (InventoryDisplayMode.classicPeriodic) {
       case InventoryDisplayMode.classicPeriodic:
-        final savedColCount =
-            VisualPrefs.notifier.value.periodicGridColumnCount;
-        cross =
-            (savedColCount > 0)
-                ? savedColCount
-                : (w < 360
-                    ? 3
-                    : w < 600
-                    ? 4
-                    : 6);
+        cross = w < 360 ? 3 : w < 600 ? 4 : 6;
         ratio = 0.75; // BUG-035: bumped from 0.80 to fit type subtitle + RANGE
         break;
       case InventoryDisplayMode.tacticalStats:
