@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/run_provider.dart';
+import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../utils/responsive.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Cool & Curse fullscreen — opened by tapping the COOL or CURSE stat
 /// in the Paradox player panel (also usable from classic MP later).
@@ -33,17 +35,24 @@ class CoolCurseScreen extends StatelessWidget {
     final jamChance = curse >= 10 ? 100.0 : curse * 4;
     final bossJamChance = curse >= 10 ? 100.0 : curse * 2;
 
+    // Semantic stat colors — collapse to ink under Neo-Skeuo; title
+    // follows the theme accent like every other pushed screen.
+    final coolColor = Skeuo.inkIf(const Color(0xFF4DD0E1));
+    final curseColor = Skeuo.inkIf(const Color(0xFFBA68C8));
+    final jammedColor = Skeuo.inkIf(const Color(0xFFFF5252));
+    final titleColor = Skeuo.inkIf(AppTheme.flair.primary);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0716),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF140B22),
+        backgroundColor: Colors.transparent,
         title: GoopText(
           'COOL & CURSE',
           style: TextStyle(
             fontSize: FontSizes.titleSmall * sf,
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
-            color: const Color(0xFFB388FF),
+            color: titleColor,
           ),
         ),
         centerTitle: true,
@@ -59,7 +68,7 @@ class CoolCurseScreen extends StatelessWidget {
                     child: _MeterPanel(
                       title: 'COOLNESS',
                       value: cool,
-                      color: const Color(0xFF4DD0E1),
+                      color: coolColor,
                       sf: sf,
                       onDelta: (d) {
                         p.adjustCoolness(d);
@@ -73,7 +82,7 @@ class CoolCurseScreen extends StatelessWidget {
                     child: _MeterPanel(
                       title: 'CURSE',
                       value: curse,
-                      color: const Color(0xFFBA68C8),
+                      color: curseColor,
                       sf: sf,
                       onDelta: (d) {
                         p.adjustCurse(d);
@@ -97,38 +106,38 @@ class CoolCurseScreen extends StatelessWidget {
                     'Chest fuse auto-defuse',
                     '${fuseSkipPct.toStringAsFixed(1)}%',
                     'Chance a mimicked/unmimicked chest resets its fuse. +2.5% per Cool, caps at 10% (4 Cool).',
-                    const Color(0xFF4DD0E1),
+                    coolColor,
                   ),
                   _EffectRow(
                     'Active-item cooldown',
                     '−${chestResetPct.toStringAsFixed(0)}% time',
                     'Coolness shortens recharge on cooldown-based items (Cigarettes etc.). +5% per Cool, caps at 50%.',
-                    const Color(0xFF4DD0E1),
+                    coolColor,
                   ),
                   _EffectRow(
                     'Extra room reward',
                     '${rewardPct.toStringAsFixed(1)}% ',
                     'Chance a cleared room drops an extra pickup. +1% per Cool, −1% per Curse.',
-                    const Color(0xFF4DD0E1),
+                    coolColor,
                   ),
                   _EffectRow(
                     'Jammed enemy chance',
                     '${jamChance.toStringAsFixed(0)}%',
                     'Curse jamms normal enemies — faster, harder, more damage. ~4% per Curse point.',
-                    const Color(0xFFBA68C8),
+                    curseColor,
                   ),
                   _EffectRow(
                     'Jammed boss chance',
                     '${bossJamChance.toStringAsFixed(0)}%',
                     'Bosses can also jam (except past bosses). ~2% per Curse point.',
-                    const Color(0xFFBA68C8),
+                    curseColor,
                   ),
                   if (curse >= 10)
-                    const _EffectRow(
+                    _EffectRow(
                       'LORD OF THE JAMMED',
                       'ACTIVE',
                       'At 10 Curse an unkillable reaper hunts you until the run ends. Stay under 10.',
-                      Color(0xFFFF5252),
+                      jammedColor,
                     ),
                 ],
               ),
@@ -166,7 +175,7 @@ class CoolCurseScreen extends StatelessWidget {
                 children: [
                   _InfoBlock(
                     title: 'COOLNESS',
-                    color: const Color(0xFF4DD0E1),
+                    color: coolColor,
                     sf: sf,
                     body:
                         'Coolness is a hidden counter of how "cool" you are — '
@@ -184,7 +193,7 @@ class CoolCurseScreen extends StatelessWidget {
                   SizedBox(height: 14 * sf),
                   _InfoBlock(
                     title: 'CURSE',
-                    color: const Color(0xFFBA68C8),
+                    color: curseColor,
                     sf: sf,
                     body:
                         'Curse is the dark twin — gained from cursed items '
