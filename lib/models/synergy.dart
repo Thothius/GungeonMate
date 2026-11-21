@@ -9,6 +9,14 @@ class Synergy {
   /// to be in the inventory. Empty for plain N-of-N synergies.
   final List<String> anyOf;
 
+  /// AND-of-OR groups: each inner list needs at least one owned member,
+  /// and EVERY group must be satisfied. Used for synergies the flat
+  /// items+anyOf model can't express (e.g. Smart Bombs = (Bomb|Ice Bomb)
+  /// AND (Crutch|Homing Bullets)). When non-empty it takes precedence over
+  /// items/anyOf for matching; items/anyOf still carry the flattened
+  /// union so piece icons and entity lookups keep working.
+  final List<List<String>> groups;
+
   final String effect;
   final String icon;
 
@@ -21,6 +29,7 @@ class Synergy {
     required this.name,
     required this.items,
     this.anyOf = const [],
+    this.groups = const [],
     this.effect = '',
     this.icon = '',
     this.effectTokens = const [],
@@ -40,6 +49,13 @@ class Synergy {
               ?.map((e) => e.toString())
               .toList() ??
           const [],
+      groups:
+          (json['groups'] as List<dynamic>?)
+              ?.map(
+                (g) => (g as List<dynamic>).map((e) => e.toString()).toList(),
+              )
+              .toList() ??
+          const [],
       effect: json['effect'] ?? '',
       icon: localSynergyIcon(name),
       effectTokens: parseSynergyEffectTokens(json['effect_tokens']),
@@ -51,6 +67,7 @@ class Synergy {
       'name': name,
       'items': items,
       if (anyOf.isNotEmpty) 'any_of': anyOf,
+      if (groups.isNotEmpty) 'groups': groups,
       'effect': effect,
       'icon': icon,
     };
@@ -65,18 +82,11 @@ class Synergy {
   /// supplies a precomputed lowercase ownership set instead of paying a
   /// `toSet()` allocation per call.
   bool matchesOwnedSet(Set<String> owned) {
-    // Special cases for synergies with empty required items list:
-    if (name == 'Smart Bombs' || name == 'Unbelievably Charming') {
-      final matchesCount =
-          anyOf.where((i) => owned.contains(i.toLowerCase())).length;
-      return matchesCount >= 2;
-    }
-    if (name == 'Super Serum') {
-      final hasGuns =
-          owned.contains('plague pistol') || owned.contains('plunger');
-      final hasDefense =
-          owned.contains('gas mask') || owned.contains('hazmat suit');
-      return hasGuns && hasDefense;
+    // AND-of-OR groups take precedence — each group needs ≥1 owned member.
+    if (groups.isNotEmpty) {
+      return groups.every(
+        (g) => g.any((i) => owned.contains(i.toLowerCase())),
+      );
     }
 
     final allRequired = items.every((i) => owned.contains(i.toLowerCase()));
@@ -117,6 +127,13 @@ class Synergy {
   /// this synergy, given the current inventory. For `any_of` synergies,
   /// returns only ONE representative missing alternative (the first one).
   List<String> missingFor(Set<String> ownedLower) {
+    if (groups.isNotEmpty) {
+      return [
+        for (final g in groups)
+          if (!g.any((i) => ownedLower.contains(i.toLowerCase())))
+            g.length == 1 ? g.first : 'any of: ${g.join(", ")}',
+      ];
+    }
     final missing =
         items.where((i) => !ownedLower.contains(i.toLowerCase())).toList();
     if (anyOf.isNotEmpty) {

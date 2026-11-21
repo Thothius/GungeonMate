@@ -8770,7 +8770,7 @@
     ]
   },
   {
-    "name": "Resourceful Indeed,",
+    "name": "Resourceful Indeed",
     "items": [
       "Elimentaler",
       "Partially-Eaten Cheese",
@@ -9790,12 +9790,12 @@
   },
   {
     "name": "Smart Bombs",
-    "items": [
-      "Bomb"
-    ],
+    "items": [],
     "effect": "Bombs home in on enemies.",
     "icon": "",
     "any_of": [
+      "Bomb",
+      "Ice Bomb",
       "Crutch",
       "Homing Bullets"
     ],
@@ -9810,6 +9810,16 @@
       108,
       240,
       284
+    ],
+    "groups": [
+      [
+        "Bomb",
+        "Ice Bomb"
+      ],
+      [
+        "Crutch",
+        "Homing Bullets"
+      ]
     ]
   },
   {
@@ -10489,6 +10499,16 @@
         "op": "ADDITIVE",
         "amount": 1.0
       }
+    ],
+    "groups": [
+      [
+        "Plague Pistol",
+        "Plunger"
+      ],
+      [
+        "Gas Mask",
+        "Hazmat Suit"
+      ]
     ]
   },
   {
@@ -10620,7 +10640,15 @@
       "Ser Junkan 1",
       "Wolf",
       "Turkey",
-      "Clown Mask"
+      "Clown Mask",
+      "Chicken Flute",
+      "Baby Good Mimic",
+      "Baby Good Shelleton",
+      "Pig",
+      "R2G2",
+      "Super Space Turtle",
+      "Blank Companion's Ring",
+      "Badge"
     ],
     "effect_tokens": [
       {
@@ -11430,6 +11458,16 @@
       260,
       379,
       527
+    ],
+    "groups": [
+      [
+        "Charmed Bow",
+        "Shotgun Full of Love"
+      ],
+      [
+        "Charming Rounds",
+        "Pink Guon Stone"
+      ]
     ]
   },
   {

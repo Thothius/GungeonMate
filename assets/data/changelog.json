@@ -4,12 +4,14 @@
     "date": "2026-11",
     "sections": {
       "Features": [
-    "Typography overhaul — the font catalog is cut from ~30 faces to a curated 10 (Enter the Gungeon, Megrim, Bungee, Germania One, Anton, Lilita One, Fjalla One, Wallpoet, Monoton, Press Start 2P): fat display + stylized accents that stay readable, plus 6 new bundled typefaces. The TYPE step is now an authored list — each name set in its own face with a role tag — and every saved font/theme index migrates automatically to the nearest live face.",
+        "Typography overhaul — the font catalog is cut from ~30 faces to a curated 10 (Enter the Gungeon, Megrim, Bungee, Germania One, Anton, Lilita One, Fjalla One, Wallpoet, Monoton, Press Start 2P): fat display + stylized accents that stay readable, plus 6 new bundled typefaces. The TYPE step is now an authored list — each name set in its own face with a role tag — and every saved font/theme index migrates automatically to the nearest live face.",
         "Theme-reactive main menu — the whole menu re-skins from the active palette (all themes, Unicorn palettes, remixes, custom presets): buttons, logo, sublabel chip, and backdrop gradient/embers/glow all follow AppTheme.flair",
         "Living backdrop — distant flocks of small gun/item/bullet sprites drift across the sky like birds, plus a nearer layer of smaller sprites rising slowly; both layers decode once and paint in a single pass",
         "Neo-Skeuo accent — the cream-paper skin keeps its identity but the hero button and chips pick up the active theme's primary color"
       ],
-      "Fixed": []
+      "Fixed": [
+        "Synergy accuracy — Smart Bombs, Unbelievably Charming and Super Serum now use proper requirement groups (e.g. Bomb-or-Ice-Bomb AND Crutch-or-Homing-Bullets) instead of a flat any-of count; Tea for Two recognises the full companion pool; 'Resourceful Indeed,' name typo fixed so item cross-links resolve"
+      ]
     }
   },
   {

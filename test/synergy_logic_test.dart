@@ -46,23 +46,87 @@ void main() {
     });
   });
 
-  group('matchesItems — hardcoded special cases', () {
-    test('Smart Bombs needs ≥2 of the alternatives', () {
-      final s = Synergy(
-        name: 'Smart Bombs',
-        items: [],
-        anyOf: ['Homing Bullets', 'Crutch', 'Shock Rounds'],
-      );
-      expect(s.matchesItems(['homing bullets', 'crutch']), true);
-      expect(s.matchesItems(['homing bullets']), false);
+  group('matchesItems — groups (AND-of-OR pools)', () {
+    // Smart Bombs: (Bomb|Ice Bomb) AND (Crutch|Homing Bullets)
+    final smartBombs = Synergy(
+      name: 'Smart Bombs',
+      items: [],
+      anyOf: ['Bomb', 'Ice Bomb', 'Crutch', 'Homing Bullets'],
+      groups: [
+        ['Bomb', 'Ice Bomb'],
+        ['Crutch', 'Homing Bullets'],
+      ],
+    );
+
+    test('one member per group → matches', () {
+      expect(smartBombs.matchesItems(['bomb', 'crutch']), true);
+      expect(smartBombs.matchesItems(['ice bomb', 'homing bullets']), true);
     });
 
-    test('Super Serum needs gun AND defense categories', () {
-      final s = Synergy(name: 'Super Serum', items: [], anyOf: []);
-      expect(s.matchesItems(['plague pistol', 'gas mask']), true);
-      expect(s.matchesItems(['plunger', 'hazmat suit']), true);
-      expect(s.matchesItems(['plague pistol']), false);
-      expect(s.matchesItems(['gas mask', 'hazmat suit']), false);
+    test('two members of one group only → no match', () {
+      expect(smartBombs.matchesItems(['bomb', 'ice bomb']), false);
+      expect(smartBombs.matchesItems(['crutch', 'homing bullets']), false);
+    });
+
+    test('missing a whole group → no match', () {
+      expect(smartBombs.matchesItems(['bomb']), false);
+      expect(smartBombs.matchesItems(['crutch', 'homing bullets', 'bomb']),
+          true);
+    });
+
+    // Unbelievably Charming: (Charmed Bow|Shotgun Full of Love)
+    // AND (Charming Rounds|Pink Guon Stone) — two guns alone must NOT match.
+    final charming = Synergy(
+      name: 'Unbelievably Charming',
+      items: [],
+      anyOf: [
+        'Charmed Bow',
+        'Shotgun Full of Love',
+        'Charming Rounds',
+        'Pink Guon Stone',
+      ],
+      groups: [
+        ['Charmed Bow', 'Shotgun Full of Love'],
+        ['Charming Rounds', 'Pink Guon Stone'],
+      ],
+    );
+
+    test('gun + item combo → matches', () {
+      expect(
+        charming.matchesItems(['charmed bow', 'pink guon stone']),
+        true,
+      );
+    });
+
+    test('two guns or two items → no match', () {
+      expect(
+        charming.matchesItems([
+          'charmed bow',
+          'shotgun full of love',
+        ]),
+        false,
+      );
+      expect(
+        charming.matchesItems(['charming rounds', 'pink guon stone']),
+        false,
+      );
+    });
+
+    test('groups round-trip through JSON', () {
+      final s = Synergy.fromJson({
+        'name': 'G',
+        'items': [],
+        'groups': [
+          ['A', 'B'],
+          ['C'],
+        ],
+      });
+      expect(s.matchesItems(['b', 'c']), true);
+      expect(s.matchesItems(['a']), false);
+      expect(s.toJson()['groups'], [
+        ['A', 'B'],
+        ['C'],
+      ]);
     });
   });
 
@@ -84,6 +148,20 @@ void main() {
       final s = Synergy(name: 'Combo', items: ['Core'], anyOf: ['X', 'Y']);
       final missing = s.missingFor({'core', 'x'});
       expect(missing.any((m) => m.startsWith('any of:')), false);
+    });
+
+    test('groups report one "any of" entry per unsatisfied group', () {
+      final s = Synergy(
+        name: 'G',
+        items: const [],
+        groups: [
+          ['A', 'B'],
+          ['C', 'D'],
+        ],
+      );
+      final missing = s.missingFor({'a'});
+      expect(missing, hasLength(1));
+      expect(missing.single, 'any of: C, D');
     });
   });
 
