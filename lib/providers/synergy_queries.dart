@@ -9,21 +9,27 @@ mixin _SynergyQueries on ChangeNotifier {
   List<Synergy> get _allSynergies;
 
   List<Synergy> getActiveSynergies() {
-    final itemNames = _runState.main.allItemNames;
-    return _allSynergies.where((s) => s.matchesItems(itemNames)).toList();
+    final owned = _runState.main.allItemNames
+        .map((n) => n.toLowerCase())
+        .toSet();
+    return _allSynergies.where((s) => s.matchesOwnedSet(owned)).toList();
   }
 
   /// Partial synergies: at least one required or any-of item is owned,
   /// but the synergy is NOT fully active. These are "potential" synergies
   /// the user could complete by acquiring the remaining items.
   List<Synergy> getPartialSynergies() {
-    final itemNames = _runState.main.allItemNames;
-    final owned = itemNames.map((n) => n.toLowerCase()).toSet();
+    final owned = _runState.main.allItemNames
+        .map((n) => n.toLowerCase())
+        .toSet();
     return _allSynergies.where((s) {
-      if (s.matchesItems(itemNames)) return false; // active, not partial
+      if (s.matchesOwnedSet(owned)) return false; // active, not partial
       return s.items.any((i) => owned.contains(i.toLowerCase())) ||
           (s.anyOf.isNotEmpty &&
-              s.anyOf.any((i) => owned.contains(i.toLowerCase())));
+              s.anyOf.any((i) => owned.contains(i.toLowerCase()))) ||
+          s.groups.any(
+            (g) => g.any((i) => owned.contains(i.toLowerCase())),
+          );
     }).toList();
   }
 
@@ -31,19 +37,42 @@ mixin _SynergyQueries on ChangeNotifier {
   List<Synergy> getActiveSynergiesForSlot(PlayerSlot slot) {
     final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
     if (player == null) return [];
-    final itemNames = player.allItemNames;
-    return _allSynergies.where((s) => s.matchesItems(itemNames)).toList();
+    final owned = player.allItemNames.map((n) => n.toLowerCase()).toSet();
+    return _allSynergies.where((s) => s.matchesOwnedSet(owned)).toList();
+  }
+
+  /// piece-name (lowercased) → synergies containing it in items, anyOf,
+  /// or any groups pool. Built once — replaces the old per-call full
+  /// 395-synergy scans in getSynergiesFor/_collectFor.
+  Map<String, List<Synergy>>? _pieceIndex;
+  List<Synergy>? _pieceIndexFor;
+
+  Map<String, List<Synergy>> get _synergyPieceIndex {
+    if (_pieceIndex == null || !identical(_pieceIndexFor, _allSynergies)) {
+      _pieceIndex = _buildPieceIndex();
+      _pieceIndexFor = _allSynergies;
+    }
+    return _pieceIndex!;
+  }
+
+  Map<String, List<Synergy>> _buildPieceIndex() {
+    final map = <String, List<Synergy>>{};
+    for (final s in _allSynergies) {
+      final pieces = <String>{
+        for (final i in s.items) i.toLowerCase(),
+        for (final i in s.anyOf) i.toLowerCase(),
+        for (final g in s.groups)
+          for (final i in g) i.toLowerCase(),
+      };
+      for (final p in pieces) {
+        map.putIfAbsent(p, () => []).add(s);
+      }
+    }
+    return map;
   }
 
   List<Synergy> getSynergiesFor(String itemName) {
-    final lower = itemName.toLowerCase();
-    return _allSynergies
-        .where(
-          (s) =>
-              s.items.any((i) => i.toLowerCase() == lower) ||
-              s.anyOf.any((i) => i.toLowerCase() == lower),
-        )
-        .toList();
+    return List.of(_synergyPieceIndex[itemName.toLowerCase()] ?? const []);
   }
 
   /// Lowercased names of every gun + item the active player currently
@@ -68,19 +97,15 @@ mixin _SynergyQueries on ChangeNotifier {
   }
 
   ItemSynergies _collectFor(String name, bool isGun, Set<String> owned) {
-    final lower = name.toLowerCase();
-    final related = _allSynergies.where(
-      (s) =>
-          s.items.any((i) => i.toLowerCase() == lower) ||
-          s.anyOf.any((i) => i.toLowerCase() == lower),
-    );
+    final related =
+        _synergyPieceIndex[name.toLowerCase()] ?? const <Synergy>[];
     final synergies =
         related.map((s) {
             final missing = s.missingFor(owned);
             return SynergyStatus(
               synergy: s,
               missing: missing,
-              active: s.matchesItems(owned.toList()),
+              active: s.matchesOwnedSet(owned),
             );
           }).toList()
           ..sort((a, b) {
@@ -112,9 +137,14 @@ mixin _SynergyQueries on ChangeNotifier {
   List<Synergy>? _activeCombinedCache;
 
   Map<String, int>? _synergyCountCache;
+  List<Synergy>? _countCacheFor;
 
   int synergyCountFor(String itemName) {
-    _synergyCountCache ??= _buildSynergyCountCache();
+    if (_synergyCountCache == null ||
+        !identical(_countCacheFor, _allSynergies)) {
+      _synergyCountCache = _buildSynergyCountCache();
+      _countCacheFor = _allSynergies;
+    }
     return _synergyCountCache![itemName.toLowerCase()] ?? 0;
   }
 
@@ -172,6 +202,11 @@ mixin _SynergyQueries on ChangeNotifier {
       }
       for (final i in s.anyOf) {
         seen.add(i.toLowerCase());
+      }
+      for (final g in s.groups) {
+        for (final i in g) {
+          seen.add(i.toLowerCase());
+        }
       }
       for (final k in seen) {
         map[k] = (map[k] ?? 0) + 1;

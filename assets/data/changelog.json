@@ -13,7 +13,8 @@
       "Fixed": [
         "Restored uni_5 avatar — the 170e70b file cull deleted the webp while c5ba8db pruned its registry id, leaving the unicorn set at 8 of 9 portraits. File restored from pre-cull history and id re-registered; new integrity test asserts every kAvatarIds entry has a file on disk.",
         "Synergy accuracy — Smart Bombs, Unbelievably Charming and Super Serum now use proper requirement groups (e.g. Bomb-or-Ice-Bomb AND Crutch-or-Homing-Bullets) instead of a flat any-of count; Tea for Two recognises the full companion pool; 'Resourceful Indeed,' name typo fixed so item cross-links resolve",
-        "Synergy pools audited against game data — 17 entries corrected (Pea Cannon/Plant Power pools, Alternative Rock +3 options, Natural Selection/Paperwork/Full Circle/Lotus Bloom/Relodestar/Tile Match missing pieces, Sniper Woof +Bow, I need scissors/What A Thrill +Wolf/Bandana/Box, Void Corps gun name, BEES -Jar of Bees, Deadly/Frosty Distraction Explosive Decoy, Blade Runner Knife Shield); LEB exclusions +The Submachinist/Detective Mode"
+        "Synergy pools audited against game data — 17 entries corrected (Pea Cannon/Plant Power pools, Alternative Rock +3 options, Natural Selection/Paperwork/Full Circle/Lotus Bloom/Relodestar/Tile Match missing pieces, Sniper Woof +Bow, I need scissors/What A Thrill +Wolf/Bandana/Box, Void Corps gun name, BEES -Jar of Bees, Deadly/Frosty Distraction Explosive Decoy, Blade Runner Knife Shield); LEB exclusions +The Submachinist/Detective Mode",
+        "Synergy lookups indexed — item→synergy queries now use a prebuilt piece index (and group-aware partial/count caches) instead of re-scanning all ~400 synergies per call"
       ]
     }
   },
