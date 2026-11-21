@@ -10,6 +10,63 @@ final List<String> kCustomWallpaperAssets = List<String>.generate(
   (i) => 'wp_${(i + 1).toString().padLeft(2, '0')}.webp',
 );
 
+/// Lore names for the bundled wallpapers — shown in the picker and
+/// asset-vote catalog so `wp_XX` files stop being anonymous. Names are
+/// mood-matched to each piece's palette; tweak freely, they are labels
+/// only and never persisted.
+const Map<String, String> kWallpaperNames = {
+  'wp_01.webp': 'Riftglass',
+  'wp_02.webp': 'Drowned Nave',
+  'wp_03.webp': 'Slate Drift',
+  'wp_04.webp': 'The Unlit Deep',
+  'wp_05.webp': 'Blood Oath',
+  'wp_06.webp': 'Cinder Masonry',
+  'wp_07.webp': 'Ashen Floor',
+  'wp_08.webp': 'Pelagic Dark',
+  'wp_09.webp': 'Bone Parchment',
+  'wp_10.webp': 'Wine Dregs',
+  'wp_11.webp': 'Gilded Ash',
+  'wp_12.webp': 'Cultist Violet',
+  'wp_13.webp': 'Pewter Night',
+  'wp_14.webp': 'Gloam Shard',
+  'wp_15.webp': 'Marble Effigy',
+  'wp_16.webp': 'Brine Cathedral',
+  'wp_17.webp': 'Pressure Bloom',
+  'wp_18.webp': 'Sere Stone',
+  'wp_19.webp': 'Graphite Veil',
+  'wp_20.webp': 'Basalt Seam',
+  'wp_21.webp': 'Hollow Black',
+  'wp_22.webp': 'Storm Static',
+  'wp_23.webp': 'Trench Light',
+  'wp_24.webp': 'Mosslight',
+  'wp_25.webp': 'Iron Gloom',
+  'wp_26.webp': 'Umbral Choir',
+  'wp_27.webp': 'Carnival Coals',
+  'wp_28.webp': 'Violet Sexton',
+  'wp_29.webp': 'Verdigris',
+  'wp_30.webp': 'Event Horizon',
+  'wp_31.webp': 'Rosy Static',
+  'wp_32.webp': 'Faded Fresco',
+  'wp_33.webp': 'Pale Arcanum',
+  'wp_34.webp': 'Cold Current',
+  'wp_35.webp': 'Soot Column',
+  'wp_36.webp': 'Leviathan Deep',
+  'wp_37.webp': 'Ochre Vault',
+  'wp_38.webp': 'Toxin Bloom',
+  'wp_39.webp': 'Lead Plating',
+  'wp_40.webp': 'Storm Shelf',
+  'wp_41.webp': 'Abyssal Gauge',
+  'wp_42.webp': 'Ember Hide',
+  'wp_43.webp': 'Dusk Alloy',
+  'wp_44.webp': 'Pale Reliquary',
+  'wp_45.webp': 'The Drowning Bell',
+  'wp_46.webp': 'Brass Relic',
+};
+
+/// Display name for a wallpaper asset file — lore name when known,
+/// the raw file name otherwise.
+String wallpaperDisplayName(String file) => kWallpaperNames[file] ?? file;
+
 /// Normalize a stored wallpaper file name to the current asset set —
 /// pre-webp saves referenced `.jpg` names that no longer exist.
 String? normalizeWallpaperFileName(String? name) {

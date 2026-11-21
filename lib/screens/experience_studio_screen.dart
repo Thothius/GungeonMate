@@ -4002,6 +4002,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       selected: isSel,
                       accent: flair.primary,
                       onTap: () => _applyWallpaper(file),
+                      label: wallpaperDisplayName(file),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         // Honest preview — the app paints a 62% scaffold

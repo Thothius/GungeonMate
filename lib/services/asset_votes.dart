@@ -62,7 +62,7 @@ class AssetVotes extends ChangeNotifier {
         AssetEntry(
           id: 'bg:$file',
           category: 'bg',
-          name: 'Wallpaper ${i.toString().padLeft(2, '0')}',
+          name: wallpaperDisplayName(file),
           detail: file,
           imagePath: 'assets/images/wallpapers/custom/$file',
         ),

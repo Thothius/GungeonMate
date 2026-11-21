@@ -7,12 +7,13 @@ The main menu is no longer theme-locked: every surface derives from `AppTheme.fl
 ### Features
 - **Typography overhaul** — the ~30-face font catalog is cut to a curated 10: Enter the Gungeon + Megrim (signature), Bungee / Germania One / Anton / Lilita One (fat display), Wallpoet / Monoton / Press Start 2P (stylized accents), Fjalla One (readable workhorse). Six new bundled typefaces; 24 scrapped TTFs removed from the APK. TYPE step redesigned as an authored list — each name set in its own face with description + role tag (SIGNATURE / DISPLAY / ACCENT / READABLE).
 - **Font migration** — `AppFont` enum order frozen for persisted-index safety; deprecated members remain but every read path (`VisualPrefs` init/JSON, `CustomThemeData` JSON/load, Neo-Skeuo restore, `setFont`, random theme gen) runs `AppFontLabel.migrate()` so stale picks land on the nearest live face by role (pixel→pixel, gothic→gothic, display→display, clean→readable).
+- **Wallpaper lore names** — all 46 bundled wallpapers get authored titles (Riftglass, Drowned Nave, Cultist Violet, Brass Relic…) rendered as nameplates in the picker grid and used in the asset-vote catalog.
 - **Theme-reactive menu** — logo, buttons, sublabel chip, and the `MainMenuBackdrop` gradient/embers/glow all resolve from the active `ThemeFlair` (themes, Unicorn palettes, remixes, custom presets). Hero button = solid `flair.primary` with luminance-checked label; ghost buttons = faint accent wash per DESIGN.md.
 - **Living backdrop** — `_FlockDrift` (3 flocks of 5–7 sprites crossing horizontally at varied depths, bird-flock motion) + `_RiseDrift` (11 smaller rising sprites, gun-weighted). Sprite pools: 12 guns, 14 items, 8 bullets — all decode once into `ui.Image`, single `CustomPaint` pass per layer, `RepaintBoundary`-wrapped.
 - **Neo-Skeuo accent** — `SkeuoButton.accent` (optional, primary style only): cream paper stays, hero button fill + sublabel chip + toggle chip take the theme's primary (darkened to a pencil tone for the chip).
 
 ### Fixed
-- (none)
+- **uni_5 avatar restored** — the `170e70b` avatar cull deleted `uni_5.webp` while `c5ba8db` pruned its registry id, silently leaving the unicorn set at 8 of 9. File restored from pre-cull history, id re-registered, and a new integrity test asserts every `kAvatarIds` entry resolves to a file on disk.
 
 ## v3.6.0 — Theme Studio Final Form + MP VS Splash (November 2026)
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/utils/asset_paths.dart';
 
@@ -44,5 +46,15 @@ void main() {
     // A mixed-version peer sends 'g7_4' — parses as no-frame.
     expect(avatarFrameId('g7_4'), '');
     expect(avatarPath('g7_4'), 'assets/images/avatars/g7_4.webp');
+  });
+
+  test('every registered avatar id has a file on disk', () {
+    // Regression guard — the 170e70b cull deleted uni_5.webp while
+    // c5ba8db pruned the id, leaving a silent 8-of-9 unicorn set.
+    final missing = <String>[
+      for (final id in kAvatarIds)
+        if (!File(avatarPath(id)).existsSync()) id,
+    ];
+    expect(missing, isEmpty, reason: 'avatar files missing: $missing');
   });
 }

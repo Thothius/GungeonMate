@@ -572,4 +572,18 @@ void main() {
       }
     });
   });
+
+  group('Wallpaper names', () {
+    test('every bundled wallpaper has a lore name', () {
+      for (final f in kCustomWallpaperAssets) {
+        expect(
+          wallpaperDisplayName(f),
+          isNot(f),
+          reason: '$f missing from kWallpaperNames',
+        );
+        expect(kWallpaperNames[f], isNotEmpty);
+      }
+      expect(kWallpaperNames.length, kCustomWallpaperAssets.length);
+    });
+  });
 }

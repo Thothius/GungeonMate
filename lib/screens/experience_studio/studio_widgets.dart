@@ -148,11 +148,16 @@ class _WallpaperTile extends StatelessWidget {
   final Color accent;
   final VoidCallback onTap;
   final Widget child;
+
+  /// Optional lore name — rendered as a bottom nameplate over the art
+  /// so bundled wallpapers stop being anonymous `wp_XX` files.
+  final String? label;
   const _WallpaperTile({
     required this.selected,
     required this.accent,
     required this.onTap,
     required this.child,
+    this.label,
   });
 
   @override
@@ -203,6 +208,35 @@ class _WallpaperTile extends StatelessWidget {
                     Icons.check_rounded,
                     size: 10,
                     color: Colors.black,
+                  ),
+                ),
+              ),
+            if (label != null)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(6, 10, 6, 4),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Color(0xCC000000)],
+                    ),
+                  ),
+                  child: GoopText(
+                    label!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 8.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                      color: Colors.white,
+                      shadows: [Shadow(color: Colors.black87, blurRadius: 3)],
+                    ),
                   ),
                 ),
               ),

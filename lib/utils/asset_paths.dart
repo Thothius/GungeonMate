@@ -100,6 +100,7 @@ const List<String> kAvatarIds = <String>[
   'uni_2',
   'uni_3',
   'uni_4',
+  'uni_5',
   'uni_6',
   'uni_7',
   'uni_8',
