@@ -60,50 +60,59 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _sync.onPeerHello = _onPeerHello;
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
-    _sync.onStartRun = () {
-      // Peer confirmed the run start — latch at session level FIRST
-      // so a message that lands before MpConnectScreen mounts its
-      // onStartRun callback isn't lost, then arm our clock on the
-      // same beat so both timers measure the same run.
-      _runStartReceived = true;
-      _startRunTimer();
-      notifyListeners();
-      onStartRun?.call();
-    };
-    _sync.onSurprise = (s) {
+    _sync.onStartRun = _onPeerStartRun;
+    _sync.onSurprise = _onPeerSurprise;
+
+    _recovery.onRestoreSession = _onRecoveryRestore;
+    _recovery.onDisconnectElapsed = _onRecoveryElapsed;
+    _runProvider.addListener(_onRunChanged);
+  }
+
+  /// Shared `MpStartRun` handler — used by both the initial
+  /// `_wireComponents` pass and `updateRunProvider`'s sync rebuild so
+  /// the latch/timer/callback sequence can't drift between copies.
+  void _onPeerStartRun() {
+    // Peer confirmed the run start — latch at session level FIRST
+    // so a message that lands before MpConnectScreen mounts its
+    // onStartRun callback isn't lost, then arm our clock on the
+    // same beat so both timers measure the same run.
+    _runStartReceived = true;
+    _startRunTimer();
+    notifyListeners();
+    onStartRun?.call();
+  }
+
+  void _onPeerSurprise(MpSurprise s) {
+    logEvent(
+      MpEvent.event(
+        kind: 'surprise',
+        from: _peerNickname ?? 'Peer',
+        text: s.text.isEmpty ? s.preset : s.text,
+        mine: false,
+      ),
+    );
+    onSurpriseReceived?.call(s);
+  }
+
+  /// Elapsed-time feed → notifier + one-shot "may have left" hint.
+  /// Recovery itself never gives up (by design) — the hint is purely
+  /// informational so the user isn't staring at "Reconnecting…"
+  /// forever without context.
+  void _onRecoveryElapsed(int sec) {
+    disconnectElapsedSec.value = sec;
+    if (sec >= 120 && !_peerGoneHinted) {
+      _peerGoneHinted = true;
       logEvent(
         MpEvent.event(
-          kind: 'surprise',
+          kind: 'system',
           from: _peerNickname ?? 'Peer',
-          text: s.text.isEmpty ? s.preset : s.text,
+          text:
+              'Still searching — your partner may have left. '
+              'The session keeps retrying; you can also cancel.',
           mine: false,
         ),
       );
-      onSurpriseReceived?.call(s);
-    };
-
-    _recovery.onRestoreSession = _onRecoveryRestore;
-    // Elapsed-time feed → notifier + one-shot "may have left" hint.
-    // Recovery itself never gives up (by design) — the hint is purely
-    // informational so the user isn't staring at "Reconnecting…"
-    // forever without context.
-    _recovery.onDisconnectElapsed = (sec) {
-      disconnectElapsedSec.value = sec;
-      if (sec >= 120 && !_peerGoneHinted) {
-        _peerGoneHinted = true;
-        logEvent(
-          MpEvent.event(
-            kind: 'system',
-            from: _peerNickname ?? 'Peer',
-            text:
-                'Still searching — your partner may have left. '
-                'The session keeps retrying; you can also cancel.',
-            mine: false,
-          ),
-        );
-      }
-    };
-    _runProvider.addListener(_onRunChanged);
+    }
   }
 
   void _onRunChanged() => _sync.onRunChanged();

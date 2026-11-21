@@ -46,6 +46,7 @@ class _CustomWallpaperState extends State<CustomWallpaper>
     with SingleTickerProviderStateMixin {
   late final AnimationController _zoom;
   Offset _tilt = Offset.zero;
+  bool _motionSynced = false;
 
   /// Base overscan — the image always renders ~18% larger than the
   /// frame so zoom + parallax never expose an edge.
@@ -66,13 +67,41 @@ class _CustomWallpaperState extends State<CustomWallpaper>
       duration: const Duration(seconds: 18),
     );
     ThemeOverlay.tiltNotifier.addListener(_onTilt);
+    VisualPrefs.notifier.addListener(_syncFromState);
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncFromState();
+  }
+
+  /// Re-evaluates the motion gate outside of build — prefs changes and
+  /// MediaQuery (reduce-motion) flips both funnel here so `_zoom` is
+  /// never started/stopped as a build side effect.
+  void _syncFromState() {
+    final still = MediaQuery.disableAnimationsOf(context);
+    final immersive = VisualPrefs.notifier.value.wallpaperImmersive;
+    if (_motionSynced &&
+        still == _lastStill &&
+        immersive == _lastImmersive) {
+      return;
+    }
+    _motionSynced = true;
+    _lastStill = still;
+    _lastImmersive = immersive;
+    _syncMotion(immersive, still);
+  }
+
+  bool _lastStill = false;
+  bool _lastImmersive = false;
 
   void _onTilt() => _tilt = ThemeOverlay.tiltNotifier.value;
 
   @override
   void dispose() {
     ThemeOverlay.tiltNotifier.removeListener(_onTilt);
+    VisualPrefs.notifier.removeListener(_syncFromState);
     _zoom.dispose();
     super.dispose();
   }
@@ -92,7 +121,6 @@ class _CustomWallpaperState extends State<CustomWallpaper>
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
         final immersive = prefs.wallpaperImmersive;
-        _syncMotion(immersive, still);
         return Stack(
           fit: StackFit.expand,
           children: [

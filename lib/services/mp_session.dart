@@ -784,25 +784,8 @@ class MpSession extends ChangeNotifier
     _sync.onPeerHello = _onPeerHello;
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
-    _sync.onStartRun = () {
-      // Latch at session level first — the UI callback may not be
-      // registered yet (message can land before the screen mounts).
-      _runStartReceived = true;
-      _startRunTimer();
-      notifyListeners();
-      onStartRun?.call();
-    };
-    _sync.onSurprise = (s) {
-      logEvent(
-        MpEvent.event(
-          kind: 'surprise',
-          from: _peerNickname ?? 'Peer',
-          text: s.text.isEmpty ? s.preset : s.text,
-          mine: false,
-        ),
-      );
-      onSurpriseReceived?.call(s);
-    };
+    _sync.onStartRun = _onPeerStartRun;
+    _sync.onSurprise = _onPeerSurprise;
     _sync.setSessionMeta(
       avatarId: _avatarId,
       runTitle: _runTitle,
@@ -827,6 +810,7 @@ class MpSession extends ChangeNotifier
       newProvider,
       onRestoreSession: _onRecoveryRestore,
     );
+    _recovery.onDisconnectElapsed = _onRecoveryElapsed;
     _recovery.setSessionInfo(role: _myRole, nickname: _myNickname);
   }
 
