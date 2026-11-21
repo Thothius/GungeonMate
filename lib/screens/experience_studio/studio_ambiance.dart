@@ -178,6 +178,10 @@ class _AmbianceStep extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
+              _StepLabel('ATMOSPHERE LOAD'),
+              const SizedBox(height: 8),
+              _AtmosphereLoadRow(load: prefs.ambienceLoad),
+              const SizedBox(height: 18),
               _StepLabel('TAP FX'),
               const SizedBox(height: 8),
               // Sparkles + ripple are VisualPrefs picks (saved with the
@@ -483,6 +487,87 @@ class _GlowQuickRow extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+/// Atmosphere load meter — counts the heavy animated backdrop layers
+/// (scene + liquid + shader + particles) so stacking all four doesn't
+/// silently degrade into visual mud. At BUSY/MUDDLED a THIN STACK chip
+/// appears: one tap kills the two pure-noise layers (shader + scene)
+/// and keeps the identity picks.
+class _AtmosphereLoadRow extends StatelessWidget {
+  const _AtmosphereLoadRow({required this.load});
+  final int load;
+
+  static const _words = ['CLEAR', 'BALANCED', 'BUSY', 'MUDDLED'];
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final word = _words[load.clamp(0, _words.length - 1)];
+    final hot = load >= 3;
+    final dotColor = hot ? const Color(0xFFFFB300) : flair.primary;
+    return Row(
+      children: [
+        for (var i = 0; i < 4; i++)
+          Container(
+            width: 14,
+            height: 14,
+            margin: const EdgeInsets.only(right: 6),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color:
+                  i < load
+                      ? dotColor.withValues(alpha: 0.9)
+                      : Colors.white.withValues(alpha: 0.08),
+              border: Border.all(
+                color:
+                    i < load ? dotColor : Colors.white.withValues(alpha: 0.15),
+                width: 1,
+              ),
+            ),
+          ),
+        Expanded(
+          child: GoopText(
+            word,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+              color: hot ? const Color(0xFFFFB300) : Colors.white54,
+            ),
+          ),
+        ),
+        if (hot)
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              VisualPrefs.calmAmbience();
+              Haptics.selection();
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFB300).withValues(alpha: 0.14),
+                borderRadius: const BorderRadius.all(Radii.sm),
+                border: Border.all(
+                  color: const Color(0xFFFFB300).withValues(alpha: 0.6),
+                  width: 1.1,
+                ),
+              ),
+              child: GoopText(
+                'THIN STACK',
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.0,
+                  color: const Color(0xFFFFB300),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

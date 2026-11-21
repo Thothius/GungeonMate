@@ -566,6 +566,19 @@ class VisualPrefs {
           ? null
           : GlowStyle.values[glowStyleIndex];
 
+  /// Count of heavy animated backdrop layers currently on screen:
+  /// atmosphere scene + liquid tank + shader + particles (0–4).
+  /// 3 reads "busy", 4 is the visual-mud zone — the studio surfaces a
+  /// load meter + THIN STACK escape hatch at >= 3.
+  int get ambienceLoad {
+    var load = 0;
+    if (ambientKindIndex > AmbientKind.off.index) load++;
+    if (liquidKindIndex > LiquidKind.off.index) load++;
+    if (shaderEnabled) load++;
+    if (particlesEnabled) load++;
+    return load;
+  }
+
   const VisualPrefs({
     this.glowIntensity = 0.0,
     this.particlesEnabled = true,
@@ -1117,6 +1130,18 @@ class VisualPrefs {
 
   static Future<void> setShaderEnabled(bool v) async {
     notifier.value = notifier.value._with(shaderEnabled: v);
+    _persist();
+  }
+
+  /// "THIN STACK" — one-tap de-mud for the studio's ambience guard.
+  /// Kills the two pure-noise layers (full-screen shader + procedural
+  /// atmosphere scene) while keeping the identity picks (liquid tank,
+  /// particles, glow). Everything stays re-enableable per-layer.
+  static Future<void> calmAmbience() async {
+    notifier.value = notifier.value._with(
+      shaderEnabled: false,
+      ambientKindIndex: AmbientKind.off.index,
+    );
     _persist();
   }
 

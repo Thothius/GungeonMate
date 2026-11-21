@@ -253,6 +253,11 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                         prefs.ambientKindIndex < AmbientKind.values.length
                     ? AmbientKind.values[prefs.ambientKindIndex]
                     : AmbientKind.off;
+            // Mud guard — with every heavy backdrop layer on (scene +
+            // liquid + shader + particles), the second particle field
+            // is the most disposable layer: drop it rather than stack
+            // noise on noise. Studio shows the same load as a meter.
+            final maxedAmbience = prefs.ambienceLoad >= 4;
             final particleBackdropBg =
                 skeuo
                     ? null
@@ -538,7 +543,8 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   //    run = wall-to-wall opaque panels) hide the
                   //    backdrop field entirely; this keeps the user's
                   //    particle identity visible without covering UI.
-                  if (!menuVisible && !skeuo)
+                  //    Skipped at max ambience load — see above.
+                  if (!menuVisible && !skeuo && !maxedAmbience)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: Opacity(

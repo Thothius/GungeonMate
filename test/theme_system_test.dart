@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
+import 'package:gungeon_mate/utils/asset_paths.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Unit tests for the custom theme system — serialization round-trips,
@@ -489,18 +492,21 @@ void main() {
   group('BG modes + particle off-flag', () {
     tearDown(() => VisualPrefs.notifier.value = const VisualPrefs());
 
-    test('CustomThemeData bgMode round-trips; legacy defaults to wallpaper', () {
-      final d = CustomThemeData.defaultTheme.copyWith(bgMode: 2);
-      final j = d.toJson();
-      expect(j['bgMode'], 2);
-      final r = CustomThemeData.fromJson(j);
-      expect(r.bgMode, CustomThemeData.bgGradient);
-      // Missing key = legacy wallpaper-or-solid behavior.
-      final legacy = CustomThemeData.fromJson(
-        Map<String, dynamic>.from(j)..remove('bgMode'),
-      );
-      expect(legacy.bgMode, CustomThemeData.bgWallpaper);
-    });
+    test(
+      'CustomThemeData bgMode round-trips; legacy defaults to wallpaper',
+      () {
+        final d = CustomThemeData.defaultTheme.copyWith(bgMode: 2);
+        final j = d.toJson();
+        expect(j['bgMode'], 2);
+        final r = CustomThemeData.fromJson(j);
+        expect(r.bgMode, CustomThemeData.bgGradient);
+        // Missing key = legacy wallpaper-or-solid behavior.
+        final legacy = CustomThemeData.fromJson(
+          Map<String, dynamic>.from(j)..remove('bgMode'),
+        );
+        expect(legacy.bgMode, CustomThemeData.bgWallpaper);
+      },
+    );
 
     test('VisualPrefs particlesUserOff round-trips', () {
       const p = VisualPrefs(particlesUserOff: true);
@@ -511,18 +517,21 @@ void main() {
 
   group('Font curation', () {
     test('curated set keeps signature + new faces, drops the catalog', () {
-      expect(AppFontLabel.curated, containsAll([
-        AppFont.gungeon,
-        AppFont.megrim,
-        AppFont.bungee,
-        AppFont.lilitaOne,
-        AppFont.germaniaOne,
-        AppFont.anton,
-        AppFont.fjallaOne,
-        AppFont.wallpoet,
-        AppFont.monoton,
-        AppFont.pressStart2p,
-      ]));
+      expect(
+        AppFontLabel.curated,
+        containsAll([
+          AppFont.gungeon,
+          AppFont.megrim,
+          AppFont.bungee,
+          AppFont.lilitaOne,
+          AppFont.germaniaOne,
+          AppFont.anton,
+          AppFont.fjallaOne,
+          AppFont.wallpoet,
+          AppFont.monoton,
+          AppFont.pressStart2p,
+        ]),
+      );
       expect(AppFontLabel.curated.length, 10);
       // Deprecated members exist for index stability but are hidden.
       expect(AppFontLabel.isOffered(AppFont.orbitron), isFalse);
@@ -559,8 +568,7 @@ void main() {
     test('deprecated persisted font index migrates on load', () {
       // orbitron.index written by an old build must not survive as
       // orbitron — it lands on fjallaOne.
-      final j = const VisualPrefs().toJson()
-        ..['font'] = AppFont.orbitron.index;
+      final j = const VisualPrefs().toJson()..['font'] = AppFont.orbitron.index;
       expect(VisualPrefs.fromJson(j).font, AppFont.fjallaOne);
       // CustomThemeData font field migrates the same way.
       final d = CustomThemeData.fromJson({'font': AppFont.vt323.index});
@@ -584,6 +592,77 @@ void main() {
         expect(kWallpaperNames[f], isNotEmpty);
       }
       expect(kWallpaperNames.length, kCustomWallpaperAssets.length);
+    });
+  });
+
+  group('Ambience load guard', () {
+    test('ambienceLoad counts heavy backdrop layers', () {
+      expect(const VisualPrefs().ambienceLoad, 1); // particles on by default
+      expect(
+        VisualPrefs(
+          ambientKindIndex: AmbientKind.ash.index,
+          liquidKindIndex: LiquidKind.blood.index,
+          shaderEnabled: true,
+          particlesEnabled: true,
+        ).ambienceLoad,
+        4,
+      );
+      expect(
+        VisualPrefs(
+          ambientKindIndex: AmbientKind.off.index,
+          liquidKindIndex: LiquidKind.off.index,
+          shaderEnabled: false,
+          particlesEnabled: false,
+        ).ambienceLoad,
+        0,
+      );
+    });
+
+    test('calmAmbience kills shader + scene, keeps identity picks', () async {
+      VisualPrefs.notifier.value = VisualPrefs(
+        ambientKindIndex: AmbientKind.runes.index,
+        liquidKindIndex: LiquidKind.venom.index,
+        shaderEnabled: true,
+        particlesEnabled: true,
+      );
+      await VisualPrefs.calmAmbience();
+      final p = VisualPrefs.notifier.value;
+      expect(p.shaderEnabled, isFalse);
+      expect(p.ambientKindIndex, AmbientKind.off.index);
+      expect(p.liquidKindIndex, LiquidKind.venom.index);
+      expect(p.particlesEnabled, isTrue);
+      expect(p.ambienceLoad, 2);
+    });
+  });
+
+  group('Theme splash integrity', () {
+    test('every advertised splashSlug resolves to a file on disk', () {
+      // U-013 regression guard — 12 modes pointed at JPGs that were
+      // never bundled, so the studio silently showed gradient fallbacks.
+      final missing = <String>[
+        for (final mode in AppThemeMode.values)
+          if (mode.splashSlug.isNotEmpty &&
+              !File(themeSplashPath(mode.splashSlug)).existsSync())
+            '${mode.name} -> ${mode.splashSlug}',
+      ];
+      expect(missing, isEmpty, reason: 'splash files missing: $missing');
+    });
+
+    test('every splash file on disk is advertised by a mode', () {
+      final advertised =
+          AppThemeMode.values
+              .map((m) => m.splashSlug)
+              .where((s) => s.isNotEmpty)
+              .toSet();
+      final dir = Directory('assets/images/themes/splash');
+      final orphans =
+          dir
+              .listSync()
+              .whereType<File>()
+              .map((f) => f.uri.pathSegments.last.replaceAll('.jpg', ''))
+              .where((slug) => !advertised.contains(slug))
+              .toList();
+      expect(orphans, isEmpty, reason: 'orphan splash files: $orphans');
     });
   });
 }

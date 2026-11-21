@@ -11,9 +11,12 @@ The main menu is no longer theme-locked: every surface derives from `AppTheme.fl
 - **Theme-reactive menu** — logo, buttons, sublabel chip, and the `MainMenuBackdrop` gradient/embers/glow all resolve from the active `ThemeFlair` (themes, Unicorn palettes, remixes, custom presets). Hero button = solid `flair.primary` with luminance-checked label; ghost buttons = faint accent wash per DESIGN.md.
 - **Living backdrop** — `_FlockDrift` (3 flocks of 5–7 sprites crossing horizontally at varied depths, bird-flock motion) + `_RiseDrift` (11 smaller rising sprites, gun-weighted). Sprite pools: 12 guns, 14 items, 8 bullets — all decode once into `ui.Image`, single `CustomPaint` pass per layer, `RepaintBoundary`-wrapped.
 - **Neo-Skeuo accent** — `SkeuoButton.accent` (optional, primary style only): cream paper stays, hero button fill + sublabel chip + toggle chip take the theme's primary (darkened to a pencil tone for the chip).
+- **Theme splash art complete (U-013)** — the 12 theme modes that silently fell back to gradients now have dedicated 1200×1200 sigil splashes (palette-matched emblem + motif, name in the theme's curated font). Procedural generator kept at `tools/gen_sigil_splashes.py`; splash-integrity tests assert every `splashSlug` resolves to a file.
+- **Ambience load guard** — ATMOSPHERE LOAD meter in the studio counts heavy backdrop layers (scene + liquid + shader + particles); at BUSY/MUDDLED a THIN STACK chip kills shader + scene while keeping identity picks, and the overlay drops the disposable foreground dust field at max load.
 
 ### Fixed
 - **uni_5 avatar restored** — the `170e70b` avatar cull deleted `uni_5.webp` while `c5ba8db` pruned its registry id, silently leaving the unicorn set at 8 of 9. File restored from pre-cull history, id re-registered, and a new integrity test asserts every `kAvatarIds` entry resolves to a file on disk.
+- **Missing splash artwork (U-013)** — 12 `splashSlug` mappings pointed at JPGs that were never bundled. All 26 advertised slugs now resolve to real 1200×1200 artwork.
 
 ## v3.6.0 — Theme Studio Final Form + MP VS Splash (November 2026)
 
