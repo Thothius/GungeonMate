@@ -16,6 +16,7 @@ import '../../utils/reduce_motion.dart';
 import '../../widgets/quality_badge.dart';
 import '../../widgets/scale_button.dart';
 import 'quiz_session_screen.dart';
+import '../../widgets/skeuo/skeuo_tokens.dart';
 
 /// Gungeonmaster Quiz — chest select.
 ///
@@ -90,7 +91,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                             fontSize: FontSizes.titleLarge,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.6,
-                            color: const Color(0xFFFFD54F),
+                            color: Skeuo.inkIf(const Color(0xFFFFD54F)),
                             shadows: const [
                               Shadow(
                                 offset: Offset(0, 2),
@@ -169,19 +170,19 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                   vertical: Insets.sm,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFD54F).withValues(alpha: 0.10),
+                  color: Skeuo.inkIf(const Color(0xFFFFD54F)).withValues(alpha: 0.10),
                   borderRadius: Radii.pill,
                   border: Border.all(
-                    color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
+                    color: Skeuo.inkIf(const Color(0xFFFFD54F)).withValues(alpha: 0.35),
                   ),
                 ),
                 child: GoopText(
                   '$completedCount/${kQuizChestTiers.length} CHESTS CLEARED',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.4,
-                    color: Color(0xFFFFD54F),
+                    color: Skeuo.inkIf(const Color(0xFFFFD54F)),
                   ),
                 ),
               ),
@@ -501,14 +502,14 @@ class _CompletedLabelState extends State<_CompletedLabel>
           fontSize: FontSizes.titleMedium,
           fontWeight: FontWeight.w900,
           letterSpacing: 1.4,
-          color: const Color(0xFFFFD700),
-          shadows: const [
+          color: Skeuo.inkIf(const Color(0xFFFFD700)),
+          shadows: [
             Shadow(
               offset: Offset(0, 2),
               blurRadius: 8,
               color: Color(0xAA000000),
             ),
-            Shadow(blurRadius: 16, color: Color(0x66FFD700)),
+            Shadow(blurRadius: 16, color: Skeuo.inkIf(const Color(0xFFFFD700)).withValues(alpha: 0.4)),
           ],
         ),
       ),

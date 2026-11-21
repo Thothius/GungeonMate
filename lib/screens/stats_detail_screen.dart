@@ -101,7 +101,9 @@ class _ValueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isCool ? const Color(0xFF00E5FF) : const Color(0xFFFF3D00);
+    final color = isCool
+        ? Skeuo.inkIf(const Color(0xFF00E5FF))
+        : Skeuo.inkIf(const Color(0xFFFF3D00));
     final hasBreakdown = base != 0 || fromItems != 0;
 
     // Mathematical calculations for the visual meters
