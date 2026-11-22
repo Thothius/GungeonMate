@@ -152,14 +152,16 @@ class CoolCurseScreen extends StatelessWidget {
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 28 * sf,
-                    color: Colors.white.withValues(alpha: 0.35),
+                    color: Skeuo.collapse(Colors.white.withValues(alpha: 0.35)),
                   ),
                   GoopText(
                     'scroll for the full picture',
                     style: TextStyle(
                       fontSize: 10.5 * sf,
                       fontStyle: FontStyle.italic,
-                      color: Colors.white.withValues(alpha: 0.35),
+                      color: Skeuo.collapse(
+                        Colors.white.withValues(alpha: 0.35),
+                      ),
                     ),
                   ),
                 ],
@@ -298,7 +300,7 @@ class _MeterPanel extends StatelessWidget {
             child: Icon(
               Icons.refresh_rounded,
               size: 16 * sf,
-              color: Colors.white.withValues(alpha: 0.35),
+              color: Skeuo.collapse(Colors.white.withValues(alpha: 0.35)),
             ),
           ),
         ],
@@ -361,15 +363,20 @@ class _EffectsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: Skeuo.collapse(Colors.white.withValues(alpha: 0.04)),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Skeuo.collapse(Colors.white.withValues(alpha: 0.1)),
+        ),
       ),
       child: Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
             if (i > 0)
-              Divider(height: 1, color: Colors.white.withValues(alpha: 0.06)),
+              Divider(
+                height: 1,
+                color: Skeuo.collapse(Colors.white.withValues(alpha: 0.06)),
+              ),
             Padding(
               padding: EdgeInsets.all(12 * sf),
               child: Row(
@@ -384,7 +391,9 @@ class _EffectsCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.5 * sf,
                             fontWeight: FontWeight.w800,
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: Skeuo.collapse(
+                              Colors.white.withValues(alpha: 0.85),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -393,7 +402,9 @@ class _EffectsCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10.5 * sf,
                             height: 1.35,
-                            color: Colors.white.withValues(alpha: 0.45),
+                            color: Skeuo.collapse(
+                              Colors.white.withValues(alpha: 0.45),
+                            ),
                           ),
                         ),
                       ],
@@ -471,7 +482,7 @@ class _InfoBlock extends StatelessWidget {
             style: TextStyle(
               fontSize: 12 * sf,
               height: 1.5,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: Skeuo.collapse(Colors.white.withValues(alpha: 0.7)),
             ),
           ),
         ],

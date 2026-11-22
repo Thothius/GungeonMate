@@ -108,7 +108,9 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                             fontSize: FontSizes.labelMedium,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
-                            color: Colors.white.withValues(alpha: 0.45),
+                            color: Skeuo.collapse(
+                              Colors.white.withValues(alpha: 0.45),
+                            ),
                           ),
                         ),
                       ],
@@ -170,10 +172,14 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                   vertical: Insets.sm,
                 ),
                 decoration: BoxDecoration(
-                  color: Skeuo.inkIf(const Color(0xFFFFD54F)).withValues(alpha: 0.10),
+                  color: Skeuo.inkIf(
+                    const Color(0xFFFFD54F),
+                  ).withValues(alpha: 0.10),
                   borderRadius: Radii.pill,
                   border: Border.all(
-                    color: Skeuo.inkIf(const Color(0xFFFFD54F)).withValues(alpha: 0.35),
+                    color: Skeuo.inkIf(
+                      const Color(0xFFFFD54F),
+                    ).withValues(alpha: 0.35),
                   ),
                 ),
                 child: GoopText(
@@ -285,7 +291,9 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.titleSmall,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
-                          color: Colors.white.withValues(alpha: 0.95),
+                          color: Skeuo.collapse(
+                            Colors.white.withValues(alpha: 0.95),
+                          ),
                         ),
                       ),
                       GoopText(
@@ -293,7 +301,9 @@ class _ChestCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white.withValues(alpha: 0.45),
+                          color: Skeuo.collapse(
+                            Colors.white.withValues(alpha: 0.45),
+                          ),
                         ),
                       ),
                     ],
@@ -306,7 +316,9 @@ class _ChestCard extends StatelessWidget {
                       Icon(
                         Icons.lock_rounded,
                         size: 14,
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Skeuo.collapse(
+                          Colors.white.withValues(alpha: 0.5),
+                        ),
                       ),
                       const SizedBox(width: 4),
                       GoopText(
@@ -315,7 +327,9 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.8,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: Skeuo.collapse(
+                            Colors.white.withValues(alpha: 0.5),
+                          ),
                         ),
                       ),
                     ],
@@ -332,7 +346,9 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.2,
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: Skeuo.collapse(
+                            Colors.white.withValues(alpha: 0.4),
+                          ),
                         ),
                       ),
                       GoopText(
@@ -380,7 +396,7 @@ class _ChestCard extends StatelessWidget {
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.4,
-                color: Colors.white.withValues(alpha: 0.35),
+                color: Skeuo.collapse(Colors.white.withValues(alpha: 0.35)),
               ),
             ),
           ],
@@ -509,7 +525,12 @@ class _CompletedLabelState extends State<_CompletedLabel>
               blurRadius: 8,
               color: Color(0xAA000000),
             ),
-            Shadow(blurRadius: 16, color: Skeuo.inkIf(const Color(0xFFFFD700)).withValues(alpha: 0.4)),
+            Shadow(
+              blurRadius: 16,
+              color: Skeuo.inkIf(
+                const Color(0xFFFFD700),
+              ).withValues(alpha: 0.4),
+            ),
           ],
         ),
       ),

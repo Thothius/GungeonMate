@@ -295,7 +295,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                 fontSize: FontSizes.titleSmall,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.1,
-                color: Colors.white.withValues(alpha: 0.9),
+                color: Skeuo.collapse(Colors.white.withValues(alpha: 0.9)),
               ),
             ),
           ),
@@ -305,7 +305,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w800,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: Skeuo.collapse(Colors.white.withValues(alpha: 0.5)),
             ),
           ),
           const SizedBox(width: Insets.md),
@@ -327,13 +327,15 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                 color:
                     _streak > 0
                         ? tier.accent.withValues(alpha: 0.20)
-                        : Colors.white.withValues(alpha: 0.06),
+                        : Skeuo.collapse(Colors.white.withValues(alpha: 0.06)),
                 borderRadius: Radii.pill,
                 border: Border.all(
                   color:
                       _streak > 0
                           ? tier.accent.withValues(alpha: 0.6)
-                          : Colors.white.withValues(alpha: 0.15),
+                          : Skeuo.collapse(
+                            Colors.white.withValues(alpha: 0.15),
+                          ),
                 ),
               ),
               child: Row(
@@ -343,7 +345,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                     Icons.local_fire_department_rounded,
                     size: 14,
                     color:
-                        _streak > 0 ? Skeuo.inkIf(const Color(0xFFFFB300)) : Colors.white38,
+                        _streak > 0
+                            ? Skeuo.inkIf(const Color(0xFFFFB300))
+                            : Skeuo.collapse(Colors.white38),
                   ),
                   const SizedBox(width: 3),
                   GoopText(
@@ -354,7 +358,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                       color:
                           _streak > 0
                               ? Skeuo.inkIf(const Color(0xFFFFB300))
-                              : Colors.white38,
+                              : Skeuo.collapse(Colors.white38),
                     ),
                   ),
                 ],
@@ -422,7 +426,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.6,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: Skeuo.collapse(Colors.white.withValues(alpha: 0.3)),
             ),
           ),
         ],
@@ -544,7 +548,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                               letterSpacing: 1.4,
                               color:
                                   !revealed
-                                      ? Colors.white.withValues(alpha: 0.75)
+                                      ? Skeuo.collapse(
+                                        Colors.white.withValues(alpha: 0.75),
+                                      )
                                       : wasCorrect
                                       ? Skeuo.inkIf(const Color(0xFF4CAF50))
                                       : Skeuo.inkIf(const Color(0xFFE53935)),
@@ -619,8 +625,8 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                                           fontSize: FontSizes.labelMedium,
                                           fontWeight: FontWeight.w900,
                                           letterSpacing: 2.0,
-                                          color: Colors.white.withValues(
-                                            alpha: 0.5,
+                                          color: Skeuo.collapse(
+                                            Colors.white.withValues(alpha: 0.5),
                                           ),
                                         ),
                                       )
@@ -708,7 +714,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             color: Skeuo.inkIf(const Color(0xFFCDA349)).withValues(alpha: 0.10),
             borderRadius: Radii.pill,
             border: Border.all(
-              color: Skeuo.inkIf(const Color(0xFFCDA349)).withValues(alpha: 0.45),
+              color: Skeuo.inkIf(
+                const Color(0xFFCDA349),
+              ).withValues(alpha: 0.45),
             ),
           ),
           child: Row(
@@ -787,7 +795,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                           fontWeight: FontWeight.w900,
                           letterSpacing: 2.0,
                           color:
-                              _flawless ? Skeuo.inkIf(const Color(0xFFFFD700)) : tier.accent,
+                              _flawless
+                                  ? Skeuo.inkIf(const Color(0xFFFFD700))
+                                  : tier.accent,
                           shadows:
                               _flawless
                                   ? const [
@@ -816,7 +826,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white.withValues(alpha: 0.55),
+                      color: Skeuo.collapse(
+                        Colors.white.withValues(alpha: 0.55),
+                      ),
                     ),
                   ),
                   const SizedBox(height: Insets.lg),
@@ -836,10 +848,14 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                         vertical: Insets.xs,
                       ),
                       decoration: BoxDecoration(
-                        color: Skeuo.inkIf(const Color(0xFFFFD700)).withValues(alpha: 0.15),
+                        color: Skeuo.inkIf(
+                          const Color(0xFFFFD700),
+                        ).withValues(alpha: 0.15),
                         borderRadius: Radii.pill,
                         border: Border.all(
-                          color: Skeuo.inkIf(const Color(0xFFFFD700)).withValues(alpha: 0.6),
+                          color: Skeuo.inkIf(
+                            const Color(0xFFFFD700),
+                          ).withValues(alpha: 0.6),
                         ),
                       ),
                       child: GoopText(
@@ -893,15 +909,15 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
             fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.4,
-            color: Colors.white.withValues(alpha: 0.45),
+            color: Skeuo.collapse(Colors.white.withValues(alpha: 0.45)),
           ),
         ),
         GoopText(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: FontSizes.titleSmall,
             fontWeight: FontWeight.w900,
-            color: Colors.white,
+            color: Skeuo.collapse(Colors.white),
           ),
         ),
       ],

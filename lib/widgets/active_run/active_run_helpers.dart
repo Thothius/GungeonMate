@@ -378,322 +378,328 @@ class _RunToolsSheet extends StatelessWidget {
       ),
       child: SafeArea(
         top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Grab handle.
-            Container(
-              width: 36,
-              height: 4,
-              margin: const EdgeInsets.only(top: Insets.sm),
-              decoration: BoxDecoration(
-                color: flair.primary.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
+        // Scrollable — the sheet gained co-op/save/leave rows and can
+        // exceed short viewports (was a fixed Column before).
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Grab handle.
+              Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(top: Insets.sm),
+                decoration: BoxDecoration(
+                  color: flair.primary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            _label('RUN TOOLS', flair),
-            _action(
-              sheetCtx,
-              icon: Icons.menu_book_rounded,
-              label: 'Ammonomicon',
-              iconColor: const Color(0xFF4DD0E1),
-              onTap: () {
-                if (sheetCtx.mounted) {
-                  Navigator.push(
-                    sheetCtx,
-                    fastRoute(const AmmonomiconScreen()),
-                  );
-                }
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.temple_buddhist,
-              label: 'Shrines',
-              iconColor: Skeuo.inkIf(Colors.amberAccent),
-              onTap: () {
-                if (sheetCtx.mounted) {
-                  Navigator.push(
-                    sheetCtx,
-                    fastRoute(const ShrinePickerScreen()),
-                  );
-                }
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon:
-                  hasCoop
-                      ? Icons.remove_circle_outline
-                      : Icons.person_add_alt_1,
-              label: hasCoop ? 'Remove Co-op' : 'Add Co-op',
-              iconColor:
-                  hasCoop
-                      ? Skeuo.inkIf(Colors.redAccent)
-                      : Skeuo.inkIf(Colors.pinkAccent),
-              onTap: () {
-                if (hasCoop) {
-                  showDialog(
-                    context: sheetCtx,
-                    builder:
-                        (c) => AlertDialog(
-                          icon: Icon(
-                            Icons.remove_circle_outline,
-                            color: Skeuo.inkIf(Colors.redAccent),
-                          ),
-                          title: const GoopText('Remove Co-op Player?'),
-                          content: GoopText(
-                            'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(c),
-                              child: const GoopText('Cancel'),
-                            ),
-                            FilledButton.tonal(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: Skeuo.inkIf(
-                                  Colors.red.shade900,
-                                ),
-                              ),
-                              onPressed: () {
-                                p.endCoopPlayer();
-                                Navigator.pop(c);
-                              },
-                              child: const GoopText('Remove'),
-                            ),
-                          ],
-                        ),
-                  );
-                } else {
-                  Navigator.push(
-                    sheetCtx,
-                    fastRoute(
-                      const CharacterSelectScreen(mode: CharSelectMode.coop),
-                    ),
-                  );
-                }
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.save_outlined,
-              label: 'Save Run',
-              iconColor: Skeuo.inkIf(Colors.greenAccent),
-              onTap: () {
-                p
-                    .saveRun()
-                    .then((_) {
-                      if (sheetCtx.mounted) {
-                        ScaffoldMessenger.of(sheetCtx).showSnackBar(
-                          const SnackBar(
-                            content: GoopText('Run saved'),
-                            duration: Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    })
-                    .catchError((e) {
-                      if (sheetCtx.mounted) {
-                        ScaffoldMessenger.of(sheetCtx).showSnackBar(
-                          SnackBar(
-                            content: GoopText('Failed to save run: $e'),
-                            duration: const Duration(seconds: 3),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    });
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.casino_rounded,
-              label: 'Dice Roller',
-              iconColor: const Color(0xFFFFD54F),
-              onTap: () => showDiceRollDialog(sheetCtx),
-            ),
-            if (mpSession.isActive)
+              _label('RUN TOOLS', flair),
               _action(
                 sheetCtx,
-                icon: Icons.auto_awesome_rounded,
-                label: 'Surprise',
-                iconColor: Skeuo.inkIf(Colors.amberAccent),
-                onTap:
-                    () => showModalBottomSheet<void>(
-                      context: sheetCtx,
-                      isScrollControlled: true,
-                      backgroundColor: const Color(0xFF140B22),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(18),
-                        ),
-                      ),
-                      builder: (_) => const SurpriseSheet(),
-                    ),
-              ),
-            if (mpSession.isActive &&
-                mpSession.myRole == MpRole.sidekick)
-              _action(
-                sheetCtx,
-                icon: Icons.bluetooth_disabled,
-                label: 'Leave MP',
-                iconColor: Skeuo.inkIf(Colors.lightBlueAccent),
+                icon: Icons.menu_book_rounded,
+                label: 'Ammonomicon',
+                iconColor: const Color(0xFF4DD0E1),
                 onTap: () {
-                  showDialog(
-                    context: sheetCtx,
-                    builder:
-                        (c) => AlertDialog(
-                          icon: Icon(
-                            Icons.bluetooth_disabled,
-                            color: Skeuo.inkIf(Colors.lightBlueAccent),
-                          ),
-                          title: const GoopText('Leave Multiplayer?'),
-                          content: const GoopText(
-                            'You will disconnect from the host. Your inventory will be restored to your pre-MP state.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(c),
-                              child: const GoopText('Cancel'),
-                            ),
-                            FilledButton.tonal(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: Skeuo.inkIf(
-                                  Colors.lightBlueAccent,
-                                ).withValues(alpha: 0.15),
-                                foregroundColor: Skeuo.inkIf(
-                                  Colors.lightBlueAccent,
-                                ),
-                              ),
-                              onPressed: () {
-                                mpSession.cancel();
-                                Navigator.pop(c);
-                              },
-                              child: const GoopText('Leave'),
-                            ),
-                          ],
-                        ),
-                  );
+                  if (sheetCtx.mounted) {
+                    Navigator.push(
+                      sheetCtx,
+                      fastRoute(const AmmonomiconScreen()),
+                    );
+                  }
                 },
               ),
-            Divider(
-              height: 1,
-              thickness: 0.5,
-              indent: Insets.lg,
-              endIndent: Insets.lg,
-              color: flair.primary.withValues(alpha: 0.1),
-            ),
-            _label('RESET', flair),
-            _action(
-              sheetCtx,
-              icon: Icons.restart_alt_rounded,
-              label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
-              iconColor: Skeuo.inkIf(Colors.cyanAccent),
-              onTap:
-                  () =>
-                      confirmClearInventoryDialog(sheetCtx, p, PlayerSlot.main),
-            ),
-            if (hasCoop)
+              _action(
+                sheetCtx,
+                icon: Icons.temple_buddhist,
+                label: 'Shrines',
+                iconColor: Skeuo.inkIf(Colors.amberAccent),
+                onTap: () {
+                  if (sheetCtx.mounted) {
+                    Navigator.push(
+                      sheetCtx,
+                      fastRoute(const ShrinePickerScreen()),
+                    );
+                  }
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon:
+                    hasCoop
+                        ? Icons.remove_circle_outline
+                        : Icons.person_add_alt_1,
+                label: hasCoop ? 'Remove Co-op' : 'Add Co-op',
+                iconColor:
+                    hasCoop
+                        ? Skeuo.inkIf(Colors.redAccent)
+                        : Skeuo.inkIf(Colors.pinkAccent),
+                onTap: () {
+                  if (hasCoop) {
+                    showDialog(
+                      context: sheetCtx,
+                      builder:
+                          (c) => AlertDialog(
+                            icon: Icon(
+                              Icons.remove_circle_outline,
+                              color: Skeuo.inkIf(Colors.redAccent),
+                            ),
+                            title: const GoopText('Remove Co-op Player?'),
+                            content: GoopText(
+                              'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(c),
+                                child: const GoopText('Cancel'),
+                              ),
+                              FilledButton.tonal(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: Skeuo.inkIf(
+                                    Colors.red.shade900,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  p.endCoopPlayer();
+                                  Navigator.pop(c);
+                                },
+                                child: const GoopText('Remove'),
+                              ),
+                            ],
+                          ),
+                    );
+                  } else {
+                    Navigator.push(
+                      sheetCtx,
+                      fastRoute(
+                        const CharacterSelectScreen(mode: CharSelectMode.coop),
+                      ),
+                    );
+                  }
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.save_outlined,
+                label: 'Save Run',
+                iconColor: Skeuo.inkIf(Colors.greenAccent),
+                onTap: () {
+                  p
+                      .saveRun()
+                      .then((_) {
+                        if (sheetCtx.mounted) {
+                          ScaffoldMessenger.of(sheetCtx).showSnackBar(
+                            const SnackBar(
+                              content: GoopText('Run saved'),
+                              duration: Duration(seconds: 2),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      })
+                      .catchError((e) {
+                        if (sheetCtx.mounted) {
+                          ScaffoldMessenger.of(sheetCtx).showSnackBar(
+                            SnackBar(
+                              content: GoopText('Failed to save run: $e'),
+                              duration: const Duration(seconds: 3),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      });
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.casino_rounded,
+                label: 'Dice Roller',
+                iconColor: const Color(0xFFFFD54F),
+                onTap: () => showDiceRollDialog(sheetCtx),
+              ),
+              if (mpSession.isActive)
+                _action(
+                  sheetCtx,
+                  icon: Icons.auto_awesome_rounded,
+                  label: 'Surprise',
+                  iconColor: Skeuo.inkIf(Colors.amberAccent),
+                  onTap:
+                      () => showModalBottomSheet<void>(
+                        context: sheetCtx,
+                        isScrollControlled: true,
+                        backgroundColor: const Color(0xFF140B22),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(18),
+                          ),
+                        ),
+                        builder: (_) => const SurpriseSheet(),
+                      ),
+                ),
+              if (mpSession.isActive && mpSession.myRole == MpRole.sidekick)
+                _action(
+                  sheetCtx,
+                  icon: Icons.bluetooth_disabled,
+                  label: 'Leave MP',
+                  iconColor: Skeuo.inkIf(Colors.lightBlueAccent),
+                  onTap: () {
+                    showDialog(
+                      context: sheetCtx,
+                      builder:
+                          (c) => AlertDialog(
+                            icon: Icon(
+                              Icons.bluetooth_disabled,
+                              color: Skeuo.inkIf(Colors.lightBlueAccent),
+                            ),
+                            title: const GoopText('Leave Multiplayer?'),
+                            content: const GoopText(
+                              'You will disconnect from the host. Your inventory will be restored to your pre-MP state.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(c),
+                                child: const GoopText('Cancel'),
+                              ),
+                              FilledButton.tonal(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: Skeuo.inkIf(
+                                    Colors.lightBlueAccent,
+                                  ).withValues(alpha: 0.15),
+                                  foregroundColor: Skeuo.inkIf(
+                                    Colors.lightBlueAccent,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  mpSession.cancel();
+                                  Navigator.pop(c);
+                                },
+                                child: const GoopText('Leave'),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                ),
+              Divider(
+                height: 1,
+                thickness: 0.5,
+                indent: Insets.lg,
+                endIndent: Insets.lg,
+                color: flair.primary.withValues(alpha: 0.1),
+              ),
+              _label('RESET', flair),
               _action(
                 sheetCtx,
                 icon: Icons.restart_alt_rounded,
-                label: 'Reset P2 Items',
+                label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
                 iconColor: Skeuo.inkIf(Colors.cyanAccent),
                 onTap:
                     () => confirmClearInventoryDialog(
                       sheetCtx,
                       p,
-                      PlayerSlot.coop,
+                      PlayerSlot.main,
                     ),
               ),
-            Divider(
-              height: 1,
-              thickness: 0.5,
-              indent: Insets.lg,
-              endIndent: Insets.lg,
-              color: flair.primary.withValues(alpha: 0.1),
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.draw_rounded,
-              label: 'Neo-Skeuo ${AppTheme.isSkeuo ? '· ON' : '· OFF'}',
-              iconColor:
-                  AppTheme.isSkeuo
-                      ? const Color(0xFF1F1B16)
-                      : const Color(0xFF8D6E63),
-              onTap: () {
-                if (AppTheme.isSkeuo) {
-                  AppTheme.exitSkeuo();
-                } else {
-                  AppTheme.enterSkeuo();
-                }
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon:
-                  AppTheme.isSkeuo
-                      ? Icons.lock_outline_rounded
-                      : Icons.palette_rounded,
-              label:
-                  AppTheme.isSkeuo
-                      ? 'Customization (locked in Neo-Skeuo)'
-                      : 'Customization',
-              iconColor:
-                  AppTheme.isSkeuo
-                      ? flair.primary.withValues(alpha: 0.35)
-                      : const Color(0xFFB388FF),
-              onTap: () {
-                if (AppTheme.isSkeuo || !sheetCtx.mounted) return;
-                Navigator.push(
+              if (hasCoop)
+                _action(
                   sheetCtx,
-                  fastRoute(const ExperienceStudioScreen()),
-                );
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.quiz_rounded,
-              label: 'Quiz',
-              iconColor: const Color(0xFF66BB6A),
-              onTap: () {
-                if (sheetCtx.mounted) {
+                  icon: Icons.restart_alt_rounded,
+                  label: 'Reset P2 Items',
+                  iconColor: Skeuo.inkIf(Colors.cyanAccent),
+                  onTap:
+                      () => confirmClearInventoryDialog(
+                        sheetCtx,
+                        p,
+                        PlayerSlot.coop,
+                      ),
+                ),
+              Divider(
+                height: 1,
+                thickness: 0.5,
+                indent: Insets.lg,
+                endIndent: Insets.lg,
+                color: flair.primary.withValues(alpha: 0.1),
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.draw_rounded,
+                label: 'Neo-Skeuo ${AppTheme.isSkeuo ? '· ON' : '· OFF'}',
+                iconColor:
+                    AppTheme.isSkeuo
+                        ? const Color(0xFF1F1B16)
+                        : const Color(0xFF8D6E63),
+                onTap: () {
+                  if (AppTheme.isSkeuo) {
+                    AppTheme.exitSkeuo();
+                  } else {
+                    AppTheme.enterSkeuo();
+                  }
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon:
+                    AppTheme.isSkeuo
+                        ? Icons.lock_outline_rounded
+                        : Icons.palette_rounded,
+                label:
+                    AppTheme.isSkeuo
+                        ? 'Customization (locked in Neo-Skeuo)'
+                        : 'Customization',
+                iconColor:
+                    AppTheme.isSkeuo
+                        ? flair.primary.withValues(alpha: 0.35)
+                        : const Color(0xFFB388FF),
+                onTap: () {
+                  if (AppTheme.isSkeuo || !sheetCtx.mounted) return;
                   Navigator.push(
                     sheetCtx,
-                    fastRoute(const QuizHomeScreen(showBackButton: true)),
+                    fastRoute(const ExperienceStudioScreen()),
                   );
-                }
-              },
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.settings_outlined,
-              label: 'Settings',
-              iconColor: flair.primary.withValues(alpha: 0.6),
-              onTap: () {
-                if (sheetCtx.mounted) {
-                  Navigator.push(sheetCtx, fastRoute(const SettingsScreen()));
-                }
-              },
-            ),
-            Divider(
-              height: 1,
-              thickness: 0.5,
-              indent: Insets.lg,
-              endIndent: Insets.lg,
-              color: flair.primary.withValues(alpha: 0.1),
-            ),
-            _action(
-              sheetCtx,
-              icon: Icons.flag_rounded,
-              label: 'End Run',
-              iconColor: Skeuo.inkIf(Colors.redAccent),
-              onTap: () => RunLifecycle.confirmEndRun(sheetCtx),
-            ),
-            const SizedBox(height: Insets.sm),
-          ],
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.quiz_rounded,
+                label: 'Quiz',
+                iconColor: const Color(0xFF66BB6A),
+                onTap: () {
+                  if (sheetCtx.mounted) {
+                    Navigator.push(
+                      sheetCtx,
+                      fastRoute(const QuizHomeScreen(showBackButton: true)),
+                    );
+                  }
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.settings_outlined,
+                label: 'Settings',
+                iconColor: flair.primary.withValues(alpha: 0.6),
+                onTap: () {
+                  if (sheetCtx.mounted) {
+                    Navigator.push(sheetCtx, fastRoute(const SettingsScreen()));
+                  }
+                },
+              ),
+              Divider(
+                height: 1,
+                thickness: 0.5,
+                indent: Insets.lg,
+                endIndent: Insets.lg,
+                color: flair.primary.withValues(alpha: 0.1),
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.flag_rounded,
+                label: 'End Run',
+                iconColor: Skeuo.inkIf(Colors.redAccent),
+                onTap: () => RunLifecycle.confirmEndRun(sheetCtx),
+              ),
+              const SizedBox(height: Insets.sm),
+            ],
+          ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import '../providers/run_provider.dart';
 import '../models/run_log_entry.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
+import '../services/app_theme.dart';
 import '../widgets/active_run/gungeon_meter.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 part 'stats_detail/effects.dart';
@@ -101,9 +102,10 @@ class _ValueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isCool
-        ? Skeuo.inkIf(const Color(0xFF00E5FF))
-        : Skeuo.inkIf(const Color(0xFFFF3D00));
+    final color =
+        isCool
+            ? Skeuo.inkIf(const Color(0xFF00E5FF))
+            : Skeuo.inkIf(const Color(0xFFFF3D00));
     final hasBreakdown = base != 0 || fromItems != 0;
 
     // Mathematical calculations for the visual meters
@@ -160,7 +162,9 @@ class _ValueCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white.withValues(alpha: 0.65),
+                      color: Skeuo.collapse(
+                        Colors.white.withValues(alpha: 0.65),
+                      ),
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -177,12 +181,17 @@ class _ValueCard extends StatelessWidget {
                 SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     activeTrackColor: color,
-                    inactiveTrackColor: Colors.white.withValues(alpha: 0.08),
-                    thumbColor: Colors.white,
+                    inactiveTrackColor: Skeuo.collapse(
+                      Colors.white.withValues(alpha: 0.08),
+                    ),
+                    thumbColor: Skeuo.collapse(Colors.white),
                     overlayColor: color.withValues(alpha: 0.2),
                     valueIndicatorColor: color,
-                    valueIndicatorTextStyle: const TextStyle(
-                      color: Colors.black,
+                    // Bubble fill is the ink-collapsed stat color — its
+                    // label must flip to paper under Neo-Skeuo or it
+                    // renders black-on-ink.
+                    valueIndicatorTextStyle: TextStyle(
+                      color: AppTheme.isSkeuo ? Skeuo.paper : Colors.black,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -210,7 +219,7 @@ class _ValueCard extends StatelessWidget {
                         '0.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Colors.white54,
+                          color: Skeuo.collapse(Colors.white54),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -218,14 +227,14 @@ class _ValueCard extends StatelessWidget {
                         '5.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Colors.white30,
+                          color: Skeuo.collapse(Colors.white30),
                         ),
                       ),
                       Text(
                         '10.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Colors.white30,
+                          color: Skeuo.collapse(Colors.white30),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -233,7 +242,7 @@ class _ValueCard extends StatelessWidget {
                         '15.0+',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Colors.white54,
+                          color: Skeuo.collapse(Colors.white54),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
