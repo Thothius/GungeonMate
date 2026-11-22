@@ -184,11 +184,15 @@ void main() {
     expect(lebNeedsRealPieces(synergyNamed('Resourceful Indeed')), isTrue);
     expect(lebNeedsRealPieces(synergyNamed('Behold!')), isTrue);
     expect(lebNeedsRealPieces(synergyNamed('Cormorant')), isTrue);
-    expect(lebNeedsRealPieces(synergyNamed('In The Mood!')), isTrue);
+    // Chief Master = Alien Sidearm + any 2 of 5 Master Rounds → 3 slots.
+    expect(lebNeedsRealPieces(synergyNamed('Chief Master')), isTrue);
     expect(
       lebNeedsRealPieces(synergyNamed('Mmmmmmmmm MMMMmm!')),
       isTrue,
     );
+    // In The Mood! is a 2-of-3 pool = 2 slots — gun + LEB satisfies it.
+    expect(lebNeedsRealPieces(synergyNamed('In The Mood!')), isFalse);
+    expect(lebSlotsNeeded(synergyNamed('In The Mood!')), 2);
     // Ordinary 2-piece synergies are fully simulated.
     final pair = findTwoPiece();
     expect(lebNeedsRealPieces(pair), isFalse);

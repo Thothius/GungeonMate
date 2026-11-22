@@ -130,6 +130,102 @@ void main() {
     });
   });
 
+  group('matchesItems — anyOfMin (K-of-N pools)', () {
+    // In The Mood!: any 2 of BSG / Thunderclap / Strafe Gun.
+    final mood = Synergy(
+      name: 'In The Mood!',
+      items: const [],
+      anyOf: ['BSG', 'Thunderclap', 'Strafe Gun'],
+      anyOfMin: 2,
+    );
+
+    test('two of three → matches', () {
+      expect(mood.matchesItems(['bsg', 'strafe gun']), true);
+      expect(mood.matchesItems(['thunderclap', 'strafe gun']), true);
+    });
+
+    test('one of three → no match', () {
+      expect(mood.matchesItems(['bsg']), false);
+    });
+
+    test('all three → matches', () {
+      expect(
+        mood.matchesItems(['bsg', 'thunderclap', 'strafe gun']),
+        true,
+      );
+    });
+
+    test('mandatory item still required alongside pool picks', () {
+      // Chief Master: Alien Sidearm + any 2 of 5 Master Rounds.
+      final chief = Synergy(
+        name: 'Chief Master',
+        items: const ['Alien Sidearm'],
+        anyOf: const [
+          'Master Round I',
+          'Master Round II',
+          'Master Round III',
+          'Master Round IV',
+          'Master Round V',
+        ],
+        anyOfMin: 2,
+      );
+      expect(
+        chief.matchesItems(['alien sidearm', 'master round i', 'master round iii']),
+        true,
+      );
+      expect(
+        chief.matchesItems(['alien sidearm', 'master round i']),
+        false,
+      );
+      expect(
+        chief.matchesItems(['master round i', 'master round ii']),
+        false,
+      );
+    });
+
+    test('missingFor reports the pick deficit', () {
+      final missing = mood.missingFor({'bsg'});
+      expect(missing.any((m) => m.startsWith('any of:')), true);
+      final none = mood.missingFor(const {});
+      expect(none.any((m) => m.startsWith('any 2 of:')), true);
+      final done = mood.missingFor({'bsg', 'thunderclap'});
+      expect(done.any((m) => m.startsWith('any')), false);
+    });
+
+    test('any_of_min round-trips through JSON', () {
+      final s = Synergy.fromJson({
+        'name': 'K',
+        'items': [],
+        'any_of': ['A', 'B', 'C'],
+        'any_of_min': 2,
+      });
+      expect(s.requiredAnyOfCount, 2);
+      expect(s.toJson()['any_of_min'], 2);
+      expect(s.matchesItems(['a', 'b']), true);
+      expect(s.matchesItems(['a']), false);
+    });
+  });
+
+  group('activation — game-disabled synergies', () {
+    test('INACTIVE never matches even with all pieces', () {
+      final s = Synergy(
+        name: 'Cut Content',
+        items: const ['A', 'B'],
+        activation: 'INACTIVE',
+      );
+      expect(s.isGameInactive, true);
+      // matching itself stays pure — the query layer filters these out
+      expect(s.matchesItems(['a', 'b']), true);
+      expect(s.toJson()['activation'], 'INACTIVE');
+    });
+
+    test('default activation is ACTIVE', () {
+      final s = Synergy(name: 'Live', items: const ['A']);
+      expect(s.isGameInactive, false);
+      expect(s.toJson().containsKey('activation'), false);
+    });
+  });
+
   group('missingFor', () {
     test('lists unowned required pieces', () {
       final s = Synergy(name: 'Trio', items: ['A', 'B', 'C']);

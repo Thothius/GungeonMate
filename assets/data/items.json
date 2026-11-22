@@ -30515,7 +30515,7 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "ammonomicon_entry": "Just some junk.",
-    "id": 580,
+    "id": 127,
     "ammonomicon_pos": 250,
     "sources": [
       "Broken chests",
@@ -48780,7 +48780,8 @@
         }
       ]
     },
-    "ammonomicon_entry": "Summons Ser Junkan, who follows the player, attacks enemies, and becomes stronger for each Junk picked up."
+    "ammonomicon_entry": "Summons Ser Junkan, who follows the player, attacks enemies, and becomes stronger for each Junk picked up.",
+    "id": 580
   },
   {
     "name": "Seven-Leaf Clover",

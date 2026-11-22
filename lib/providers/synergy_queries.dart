@@ -12,7 +12,9 @@ mixin _SynergyQueries on ChangeNotifier {
     final owned = _runState.main.allItemNames
         .map((n) => n.toLowerCase())
         .toSet();
-    return _allSynergies.where((s) => s.matchesOwnedSet(owned)).toList();
+    return _allSynergies
+        .where((s) => !s.isGameInactive && s.matchesOwnedSet(owned))
+        .toList();
   }
 
   /// Partial synergies: at least one required or any-of item is owned,
@@ -23,6 +25,7 @@ mixin _SynergyQueries on ChangeNotifier {
         .map((n) => n.toLowerCase())
         .toSet();
     return _allSynergies.where((s) {
+      if (s.isGameInactive) return false;
       if (s.matchesOwnedSet(owned)) return false; // active, not partial
       return s.items.any((i) => owned.contains(i.toLowerCase())) ||
           (s.anyOf.isNotEmpty &&
@@ -38,7 +41,9 @@ mixin _SynergyQueries on ChangeNotifier {
     final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
     if (player == null) return [];
     final owned = player.allItemNames.map((n) => n.toLowerCase()).toSet();
-    return _allSynergies.where((s) => s.matchesOwnedSet(owned)).toList();
+    return _allSynergies
+        .where((s) => !s.isGameInactive && s.matchesOwnedSet(owned))
+        .toList();
   }
 
   /// piece-name (lowercased) → synergies containing it in items, anyOf,
@@ -58,6 +63,7 @@ mixin _SynergyQueries on ChangeNotifier {
   Map<String, List<Synergy>> _buildPieceIndex() {
     final map = <String, List<Synergy>>{};
     for (final s in _allSynergies) {
+      if (s.isGameInactive) continue;
       final pieces = <String>{
         for (final i in s.items) i.toLowerCase(),
         for (final i in s.anyOf) i.toLowerCase(),
@@ -126,6 +132,7 @@ mixin _SynergyQueries on ChangeNotifier {
     if (sig != _activeCombinedSig) {
       _activeCombinedSig = sig;
       _activeCombinedCache = _allSynergies.where((s) {
+        if (s.isGameInactive) return false;
         if (s.matchesItems(mainNames)) return true;
         return coopNames.isNotEmpty && s.matchesItems(coopNames);
       }).toList();
@@ -181,7 +188,9 @@ mixin _SynergyQueries on ChangeNotifier {
         _allSynergies
             .where(
               (s) =>
-                  !s.matchesOwnedSet(ownedLower) && s.matchesOwnedSet(wouldOwn),
+                  !s.isGameInactive &&
+                  !s.matchesOwnedSet(ownedLower) &&
+                  s.matchesOwnedSet(wouldOwn),
             )
             .map((s) => s.name)
             .toList();

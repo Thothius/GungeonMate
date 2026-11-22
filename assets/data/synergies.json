@@ -1002,7 +1002,7 @@
     "name": "Blade Runner",
     "items": [
       "Deck4rd",
-      "Knife Shield"
+      "Origuni"
     ],
     "effect": "Increases the magazine size of both weapons by 50%.",
     "icon": "",
@@ -1012,11 +1012,12 @@
         "v": "Increases the magazine size of both weapons by 50%."
       }
     ],
-    "game_name_key": "#BLADESRUNNER",
+    "game_name_key": "#BLADERUNNER",
     "game_ids": [
       81,
       477
-    ]
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Blammo!",
@@ -1289,11 +1290,11 @@
         "v": " is held, spawns a fish companion which shows what items are inside chests without opening them."
       }
     ],
-    "game_name_key": "",
+    "game_name_key": "#MERMAIDFISH",
     "game_ids": [
-      114,
       404,
-      444
+      444,
+      114
     ]
   },
   {
@@ -2064,6 +2065,16 @@
       "Master Round III",
       "Master Round IV",
       "Master Round V"
+    ],
+    "any_of_min": 2,
+    "game_name_key": "#MASTER_CHIEF",
+    "game_ids": [
+      57,
+      467,
+      468,
+      469,
+      470,
+      471
     ]
   },
   {
@@ -2671,7 +2682,7 @@
   {
     "name": "Deadly Distraction",
     "items": [
-      "Explosive Decoy",
+      "Decoy",
       "Monster Blood"
     ],
     "effect": "Decoy creates a large poison pool when attacked.",
@@ -2687,10 +2698,10 @@
         "v": " creates a large poison pool when attacked."
       }
     ],
-    "game_name_key": "#BLOODEXPLOSIVEDECOY",
+    "game_name_key": "#BLOODDECOY",
     "game_ids": [
-      313,
-      438
+      71,
+      313
     ]
   },
   {
@@ -2711,6 +2722,11 @@
         "t": "text",
         "v": " explodes and creates a large poison pool when attacked."
       }
+    ],
+    "game_name_key": "#BLOODEXPLOSIVEDECOY",
+    "game_ids": [
+      438,
+      313
     ]
   },
   {
@@ -3526,7 +3542,7 @@
         "amount": 0.20000000298023224
       }
     ],
-    "activation": "INACTIVE"
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Finger on the Pulse",
@@ -3821,7 +3837,7 @@
   {
     "name": "Frosty Distraction",
     "items": [
-      "Explosive Decoy",
+      "Decoy",
       "Heart of Ice"
     ],
     "effect": "Decoy freezes enemies that attack it.",
@@ -3837,10 +3853,10 @@
         "v": " freezes enemies that attack it."
       }
     ],
-    "game_name_key": "#ICEEXPLOSIVEDECOY",
+    "game_name_key": "#ICEDECOY",
     "game_ids": [
-      364,
-      438
+      71,
+      364
     ]
   },
   {
@@ -3861,6 +3877,11 @@
         "t": "text",
         "v": " freezes enemies that attack it and explodes after a short period."
       }
+    ],
+    "game_name_key": "#ICEEXPLOSIVEDECOY",
+    "game_ids": [
+      438,
+      364
     ]
   },
   {
@@ -4467,6 +4488,11 @@
         "t": "text",
         "v": " damage by 25%."
       }
+    ],
+    "game_name_key": "#GARBAGE",
+    "game_ids": [
+      154,
+      127
     ]
   },
   {
@@ -5722,11 +5748,7 @@
   },
   {
     "name": "In The Mood!",
-    "items": [
-      "BSG",
-      "Thunderclap",
-      "Strafe Gun"
-    ],
+    "items": [],
     "effect": "Slightly increases movement speed and increases the shot speed of the guns by 25%.",
     "icon": "",
     "effect_tokens": [
@@ -5753,7 +5775,13 @@
         "amount": 1.25
       }
     ],
-    "activation": "ACTIVE_UNBOOSTED"
+    "activation": "ACTIVE_UNBOOSTED",
+    "any_of": [
+      "BSG",
+      "Thunderclap",
+      "Strafe Gun"
+    ],
+    "any_of_min": 2
   },
   {
     "name": "Inconsistent Scale",
@@ -6499,6 +6527,12 @@
         "t": "text",
         "v": " is doubled."
       }
+    ],
+    "game_name_key": "#KLOBBETIME",
+    "game_ids": [
+      31,
+      53,
+      20
     ]
   },
   {
@@ -9812,7 +9846,8 @@
   {
     "name": "Smart Bombs",
     "items": [
-      "Bomb"
+      "Bomb",
+      "Ice Bomb"
     ],
     "effect": "Bombs home in on enemies.",
     "icon": "",
@@ -9829,8 +9864,19 @@
     "game_name_key": "#HOMINGBOMBS2",
     "game_ids": [
       108,
+      109,
       240,
       284
+    ],
+    "groups": [
+      [
+        "Bomb",
+        "Ice Bomb"
+      ],
+      [
+        "Crutch",
+        "Homing Bullets"
+      ]
     ]
   },
   {
@@ -10623,10 +10669,7 @@
   },
   {
     "name": "Synthetic Shield",
-    "items": [
-      "Heart Synthesizer",
-      "Armor Synthesizer"
-    ],
+    "items": [],
     "effect": "Creates a companion that orbits the player and blocks shots. If the player has two of the three synthesizers, the companion will take the appearance of the third synthesizer. If the player has all three synthesizers, all three companions will spawn.",
     "icon": "",
     "effect_tokens": [
@@ -10638,8 +10681,15 @@
     "game_name_key": "#SYNTHESIZERS1",
     "game_ids": [
       164,
-      450
-    ]
+      450,
+      116
+    ],
+    "any_of": [
+      "Heart Synthesizer",
+      "Armor Synthesizer",
+      "Ammo Synthesizer"
+    ],
+    "any_of_min": 2
   },
   {
     "name": "Tea for Two",
@@ -10825,7 +10875,11 @@
     "any_of": [
       "Pig",
       "Turkey",
-      "Owl"
+      "Owl",
+      "Chicken Flute",
+      "Super Space Turtle",
+      "Compressed Air Tank",
+      "Bait Launcher"
     ],
     "effect_tokens": [
       {
@@ -10837,6 +10891,17 @@
         "t": "text",
         "v": " becomes an elephant head and shoots elephants instead of bullets."
       }
+    ],
+    "game_name_key": "#ELEPHANTGUN",
+    "game_ids": [
+      82,
+      451,
+      632,
+      249,
+      572,
+      301,
+      359,
+      369
     ]
   },
   {
@@ -11630,10 +11695,7 @@
   },
   {
     "name": "The Void Corps",
-    "items": [
-      "Void Core Cannon",
-      "Void Shotgun"
-    ],
+    "items": [],
     "effect": "When one of the guns is held, the other(s) orbit the player. Whenever the player reloads, the orbiting gun(s) fire towards the crosshair.",
     "icon": "",
     "effect_tokens": [
@@ -11644,9 +11706,16 @@
     ],
     "game_name_key": "#VOIDCORE",
     "game_ids": [
-      55,
-      58
-    ]
+      58,
+      593,
+      55
+    ],
+    "any_of": [
+      "Void Core Assault Rifle",
+      "Void Core Cannon",
+      "Void Shotgun"
+    ],
+    "any_of_min": 2
   },
   {
     "name": "Vulcan Raving",

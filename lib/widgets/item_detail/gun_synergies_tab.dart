@@ -333,10 +333,11 @@ bool isLebExcludedSynergy(Synergy s) {
 }
 
 /// Requirement slots a synergy consumes — one per AND-group, else
-/// required items plus the anyOf pool.
+/// required items plus the anyOf pool's K-of-N pick count (LEB counts
+/// as a single pick, so a 2-of-3 pool is 2 slots).
 int lebSlotsNeeded(Synergy s) {
   if (s.groups.isNotEmpty) return s.groups.length;
-  return s.items.length + (s.anyOf.isNotEmpty ? 1 : 0);
+  return s.items.length + (s.anyOf.isEmpty ? 0 : s.requiredAnyOfCount);
 }
 
 /// True when LEB alone can't satisfy the synergy: per the official

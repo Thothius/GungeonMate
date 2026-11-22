@@ -121,7 +121,12 @@ class SynergyDetailScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                   ],
                   if (synergy.anyOf.isNotEmpty) ...[
-                    _sectionLabel('ANY OF', sf),
+                    _sectionLabel(
+                      synergy.requiredAnyOfCount > 1
+                          ? 'ANY ${synergy.requiredAnyOfCount} OF'
+                          : 'ANY OF',
+                      sf,
+                    ),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
