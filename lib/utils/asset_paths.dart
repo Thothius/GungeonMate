@@ -61,7 +61,30 @@ String gungeoneerGifPath(String name) {
 }
 
 String localShrineIcon(String name) => _pathFor('shrines', name);
-String localSynergyIcon(String name) => _pathFor('synergies', name);
+const kSynergyIconSlugs = <String>{
+  'ak_47_island_forme', 'akey_breaky', 'alistair_s_ladder', 'alternative_rock', 'apiary', 'arctic_warfare',
+  'battery_powered', 'beta_ray', 'betrayer_s_lies', 'black_flag', 'blank_generation', 'blunderbrace',
+  'brave_new_world', 'buster_gun', 'cactus_flower', 'careful_iteration', 'cerebral_bros', 'chief_master',
+  'comammo_belt', 'contrail', 'cormorant', 'deadlier_distraction', 'deadly_distraction', 'detective_mode',
+  'don_t_hoot_the_messenger', 'double_double_helix', 'dualing_pistol', 'electron_pack', 'empty_vessels', 'fightknives',
+  'fightsabre_training', 'firing_with_flair', 'five_o_clock_somewhere', 'frostier_distraction', 'frosty_distraction', 'future_gangster',
+  'get_equipped_with_a', 'get_equipped_with_b', 'get_equipped_with_c', 'get_equipped_with_f', 'get_equipped_with_h', 'get_equipped_with_m',
+  'get_equipped_with_q', 'get_equipped_with_w', 'great_queen_ant', 'greener_guon_stone', 'gunderlord', 'hammer_and_nail',
+  'hard_light', 'heavy_jolt', 'hegemony_special_forces', 'hellhole', 'hyper_beam', 'i_need_scissors_61',
+  'ice_beam', 'ice_cap', 'insight', 'iron_slug', 'it_s_your_destiny', 'just_in_case',
+  'kaliber_s_grip', 'kalibreath', 'king_bomber', 'klobbering_time', 'kung_fu_hippie_rappin_surfer', 'laser_light_show',
+  'like_shooting_fish', 'lotus_bloom', 'm1_multi_tool', 'maximize_spell', 'meltdown', 'mirror_shield',
+  'moonplanet', 'nailed_it', 'neo_tech_yo', 'not_quite_as_mini', 'not_so_sawed_off', 'noxin_cannon',
+  'pandemic_pistol', 'parchmental', 'pea_cannon', 'peripheral_vision', 'phoenix_up', 'pilot_wingsman',
+  'pistol_machine', 'pitch_perfect', 'plasma_beam', 'raiden', 'recycling_bin', 'rubenstein_s_monster',
+  'ruby_carbine', 'savior_of_the_universe', 'second_accident', 'shot_across_the_bow', 'snowball_shotgun', 'space_best_friend',
+  'special_delivery', 'special_reserve', 'square_brace', 'super_space_turtle_dx', 'the_elephant_in_the_room', 'the_return',
+  'to_serve_android', 'trigger_twins', 'unbelievably_charming', 'wave_beam', 'wicked_sister', 'wrath_of_the_blam',
+};
+
+String localSynergyIcon(String name) => kSynergyIconSlugs.contains(slugForAssetName(name))
+      ? _pathFor('synergies', name)
+      : '';
 
 /// Returns the path to a gungeoneer's map icon (9x9px pixel art from wiki).
 /// Returns null if no map icon exists for the given name.

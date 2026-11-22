@@ -19,7 +19,8 @@
         "Synergy accuracy — Smart Bombs, Unbelievably Charming and Super Serum now use proper requirement groups (e.g. Bomb-or-Ice-Bomb AND Crutch-or-Homing-Bullets) instead of a flat any-of count; Tea for Two recognises the full companion pool; 'Resourceful Indeed,' name typo fixed so item cross-links resolve",
         "Synergy pools audited against game data — 17 entries corrected (Pea Cannon/Plant Power pools, Alternative Rock +3 options, Natural Selection/Paperwork/Full Circle/Lotus Bloom/Relodestar/Tile Match missing pieces, Sniper Woof +Bow, I need scissors/What A Thrill +Wolf/Bandana/Box, Void Corps gun name, BEES -Jar of Bees, Deadly/Frosty Distraction Explosive Decoy, Blade Runner Knife Shield); LEB exclusions +The Submachinist/Detective Mode",
         "Synergy lookups indexed — item→synergy queries now use a prebuilt piece index (and group-aware partial/count caches) instead of re-scanning all ~400 synergies per call",
-        "Asset cull — removed 602 dead game sprite PNGs (~835KB): the raw extraction dump in images/game/ was bundled but only 12 gun icons are actually referenced (menu flock + skeuo lab); bosses/enemies/items dirs deleted entirely"
+        "Asset cull — removed 602 dead game sprite PNGs (~835KB): the raw extraction dump in images/game/ was bundled but only 12 gun icons are actually referenced (menu flock + skeuo lab); bosses/enemies/items dirs deleted entirely",
+        "Synergy icons — rows for the ~290 synergies without dedicated art now show the first component item's icon instead of a generic placeholder (the fallback path existed but was dead code: icon paths resolved unconditionally)"
       ]
     }
   },

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
+import 'package:gungeon_mate/utils/asset_paths.dart';
 
 /// Data integrity — guns.json / items.json / synergies.json coherence.
 /// A typo'd synergy piece name or a missing icon asset breaks a
@@ -46,6 +47,34 @@ void main() {
       isEmpty,
       reason: 'unresolvable synergy pieces:\n${broken.join('\n')}',
     );
+  });
+
+  test('synergy icon slug set matches the assets/images/synergies dir', () {
+    // kSynergyIconSlugs gates localSynergyIcon(): a slug in the set gets a
+    // real icon path, anything else returns '' so UIs fall back to a
+    // piece icon. Drift in either direction breaks that contract.
+    final onDisk =
+        Directory('assets/images/synergies')
+            .listSync()
+            .whereType<File>()
+            .map((f) => f.uri.pathSegments.last.replaceAll('.webp', ''))
+            .toSet();
+    expect(
+      onDisk,
+      kSynergyIconSlugs,
+      reason:
+          'add/remove the .webp and update kSynergyIconSlugs in '
+          'lib/utils/asset_paths.dart',
+    );
+    // Every synergy WITH dedicated art resolves to an existing file.
+    final missing = <String>[];
+    for (final s in p.allSynergies) {
+      final icon = s.icon;
+      if (icon.isNotEmpty && !File(icon).existsSync()) {
+        missing.add('${s.name} -> $icon');
+      }
+    }
+    expect(missing, isEmpty, reason: 'missing synergy icons:\n${missing.join('\n')}');
   });
 
   test('gun/item icon paths point at files that exist', () {
