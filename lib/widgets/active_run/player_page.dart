@@ -14,7 +14,6 @@ import '../../theme/tokens.dart';
 import '../../services/effect_tagger.dart';
 import '../../services/mp_session.dart';
 import '../paradox/paradox_player_panel.dart';
-import '../paradox/surprise_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/fast_route.dart';
 import '../../services/goop_talk_engine.dart';
@@ -188,10 +187,7 @@ class PlayerPageState extends State<PlayerPage> {
                         ? Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ParadoxPlayerPanel(
-                              slot: _slot,
-                              onTapMsg: () => SurpriseSheet.open(context),
-                            ),
+                            ParadoxPlayerPanel(slot: _slot),
                             // Effects strip is always on — cool/curse
                             // are constant game factors, not a panel
                             // the user toggles.
@@ -256,9 +252,10 @@ class PlayerPageState extends State<PlayerPage> {
                               ValueListenableBuilder<VisualPrefs>(
                                 valueListenable: VisualPrefs.notifier,
                                 builder:
-                                    (_, p, _) => p.showDashboards
-                                        ? DashboardSwiperCard(slot: _slot)
-                                        : const SizedBox.shrink(),
+                                    (_, p, _) =>
+                                        p.showDashboards
+                                            ? DashboardSwiperCard(slot: _slot)
+                                            : const SizedBox.shrink(),
                               ),
                             ],
                           ),
@@ -563,7 +560,12 @@ class PlayerPageState extends State<PlayerPage> {
     // the saved display-mode pref. Other renderers stay dormant.
     switch (InventoryDisplayMode.classicPeriodic) {
       case InventoryDisplayMode.classicPeriodic:
-        cross = w < 360 ? 3 : w < 600 ? 4 : 6;
+        cross =
+            w < 360
+                ? 3
+                : w < 600
+                ? 4
+                : 6;
         ratio = 0.75; // BUG-035: bumped from 0.80 to fit type subtitle + RANGE
         break;
       case InventoryDisplayMode.tacticalStats:

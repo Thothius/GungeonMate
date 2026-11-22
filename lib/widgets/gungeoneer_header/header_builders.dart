@@ -10,6 +10,15 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
   AnimationController get _wobbleController;
   void _onAvatarTapped();
 
+  /// Signed stat display — '+2.5' / '−1.0' / '0.0'. Negative coolness/
+  /// curse is rare but legal, and '+-1.0' reads broken.
+  static String _signedStat(double v) {
+    final s = v.toStringAsFixed(1);
+    if (v > 0) return '+$s';
+    if (v < 0) return '−${s.substring(1)}';
+    return s;
+  }
+
   Widget _buildExpanded(BuildContext context) {
     final f = AppTheme.flair;
     final iconPath = widget.character.icon;
@@ -97,7 +106,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                           Expanded(
                             child: _buildFlatCapsule(
                               color: const Color(0xFF00E5FF),
-                              value: '+${widget.coolness.toStringAsFixed(1)}',
+                              value: _signedStat(widget.coolness),
                               label: 'COOL',
                               onTap: widget.onTapCoolness,
                               onLongPress: widget.onLongPressCoolness,
@@ -108,7 +117,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                           Expanded(
                             child: _buildFlatCapsule(
                               color: const Color(0xFFE040FB),
-                              value: '+${widget.curse.toStringAsFixed(1)}',
+                              value: _signedStat(widget.curse),
                               label: 'CURSE',
                               onTap: widget.onTapCurse,
                               onLongPress: widget.onLongPressCurse,

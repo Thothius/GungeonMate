@@ -56,22 +56,39 @@ class _GungeonMeterState extends State<GungeonMeter>
       duration: const Duration(milliseconds: 900),
     );
     _wasOverThreshold = widget.value >= widget.threshold;
-    if (_wasOverThreshold) _pulse.repeat(reverse: true);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncPulse();
+  }
+
+  /// Pulse only when over threshold AND motion is allowed — the meter
+  /// still renders its over-threshold color statically under
+  /// reduced-motion, just without the ticker.
+  void _syncPulse() {
+    final over = widget.value >= widget.threshold;
+    final animate = over && !ReduceMotion.of(context);
+    if (animate && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!animate && _pulse.isAnimating) {
+      _pulse
+        ..stop()
+        ..value = 0;
+    }
   }
 
   @override
   void didUpdateWidget(GungeonMeter old) {
     super.didUpdateWidget(old);
     final over = widget.value >= widget.threshold;
-    if (over && !_wasOverThreshold) {
-      // Just crossed the threshold — haptic + start pulsing
-      Haptics.heavy();
-      _pulse.repeat(reverse: true);
-    } else if (!over && _wasOverThreshold) {
-      // Dropped back below — stop pulsing
-      _pulse.stop();
+    if (over != _wasOverThreshold) {
+      // Just crossed the threshold — haptic + (maybe) start pulsing
+      if (over) Haptics.heavy();
+      _wasOverThreshold = over;
     }
-    _wasOverThreshold = over;
+    _syncPulse();
   }
 
   @override

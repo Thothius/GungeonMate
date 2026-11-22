@@ -36,19 +36,14 @@ import '../skeuo/skeuo_tokens.dart';
 /// [MpPeerEdit] clear (co-op trust model).
 class ParadoxPlayerPanel extends StatelessWidget {
   final PlayerSlot slot;
-  final VoidCallback onTapMsg;
-
-  const ParadoxPlayerPanel({
-    super.key,
-    required this.slot,
-    required this.onTapMsg,
-  });
+  const ParadoxPlayerPanel({super.key, required this.slot});
 
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
     final session = context.watch<MpSession>();
     final p = context.watch<RunProvider>();
+    final flair = AppTheme.flair;
     final isMainSlot = slot == PlayerSlot.main;
     final isMyPage = (session.myRole == MpRole.main) == isMainSlot;
     final avatarId = isMyPage ? session.avatarId : session.peerAvatarId;
@@ -57,11 +52,9 @@ class ParadoxPlayerPanel extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(8 * sf, 4 * sf, 8 * sf, 2 * sf),
       padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 6 * sf),
       decoration: BoxDecoration(
-        color: const Color(0xFF140B22).withValues(alpha: 0.9),
+        color: flair.card.withValues(alpha: 0.92),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: const Color(0xFF7C4DFF).withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: flair.primary.withValues(alpha: 0.35)),
       ),
       child: Row(
         children: [
@@ -72,7 +65,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                 () => showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
-                  backgroundColor: const Color(0xFF140B22),
+                  backgroundColor: flair.card,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(18),
@@ -89,7 +82,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: const Color(0xFFB388FF).withValues(alpha: 0.55),
+                      color: flair.primary.withValues(alpha: 0.55),
                       width: 1.5,
                     ),
                   ),
@@ -126,9 +119,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                           fontSize: 7 * sf,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.1,
-                          color: const Color(0xFFB388FF).withValues(
-                            alpha: 0.7,
-                          ),
+                          color: flair.headlineStat.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -146,46 +137,46 @@ class ParadoxPlayerPanel extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Row(
-              children: [
-                // Avatar tap opens the surprise composer (chat removed).
-                // COOL
-                _PanelStat(
-                  label: 'COOL',
-                  value: p.runState.totalCoolness.toStringAsFixed(0),
-                  color: const Color(0xFF4DD0E1),
-                  sf: sf,
-                  onTap:
-                      () => Navigator.push(
-                        context,
-                        fastRoute(const CoolCurseScreen()),
-                      ),
+                  children: [
+                    // Avatar tap opens the surprise composer (chat removed).
+                    // COOL
+                    _PanelStat(
+                      label: 'COOL',
+                      value: p.runState.totalCoolness.toStringAsFixed(0),
+                      color: const Color(0xFF4DD0E1),
+                      sf: sf,
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            fastRoute(const CoolCurseScreen()),
+                          ),
+                    ),
+                    // CURSE
+                    _PanelStat(
+                      label: 'CURSE',
+                      value: p.runState.totalCurse.toStringAsFixed(0),
+                      color: const Color(0xFFBA68C8),
+                      sf: sf,
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            fastRoute(const CoolCurseScreen()),
+                          ),
+                    ),
+                    // SYN — active synergy count (combined)
+                    _PanelStat(
+                      label: 'SYN',
+                      value: p.activeSynergyGlowColors.length.toString(),
+                      color: flair.headlineStat,
+                      sf: sf,
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            fastRoute(const AllSynergiesScreen()),
+                          ),
+                    ),
+                  ],
                 ),
-                // CURSE
-                _PanelStat(
-                  label: 'CURSE',
-                  value: p.runState.totalCurse.toStringAsFixed(0),
-                  color: const Color(0xFFBA68C8),
-                  sf: sf,
-                  onTap:
-                      () => Navigator.push(
-                        context,
-                        fastRoute(const CoolCurseScreen()),
-                      ),
-                ),
-                // SYN — active synergy count (combined)
-                _PanelStat(
-                  label: 'SYN',
-                  value: p.activeSynergyGlowColors.length.toString(),
-                  color: const Color(0xFFB388FF),
-                  sf: sf,
-                  onTap:
-                      () => Navigator.push(
-                        context,
-                        fastRoute(const AllSynergiesScreen()),
-                      ),
-                ),
-              ],
-            ),
               ),
             ),
           ),
@@ -198,7 +189,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
               size: 20 * sf,
               color: Colors.white.withValues(alpha: 0.7),
             ),
-            color: const Color(0xFF1E122E),
+            color: AppTheme.flair.card,
             onSelected: (v) => _onMenu(context, v, session),
             itemBuilder:
                 (_) => [
@@ -303,7 +294,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
       context: context,
       builder:
           (dctx) => AlertDialog(
-            backgroundColor: const Color(0xFF1E122E),
+            backgroundColor: AppTheme.flair.card,
             title: const GoopText('Leave multiplayer?'),
             content: const GoopText(
               'You disconnect; your partner keeps their run.',
@@ -416,7 +407,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
         showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,
-          backgroundColor: const Color(0xFF140B22),
+          backgroundColor: AppTheme.flair.card,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
           ),
@@ -444,7 +435,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
       context: context,
       builder:
           (dctx) => AlertDialog(
-            backgroundColor: const Color(0xFF1E122E),
+            backgroundColor: AppTheme.flair.card,
             title: GoopText(
               isMyPage ? 'Reset your items?' : 'Reset partner items?',
             ),
