@@ -9,6 +9,8 @@ import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
 import '../../services/goop_talk_engine.dart';
 import '../skeuo/skeuo_tokens.dart';
+import '../bug_report/bug_report_sheet.dart';
+import '../../models/bug_report.dart';
 part 'dice_roll/dice_roll_logic.dart';
 part 'dice_roll/dice_roll_parts.dart';
 
@@ -115,13 +117,36 @@ class DiceRollDialogState extends State<DiceRollDialog>
                             ),
                           ],
                         ),
-                        IconButton(
-                          tooltip: 'Close',
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white38,
-                            size: 20,
-                          ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: 'Report a bug',
+                              icon: Icon(
+                                Icons.bug_report_outlined,
+                                color: Skeuo.inkIf(Colors.deepOrangeAccent),
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                BugReportSheet.show(
+                                  context,
+                                  const BugReportContext(
+                                    kind: BugReportKind.bug,
+                                    screen: 'Dice Roller',
+                                  ),
+                                );
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                            const SizedBox(width: 4),
+                            IconButton(
+                              tooltip: 'Close',
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white38,
+                                size: 20,
+                              ),
                           onPressed: () {
                             // Any mid-flow close notifies the peer so
                             // their dialog resolves instead of hanging.
@@ -134,6 +159,8 @@ class DiceRollDialogState extends State<DiceRollDialog>
                           },
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
+                            ),
+                          ],
                         ),
                       ],
                     ),

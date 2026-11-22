@@ -16,6 +16,8 @@ import '../widgets/scale_button.dart';
 import 'item_detail_screen.dart';
 import 'home_screen.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 
 /// Rich, tabbed detail view for a single Gungeoneer.
 ///
@@ -99,6 +101,13 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
         ),
         centerTitle: true,
         actions: [
+          BugReportButton.iconButton(
+            context,
+            BugReportContext.content(
+              screen: 'Gungeoneer Detail',
+              entity: g.name,
+            ),
+          ),
           if (g.wikiUrl.isNotEmpty)
             IconButton(
               tooltip: 'View on Wiki',

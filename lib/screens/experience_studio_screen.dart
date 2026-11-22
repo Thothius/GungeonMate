@@ -24,6 +24,8 @@ import '../widgets/skeuo/skeuo_tokens.dart';
 import '../providers/run_provider.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
 part 'experience_studio/studio_particles.dart';
@@ -537,6 +539,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             () => _openGallery(previewOnly: true),
           ),
           const SizedBox(width: 8),
+          BugReportButton.iconButton(
+            context,
+            const BugReportContext(
+              kind: BugReportKind.bug,
+              screen: 'Experience Studio',
+            ),
+          ),
           ScaleButton(
             onTap: _openMockPreview,
             child: Container(

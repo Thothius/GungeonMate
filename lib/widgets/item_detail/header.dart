@@ -7,6 +7,8 @@ import '../../services/elemental_tagger.dart';
 import '../../services/haptics.dart';
 import '../game_icon.dart';
 import '../quality_badge.dart';
+import '../bug_report/bug_report_button.dart';
+import '../../models/bug_report.dart';
 import '../../utils/responsive.dart';
 import '../skeuo/skeuo_tokens.dart';
 
@@ -137,37 +139,51 @@ class ItemDetailHeader extends StatelessWidget {
                     ],
                   ],
                 ),
-                IconButton(
-                  icon: Icon(
-                    isFav
-                        ? Icons.favorite_rounded
-                        : Icons.favorite_border_rounded,
-                    color: favColor,
-                    size: 30,
-                  ),
-                  tooltip:
-                      isFav ? 'Remove from favourites' : 'Add to favourites',
-                  constraints: const BoxConstraints(
-                    minWidth: 44,
-                    minHeight: 44,
-                  ),
-                  onPressed: () {
-                    Haptics.light();
-                    final p = context.read<RunProvider>();
-                    final wasFav = p.isFavourite(name);
-                    p.toggleFavourite(name);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: GoopText(
-                          wasFav
-                              ? '$name removed from favourites'
-                              : '$name added to favourites',
-                        ),
-                        duration: const Duration(seconds: 1),
-                        behavior: SnackBarBehavior.floating,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BugReportButton.iconButton(
+                      context,
+                      BugReportContext.content(
+                        screen: isGun ? 'Gun Detail' : 'Item Detail',
+                        entity: name,
                       ),
-                    );
-                  },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        isFav
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        color: favColor,
+                        size: 30,
+                      ),
+                      tooltip:
+                          isFav
+                              ? 'Remove from favourites'
+                              : 'Add to favourites',
+                      constraints: const BoxConstraints(
+                        minWidth: 44,
+                        minHeight: 44,
+                      ),
+                      onPressed: () {
+                        Haptics.light();
+                        final p = context.read<RunProvider>();
+                        final wasFav = p.isFavourite(name);
+                        p.toggleFavourite(name);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: GoopText(
+                              wasFav
+                                  ? '$name removed from favourites'
+                                  : '$name added to favourites',
+                            ),
+                            duration: const Duration(seconds: 1),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -242,33 +258,51 @@ class ItemDetailHeader extends StatelessWidget {
                   ),
                 ],
               ),
-              IconButton(
-                icon: Icon(
-                  isFav
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
-                  color: favColor,
-                  size: 30,
-                ),
-                tooltip: isFav ? 'Remove from favourites' : 'Add to favourites',
-                constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-                onPressed: () {
-                  Haptics.light();
-                  final p = context.read<RunProvider>();
-                  final wasFav = p.isFavourite(name);
-                  p.toggleFavourite(name);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: GoopText(
-                        wasFav
-                            ? '$name removed from favourites'
-                            : '$name added to favourites',
-                      ),
-                      duration: const Duration(seconds: 1),
-                      behavior: SnackBarBehavior.floating,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  BugReportButton.iconButton(
+                    context,
+                    BugReportContext.content(
+                      screen: 'Item Detail',
+                      entity: name,
                     ),
-                  );
-                },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      isFav
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
+                      color: favColor,
+                      size: 30,
+                    ),
+                    tooltip:
+                        isFav
+                            ? 'Remove from favourites'
+                            : 'Add to favourites',
+                    constraints: const BoxConstraints(
+                      minWidth: 44,
+                      minHeight: 44,
+                    ),
+                    onPressed: () {
+                      Haptics.light();
+                      final p = context.read<RunProvider>();
+                      final wasFav = p.isFavourite(name);
+                      p.toggleFavourite(name);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: GoopText(
+                            wasFav
+                                ? '$name removed from favourites'
+                                : '$name added to favourites',
+                          ),
+                          duration: const Duration(seconds: 1),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

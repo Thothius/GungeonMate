@@ -10,6 +10,8 @@ import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import 'item_detail_screen.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 
 /// Synergy detail page — the "synergy graph" surface of the
 /// Ammonomicon. Every required/optional item is a tappable chip that
@@ -45,13 +47,26 @@ class SynergyDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  GoopText(
-                    synergy.name,
-                    style: TextStyle(
-                      fontSize: 22 * sf,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GoopText(
+                          synergy.name,
+                          style: TextStyle(
+                            fontSize: 22 * sf,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      BugReportButton.iconButton(
+                        context,
+                        BugReportContext.content(
+                          screen: 'Synergy Detail',
+                          entity: synergy.name,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 6),
                   Container(

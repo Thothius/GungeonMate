@@ -21,6 +21,8 @@ import '../widgets/skeuo/skeuo_backdrop.dart';
 import '../widgets/skeuo/skeuo_surface.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 import '../widgets/theme_overlay.dart';
+import '../widgets/bug_report/bug_report_sheet.dart';
+import '../models/bug_report.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 ///
@@ -458,6 +460,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                         _settingsChip(skeuo),
                         const SizedBox(width: 8),
                         _assetViewerChip(skeuo),
+                        const SizedBox(width: 8),
+                        _bugChip(skeuo),
                       ],
                     ),
                   ),
@@ -565,6 +569,56 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                   ),
                   child: Icon(
                     Icons.settings_outlined,
+                    size: 22,
+                    color: _accent,
+                  ),
+                ),
+      ),
+    );
+  }
+
+  /// Bug-report chip — same circular chrome as the other corner
+  /// controls; opens the reporter sheet with menu context.
+  Widget _bugChip(bool skeuo) {
+    return Tooltip(
+      message: 'Report a bug',
+      child: ScaleButton(
+        onTap: () {
+          Haptics.selection();
+          BugReportSheet.show(
+            context,
+            const BugReportContext(
+              kind: BugReportKind.bug,
+              screen: 'Main Menu',
+            ),
+          );
+        },
+        child:
+            skeuo
+                ? const SkeuoSurface(
+                  elevation: SkeuoElevation.pressed,
+                  radius: Skeuo.rLg,
+                  sketchy: false,
+                  padding: EdgeInsets.all(11),
+                  child: Icon(
+                    Icons.bug_report_outlined,
+                    size: 22,
+                    color: Skeuo.ink,
+                  ),
+                )
+                : Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: _panel,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: _accent.withValues(alpha: 0.5),
+                      width: 1.4,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.bug_report_outlined,
                     size: 22,
                     color: _accent,
                   ),

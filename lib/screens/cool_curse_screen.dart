@@ -10,6 +10,8 @@ import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../utils/responsive.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 
 /// Cool & Curse fullscreen — opened by tapping the COOL or CURSE stat
 /// in the Paradox player panel, or by long-pressing either capsule in
@@ -57,6 +59,15 @@ class CoolCurseScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: [
+          BugReportButton.iconButton(
+            context,
+            const BugReportContext(
+              kind: BugReportKind.bug,
+              screen: 'Cool & Curse',
+            ),
+          ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [

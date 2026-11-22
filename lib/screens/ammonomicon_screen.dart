@@ -18,6 +18,8 @@ import 'synergy_detail_screen.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 
 part 'ammonomicon_widgets.dart';
 
@@ -806,6 +808,15 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                   ],
                 )
                 : const SizedBox.shrink(),
+        actions: [
+          BugReportButton.iconButton(
+            context,
+            const BugReportContext(
+              kind: BugReportKind.bug,
+              screen: 'Ammonomicon',
+            ),
+          ),
+        ],
       ),
       body:
           !_loaded

@@ -8,6 +8,8 @@ import '../services/goop_talk_engine.dart';
 import '../services/app_theme.dart';
 import '../widgets/active_run/gungeon_meter.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 part 'stats_detail/effects.dart';
 part 'stats_detail/log.dart';
 part 'stats_detail/rows.dart';
@@ -33,6 +35,13 @@ class StatsDetailScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         title: GoopText(title),
         actions: [
+          BugReportButton.iconButton(
+            context,
+            BugReportContext(
+              kind: BugReportKind.bug,
+              screen: title,
+            ),
+          ),
           if (base != 0)
             IconButton(
               tooltip: 'Reset manual adjustments',

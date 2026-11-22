@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/settings/settings_tab.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 
 /// Central control room for Gungeon Mate.
 /// All visual/theme options live in the Themes screen (opened from
@@ -24,6 +26,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         scrolledUnderElevation: 0,
         title: const GoopText('Settings'),
         centerTitle: true,
+        actions: [
+          BugReportButton.iconButton(
+            context,
+            const BugReportContext(
+              kind: BugReportKind.bug,
+              screen: 'Settings',
+            ),
+          ),
+        ],
       ),
       body: const SettingsTab(),
     );

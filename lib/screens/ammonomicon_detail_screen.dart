@@ -9,6 +9,8 @@ import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../utils/asset_paths.dart' show npcIdleGifPath;
 import '../utils/responsive.dart';
+import '../widgets/bug_report/bug_report_button.dart';
+import '../models/bug_report.dart';
 
 /// Full-page view for a single Ammonomicon entry — large icon, name, category,
 /// description, and wiki link.
@@ -50,6 +52,15 @@ class AmmonomiconDetailScreen extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         centerTitle: true,
+        actions: [
+          BugReportButton.iconButton(
+            context,
+            BugReportContext.content(
+              screen: 'Ammonomicon',
+              entity: entry.name,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         top: false,

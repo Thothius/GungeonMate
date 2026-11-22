@@ -17,6 +17,8 @@ import '../../widgets/quality_badge.dart';
 import '../../widgets/scale_button.dart';
 import 'quiz_session_screen.dart';
 import '../../widgets/skeuo/skeuo_tokens.dart';
+import '../../widgets/bug_report/bug_report_button.dart';
+import '../../models/bug_report.dart';
 
 /// Gungeonmaster Quiz — chest select.
 ///
@@ -119,6 +121,13 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                   // Keep the header optically centered when no back
                   // button is shown — same 48px slot on both sides.
                   SizedBox(width: widget.showBackButton ? 8 : 48),
+                  BugReportButton.iconButton(
+                    context,
+                    const BugReportContext(
+                      kind: BugReportKind.bug,
+                      screen: 'Quiz',
+                    ),
+                  ),
                 ],
               ),
             ),

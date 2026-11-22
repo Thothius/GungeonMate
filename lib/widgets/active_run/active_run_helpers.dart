@@ -18,6 +18,8 @@ import 'sort_picker.dart';
 import 'dice_roll.dart';
 import '../paradox/surprise_sheet.dart';
 import '../../services/run_lifecycle.dart';
+import '../../models/bug_report.dart';
+import '../bug_report/bug_report_sheet.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../screens/quiz/quiz_home_screen.dart';
@@ -668,6 +670,23 @@ class _RunToolsSheet extends StatelessWidget {
                     Navigator.push(
                       sheetCtx,
                       fastRoute(const QuizHomeScreen(showBackButton: true)),
+                    );
+                  }
+                },
+              ),
+              _action(
+                sheetCtx,
+                icon: Icons.bug_report_outlined,
+                label: 'Report a Bug',
+                iconColor: Skeuo.inkIf(Colors.deepOrangeAccent),
+                onTap: () {
+                  if (sheetCtx.mounted) {
+                    BugReportSheet.show(
+                      sheetCtx,
+                      const BugReportContext(
+                        kind: BugReportKind.bug,
+                        screen: 'Active Run',
+                      ),
                     );
                   }
                 },
