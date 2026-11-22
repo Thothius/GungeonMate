@@ -165,7 +165,7 @@ class _BugReportSheetState extends State<BugReportSheet> {
                     children: [
                       _ctxChip('SCREEN', widget.context.screen, ink, skeuo),
                       if (widget.context.entity != null &&
-                          widget.context.entity!.isNotEmpty)
+                          widget.context.entity!.trim().isNotEmpty)
                         _ctxChip('ITEM', widget.context.entity!, ink, skeuo),
                       const SizedBox(height: Insets.sm),
                       _kindLabel(ink, skeuo),

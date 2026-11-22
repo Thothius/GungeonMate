@@ -28,7 +28,8 @@ class BugReport {
       'GM-BUG v$kAppVersion',
       ctx.kind.label,
       _safe(ctx.screen),
-      if (ctx.entity != null && ctx.entity!.isNotEmpty) _safe(ctx.entity!),
+      if (ctx.entity != null && ctx.entity!.trim().isNotEmpty)
+        _safe(ctx.entity!),
     ];
     return parts.join('|');
   }
@@ -36,7 +37,7 @@ class BugReport {
   /// Notes first (that's what the user wrote), context block after the
   /// divider so the pipeline can split on '\n---\n'.
   static String bodyFor(BugReportContext ctx, String notes) {
-    final entity = ctx.entity == null || ctx.entity!.isEmpty
+    final entity = ctx.entity == null || ctx.entity!.trim().isEmpty
         ? '—'
         : ctx.entity!;
     return '$notes\n\n---\n'
