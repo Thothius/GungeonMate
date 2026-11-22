@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:gungeon_mate/models/gun.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/models/item.dart';
 import 'package:gungeon_mate/models/player.dart';

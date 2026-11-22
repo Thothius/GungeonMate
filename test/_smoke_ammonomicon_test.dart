@@ -1,51 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
-import 'package:gungeon_mate/services/goop_talk_engine.dart';
+import 'package:gungeon_mate/widgets/state_widgets.dart';
 
+/// Smoke: AmmonomiconScreen loads real JSON assets and renders the
+/// category strip without exceptions. `debugParseInline` replaces the
+/// compute() isolates that can't run under flutter_test.
 void main() {
-  late RunProvider p;
-  setUpAll(() async {
-    p = RunProvider();
-    await p.loadData();
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    AmmonomiconScreen.debugParseInline = true;
+  });
+  tearDown(() {
+    AmmonomiconScreen.debugParseInline = false;
   });
 
-  Widget wrap(Widget child) => MultiProvider(
-    providers: [
-      ChangeNotifierProvider.value(value: p),
-      ChangeNotifierProvider(create: (_) => MpSession(p)),
-      Provider.value(value: GoopAnimationManager.instance),
-    ],
-    child: MaterialApp(home: child),
-  );
-
-  testWidgets(
-    'ammonomicon opens on category grid, picks, and backs out',
-    // Skipped: compute()+asset load in _loadData doesn't complete
-    // under flutter_test — verified on-device. Guard kept for CI.
-    skip: true,
-    (t) async {
-      await t.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
-      // Data parses off-main-isolate — needs real async, not pump().
-      await t.runAsync(() => Future.delayed(const Duration(seconds: 3)));
+  testWidgets('ammonomicon loads data and renders category chips', (t) async {
+    await t.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => RunProvider()),
+          ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
+        ],
+        child: const MaterialApp(
+          home: AmmonomiconScreen(showBackButton: false),
+        ),
+      ),
+    );
+    // Asset loadString uses real async I/O — poll with runAsync until
+    // the skeleton loaders are gone; parses run inline.
+    for (var i = 0; i < 25; i++) {
+      await t.runAsync(() => Future.delayed(const Duration(milliseconds: 200)));
       await t.pump();
-      await t.pump(const Duration(milliseconds: 100));
-      // Level 1: category grid visible with all 10 tiles.
-      expect(find.text('ENEMIES'), findsOneWidget);
-      expect(find.text('BOSSES'), findsOneWidget);
-      // Tap BOSSES -> level 2: back button + title + search.
-      await t.tap(find.text('BOSSES'));
-      await t.pump(const Duration(milliseconds: 600));
-      expect(find.byTooltip('Back to categories'), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
-      // Back -> level 1 again.
-      await t.tap(find.byTooltip('Back to categories'));
-      await t.pump(const Duration(milliseconds: 600));
-      expect(find.text('ENEMIES'), findsOneWidget);
-      expect(t.takeException(), isNull);
-    },
-  );
+      if (find.byType(SkeletonLoader).evaluate().isEmpty) break;
+    }
+
+    expect(find.text('ENEMIES'), findsWidgets);
+    expect(find.text('BOSSES'), findsWidgets);
+    expect(t.takeException(), isNull);
+  });
 }

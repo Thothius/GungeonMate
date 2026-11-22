@@ -40,6 +40,16 @@ class AmmonomiconScreen extends StatefulWidget {
 
   const AmmonomiconScreen({super.key, this.showBackButton = false});
 
+  /// Test hook — `compute()` isolates never complete under flutter_test,
+  /// so widget tests set this to parse inline on the main isolate.
+  @visibleForTesting
+  static bool debugParseInline = false;
+
+  /// Test hook — starts the screen in the loaded state with empty data,
+  /// skipping asset loads entirely (nav/interaction tests only).
+  @visibleForTesting
+  static bool debugStartLoaded = false;
+
   @override
   State<AmmonomiconScreen> createState() => _AmmonomiconScreenState();
 }
@@ -72,6 +82,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   // content area the full screen width.
 
   // Loaded data
+  bool _loaded = AmmonomiconScreen.debugStartLoaded;
   List<AmmonomiconEntry> _objects = [];
   List<AmmonomiconEntry> _shrines = [];
   List<AmmonomiconEntry> _chapters = [];
@@ -80,7 +91,6 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   List<AmmonomiconEntry> _npcs = [];
   List<AmmonomiconEntry> _enemies = [];
   List<AmmonomiconEntry> _bosses = [];
-  bool _loaded = false;
 
   // Category definitions — Ammonomicon bookmark tabs.
   // The 5 ammonomicon tab icons map to: Guns→Objects, Items→Pickups,
@@ -175,7 +185,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   void initState() {
     super.initState();
     _searchCtrl.addListener(_onSearchChanged);
-    _loadData();
+    if (!AmmonomiconScreen.debugStartLoaded) _loadData();
   }
 
   void _onSearchChanged() {
@@ -203,14 +213,18 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       ]);
       if (!mounted) return;
       // Parse each JSON file in an isolate to avoid jank on the ammonomicon screen.
+      Future<List<AmmonomiconEntry>> parse(String s) =>
+          AmmonomiconScreen.debugParseInline
+              ? Future.value(_parseAmmonomiconEntries(s))
+              : compute(_parseAmmonomiconEntries, s);
       final parsed = await Future.wait([
-        compute(_parseAmmonomiconEntries, results[0]),
-        compute(_parseAmmonomiconEntries, results[1]),
-        compute(_parseAmmonomiconEntries, results[2]),
-        compute(_parseAmmonomiconEntries, results[3]),
-        compute(_parseAmmonomiconEntries, results[4]),
-        compute(_parseAmmonomiconEntries, results[6]),
-        compute(_parseAmmonomiconEntries, results[7]),
+        parse(results[0]),
+        parse(results[1]),
+        parse(results[2]),
+        parse(results[3]),
+        parse(results[4]),
+        parse(results[6]),
+        parse(results[7]),
       ]);
       if (!mounted) return;
       // Shrines: custom parse — JSON icon fields are wiki URLs; the local
