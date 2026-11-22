@@ -9,6 +9,7 @@ import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/screens/item_detail_screen.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
+import 'package:gungeon_mate/widgets/item_detail/gun_synergies_tab.dart';
 
 /// Lich's Eye Bullets synergy display — the VisualPrefs toggle, the
 /// simulated LEB view (default), and the actual COMPLETE/PARTIAL/LOCKED
@@ -50,6 +51,9 @@ void main() {
       final lower = gun.name.toLowerCase();
       for (final s in p.getSynergiesFor(gun.name)) {
         if (s.items.length != 2 || s.anyOf.isNotEmpty) continue;
+        // The LEB ghost list skips hard-excluded (dual-wield etc.) and
+        // 3+-piece synergies — pick a pair that actually renders there.
+        if (isLebExcludedSynergy(s) || lebNeedsRealPieces(s)) continue;
         if (!s.items.any((i) => i.toLowerCase() == lower)) continue;
         final partner = s.items.firstWhere(
           (i) => i.toLowerCase() != lower,

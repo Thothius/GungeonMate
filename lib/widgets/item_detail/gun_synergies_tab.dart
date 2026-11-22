@@ -322,6 +322,29 @@ const kLebExcludedSynergies = {
   'Detective Mode',
 };
 
+/// True when the game won't simulate this synergy under Lich's Eye
+/// Bullets. Beyond the named [kLebExcludedSynergies], EVERY pure
+/// dual-wield synergy is non-simulated (the gun can't actually
+/// dual-wield) — except Trigger Twins, whose non-wield bonuses the
+/// game still grants per the official wiki.
+bool isLebExcludedSynergy(Synergy s) {
+  if (kLebExcludedSynergies.contains(s.name)) return true;
+  return s.name != 'Trigger Twins' && s.effect.toLowerCase().contains('dual-wield');
+}
+
+/// Requirement slots a synergy consumes — one per AND-group, else
+/// required items plus the anyOf pool.
+int lebSlotsNeeded(Synergy s) {
+  if (s.groups.isNotEmpty) return s.groups.length;
+  return s.items.length + (s.anyOf.isNotEmpty ? 1 : 0);
+}
+
+/// True when LEB alone can't satisfy the synergy: per the official
+/// rules LEB counts as ONE component, so 3+-piece synergies still
+/// need real items alongside it (Resourceful Indeed needs Elimentaler
+/// + 2 of the 3 rat items; Behold! needs 5 real pieces, etc.).
+bool lebNeedsRealPieces(Synergy s) => lebSlotsNeeded(s) >= 3;
+
 /// True when the synergy's effect text implies extra requirements under
 /// Lich's Eye Bullets (conditionals, per-count scaling, replacements).
 /// Heuristic — the JSON carries no structured requirement flag.
@@ -389,14 +412,18 @@ class _LebPageState extends State<_LebPage>
     final currentName = widget.currentName;
     final p = context.read<RunProvider>();
     final allSynergies = p.getSynergiesFor(currentName);
-    final synergies =
-        allSynergies
-            .where((s) => !kLebExcludedSynergies.contains(s.name))
-            .toList();
-    final blocked =
-        allSynergies
-            .where((s) => kLebExcludedSynergies.contains(s.name))
-            .toList();
+    final synergies = <Synergy>[];
+    final needsPieces = <Synergy>[];
+    final blocked = <Synergy>[];
+    for (final s in allSynergies) {
+      if (isLebExcludedSynergy(s)) {
+        blocked.add(s);
+      } else if (lebNeedsRealPieces(s)) {
+        needsPieces.add(s);
+      } else {
+        synergies.add(s);
+      }
+    }
     final lebIcon = p.itemByName("Lich's Eye Bullets")?.icon ?? '';
     final curGun = p.gunByName(currentName);
 
@@ -409,7 +436,7 @@ class _LebPageState extends State<_LebPage>
           children: [
             _LebHeader(iconPath: lebIcon),
             const SizedBox(height: 10),
-            if (synergies.isEmpty)
+            if (synergies.isEmpty && needsPieces.isEmpty)
               _NoLebSynergies()
             else ...[
               for (final s in [...synergies]
@@ -419,6 +446,13 @@ class _LebPageState extends State<_LebPage>
                   march: _march,
                   statDeltas: _lebDeltas(p, curGun, s),
                   meta: p.synergyMeta(s.name),
+                ),
+              if (needsPieces.isNotEmpty)
+                _LebNeedsPiecesNote(
+                  entries: {
+                    for (final s in needsPieces)
+                      s.name: lebSlotsNeeded(s) - 1,
+                  },
                 ),
               if (blocked.isNotEmpty)
                 _LebBlockedNote(
@@ -628,6 +662,39 @@ class _LebBlockedNote extends StatelessWidget {
       child: GoopText(
         "LEB can't simulate: ${names.join(', ')} "
         '(excluded by the game).',
+        style: TextStyle(
+          fontSize: 11.5,
+          height: 1.4,
+          fontStyle: FontStyle.italic,
+          color: Colors.white.withValues(alpha: 0.5),
+        ),
+      ),
+    );
+  }
+}
+
+/// Footnote for 3+-component synergies: LEB counts as only ONE piece,
+/// so these still need real items alongside it. [entries] maps synergy
+/// name → how many real pieces it still requires.
+class _LebNeedsPiecesNote extends StatelessWidget {
+  final Map<String, int> entries;
+  const _LebNeedsPiecesNote({required this.entries});
+
+  @override
+  Widget build(BuildContext context) {
+    final list =
+        entries.entries.map((e) => '${e.key} (+${e.value})').join(', ');
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.all(Radii.md),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: GoopText(
+        'LEB counts as one piece — still needs real items: $list.',
         style: TextStyle(
           fontSize: 11.5,
           height: 1.4,

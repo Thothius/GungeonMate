@@ -15,6 +15,7 @@ mixin _PeerSnapshots on ChangeNotifier {
   Future<void> _saveLastPlayedChar(String name);
   bool get _paradoxSidekickEmptied;
   set _paradoxSidekickEmptied(bool v);
+  void _autoEnableLebViewsIfHeld();
 
   /// Replace the co-op slot wholesale from a partner's snapshot. Names
   /// are resolved against the current master data; unknown names are
@@ -114,6 +115,7 @@ mixin _PeerSnapshots on ChangeNotifier {
         } else {
           _runState = _runState.copyWith(coop: player);
         }
+        _autoEnableLebViewsIfHeld();
         _scheduleSave();
         notifyListeners();
         return;
@@ -143,6 +145,7 @@ mixin _PeerSnapshots on ChangeNotifier {
       // Main receiving joiner's data → coop slot.
       _runState = _runState.copyWith(coop: player);
     }
+    _autoEnableLebViewsIfHeld();
     _scheduleSave();
     notifyListeners();
   }

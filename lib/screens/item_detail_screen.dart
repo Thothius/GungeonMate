@@ -159,10 +159,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       body: ValueListenableBuilder<VisualPrefs>(
         valueListenable: VisualPrefs.notifier,
         builder: (context, prefs, _) {
+          // Run-context views show the LEB simulation only when that
+          // slot actually holds Lich's Eye Bullets AND the user hasn't
+          // toggled the view off — auto-enable flips the pref on at
+          // acquisition, the toggle stays live for manual control.
           final lebView =
               widget.lebView ??
               (ownerSlot != null
-                  ? false
+                  ? runProvider.playerHasLeb(ownerSlot) &&
+                      prefs.showLichEyeBulletsSynergies
                   : widget.lebPref == LebPrefSource.browse
                   ? prefs.browseShowLichEyeBullets
                   : prefs.showLichEyeBulletsSynergies);
@@ -277,7 +282,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                       currentName: name,
                                       lebView: lebView,
                                       lebSource: widget.lebPref,
-                                      showLebToggle: ownerSlot == null,
+                                      showLebToggle: true,
                                     ),
                                   ),
                                   _DetailTabSpec(

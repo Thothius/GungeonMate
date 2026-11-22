@@ -16,6 +16,7 @@ import '../models/player.dart';
 import 'dart:math' as math;
 import '../models/run_state.dart';
 import '../models/run_log_entry.dart';
+import '../services/app_theme.dart';
 part 'synergy_queries.dart';
 part 'trackers/special_trackers.dart';
 part 'run_persistence.dart';
@@ -492,9 +493,50 @@ class RunProvider
 
   void startNewRun(Gungeoneer character) {
     _runState = RunState(main: _buildPlayerFor(character));
+    _lebViewsAutoEnabled = false;
     _saveLastPlayedChar(character.name);
+    _autoEnableLebViewsIfHeld();
     _scheduleSave();
     notifyListeners();
+  }
+
+  /// True when [slot]'s inventory contains Lich's Eye Bullets — the
+  /// passive that makes the holder's guns fire every simulated synergy.
+  /// Used to auto-enable the LEB view and to resolve in-run detail
+  /// screens (a real LEB makes the simulated view the truth).
+  bool playerHasLeb(PlayerSlot slot) {
+    final p = _playerFor(slot);
+    return p.items.any((i) => i.name == "Lich's Eye Bullets");
+  }
+
+  /// Latches once the auto-enable has fired for the current LEB
+  /// presence. Resets whenever no player holds LEB, so a fresh
+  /// acquisition re-enables — but a manual toggle-off mid-run is NOT
+  /// fought by unrelated pickups, snapshots, or rebuilds.
+  bool _lebViewsAutoEnabled = false;
+
+  /// When LEB enters a run (Gunslinger starter, pickup, co-op join,
+  /// snapshot, reset) the LEB-simulated views should reflect reality —
+  /// flip both persisted toggles on once per acquisition, leaving the
+  /// manual off-switch free for the rest of the run.
+  @override
+  void _autoEnableLebViewsIfHeld() {
+    final held =
+        playerHasLeb(PlayerSlot.main) ||
+        (_runState.coop != null && playerHasLeb(PlayerSlot.coop));
+    if (!held) {
+      _lebViewsAutoEnabled = false;
+      return;
+    }
+    if (_lebViewsAutoEnabled) return;
+    _lebViewsAutoEnabled = true;
+    final prefs = VisualPrefs.notifier.value;
+    if (!prefs.showLichEyeBulletsSynergies) {
+      VisualPrefs.setShowLichEyeBulletsSynergies(true);
+    }
+    if (!prefs.browseShowLichEyeBullets) {
+      VisualPrefs.setBrowseShowLichEyeBullets(true);
+    }
   }
 
   /// One-shot flag for the MP path: on the Sidekick device the coop slot
@@ -518,6 +560,7 @@ class RunProvider
               : _buildPlayerFor(character),
     );
     _paradoxSidekickEmptied = false;
+    _autoEnableLebViewsIfHeld();
     _scheduleSave();
     notifyListeners();
   }
@@ -543,6 +586,8 @@ class RunProvider
             : _buildPlayerFor(char);
     _runState = _replacePlayer(slot, fresh);
     _runState = _runState.copyWith(coolness: 0.0, curse: 0.0, shrinesUsed: []);
+    _lebViewsAutoEnabled = false;
+    _autoEnableLebViewsIfHeld();
     _scheduleSave();
     notifyListeners();
   }
@@ -624,6 +669,7 @@ class RunProvider
 
   void endRun() {
     _runState = RunState();
+    _lebViewsAutoEnabled = false;
     _resetRunScopedSpecials();
     _scheduleSave();
     notifyListeners();
@@ -714,6 +760,7 @@ class RunProvider
       ),
     );
     _checkNewSynergies(synergyBefore);
+    _autoEnableLebViewsIfHeld();
 
     // Robot Tax: Automatically convert HP Upgrades and Master Rounds to +1 Armor!
     final charName = p.character?.name.toLowerCase() ?? '';
@@ -792,6 +839,9 @@ class RunProvider
       _autoTrackRobotJunk(item.name.toLowerCase(), added: false);
     }
 
+    // LEB leaving the inventory releases the auto-enable latch so a
+    // later re-acquisition counts as a fresh pickup.
+    _autoEnableLebViewsIfHeld();
     _scheduleSave();
     notifyListeners();
   }
@@ -856,6 +906,7 @@ class RunProvider
       ),
     );
     _checkNewSynergies(synergyBefore);
+    _autoEnableLebViewsIfHeld();
     _scheduleSave();
     notifyListeners();
     return true;

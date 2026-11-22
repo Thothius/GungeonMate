@@ -5,6 +5,7 @@ import 'package:gungeon_mate/screens/item_detail_screen.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
+import 'package:gungeon_mate/widgets/item_detail/gun_synergies_tab.dart';
 
 void main() {
   late RunProvider p;
@@ -130,7 +131,16 @@ void main() {
     );
     await t.pump();
     expect(t.takeException(), isNull);
-    expect(find.text('Detective Magnum'), findsOneWidget);
+    // Ghost rows skip LEB-excluded (dual-wield etc.) and 3+-piece
+    // synergies — assert on the first one that does render.
+    final gun = p.allGuns.first;
+    final rendered = p
+        .getSynergiesFor(gun.name)
+        .firstWhere(
+          (s) =>
+              !isLebExcludedSynergy(s) && !lebNeedsRealPieces(s),
+        );
+    expect(find.text(rendered.name), findsOneWidget);
   });
 
   testWidgets('gun detail lists locked synergies when LEB toggle is off', (
