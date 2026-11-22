@@ -1,1676 +1,4539 @@
 {
- "360 Yes Scope": {
-  "fx": [
-   "damage_ramp"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Scope",
-    "does": "Spinning 360 grants stacking 1.5x next-shot damage buff"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "damage +50% phrased as '1.5x damage multiplier', stacks up to 'six times'"
-  ],
-  "enemy": false
- },
- "Absent Minded": {
-  "fx": [
-   "bullet_bounce",
-   "bullet_homing"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "bounce set:4 phrased as 'bounce 4 times'"
-  ],
-  "enemy": false
- },
- "Added Effect - Fire": {
-  "fx": [
-   "burn"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Alpha Bullet / Hot Lead",
-    "does": "Guarantees first magazine shot is a fire bullet"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Added Effect - Ice": {
-  "fx": [
-   "freeze"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Alpha Bullet / Frost Bullets",
-    "does": "Guarantees first magazine shot is an ice bullet"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Added Effect - Poison": {
-  "fx": [
-   "poison"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Alpha Bullet / Irradiated Lead",
-    "does": "Guarantees first magazine shot is a poison bullet"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Akey Breaky": {
-  "fx": [
-   "infinite_ammo_part"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "damage set:10 parenthetical '(10 damage per bullet)'"
-  ],
-  "enemy": false
- },
- "AI Assistant": {
-  "fx": [
-   "bullet_bounce"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Roll Bomb / iBomb Companion App",
-    "does": "Roll bombs bounce and detonate manually via iBomb"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "AK-47 (Island Forme)": {
-  "fx": [
-   "transform"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "damage set:7 phrased as 'does 7 damage per shot, as opposed to the usual 5.5'"
-  ],
-  "enemy": false
- },
- "Alas, Sniperion": {
-  "fx": [
-   "transform"
-  ],
-  "qb": [
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "higher-damage crescent-shaped bullets"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "All Out Of Law": {
-  "fx": [
-   "burst_fire",
-   "shotgun_spread"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "reload burst phrased in words: 'three tight spreads of three free bullets'"
-  ],
-  "enemy": false
- },
- "Alternative Rock": {
-  "fx": [
-   "multishot",
-   "stun"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "multishot phrased in words: 'two parallel columns of notes'"
-  ],
-  "enemy": false
- },
- "Apiary": {
-  "fx": [
-   "transform",
-   "infinite_ammo_part"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Arctic Warfare": {
-  "fx": [
-   "freeze"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Armored Corps": {
-  "fx": [],
-  "qb": [
-   {
-    "s": "shotspeed",
-    "d": "up",
-    "note": "both guns gain increased shot speed"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Barrage Shot": {
-  "fx": [
-   "charge_shot",
-   "bullet_size"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "increases shot size"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Battery Powered": {
-  "fx": [
-   "infinite_ammo_part"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "ammo regen rate '1 ammo every 4 seconds'"
-  ],
-  "enemy": false
- },
- "Battle Mode": {
-  "fx": [
-   "orbiting_orb",
-   "explode_on_hit"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Orbital Bullets",
-    "does": "Spawns orbiting bombs dealing 40 explosion damage on contact"
-   }
-  ],
-  "coop": "P1",
-  "miss": [
-   "flat explosion damage 'dealing 40 damage upon touching an enemy'"
-  ],
-  "enemy": false
- },
- "Bee Plus": {
-  "fx": [
-   "minion_summon"
-  ],
-  "qb": [
-   {
-    "s": "shotspeed",
-    "d": "up",
-    "note": "hornets travel faster than regular bees"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "hornets deal more damage than regular bees"
-   }
-  ],
-  "si": [
-   {
-    "item": "Honeycomb / Jar of Bees",
-    "does": "Taking damage spawns faster, higher-damage hornets"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "BEES": {
-  "fx": [
-   "bullet_size"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectile_size +100% phrased as 'Doubles the size'"
-  ],
-  "enemy": false
- },
- "Behold!": {
-  "fx": [
-   "orbiting_orb",
-   "turret"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "P1",
-  "miss": [],
-  "enemy": false
- },
- "Beta Ray": {
-  "fx": [
-   "beam",
-   "bullet_size"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "Gamma Ray beam grows larger"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "Gamma Ray beam deals more damage"
-   },
-   {
-    "s": "shotspeed",
-    "d": "down",
-    "note": "beam no longer travels instantaneously"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Betrayer's Lies": {
-  "fx": [
-   "infinite_ammo_part"
-  ],
-  "qb": [
-   {
-    "s": "magazine",
-    "d": "up",
-    "note": "much larger magazine size"
-   },
-   {
-    "s": "firerate",
-    "d": "up",
-    "note": "extremely high fire rate"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Big Shotgun Gun": {
-  "fx": [
-   "roll_boost"
-  ],
-  "qb": [
-   {
-    "s": "other",
-    "d": "up",
-    "note": "extended dodge roll while holding Big Shotgun"
-   }
-  ],
-  "si": [],
-  "coop": "P1",
-  "miss": [
-   "projectiles_per_shot set:4 phrased as 'fires 4 projectiles instead of 3'"
-  ],
-  "enemy": false
- },
- "blade": {
-  "fx": [
-   "jammed_only"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Blade Runner": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Blessing and a Curse": {
-  "fx": [
-   "jammed_only",
-   "damage_ramp"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Cursed Bullets / Silver Bullets",
-    "does": "Grants persistent +0.25% damage per jammed enemy kill"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "damage +0.25% per jammed kill phrased as 'additive 0.0025 (0.25%)'"
-  ],
-  "enemy": false
- },
- "Block Party": {
-  "fx": [
-   "bullet_size"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Bluer Guon Stone": {
-  "fx": [
-   "orbiting_orb",
-   "shield",
-   "radial_burst"
-  ],
-  "qb": [
-   {
-    "s": "other",
-    "d": "up",
-    "note": "Guon Stone size and rotation speed increased"
-   }
-  ],
-  "si": [
-   {
-    "item": "Blue Guon Stone",
-    "does": "Larger, faster orbit; blocking bullets deals 15 AOE damage"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "flat AOE damage 'deals 15 damage to all nearby enemies'"
-  ],
-  "enemy": false
- },
- "Blunderbrace": {
-  "fx": [
-   "bullet_size",
-   "charge_shot"
-  ],
-  "qb": [
-   {
-    "s": "other",
-    "d": "up",
-    "note": "shorter charge time"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Bomberpal": {
-  "fx": [
-   "multishot",
-   "charge_shot"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot set:2 ('fires two bombs'); charge time -50% ('charges twice as fast')"
-  ],
-  "enemy": false
- },
- "Breakfast Club": {
-  "fx": [
-   "laser"
-  ],
-  "qb": [
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "all but last 10 shots are stronger lasers"
-   },
-   {
-    "s": "pierce",
-    "d": "up",
-    "note": "all but last 10 shots pierce enemies"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "reload -50% ('Halves the reload time'), magazine set:27 ('to 27'), 'last 10 shots'"
-  ],
-  "enemy": false
- },
- "Buggin' Out": {
-  "fx": [
-   "fire_immunity"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Bug Boots",
-    "does": "Spreads oil instead of poison and grants fire immunity when held"
-   }
-  ],
-  "coop": "P1",
-  "miss": [],
-  "enemy": false
- },
- "Buckle Up": {
-  "fx": [
-   "infinite_ammo_part",
-   "moving_bonus",
-   "glowing"
-  ],
-  "qb": [
-   {
-    "s": "firerate",
-    "d": "up",
-    "note": "significantly higher fire rate while moving continuously"
-   }
-  ],
-  "si": [],
-  "coop": "P1",
-  "miss": [],
-  "enemy": false
- },
- "Buster Gun": {
-  "fx": [
-   "shotgun_spread",
-   "multishot"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "variable reload cone 'fires 3 or 4 projectiles'"
-  ],
-  "enemy": false
- },
- "Cactus Flower": {
-  "fx": [
-   "bullet_bounce",
-   "radial_burst"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Captain Plant It": {
-  "fx": [
-   "turret"
-  ],
-  "qb": [
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "Portable Turret gains Unity's damage bonus"
-   }
-  ],
-  "si": [
-   {
-    "item": "Portable Turret / Unity",
-    "does": "Portable Turret gains Unity's damage bonus"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Careful Iteration": {
-  "fx": [
-   "shotgun_spread",
-   "multishot"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot +6 phrased as 'spread of 6 nails'"
-  ],
-  "enemy": false
- },
- "Chain Lightning": {
-  "fx": [
-   "lightning"
-  ],
-  "qb": [
-   {
-    "s": "range",
-    "d": "up",
-    "note": "increased electricity connection range"
-   }
-  ],
-  "si": [
-   {
-    "item": "Shock Rounds / Shadow Bullets",
-    "does": "Longer electricity arc range; arcs to enemy bullets"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Chest High is the Best High": {
-  "fx": [],
-  "qb": [],
-  "si": [
-   {
-    "item": "Cog of Battle",
-    "does": "Table flip grants +100% damage buff (enhanced Macho Brace)"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "damage +100% juxtaposed with baseline 'rather than Macho Brace's 30%'"
-  ],
-  "enemy": false
- },
- "Chief Master": {
-  "fx": [
-   "full_auto",
-   "last_magazine",
-   "charge_shot"
-  ],
-  "qb": [
-   {
-    "s": "magazine",
-    "d": "up",
-    "note": "Alien Sidearm has a much larger magazine"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "word-number trigger 'final two shots in the magazine'"
-  ],
-  "enemy": false
- },
- "Clawntlet": {
-  "fx": [
-   "spiral_shot"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Gunknight Gauntlet",
-    "does": "Taking damage releases a spiral of bullets"
-   }
-  ],
-  "coop": "P1",
-  "miss": [],
-  "enemy": false
- },
- "Cold 1896": {
-  "fx": [
-   "dual_wield"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "magazine +100% phrased as 'magazine sizes are doubled'"
-  ],
-  "enemy": false
- },
- "Comammo Belt": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "magazine +100% phrased as 'double magazine size'"
-  ],
-  "enemy": false
- },
- "Cormorant": {
-  "fx": [
-   "transform",
-   "quick_reload"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Gunknight Armor Set",
-    "does": "Transforms player, removes all reload times, +3 curse"
-   }
-  ],
-  "coop": "P1",
-  "miss": [
-   "reload set:0 ('Removes reload times'); non-gun stat 'Increases curse by 3'"
-  ],
-  "enemy": false
- },
- "Crestfallen Soul": {
-  "fx": [
-   "roll_boost"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Gun Soul",
-    "does": "+20% dodge roll speed; +50% Crestfaller damage before soul retrieval"
-   }
-  ],
-  "coop": "P1",
-  "miss": [
-   "non-gun stat 'Increases dodge roll speed by 20%'"
-  ],
-  "enemy": false
- },
- "Criticaliber": {
-  "fx": [
-   "crit_bonus"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Bullet Idol",
-    "does": "Taking damage guarantees next Vorpal Gun shot is critical"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Cryptic Cryptids": {
-  "fx": [
-   "burn",
-   "fire_immunity"
-  ],
-  "qb": [
-   {
-    "s": "pierce",
-    "d": "up",
-    "note": "both guns pierce enemies"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "both guns deal additional damage"
-   }
-  ],
-  "si": [],
-  "coop": "P1",
-  "miss": [],
-  "enemy": false
- },
- "Crystal Horn": {
-  "fx": [
-   "last_magazine",
-   "bullet_split",
-   "cluster_bullets",
-   "explode_on_kill"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "word-number 'three crystal shots at the end of each magazine'"
-  ],
-  "enemy": false
- },
- "Dead Cell": {
-  "fx": [
-   "charge_shot",
-   "boss_only"
-  ],
-  "qb": [
-   {
-    "s": "other",
-    "d": "up",
-    "note": "decreases Railgun charge time"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Dead Place": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Dead Prez": {
-  "fx": [
-   "bullet_bounce",
-   "shotgun_spread",
-   "multishot"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot +4 phrased as 'wide spread of 4 bullets alongside its normal shots'"
-  ],
-  "enemy": false
- },
- "Detective Mode": {
-  "fx": [
-   "chest_spoiler"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Badge",
-    "does": "Police Officer reveals contents of nearby chests"
-   }
-  ],
-  "coop": "TEAM",
-  "miss": [
-   "ammo set:600 ('maximum ammo to 600'); reload -50% ('halves reload time')"
-  ],
-  "enemy": false
- },
- "Diamond Weapon": {
-  "fx": [
-   "last_magazine",
-   "freeze"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Omega Bullets / Frost Bullets",
-    "does": "Guarantees last magazine shot is an ice bullet"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Diazepam": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Don't Hoot the Messenger": {
-  "fx": [
-   "charge_shot"
-  ],
-  "qb": [
-   {
-    "s": "force",
-    "d": "up",
-    "note": "charged shots gain significant knockback"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Double Double Helix": {
-  "fx": [
-   "multishot"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot set:4 phrased as 'Fires 4 projectiles per shot instead of 2'"
-  ],
-  "enemy": false
- },
- "Dr Worm": {
-  "fx": [
-   "infinite_ammo_part"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Dumb Smart Bullets": {
-  "fx": [
-   "bullet_size"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "non-homing bullets become larger"
-   }
-  ],
-  "si": [
-   {
-    "item": "Scattershot / Homing Bullets",
-    "does": "Non-homing bullets grow larger and deal +50% damage"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "The Ecstasy Of Gold": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Emerald Weapon": {
-  "fx": [
-   "last_magazine",
-   "poison"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Omega Bullets / Irradiated Lead",
-    "does": "Guarantees last magazine shot is a poison bullet"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Emergency Help": {
-  "fx": [
-   "explode_on_hit"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Empty Vessels": {
-  "fx": [
-   "radial_burst"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Bottle / Holey Grail",
-    "does": "Taking damage fills empty Bottle with 100-dmg room-wide flame"
-   }
-  ],
-  "coop": "TEAM",
-  "miss": [
-   "flat room damage 'deals 100 damage to all enemies in the room'"
-  ],
-  "enemy": false
- },
- "Enter the Fruitgeon": {
-  "fx": [
-   "orbiting_orb",
-   "turret"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Orange Guon Stone / Orange",
-    "does": "Guon Stone fires 7-damage oranges at enemies"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "flat projectile damage 'dealing 7 damage'"
-  ],
-  "enemy": false
- },
- "Finger on the Pulse": {
-  "fx": [
-   "turret",
-   "minion_summon"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "summon count 'spawns 3 Pulse Cannons'"
-  ],
-  "enemy": false
- },
- "Fear the Old Blood": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Five O'Clock Somewhere": {
-  "fx": [
-   "infinite_ammo_part",
-   "stun"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Flat Stanley": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Frosty the Bullet Tyrant": {
-  "fx": [
-   "bullet_size",
-   "damage_ramp"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "shots grow larger with travel distance"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "shots deal more damage with travel distance"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Full Circle": {
-  "fx": [],
-  "qb": [
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "Tangler gains increased damage"
-   },
-   {
-    "s": "reload",
-    "d": "down",
-    "note": "Tangler gains increased reload time"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Future Gangster": {
-  "fx": [
-   "laser"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "damage set:6.5 phrased as 'does 6.5 damage instead of the normal 5 damage'"
-  ],
-  "enemy": false
- },
- "Grouch": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Gunderlord": {
-  "fx": [
-   "lightning",
-   "infinite_ammo_part"
-  ],
-  "qb": [
-   {
-    "s": "shotspeed",
-    "d": "up",
-    "note": "Ice Breaker fires high-velocity single shots"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot set:1 phrased as 'single high-velocity shots instead of shotgun spreads'"
-  ],
-  "enemy": false
- },
- "Gunnerang": {
-  "fx": [],
-  "qb": [],
-  "si": [
-   {
-    "item": "Boomerang / Utility Belt",
-    "does": "Increases thrown gun damage by 50%"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Guns and Deviltry": {
-  "fx": [
-   "stun"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "reload knife flat damage 'deals 8 damage'"
-  ],
-  "enemy": false
- },
- "Hacker": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Hail To The King": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Hammer and Nail": {
-  "fx": [
-   "last_magazine"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "damage +200% ('deals triple damage'); '5 hammer shots at the end of every magazine'"
-  ],
-  "enemy": false
- },
- "Hard Light": {
-  "fx": [
-   "bullet_homing",
-   "infinite_ammo_part"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Heart-Shaped Box": {
-  "fx": [
-   "heal"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Lament Configurum / Heart Lunchbox",
-    "does": "Lament Configurum heals player instead of dealing damage"
-   }
-  ],
-  "coop": "P1",
-  "miss": [],
-  "enemy": false
- },
- "Heavy Jolt": {
-  "fx": [],
-  "qb": [
-   {
-    "s": "force",
-    "d": "up",
-    "note": "Jolter gains increased knockback"
-   },
-   {
-    "s": "accuracy",
-    "d": "up",
-    "note": "Jolter gains increased accuracy"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Heavy Metal": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Hellhole": {
-  "fx": [
-   "singularity",
-   "gravity"
-  ],
-  "qb": [
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "hell portal deals high damage"
-   }
-  ],
-  "si": [
-   {
-    "item": "Singularity",
-    "does": "Spawns high-damage hell portal pulling in enemies"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Hell Singing": {
-  "fx": [
-   "jammed_only"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "combined total '487.5% damage to jammed enemies' risks double-counting base Silver Bullets"
-  ],
-  "enemy": false
- },
- "Hidden Tech Flare": {
-  "fx": [
-   "burn"
-  ],
-  "qb": [
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "flipped tables ignite enemies in higher-damage green fire"
-   },
-   {
-    "s": "range",
-    "d": "up",
-    "note": "Table Tech Heat range greatly increased"
-   }
-  ],
-  "si": [
-   {
-    "item": "Table Tech Heat / Hot Lead",
-    "does": "Flipped tables ignite enemies in stronger, wider green fire"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Hotter Than Heck": {
-  "fx": [
-   "bullet_size",
-   "fire_immunity"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "http://merch.devolverdigital.com": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "damage +100% phrased as 'Doubles Microtransaction Gun's damage'"
-  ],
-  "enemy": false
- },
- "Hydro Pump": {
-  "fx": [
-   "beam",
-   "bullet_size"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "Mega Douser stream size increased"
-   },
-   {
-    "s": "force",
-    "d": "up",
-    "note": "Mega Douser stream knockback increased"
-   },
-   {
-    "s": "shotspeed",
-    "d": "up",
-    "note": "Mega Douser stream speed increased"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "Mega Douser stream damage increased"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Hyper Beam": {
-  "fx": [
-   "transform",
-   "charge_shot",
-   "beam"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Pig",
-    "does": "Pig death refills Heroine ammo and enables 30s Hyper Beam mode"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "dual damage sets 'uncharged shots deal 80 damage and charged shots deal 160 damage' for '30 seconds"
-  ],
-  "enemy": false
- },
- "I need scissors! 61!": {
-  "fx": [
-   "slow",
-   "stun"
-  ],
-  "qb": [
-   {
-    "s": "firerate",
-    "d": "down",
-    "note": "Trank Gun fire rate decreased"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "Trank Gun damage increased"
-   },
-   {
-    "s": "reload",
-    "d": "down",
-    "note": "Trank Gun reload time increased"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Ice Accumulation": {
-  "fx": [
-   "bullet_size",
-   "damage_ramp"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "significantly increases shot size"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "increases damage gained from Snowballets"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Ice Beam": {
-  "fx": [
-   "freeze",
-   "charge_shot",
-   "transform"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Ice To Meet You": {
-  "fx": [
-   "bullet_split",
-   "bullet_bounce"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Heart of Ice",
-    "does": "Any gun periodically fires splitting, bouncing Heart of Ice shots"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Ice Water": {
-  "fx": [
-   "freeze",
-   "bullet_trail",
-   "bullet_size"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "Mega Douser stream size increased"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "In The Mood!": {
-  "fx": [
-   "move_speed"
-  ],
-  "qb": [
-   {
-    "s": "move_speed",
-    "d": "up",
-    "note": "slightly increases player movement speed"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Iron Slug": {
-  "fx": [
-   "bullet_size",
-   "explode_on_hit"
-  ],
-  "qb": [
-   {
-    "s": "projectile_size",
-    "d": "up",
-    "note": "Big Iron fires one large slug"
-   },
-   {
-    "s": "damage",
-    "d": "up",
-    "note": "Big Iron fires a high-damage slug"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot set:1 phrased in words as 'fires one large, explosive, high-damage slug'"
-  ],
-  "enemy": false
- },
- "Iron Stance": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Iroquois": {
-  "fx": [],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "It's Your Destiny": {
-  "fx": [
-   "infinite_ammo_part",
-   "rocket",
-   "bullet_split",
-   "cluster_bullets"
-  ],
-  "qb": [
-   {
-    "s": "shotspeed",
-    "d": "up",
-    "note": "Ice Breaker fires high-velocity single shots"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot set:1 ('single'); split count 'split into 14 smaller rockets instead of 7'"
-  ],
-  "enemy": false
- },
- "J am": {
-  "fx": [],
-  "qb": [],
-  "si": [
-   {
-    "item": "Alpha Bullet / Omega Bullets",
-    "does": "Reduces reload times by 33%"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Jotun Time": {
-  "fx": [
-   "freeze",
-   "ice_nova",
-   "slow"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Jumping... is useless": {
-  "fx": [
-   "laser",
-   "beam"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "shotspeed +100% ('Doubles'), reload +200% ('triples'), 'four continuous lasers'"
-  ],
-  "enemy": false
- },
- "Junk Mail": {
-  "fx": [],
-  "qb": [],
-  "si": [
-   {
-    "item": "Magazine Rack",
-    "does": "Forces Mailbox to shoot only packages while active"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Just Like The Real Thing": {
-  "fx": [
-   "shotgun_spread",
-   "bullet_bounce",
-   "bullet_split"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "projectiles_per_shot set:5 phrased in words as 'wide spread of five bullets'"
-  ],
-  "enemy": false
- },
- "Just Shoot Me": {
-  "fx": [
-   "turret"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Magazine Rack",
-    "does": "Magazine Rack shoots nearby enemies when Camera is held"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Kalibreath": {
-  "fx": [],
-  "qb": [
-   {
-    "s": "firerate",
-    "d": "up",
-    "note": "Dragunfire gains increased rate of fire"
-   },
-   {
-    "s": "force",
-    "d": "up",
-    "note": "Dragunfire gains increased knockback"
-   },
-   {
-    "s": "pierce",
-    "d": "down",
-    "note": "Dragunfire loses piercing"
-   }
-  ],
-  "si": [],
-  "coop": "BOTH",
-  "miss": [
-   "pierce set:0 phrased as 'loses piercing'"
-  ],
-  "enemy": false
- },
- "Keep The Change": {
-  "fx": [
-   "last_magazine"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Blank Companion's Ring",
-    "does": "Can trigger when M16 empties its magazine"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [],
-  "enemy": false
- },
- "Keeping The Beat": {
-  "fx": [
-   "damage_ramp",
-   "combo"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Metronome / Drum Clip",
-    "does": "+4% damage per kill (was +2%), capped at +250% (was +150%)"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "damage +4% per kill (was +2%) and cap +250% (was +150%)"
-  ],
-  "enemy": false
- },
- "Knight Time": {
-  "fx": [
-   "time_stop"
-  ],
-  "qb": [],
-  "si": [
-   {
-    "item": "Ballistic Boots / Gunknight Greaves",
-    "does": "Taking damage briefly stops time"
-   }
-  ],
-  "coop": "TEAM",
-  "miss": [],
-  "enemy": false
- },
- "Kung Fu Hippie, Rappin' Surfer": {
-  "fx": [],
-  "qb": [
-   {
-    "s": "reload",
-    "d": "up",
-    "note": "slower reload speed widens active-reload window"
-   }
-  ],
-  "si": [
-   {
-    "item": "Sunglasses",
-    "does": "Grants +1.33 coolness and widens Rad Gun active reload window"
-   }
-  ],
-  "coop": "BOTH",
-  "miss": [
-   "magazine set:20 ('magazine size to 20'); non-gun stat 'grants 1.33 coolness'"
-  ],
-  "enemy": false
- },
- "Land Among The Stars": {
-  "fx": [
-   "orbiting_orb",
-   "multishot"
-  ],
-  "qb": [],
-  "si": [],
-  "coop": "P1",
-  "miss": [
-   "word-number proc 'send out three planets'"
-  ],
-  "enemy": false
- }
+  "360 Yes Scope": {
+    "fx": [
+      "damage_ramp"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Scope",
+        "does": "Spinning 360 grants stacking 1.5x next-shot damage buff"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "damage +50% phrased as '1.5x damage multiplier', stacks up to 'six times'"
+    ],
+    "enemy": false
+  },
+  "Absent Minded": {
+    "fx": [
+      "bullet_bounce",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "bounce set:4 phrased as 'bounce 4 times'"
+    ],
+    "enemy": false
+  },
+  "Added Effect - Fire": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Alpha Bullet / Hot Lead",
+        "does": "Guarantees first magazine shot is a fire bullet"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Added Effect - Ice": {
+    "fx": [
+      "freeze"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Alpha Bullet / Frost Bullets",
+        "does": "Guarantees first magazine shot is an ice bullet"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Added Effect - Poison": {
+    "fx": [
+      "poison"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Alpha Bullet / Irradiated Lead",
+        "does": "Guarantees first magazine shot is a poison bullet"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Akey Breaky": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "damage set:10 parenthetical '(10 damage per bullet)'"
+    ],
+    "enemy": false
+  },
+  "AI Assistant": {
+    "fx": [
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Roll Bomb / iBomb Companion App",
+        "does": "Roll bombs bounce and detonate manually via iBomb"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "AK-47 (Island Forme)": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "damage set:7 phrased as 'does 7 damage per shot, as opposed to the usual 5.5'"
+    ],
+    "enemy": false
+  },
+  "Alas, Sniperion": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "higher-damage crescent-shaped bullets"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "All Out Of Law": {
+    "fx": [
+      "burst_fire",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "reload burst phrased in words: 'three tight spreads of three free bullets'"
+    ],
+    "enemy": false
+  },
+  "Alternative Rock": {
+    "fx": [
+      "multishot",
+      "stun"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "multishot phrased in words: 'two parallel columns of notes'"
+    ],
+    "enemy": false
+  },
+  "Apiary": {
+    "fx": [
+      "transform",
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Arctic Warfare": {
+    "fx": [
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Armored Corps": {
+    "fx": [],
+    "qb": [
+      {
+        "s": "shotspeed",
+        "d": "up",
+        "note": "both guns gain increased shot speed"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Barrage Shot": {
+    "fx": [
+      "charge_shot",
+      "bullet_size"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "increases shot size"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Battery Powered": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "ammo regen rate '1 ammo every 4 seconds'"
+    ],
+    "enemy": false
+  },
+  "Battle Mode": {
+    "fx": [
+      "orbiting_orb",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Orbital Bullets",
+        "does": "Spawns orbiting bombs dealing 40 explosion damage on contact"
+      }
+    ],
+    "coop": "P1",
+    "miss": [
+      "flat explosion damage 'dealing 40 damage upon touching an enemy'"
+    ],
+    "enemy": false
+  },
+  "Bee Plus": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [
+      {
+        "s": "shotspeed",
+        "d": "up",
+        "note": "hornets travel faster than regular bees"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "hornets deal more damage than regular bees"
+      }
+    ],
+    "si": [
+      {
+        "item": "Honeycomb / Jar of Bees",
+        "does": "Taking damage spawns faster, higher-damage hornets"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "BEES": {
+    "fx": [
+      "bullet_size"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectile_size +100% phrased as 'Doubles the size'"
+    ],
+    "enemy": false
+  },
+  "Behold!": {
+    "fx": [
+      "orbiting_orb",
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "P1",
+    "miss": [],
+    "enemy": false
+  },
+  "Beta Ray": {
+    "fx": [
+      "beam",
+      "bullet_size"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "Gamma Ray beam grows larger"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "Gamma Ray beam deals more damage"
+      },
+      {
+        "s": "shotspeed",
+        "d": "down",
+        "note": "beam no longer travels instantaneously"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Betrayer's Lies": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [
+      {
+        "s": "magazine",
+        "d": "up",
+        "note": "much larger magazine size"
+      },
+      {
+        "s": "firerate",
+        "d": "up",
+        "note": "extremely high fire rate"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Big Shotgun Gun": {
+    "fx": [
+      "roll_boost"
+    ],
+    "qb": [
+      {
+        "s": "other",
+        "d": "up",
+        "note": "extended dodge roll while holding Big Shotgun"
+      }
+    ],
+    "si": [],
+    "coop": "P1",
+    "miss": [
+      "projectiles_per_shot set:4 phrased as 'fires 4 projectiles instead of 3'"
+    ],
+    "enemy": false
+  },
+  "blade": {
+    "fx": [
+      "jammed_only"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Blade Runner": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Blessing and a Curse": {
+    "fx": [
+      "jammed_only",
+      "damage_ramp"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Cursed Bullets / Silver Bullets",
+        "does": "Grants persistent +0.25% damage per jammed enemy kill"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "damage +0.25% per jammed kill phrased as 'additive 0.0025 (0.25%)'"
+    ],
+    "enemy": false
+  },
+  "Block Party": {
+    "fx": [
+      "bullet_size"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Bluer Guon Stone": {
+    "fx": [
+      "orbiting_orb",
+      "shield",
+      "radial_burst"
+    ],
+    "qb": [
+      {
+        "s": "other",
+        "d": "up",
+        "note": "Guon Stone size and rotation speed increased"
+      }
+    ],
+    "si": [
+      {
+        "item": "Blue Guon Stone",
+        "does": "Larger, faster orbit; blocking bullets deals 15 AOE damage"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "flat AOE damage 'deals 15 damage to all nearby enemies'"
+    ],
+    "enemy": false
+  },
+  "Blunderbrace": {
+    "fx": [
+      "bullet_size",
+      "charge_shot"
+    ],
+    "qb": [
+      {
+        "s": "other",
+        "d": "up",
+        "note": "shorter charge time"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Bomberpal": {
+    "fx": [
+      "multishot",
+      "charge_shot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot set:2 ('fires two bombs'); charge time -50% ('charges twice as fast')"
+    ],
+    "enemy": false
+  },
+  "Breakfast Club": {
+    "fx": [
+      "laser"
+    ],
+    "qb": [
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "all but last 10 shots are stronger lasers"
+      },
+      {
+        "s": "pierce",
+        "d": "up",
+        "note": "all but last 10 shots pierce enemies"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "reload -50% ('Halves the reload time'), magazine set:27 ('to 27'), 'last 10 shots'"
+    ],
+    "enemy": false
+  },
+  "Buggin' Out": {
+    "fx": [
+      "fire_immunity"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Bug Boots",
+        "does": "Spreads oil instead of poison and grants fire immunity when held"
+      }
+    ],
+    "coop": "P1",
+    "miss": [],
+    "enemy": false
+  },
+  "Buckle Up": {
+    "fx": [
+      "infinite_ammo_part",
+      "moving_bonus",
+      "glowing"
+    ],
+    "qb": [
+      {
+        "s": "firerate",
+        "d": "up",
+        "note": "significantly higher fire rate while moving continuously"
+      }
+    ],
+    "si": [],
+    "coop": "P1",
+    "miss": [],
+    "enemy": false
+  },
+  "Buster Gun": {
+    "fx": [
+      "shotgun_spread",
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "variable reload cone 'fires 3 or 4 projectiles'"
+    ],
+    "enemy": false
+  },
+  "Cactus Flower": {
+    "fx": [
+      "bullet_bounce",
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Captain Plant It": {
+    "fx": [
+      "turret"
+    ],
+    "qb": [
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "Portable Turret gains Unity's damage bonus"
+      }
+    ],
+    "si": [
+      {
+        "item": "Portable Turret / Unity",
+        "does": "Portable Turret gains Unity's damage bonus"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Careful Iteration": {
+    "fx": [
+      "shotgun_spread",
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot +6 phrased as 'spread of 6 nails'"
+    ],
+    "enemy": false
+  },
+  "Chain Lightning": {
+    "fx": [
+      "lightning"
+    ],
+    "qb": [
+      {
+        "s": "range",
+        "d": "up",
+        "note": "increased electricity connection range"
+      }
+    ],
+    "si": [
+      {
+        "item": "Shock Rounds / Shadow Bullets",
+        "does": "Longer electricity arc range; arcs to enemy bullets"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Chest High is the Best High": {
+    "fx": [],
+    "qb": [],
+    "si": [
+      {
+        "item": "Cog of Battle",
+        "does": "Table flip grants +100% damage buff (enhanced Macho Brace)"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "damage +100% juxtaposed with baseline 'rather than Macho Brace's 30%'"
+    ],
+    "enemy": false
+  },
+  "Chief Master": {
+    "fx": [
+      "full_auto",
+      "last_magazine",
+      "charge_shot"
+    ],
+    "qb": [
+      {
+        "s": "magazine",
+        "d": "up",
+        "note": "Alien Sidearm has a much larger magazine"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "word-number trigger 'final two shots in the magazine'"
+    ],
+    "enemy": false
+  },
+  "Clawntlet": {
+    "fx": [
+      "spiral_shot"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Gunknight Gauntlet",
+        "does": "Taking damage releases a spiral of bullets"
+      }
+    ],
+    "coop": "P1",
+    "miss": [],
+    "enemy": false
+  },
+  "Cold 1896": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "magazine +100% phrased as 'magazine sizes are doubled'"
+    ],
+    "enemy": false
+  },
+  "Comammo Belt": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "magazine +100% phrased as 'double magazine size'"
+    ],
+    "enemy": false
+  },
+  "Cormorant": {
+    "fx": [
+      "transform",
+      "quick_reload"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Gunknight Armor Set",
+        "does": "Transforms player, removes all reload times, +3 curse"
+      }
+    ],
+    "coop": "P1",
+    "miss": [
+      "reload set:0 ('Removes reload times'); non-gun stat 'Increases curse by 3'"
+    ],
+    "enemy": false
+  },
+  "Crestfallen Soul": {
+    "fx": [
+      "roll_boost"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Gun Soul",
+        "does": "+20% dodge roll speed; +50% Crestfaller damage before soul retrieval"
+      }
+    ],
+    "coop": "P1",
+    "miss": [
+      "non-gun stat 'Increases dodge roll speed by 20%'"
+    ],
+    "enemy": false
+  },
+  "Criticaliber": {
+    "fx": [
+      "crit_bonus"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Bullet Idol",
+        "does": "Taking damage guarantees next Vorpal Gun shot is critical"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cryptic Cryptids": {
+    "fx": [
+      "burn",
+      "fire_immunity"
+    ],
+    "qb": [
+      {
+        "s": "pierce",
+        "d": "up",
+        "note": "both guns pierce enemies"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "both guns deal additional damage"
+      }
+    ],
+    "si": [],
+    "coop": "P1",
+    "miss": [],
+    "enemy": false
+  },
+  "Crystal Horn": {
+    "fx": [
+      "last_magazine",
+      "bullet_split",
+      "cluster_bullets",
+      "explode_on_kill"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "word-number 'three crystal shots at the end of each magazine'"
+    ],
+    "enemy": false
+  },
+  "Dead Cell": {
+    "fx": [
+      "charge_shot",
+      "boss_only"
+    ],
+    "qb": [
+      {
+        "s": "other",
+        "d": "up",
+        "note": "decreases Railgun charge time"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dead Place": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dead Prez": {
+    "fx": [
+      "bullet_bounce",
+      "shotgun_spread",
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot +4 phrased as 'wide spread of 4 bullets alongside its normal shots'"
+    ],
+    "enemy": false
+  },
+  "Detective Mode": {
+    "fx": [
+      "chest_spoiler"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Badge",
+        "does": "Police Officer reveals contents of nearby chests"
+      }
+    ],
+    "coop": "TEAM",
+    "miss": [
+      "ammo set:600 ('maximum ammo to 600'); reload -50% ('halves reload time')"
+    ],
+    "enemy": false
+  },
+  "Diamond Weapon": {
+    "fx": [
+      "last_magazine",
+      "freeze"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Omega Bullets / Frost Bullets",
+        "does": "Guarantees last magazine shot is an ice bullet"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Diazepam": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Don't Hoot the Messenger": {
+    "fx": [
+      "charge_shot"
+    ],
+    "qb": [
+      {
+        "s": "force",
+        "d": "up",
+        "note": "charged shots gain significant knockback"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Double Double Helix": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot set:4 phrased as 'Fires 4 projectiles per shot instead of 2'"
+    ],
+    "enemy": false
+  },
+  "Dr Worm": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dumb Smart Bullets": {
+    "fx": [
+      "bullet_size"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "non-homing bullets become larger"
+      }
+    ],
+    "si": [
+      {
+        "item": "Scattershot / Homing Bullets",
+        "does": "Non-homing bullets grow larger and deal +50% damage"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Ecstasy Of Gold": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Emerald Weapon": {
+    "fx": [
+      "last_magazine",
+      "poison"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Omega Bullets / Irradiated Lead",
+        "does": "Guarantees last magazine shot is a poison bullet"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Emergency Help": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Empty Vessels": {
+    "fx": [
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Bottle / Holey Grail",
+        "does": "Taking damage fills empty Bottle with 100-dmg room-wide flame"
+      }
+    ],
+    "coop": "TEAM",
+    "miss": [
+      "flat room damage 'deals 100 damage to all enemies in the room'"
+    ],
+    "enemy": false
+  },
+  "Enter the Fruitgeon": {
+    "fx": [
+      "orbiting_orb",
+      "turret"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Orange Guon Stone / Orange",
+        "does": "Guon Stone fires 7-damage oranges at enemies"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "flat projectile damage 'dealing 7 damage'"
+    ],
+    "enemy": false
+  },
+  "Finger on the Pulse": {
+    "fx": [
+      "turret",
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "summon count 'spawns 3 Pulse Cannons'"
+    ],
+    "enemy": false
+  },
+  "Fear the Old Blood": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Five O'Clock Somewhere": {
+    "fx": [
+      "infinite_ammo_part",
+      "stun"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Flat Stanley": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Frosty the Bullet Tyrant": {
+    "fx": [
+      "bullet_size",
+      "damage_ramp"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "shots grow larger with travel distance"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "shots deal more damage with travel distance"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Full Circle": {
+    "fx": [],
+    "qb": [
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "Tangler gains increased damage"
+      },
+      {
+        "s": "reload",
+        "d": "down",
+        "note": "Tangler gains increased reload time"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Future Gangster": {
+    "fx": [
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "damage set:6.5 phrased as 'does 6.5 damage instead of the normal 5 damage'"
+    ],
+    "enemy": false
+  },
+  "Grouch": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Gunderlord": {
+    "fx": [
+      "lightning",
+      "infinite_ammo_part"
+    ],
+    "qb": [
+      {
+        "s": "shotspeed",
+        "d": "up",
+        "note": "Ice Breaker fires high-velocity single shots"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot set:1 phrased as 'single high-velocity shots instead of shotgun spreads'"
+    ],
+    "enemy": false
+  },
+  "Gunnerang": {
+    "fx": [],
+    "qb": [],
+    "si": [
+      {
+        "item": "Boomerang / Utility Belt",
+        "does": "Increases thrown gun damage by 50%"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Guns and Deviltry": {
+    "fx": [
+      "stun"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "reload knife flat damage 'deals 8 damage'"
+    ],
+    "enemy": false
+  },
+  "Hacker": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hail To The King": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hammer and Nail": {
+    "fx": [
+      "last_magazine"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "damage +200% ('deals triple damage'); '5 hammer shots at the end of every magazine'"
+    ],
+    "enemy": false
+  },
+  "Hard Light": {
+    "fx": [
+      "bullet_homing",
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Heart-Shaped Box": {
+    "fx": [
+      "heal"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Lament Configurum / Heart Lunchbox",
+        "does": "Lament Configurum heals player instead of dealing damage"
+      }
+    ],
+    "coop": "P1",
+    "miss": [],
+    "enemy": false
+  },
+  "Heavy Jolt": {
+    "fx": [],
+    "qb": [
+      {
+        "s": "force",
+        "d": "up",
+        "note": "Jolter gains increased knockback"
+      },
+      {
+        "s": "accuracy",
+        "d": "up",
+        "note": "Jolter gains increased accuracy"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Heavy Metal": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hellhole": {
+    "fx": [
+      "singularity",
+      "gravity"
+    ],
+    "qb": [
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "hell portal deals high damage"
+      }
+    ],
+    "si": [
+      {
+        "item": "Singularity",
+        "does": "Spawns high-damage hell portal pulling in enemies"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hell Singing": {
+    "fx": [
+      "jammed_only"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "combined total '487.5% damage to jammed enemies' risks double-counting base Silver Bullets"
+    ],
+    "enemy": false
+  },
+  "Hidden Tech Flare": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "flipped tables ignite enemies in higher-damage green fire"
+      },
+      {
+        "s": "range",
+        "d": "up",
+        "note": "Table Tech Heat range greatly increased"
+      }
+    ],
+    "si": [
+      {
+        "item": "Table Tech Heat / Hot Lead",
+        "does": "Flipped tables ignite enemies in stronger, wider green fire"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hotter Than Heck": {
+    "fx": [
+      "bullet_size",
+      "fire_immunity"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "http://merch.devolverdigital.com": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "damage +100% phrased as 'Doubles Microtransaction Gun's damage'"
+    ],
+    "enemy": false
+  },
+  "Hydro Pump": {
+    "fx": [
+      "beam",
+      "bullet_size"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "Mega Douser stream size increased"
+      },
+      {
+        "s": "force",
+        "d": "up",
+        "note": "Mega Douser stream knockback increased"
+      },
+      {
+        "s": "shotspeed",
+        "d": "up",
+        "note": "Mega Douser stream speed increased"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "Mega Douser stream damage increased"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hyper Beam": {
+    "fx": [
+      "transform",
+      "charge_shot",
+      "beam"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Pig",
+        "does": "Pig death refills Heroine ammo and enables 30s Hyper Beam mode"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "dual damage sets 'uncharged shots deal 80 damage and charged shots deal 160 damage' for '30 seconds"
+    ],
+    "enemy": false
+  },
+  "I need scissors! 61!": {
+    "fx": [
+      "slow",
+      "stun"
+    ],
+    "qb": [
+      {
+        "s": "firerate",
+        "d": "down",
+        "note": "Trank Gun fire rate decreased"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "Trank Gun damage increased"
+      },
+      {
+        "s": "reload",
+        "d": "down",
+        "note": "Trank Gun reload time increased"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ice Accumulation": {
+    "fx": [
+      "bullet_size",
+      "damage_ramp"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "significantly increases shot size"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "increases damage gained from Snowballets"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ice Beam": {
+    "fx": [
+      "freeze",
+      "charge_shot",
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ice To Meet You": {
+    "fx": [
+      "bullet_split",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Heart of Ice",
+        "does": "Any gun periodically fires splitting, bouncing Heart of Ice shots"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ice Water": {
+    "fx": [
+      "freeze",
+      "bullet_trail",
+      "bullet_size"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "Mega Douser stream size increased"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "In The Mood!": {
+    "fx": [
+      "move_speed"
+    ],
+    "qb": [
+      {
+        "s": "move_speed",
+        "d": "up",
+        "note": "slightly increases player movement speed"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Iron Slug": {
+    "fx": [
+      "bullet_size",
+      "explode_on_hit"
+    ],
+    "qb": [
+      {
+        "s": "projectile_size",
+        "d": "up",
+        "note": "Big Iron fires one large slug"
+      },
+      {
+        "s": "damage",
+        "d": "up",
+        "note": "Big Iron fires a high-damage slug"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot set:1 phrased in words as 'fires one large, explosive, high-damage slug'"
+    ],
+    "enemy": false
+  },
+  "Iron Stance": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Iroquois": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "It's Your Destiny": {
+    "fx": [
+      "infinite_ammo_part",
+      "rocket",
+      "bullet_split",
+      "cluster_bullets"
+    ],
+    "qb": [
+      {
+        "s": "shotspeed",
+        "d": "up",
+        "note": "Ice Breaker fires high-velocity single shots"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot set:1 ('single'); split count 'split into 14 smaller rockets instead of 7'"
+    ],
+    "enemy": false
+  },
+  "J am": {
+    "fx": [],
+    "qb": [],
+    "si": [
+      {
+        "item": "Alpha Bullet / Omega Bullets",
+        "does": "Reduces reload times by 33%"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Jotun Time": {
+    "fx": [
+      "freeze",
+      "ice_nova",
+      "slow"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Jumping... is useless": {
+    "fx": [
+      "laser",
+      "beam"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "shotspeed +100% ('Doubles'), reload +200% ('triples'), 'four continuous lasers'"
+    ],
+    "enemy": false
+  },
+  "Junk Mail": {
+    "fx": [],
+    "qb": [],
+    "si": [
+      {
+        "item": "Magazine Rack",
+        "does": "Forces Mailbox to shoot only packages while active"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Just Like The Real Thing": {
+    "fx": [
+      "shotgun_spread",
+      "bullet_bounce",
+      "bullet_split"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "projectiles_per_shot set:5 phrased in words as 'wide spread of five bullets'"
+    ],
+    "enemy": false
+  },
+  "Just Shoot Me": {
+    "fx": [
+      "turret"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Magazine Rack",
+        "does": "Magazine Rack shoots nearby enemies when Camera is held"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Kalibreath": {
+    "fx": [],
+    "qb": [
+      {
+        "s": "firerate",
+        "d": "up",
+        "note": "Dragunfire gains increased rate of fire"
+      },
+      {
+        "s": "force",
+        "d": "up",
+        "note": "Dragunfire gains increased knockback"
+      },
+      {
+        "s": "pierce",
+        "d": "down",
+        "note": "Dragunfire loses piercing"
+      }
+    ],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [
+      "pierce set:0 phrased as 'loses piercing'"
+    ],
+    "enemy": false
+  },
+  "Keep The Change": {
+    "fx": [
+      "last_magazine"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Blank Companion's Ring",
+        "does": "Can trigger when M16 empties its magazine"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Keeping The Beat": {
+    "fx": [
+      "damage_ramp",
+      "combo"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Metronome / Drum Clip",
+        "does": "+4% damage per kill (was +2%), capped at +250% (was +150%)"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "damage +4% per kill (was +2%) and cap +250% (was +150%)"
+    ],
+    "enemy": false
+  },
+  "Knight Time": {
+    "fx": [
+      "time_stop"
+    ],
+    "qb": [],
+    "si": [
+      {
+        "item": "Ballistic Boots / Gunknight Greaves",
+        "does": "Taking damage briefly stops time"
+      }
+    ],
+    "coop": "TEAM",
+    "miss": [],
+    "enemy": false
+  },
+  "Kung Fu Hippie, Rappin' Surfer": {
+    "fx": [],
+    "qb": [
+      {
+        "s": "reload",
+        "d": "up",
+        "note": "slower reload speed widens active-reload window"
+      }
+    ],
+    "si": [
+      {
+        "item": "Sunglasses",
+        "does": "Grants +1.33 coolness and widens Rad Gun active reload window"
+      }
+    ],
+    "coop": "BOTH",
+    "miss": [
+      "magazine set:20 ('magazine size to 20'); non-gun stat 'grants 1.33 coolness'"
+    ],
+    "enemy": false
+  },
+  "Land Among The Stars": {
+    "fx": [
+      "orbiting_orb",
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "P1",
+    "miss": [
+      "word-number proc 'send out three planets'"
+    ],
+    "enemy": false
+  },
+  "Air Support": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Alistair's Ladder": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ancient Aliens": {
+    "fx": [
+      "last_magazine"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Anti-Aircraft": {
+    "fx": [
+      "bullet_split",
+      "bullet_homing",
+      "cluster_bullets"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Antichamber": {
+    "fx": [
+      "bullet_size",
+      "slow"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Assault and Battery": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Backdraft": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Bacon and Eggs": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Banshee Cry": {
+    "fx": [
+      "multishot",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Birthright": {
+    "fx": [
+      "laser",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Black Flag": {
+    "fx": [
+      "bullet_bounce",
+      "bullet_split"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Blammo!": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Blank Generation": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Blast Crown": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Brave New World": {
+    "fx": [
+      "chest_spoiler",
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Bullet Kiln": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Bullet or the Egg": {
+    "fx": [
+      "bullet_size",
+      "bullet_split",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Bubble Trouble": {
+    "fx": [
+      "bullet_size",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Camera Shy": {
+    "fx": [
+      "stun"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cash Rules Everygun Around Me": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cast Iron": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cat Friend": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cerebral Bros": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Chance On Hit": {
+    "fx": [
+      "slow",
+      "lightning"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Chicken Arise": {
+    "fx": [
+      "bullet_size",
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Circle of Bricks": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Clearer Guon Stone": {
+    "fx": [
+      "fire_immunity",
+      "burn",
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cold Ones": {
+    "fx": [
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Contractual Obligation": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Contrail": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cool Kids Club": {
+    "fx": [
+      "moving_bonus",
+      "glowing",
+      "move_speed"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Cosmic Horror": {
+    "fx": [
+      "singularity"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Crave the Glaive": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dawn of the Gundead": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Deadly Distraction": {
+    "fx": [
+      "poison"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Deadlier Distraction": {
+    "fx": [
+      "explode_on_hit",
+      "poison"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Death Square": {
+    "fx": [
+      "combo"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Decorated": {
+    "fx": [
+      "multishot",
+      "burst_fire"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Decoy Octorok": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Detective Magnum": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Devil's Plaything": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Don't Worry About The Vase": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Double Down": {
+    "fx": [
+      "roll_boost"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Double Rainbow": {
+    "fx": [
+      "beam",
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dragunice": {
+    "fx": [
+      "burn",
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dualing Pistol": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Dwarven Stout": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "EGG MURDERER": {
+    "fx": [
+      "bullet_split"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Elder Blank Bullets": {
+    "fx": [
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Electron Pack": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Extreme Operation": {
+    "fx": [
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Fairy Bow": {
+    "fx": [
+      "charge_shot",
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Fightknives": {
+    "fx": [
+      "shield",
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Fightsabre Training": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Firing With Flair": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Friend to Gun and Bullet": {
+    "fx": [
+      "turret",
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Frosty Distraction": {
+    "fx": [
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Frostier Distraction": {
+    "fx": [
+      "freeze",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Garbage Collecting": {
+    "fx": [
+      "freeze",
+      "time_stop"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -A-": {
+    "fx": [
+      "charge_shot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -B-": {
+    "fx": [
+      "charge_shot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -C-": {
+    "fx": [
+      "charge_shot",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped with -F-": {
+    "fx": [
+      "charge_shot",
+      "time_stop"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -H-": {
+    "fx": [
+      "charge_shot",
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -M-": {
+    "fx": [
+      "charge_shot",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -Q-": {
+    "fx": [
+      "charge_shot",
+      "stun"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Get Equipped With -W-": {
+    "fx": [
+      "charge_shot",
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ghost With The Most": {
+    "fx": [
+      "bullet_size",
+      "freeze",
+      "quick_reload"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Gilded Tables": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Great Queen Ant": {
+    "fx": [
+      "rocket"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Green Thumb": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Greener Guon Stone": {
+    "fx": [
+      "heal"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Gruber's Bane": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Gungeonite": {
+    "fx": [
+      "poison"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hail, Satan!": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hammer and Anvil": {
+    "fx": [
+      "charge_shot",
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hardwood": {
+    "fx": [
+      "multishot",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Heads Up": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Heavy Artillery": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hegemony Special Forces": {
+    "fx": [
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hidden Tech Bees": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hidden Tech Big Shotgun": {
+    "fx": [
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hidden Tech Time": {
+    "fx": [
+      "time_stop"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Holy Bell": {
+    "fx": [
+      "slow",
+      "time_stop"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hornucopia": {
+    "fx": [
+      "bullet_split",
+      "explode_on_hit",
+      "cluster_bullets"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hot Head": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hot Ones": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hot Rolls": {
+    "fx": [
+      "roll_boost",
+      "burn",
+      "bullet_trail"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Human Shield": {
+    "fx": [
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Hunter-Seeker Tables": {
+    "fx": [
+      "rocket",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "I Studied The Blade": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ice Cap": {
+    "fx": [
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Inconsistent Scale": {
+    "fx": [
+      "orbiting_orb",
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Insight": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Jolly Roger": {
+    "fx": [
+      "multishot",
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Just In Case": {
+    "fx": [
+      "rocket",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Kage Bunshin": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Kaliber k'pow uboom k'bhang": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Kaliber's Grip": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Key Witness": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Killing Joke": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "King Bomber": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Kinjutsu": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Klobbering Time": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Laser Light Show": {
+    "fx": [
+      "burst_fire",
+      "shotgun_spread",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Liches Get Stitches": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Like Shooting Fish": {
+    "fx": [
+      "last_magazine",
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Line Of Fire": {
+    "fx": [
+      "burn",
+      "bullet_trail"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Lotus Bloom": {
+    "fx": [
+      "full_auto"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Love/Hate": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Lumberjacked": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "M1 Multi-Tool": {
+    "fx": [
+      "quick_reload",
+      "move_speed"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mad Cats": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Magazine Clips": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mak Pak": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mass Cutter": {
+    "fx": [
+      "bullet_split",
+      "laser",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Massive Effect": {
+    "fx": [
+      "bullet_size",
+      "bullet_split",
+      "cluster_bullets"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Master's Chambers": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Maximize Spell": {
+    "fx": [
+      "burn",
+      "fire_immunity"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Max Pane": {
+    "fx": [
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Meltdown": {
+    "fx": [
+      "beam",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mine Craft": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mirror Shield": {
+    "fx": [
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "MM6 Mini Rocket": {
+    "fx": [
+      "rocket"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mmmmmmmmm MMMMmm!": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Monsters and Monocles": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Moonplanet": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Mr. Shadow": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Monster Grub": {
+    "fx": [
+      "quick_reload",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Nailed It!": {
+    "fx": [
+      "bullet_size"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Napalm B": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Natural Selection": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Needless Acrimony": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Neo Tech, Yo": {
+    "fx": [
+      "beam",
+      "lightning"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "No Odd Job": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Not Quite As Mini": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Not So Sawed-Off": {
+    "fx": [
+      "lightning"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Noxin Cannon": {
+    "fx": [
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "One Fish Two Fish": {
+    "fx": [
+      "multishot",
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Oranger Guon Stone": {
+    "fx": [
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Orrery": {
+    "fx": [
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Outer Limits": {
+    "fx": [
+      "singularity",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Over Dose": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Paperwork": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Paper Lanterns": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pandemic Pistol": {
+    "fx": [
+      "bullet_bounce",
+      "lightning"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Parchmental": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Particle Accelerator": {
+    "fx": [
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Particle Flow": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pea Cannon": {
+    "fx": [
+      "bullet_size",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Peripheral Vision": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Phoenix Up": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pilot Wingsman": {
+    "fx": [
+      "multishot",
+      "rocket"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pinker Guon Stone": {
+    "fx": [
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pistol Machine": {
+    "fx": [
+      "bullet_bounce",
+      "lightning"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pitch Perfect": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Plant Power": {
+    "fx": [
+      "beam",
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Plasma Beam": {
+    "fx": [
+      "charge_shot",
+      "laser",
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Porkulent": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Poseigun": {
+    "fx": [
+      "beam",
+      "shotgun_spread",
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Powerhouse of the Cell": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Praise the Gun": {
+    "fx": [
+      "roll_boost"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pretty Good": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Primitive Shapes": {
+    "fx": [
+      "bullet_size"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Production Model": {
+    "fx": [
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Pulp Gungeon": {
+    "fx": [
+      "orbiting_orb",
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Queen of Hearts": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Quick and the Gundead": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "RAIDEN": {
+    "fx": [
+      "multishot",
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Raizo's Stuff": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Recycling Bin": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Red Hood": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Redder Guon Stone": {
+    "fx": [
+      "orbiting_orb",
+      "glowing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Regular Old Guns": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Reload Roll": {
+    "fx": [
+      "roll_boost",
+      "quick_reload"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Relodestar": {
+    "fx": [
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Resourceful Indeed": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Revolution": {
+    "fx": [
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Rubenstein's Monster": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ruby Carbine": {
+    "fx": [
+      "burn",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ruby Weapon": {
+    "fx": [
+      "last_magazine",
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Running Blades": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Rabid": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Radiant": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Ravishing": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Reactive": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Reanimate": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Reinforced": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Remnant": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Replete": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Research": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Resplendent": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Root": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Runic": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Sausage and Peppers": {
+    "fx": [
+      "heal"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Saved the Best for Last": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Savior of the Universe": {
+    "fx": [
+      "beam",
+      "bullet_bounce",
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Second Accident": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Secret Twin": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Serious Sam Publishing Contract": {
+    "fx": [
+      "bullet_homing",
+      "explode_on_hit",
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Shadow Warrior": {
+    "fx": [
+      "orbiting_orb",
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Shell-A-Ton": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Shield Night": {
+    "fx": [
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Shot Across The Bow": {
+    "fx": [
+      "rocket",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Shotgun Affinity": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Shredder": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Siren Sidearm": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Slings and Arrows": {
+    "fx": [
+      "charge_shot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Sleuth Out": {
+    "fx": [
+      "slow"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Smart Bombs": {
+    "fx": [
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Smile, you son of a...": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Snicker-snack": {
+    "fx": [
+      "multishot",
+      "shotgun_spread",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Sniper Woof": {
+    "fx": [
+      "quick_reload",
+      "glowing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Snowball Shotgun": {
+    "fx": [
+      "multishot",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Soft Air": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Softshell": {
+    "fx": [
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Solar Flare": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "some even larger number": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Space Best Friend": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Spartan Loadout": {
+    "fx": [
+      "charge_shot",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Special Delivery": {
+    "fx": [
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Special Reserve": {
+    "fx": [
+      "burn",
+      "fire_immunity"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Spelunker": {
+    "fx": [
+      "roll_boost",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Spicy D-Boys": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Spengbab": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Square Brace": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Star Friends": {
+    "fx": [
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Starburst Fire": {
+    "fx": [
+      "burst_fire",
+      "full_auto"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Steel Skin": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Submachinist": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Succulent DOOM": {
+    "fx": [
+      "multishot",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Super Bomberpal": {
+    "fx": [
+      "multishot",
+      "charge_shot",
+      "quick_reload"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Super Serum": {
+    "fx": [
+      "bullet_size",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Super Space Turtle DX": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Sweetness and Light": {
+    "fx": [
+      "multishot"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Swift Sloop": {
+    "fx": [
+      "charge_shot",
+      "quick_reload"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Synthetic Shield": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Tea for Two": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Tears of Blood": {
+    "fx": [
+      "slow"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Telefrag": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Terminated, Too": {
+    "fx": [
+      "radial_burst",
+      "bullet_split",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "that &^#$# 'pizza'": {
+    "fx": [
+      "explode_on_hit",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Elephant in the Room": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Return": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "There Is Only War": {
+    "fx": [
+      "beam"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Thermal Imagine": {
+    "fx": [
+      "multishot",
+      "laser"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Thorn Bath, ooh!": {
+    "fx": [
+      "radial_burst"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Three Part Harmony": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Three Sheets": {
+    "fx": [
+      "move_speed"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Throw All Daggers": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Thrown For A Bloop": {
+    "fx": [
+      "orbiting_orb",
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Tile Match": {
+    "fx": [
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "To Serve Android": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Trigger Twins": {
+    "fx": [
+      "dual_wield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Triple Jump": {
+    "fx": [
+      "roll_boost"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Triple Sticky": {
+    "fx": [
+      "multishot",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Turret Link": {
+    "fx": [
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Turtle Solutions": {
+    "fx": [
+      "minion_summon"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Tutorialized": {
+    "fx": [
+      "orbiting_orb",
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Twin Snakes": {
+    "fx": [
+      "poison",
+      "beam",
+      "bullet_homing"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Two Eggs Over Easy": {
+    "fx": [
+      "poison"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Two Heavy": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Two Kinds of People": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Unbelievably Charming": {
+    "fx": [
+      "orbiting_orb",
+      "shield",
+      "chest_spoiler"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Unsinkable": {
+    "fx": [
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Usurper": {
+    "fx": [
+      "multishot",
+      "bullet_size"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Vegetables": {
+    "fx": [
+      "bullet_size",
+      "bullet_bounce"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Venom Veins": {
+    "fx": [
+      "poison"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "The Void Corps": {
+    "fx": [
+      "orbiting_orb",
+      "turret"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Vulcan Raving": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Wave Beam": {
+    "fx": [
+      "charge_shot",
+      "lightning"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Weird Science": {
+    "fx": [
+      "beam"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Well Dressed": {
+    "fx": [
+      "last_magazine",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Whale of a Time": {
+    "fx": [
+      "heal"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "What A Thrill": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "what engine do you use": {
+    "fx": [
+      "multishot",
+      "shotgun_spread"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Whiter Guon Stone": {
+    "fx": [
+      "orbiting_orb"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Why's Bullet Crying?": {
+    "fx": [
+      "freeze"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Wicked Sister": {
+    "fx": [
+      "shield"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Willing To Sacrifice": {
+    "fx": [
+      "infinite_ammo_part"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Worlds of Guncraft": {
+    "fx": [],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Wound Up": {
+    "fx": [
+      "bullet_size"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "Wrath Of The Blam": {
+    "fx": [
+      "transform"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "y cant u crawl": {
+    "fx": [
+      "roll_boost",
+      "explode_on_hit"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  },
+  "\\o/": {
+    "fx": [
+      "burn"
+    ],
+    "qb": [],
+    "si": [],
+    "coop": "BOTH",
+    "miss": [],
+    "enemy": false
+  }
 }
