@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../models/bug_report.dart';
 import '../../services/app_theme.dart';
@@ -33,13 +36,18 @@ class BugReportSheet extends StatefulWidget {
   State<BugReportSheet> createState() => _BugReportSheetState();
 }
 
+enum _DonePhase { sent, copied }
+
 class _BugReportSheetState extends State<BugReportSheet> {
   late BugReportKind _kind = widget.context.kind;
   final _notesCtrl = TextEditingController();
   bool _sending = false;
+  _DonePhase? _done;
+  Timer? _dismissTimer;
 
   @override
   void dispose() {
+    _dismissTimer?.cancel();
     _notesCtrl.dispose();
     super.dispose();
   }
@@ -52,39 +60,41 @@ class _BugReportSheetState extends State<BugReportSheet> {
 
   Future<void> _send() async {
     final notes = _notesCtrl.text.trim();
-    if (notes.isEmpty || _sending) return;
+    if (notes.isEmpty || _sending || _done != null) return;
     setState(() => _sending = true);
     Haptics.medium();
     final ctx = _effective;
     final ok = await BugReport.send(ctx, notes);
     if (!mounted) return;
     if (ok) {
-      Navigator.pop(context);
-      _snack('Report handed to your email app');
+      _finish(_DonePhase.sent);
     } else {
       await BugReport.copyReport(ctx, notes);
       if (!mounted) return;
-      setState(() => _sending = false);
-      _snack('No email app found — report copied, paste it anywhere');
+      _finish(_DonePhase.copied);
     }
   }
 
   Future<void> _copy() async {
     final notes = _notesCtrl.text.trim();
-    if (notes.isEmpty) return;
+    if (notes.isEmpty || _done != null) return;
     await BugReport.copyReport(_effective, notes);
     if (!mounted) return;
-    _snack('Report copied to clipboard');
+    _finish(_DonePhase.copied);
   }
 
-  void _snack(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: GoopText(msg),
-        duration: const Duration(seconds: 3),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+  /// Swap to the confirmation state, then auto-dismiss — the report is
+  /// already safe (email app opened / clipboard written), so the sheet
+  /// doesn't need to linger.
+  void _finish(_DonePhase phase) {
+    Haptics.success();
+    setState(() {
+      _sending = false;
+      _done = phase;
+    });
+    _dismissTimer = Timer(const Duration(milliseconds: 1700), () {
+      if (mounted) Navigator.pop(context);
+    });
   }
 
   @override
@@ -113,7 +123,9 @@ class _BugReportSheetState extends State<BugReportSheet> {
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            child: Column(
+            child:
+                _done == null
+                    ? Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -267,9 +279,98 @@ class _BugReportSheetState extends State<BugReportSheet> {
                   ),
                 ),
               ],
-            ),
+                    )
+                    : _buildDoneView(skeuo, ink),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Post-send confirmation — icon pops in with a spring, text rises
+  /// behind it. Sheet auto-dismisses ~1.7s after this appears.
+  Widget _buildDoneView(bool skeuo, Color ink) {
+    final sent = _done == _DonePhase.sent;
+    final accent = skeuo ? Skeuo.accent : ink;
+    final okColor = skeuo ? Skeuo.inkIf(Colors.greenAccent) : Colors.greenAccent;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.lg,
+        Insets.xl,
+        Insets.lg,
+        Insets.xl,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 84,
+            height: 84,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: okColor.withValues(alpha: skeuo ? 0.15 : 0.12),
+              border: Border.all(
+                color: okColor.withValues(alpha: 0.55),
+                width: 1.6,
+              ),
+            ),
+            child: Icon(
+              sent ? Icons.send_rounded : Icons.content_copy_rounded,
+              size: 38,
+              color: okColor,
+            ),
+          )
+              .animate()
+              .scale(
+                begin: const Offset(0.4, 0.4),
+                end: const Offset(1, 1),
+                duration: 420.ms,
+                curve: Curves.easeOutBack,
+              )
+              .fadeIn(duration: 200.ms),
+          const SizedBox(height: Insets.lg),
+          GoopText(
+            sent ? 'REPORT SENT' : 'COPIED',
+            style: TextStyle(
+              fontSize: FontSizes.titleMedium,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.8,
+              color: skeuo ? Skeuo.ink : null,
+            ),
+          ).animate(delay: 120.ms).fadeIn(duration: 260.ms).moveY(
+            begin: 8,
+            end: 0,
+          ),
+          const SizedBox(height: Insets.sm),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
+            child: GoopText(
+              sent
+                  ? 'Your email app has the draft — '
+                        'hit send there to deliver it.'
+                  : 'No email app found — the report is on your '
+                        'clipboard. Paste it anywhere.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: FontSizes.bodyMedium,
+                height: 1.45,
+                color: (skeuo ? Skeuo.pencil : Colors.white60)
+                    .withValues(alpha: 0.85),
+              ),
+            ),
+          ).animate(delay: 220.ms).fadeIn(duration: 300.ms),
+          const SizedBox(height: Insets.xs),
+          GoopText(
+            sent ? 'THANKS, PARTNER' : 'PASTE IT INTO ANY MESSAGE',
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.4,
+              color: accent.withValues(alpha: 0.75),
+            ),
+          ).animate(delay: 320.ms).fadeIn(duration: 300.ms),
+          const SizedBox(height: Insets.lg),
+        ],
       ),
     );
   }

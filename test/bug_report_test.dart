@@ -289,6 +289,39 @@ void main() {
       expect(clip, isNotNull);
       expect(clip, contains('GM-BUG v$kAppVersion|Content error|Item Detail|Hegemony'));
       expect(clip, contains('typo in description'));
+      // Done-state confirmation replaces the form before auto-dismiss.
+      expect(find.text('COPIED'), findsOneWidget);
+      expect(find.text('REPORT A BUG'), findsNothing);
+    });
+
+    testWidgets('done view auto-dismisses the sheet', (tester) async {
+      String? clip;
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'Clipboard.setData') {
+            clip = (call.arguments as Map)['text'] as String?;
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger
+            .setMockMethodCallHandler(SystemChannels.platform, null),
+      );
+
+      await tester.pumpWidget(wrap());
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'auto dismiss check');
+      await tester.tap(find.text('COPY'));
+      await tester.pumpAndSettle();
+      expect(find.text('COPIED'), findsOneWidget);
+
+      // Past the 1.7s auto-dismiss timer the sheet pops itself.
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+      expect(find.text('COPIED'), findsNothing);
     });
 
     testWidgets('kind chips switch the report kind end-to-end', (
