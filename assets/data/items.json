@@ -37884,7 +37884,7 @@
     "type": "Passive",
     "quote": "A Familiar Face",
     "quality": "C",
-    "effect": "Grants a chance to heal half a heart upon purchasing an item. Makes Bello's shop items 15% cheaper.",
+    "effect": "Grants a chance to heal half a heart upon purchasing an item.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -39795,7 +39795,7 @@
     "type": "Passive",
     "quote": "Last!",
     "quality": "A",
-    "effect": "The final two shots of each magazine deal double damage.",
+    "effect": "The final shot of each magazine deals double damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -44592,7 +44592,7 @@
   {
     "name": "Resourceful Sack",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/df/Resourceful_Sack.png",
-    "type": "Passive",
+    "type": "Active",
     "quote": "Pack Rat's Rat Pack",
     "quality": "A",
     "effect": "Rolling through bullets collects them (max 30). Use to fire explosive cheese per bullet. Grants 3 extra active slots.",

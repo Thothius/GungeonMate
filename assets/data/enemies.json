@@ -297,27 +297,13 @@
     ]
   },
   {
-    "name": "Chancellor",
-    "category": "Enemy",
-    "description": "Sits stationary in the Gungeon Proper's bossroom if the Chancellor was spared on the previous floor.After taking any damage, or if 5 seconds have passed, the Chancellor's health is set to 20 and he will run madly towards the player.",
-    "health": "1000",
-    "icon": "Chancellor_Revenge.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor",
-    "location": "Keep of the Lead Lord (Bullet King's room)",
-    "tips": [
-      "Spared Chancellor appears on the next floor with revenge — kill or avoid.",
-      "If Bullet King is killed without harming the Chancellor, he stops charging.",
-      "Has 1000 HP initially — drops to 1 HP after any damage or when the boss dies."
-    ]
-  },
-  {
     "name": "Old Chancellor",
     "category": "Enemy",
     "description": "Sits stationary in the Old Kings bossroom.After taking any damage, the Chancellor's health is set to 1 and he will run madly towards the player.If the Old King is killed without harming the Chancellor, his health is set to 1 and he will no longer charge.",
     "health": "1000",
     "icon": "Old_Chancellor.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Chancellor",
-    "location": "Bullet Hell (Old King's room)",
+    "location": "Gungeon Proper (Old King's room)",
     "tips": [
       "Same mechanic as the regular Chancellor — drops to 1 HP after any damage.",
       "Spares if Old King is killed without harming him."
