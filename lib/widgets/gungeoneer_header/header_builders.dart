@@ -105,7 +105,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                           // 4 stat capsules share the remaining space equally
                           Expanded(
                             child: _buildFlatCapsule(
-                              color: const Color(0xFF00E5FF),
+                              color: StatColors.cool,
                               value: _signedStat(widget.coolness),
                               label: 'COOL',
                               onTap: widget.onTapCoolness,
@@ -116,7 +116,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                           const SizedBox(width: 4),
                           Expanded(
                             child: _buildFlatCapsule(
-                              color: const Color(0xFFE040FB),
+                              color: StatColors.curse,
                               value: _signedStat(widget.curse),
                               label: 'CURSE',
                               onTap: widget.onTapCurse,
@@ -349,9 +349,9 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(
-                      0xFF00E5FF,
-                    ).withValues(alpha: 0.55 * coolGlowIntensity),
+                    color: StatColors.cool.withValues(
+                      alpha: 0.55 * coolGlowIntensity,
+                    ),
                     blurRadius: (8.0 + pulse) * coolGlowIntensity,
                     spreadRadius: (1.5 + pulse * 0.2) * coolGlowIntensity,
                   ),
@@ -392,9 +392,9 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(
-                          0xFFE040FB,
-                        ).withValues(alpha: 0.65 * curseGlowIntensity),
+                        color: StatColors.curse.withValues(
+                          alpha: 0.65 * curseGlowIntensity,
+                        ),
                         blurRadius: (8.0 + pulse) * curseGlowIntensity,
                         spreadRadius: (1.2 + pulse * 0.15) * curseGlowIntensity,
                       ),

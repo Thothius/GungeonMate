@@ -12,7 +12,8 @@ import '../utils/responsive.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Cool & Curse fullscreen — opened by tapping the COOL or CURSE stat
-/// in the Paradox player panel (also usable from classic MP later).
+/// in the Paradox player panel, or by long-pressing either capsule in
+/// the solo [GungeoneerHeader].
 ///
 /// Layout: dual top panels (COOLNESS left / CURSE right) with live
 /// values + quick ± buttons → effects list with current values →
@@ -37,8 +38,8 @@ class CoolCurseScreen extends StatelessWidget {
 
     // Semantic stat colors — collapse to ink under Neo-Skeuo; title
     // follows the theme accent like every other pushed screen.
-    final coolColor = Skeuo.inkIf(const Color(0xFF4DD0E1));
-    final curseColor = Skeuo.inkIf(const Color(0xFFBA68C8));
+    final coolColor = Skeuo.inkIf(StatColors.cool);
+    final curseColor = Skeuo.inkIf(StatColors.curse);
     final jammedColor = Skeuo.inkIf(const Color(0xFFFF5252));
     final titleColor = Skeuo.inkIf(AppTheme.flair.primary);
 
@@ -74,7 +75,10 @@ class CoolCurseScreen extends StatelessWidget {
                         p.adjustCoolness(d);
                         Haptics.light();
                       },
-                      onReset: () => p.adjustCoolness(-cool),
+                      // Reset clears the manual base only — `cool`
+                      // here is the item-inclusive total, and
+                      // subtracting it would poison the hidden base.
+                      onReset: p.resetCoolness,
                     ),
                   ),
                   SizedBox(width: 12 * sf),
@@ -88,7 +92,7 @@ class CoolCurseScreen extends StatelessWidget {
                         p.adjustCurse(d);
                         Haptics.light();
                       },
-                      onReset: () => p.adjustCurse(-curse),
+                      onReset: p.resetCurse,
                     ),
                   ),
                 ],
@@ -203,8 +207,9 @@ class CoolCurseScreen extends StatelessWidget {
                         'certain guns.\n\n'
                         '• Raises jam chance: jammed enemies move faster, '
                         'shoot more, take less damage. Bosses can jam too.\n'
-                        '• +1% jammed-enemy and jammed-boss roll per point, '
-                        'roughly 4%/2% effective.\n'
+                        '• Jam chance scales ~4% per point vs normal enemies '
+                        'and ~2% per point vs bosses — both reach 100% at '
+                        '10+ Curse.\n'
                         '• Reduces extra room-reward chance (−1% per point).\n'
                         '• 10+ Curse summons the LORD OF THE JAMMED — an '
                         'unkillable pursuer that ends runs. You can\'t dodge '
@@ -260,30 +265,46 @@ class _MeterPanel extends StatelessWidget {
               color: color.withValues(alpha: 0.8),
             ),
           ),
+          GoopText(
+            value.toStringAsFixed(value % 1 == 0 ? 0 : 1),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 36 * sf,
+              fontWeight: FontWeight.w900,
+              color: color,
+              height: 1,
+            ),
+          ),
           SizedBox(height: 12 * sf),
-          // Single centered value flanked by symmetric −/+ — the
-          // duplicate number was the broken indicator.
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _DeltaBtn(
                 label: '−1',
+                dense: true,
                 onTap: () => onDelta(-1),
                 color: color,
                 sf: sf,
               ),
-              GoopText(
-                value.toStringAsFixed(value % 1 == 0 ? 0 : 1),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 36 * sf,
-                  fontWeight: FontWeight.w900,
-                  color: color,
-                  height: 1,
-                ),
+              SizedBox(width: 6 * sf),
+              _DeltaBtn(
+                label: '−.5',
+                dense: true,
+                onTap: () => onDelta(-0.5),
+                color: color,
+                sf: sf,
               ),
+              SizedBox(width: 6 * sf),
+              _DeltaBtn(
+                label: '+.5',
+                dense: true,
+                onTap: () => onDelta(0.5),
+                color: color,
+                sf: sf,
+              ),
+              SizedBox(width: 6 * sf),
               _DeltaBtn(
                 label: '+1',
+                dense: true,
                 onTap: () => onDelta(1),
                 color: color,
                 sf: sf,
@@ -291,16 +312,46 @@ class _MeterPanel extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10 * sf),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              onReset();
-              Haptics.medium();
-            },
-            child: Icon(
-              Icons.refresh_rounded,
-              size: 16 * sf,
-              color: Skeuo.collapse(Colors.white.withValues(alpha: 0.35)),
+          Semantics(
+            button: true,
+            label: 'Reset ${title.toLowerCase()} manual stat to zero',
+            child: Tooltip(
+              message: 'Reset manual stat to zero',
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  onReset();
+                  Haptics.medium();
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4 * sf),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.restart_alt_rounded,
+                        size: 15 * sf,
+                        color: Skeuo.collapse(
+                          Colors.white.withValues(alpha: 0.55),
+                        ),
+                      ),
+                      SizedBox(width: 4 * sf),
+                      GoopText(
+                        'RESET',
+                        style: TextStyle(
+                          fontSize: 10 * sf,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: Skeuo.collapse(
+                            Colors.white.withValues(alpha: 0.55),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -314,31 +365,44 @@ class _DeltaBtn extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;
   final double sf;
+  final bool dense;
   const _DeltaBtn({
     required this.label,
     required this.onTap,
     required this.color,
     required this.sf,
+    this.dense = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14 * sf, vertical: 6 * sf),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color.withValues(alpha: 0.5)),
-        ),
-        child: GoopText(
-          label,
-          style: TextStyle(
-            fontSize: 14 * sf,
-            fontWeight: FontWeight.w900,
-            color: color,
+    return Expanded(
+      child: Semantics(
+        button: true,
+        label:
+            '${label.replaceAll('.', '')} ${label.startsWith('-') ? 'decrease' : 'increase'}',
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: dense ? 2 * sf : 14 * sf,
+              vertical: dense ? 6 * sf : 6 * sf,
+            ),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: color.withValues(alpha: 0.5)),
+            ),
+            child: GoopText(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: (dense ? 12 : 14) * sf,
+                fontWeight: FontWeight.w900,
+                color: color,
+              ),
+            ),
           ),
         ),
       ),

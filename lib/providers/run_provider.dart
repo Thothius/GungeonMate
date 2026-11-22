@@ -897,6 +897,42 @@ class RunProvider
     notifyListeners();
   }
 
+  /// Zeroes only the manual coolness base — item/gun contributions are
+  /// untouched. No-op (besides save/notify) when already 0.
+  void resetCoolness() {
+    final old = _runState.coolness;
+    if (old == 0) return;
+    _runState = _runState.copyWith(coolness: 0);
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.manual,
+        description: 'Reset manual coolness to 0',
+        coolnessDelta: -old,
+      ),
+    );
+    _scheduleSave();
+    notifyListeners();
+  }
+
+  /// Zeroes only the manual curse base — item/gun contributions are
+  /// untouched. No-op (besides save/notify) when already 0.
+  void resetCurse() {
+    final old = _runState.curse;
+    if (old == 0) return;
+    _runState = _runState.copyWith(curse: 0);
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.manual,
+        description: 'Reset manual curse to 0',
+        curseDelta: -old,
+      ),
+    );
+    _scheduleSave();
+    notifyListeners();
+  }
+
   void resetManualStats() {
     final oldCool = _runState.coolness;
     final oldCurse = _runState.curse;

@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gungeon_mate/models/gun.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
+import 'package:gungeon_mate/models/item.dart';
 import 'package:gungeon_mate/models/player.dart';
 import 'package:gungeon_mate/models/run_state.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
@@ -537,6 +539,55 @@ void main() {
 
       expect(rp.runState.main.character?.name, 'The Marine');
       expect(rp.runState.coop, isNull);
+    });
+  });
+
+  group('Per-stat manual resets', () {
+    test('resetCoolness zeroes base but keeps item contributions', () {
+      rp.startNewRun(marine);
+      rp.adjustCoolness(3);
+      rp.addItem(Item(name: 'Cool Trinket', coolness: 5));
+      expect(rp.runState.totalCoolness, 8);
+
+      rp.resetCoolness();
+
+      expect(rp.runState.coolness, 0);
+      // Item contribution survives — the old subtract-the-total bug
+      // would have left the base at -5 here.
+      expect(rp.runState.totalCoolness, 5);
+    });
+
+    test('resetCurse zeroes base but keeps gun contributions', () {
+      rp.startNewRun(marine);
+      rp.adjustCurse(4);
+      rp.addGun(Gun(name: 'Cursed Sidearm', curse: 2));
+      expect(rp.runState.totalCurse, 6);
+
+      rp.resetCurse();
+
+      expect(rp.runState.curse, 0);
+      expect(rp.runState.totalCurse, 2);
+    });
+
+    test('resets are independent — cool reset leaves curse alone', () {
+      rp.startNewRun(marine);
+      rp.adjustCoolness(3);
+      rp.adjustCurse(-2);
+
+      rp.resetCoolness();
+
+      expect(rp.runState.coolness, 0);
+      expect(rp.runState.curse, -2);
+    });
+
+    test('reset on an already-zero base does not log', () {
+      rp.startNewRun(marine);
+      final logLen = rp.runState.log.length;
+
+      rp.resetCoolness();
+      rp.resetCurse();
+
+      expect(rp.runState.log.length, logLen);
     });
   });
 }

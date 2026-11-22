@@ -21,11 +21,11 @@ import 'active_run_helpers.dart';
 import 'run_effects_block.dart';
 import '../dashboards/dashboard_swiper.dart';
 
-import 'stat_sheets.dart';
+import '../../screens/cool_curse_screen.dart';
+import '../../screens/item_detail_screen.dart';
 import '../../utils/format.dart';
 import 'sort_picker.dart';
 import 'starter_hint.dart';
-import '../../screens/item_detail_screen.dart';
 import '../../screens/all_synergies_screen.dart';
 import '../scale_button.dart';
 import '../../models/multiplayer_messages.dart';
@@ -216,10 +216,20 @@ class PlayerPageState extends State<PlayerPage> {
                                     _editStat =
                                         _editStat == 'curse' ? null : 'curse',
                               ),
+                          // Long-press opens the full Cool & Curse
+                          // explainer — the same screen MP players get
+                          // from the Paradox panel — so solo users see
+                          // the mechanics, not just bare steppers.
                           onLongPressCoolness:
-                              () => _showStatAdjuster(context, isCool: true),
+                              () => Navigator.push(
+                                context,
+                                fastRoute(const CoolCurseScreen()),
+                              ),
                           onLongPressCurse:
-                              () => _showStatAdjuster(context, isCool: false),
+                              () => Navigator.push(
+                                context,
+                                fastRoute(const CoolCurseScreen()),
+                              ),
                           onTapSynergies:
                               () => Navigator.push(
                                 context,
@@ -471,21 +481,6 @@ class PlayerPageState extends State<PlayerPage> {
 
         return scrollWidget;
       },
-    );
-  }
-
-  /// Inline +/- bottom sheet for a quick coolness/curse tweak — opened
-  /// by long-pressing either bubble in the [GungeoneerHeader]. Live-rebinds
-  /// to the latest provider state so the displayed number updates after
-  /// each tap without dismissing the sheet.
-  void _showStatAdjuster(BuildContext c, {required bool isCool}) {
-    showModalBottomSheet<void>(
-      context: c,
-      backgroundColor: AppTheme.flair.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      builder: (ctx) => StatAdjusterSheet(isCool: isCool),
     );
   }
 
@@ -746,7 +741,7 @@ class _InlineStatStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final value = isCool ? p.runState.coolness : p.runState.curse;
-    final accent = isCool ? const Color(0xFF4DD0E1) : const Color(0xFFBA68C8);
+    final accent = isCool ? StatColors.cool : StatColors.curse;
 
     void apply(double delta) {
       if (isCool) {

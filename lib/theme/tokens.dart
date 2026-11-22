@@ -219,3 +219,12 @@ abstract final class AmmonomiconColors {
   static const Color health = Color(0xFFEF5350);
   static const Color location = Color(0xFF66BB6A);
 }
+
+/// Semantic coolness/curse stat colors — game-meaningful identity, not
+/// theme chrome. Every surface that renders these stats (header
+/// capsules, player panel, inline stepper, meters, log chips) must use
+/// these so COOL always reads cyan and CURSE always reads red-orange.
+abstract final class StatColors {
+  static const Color cool = Color(0xFF4DD0E1);
+  static const Color curse = Color(0xFFFF3D00);
+}

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 import '../../utils/responsive.dart';
 
 /// Super-compact cool/curse effects strip — 5 derived stats in one
@@ -28,8 +29,8 @@ class RunEffectsBlock extends StatelessWidget {
     final jam = curse >= 10 ? 100.0 : curse * 4;
     final bossJam = curse >= 10 ? 100.0 : curse * 2;
 
-    const coolCol = Color(0xFF4DD0E1);
-    const curseCol = Color(0xFFBA68C8);
+    const coolCol = StatColors.cool;
+    const curseCol = StatColors.curse;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 1 * sf),

@@ -15,6 +15,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
+import '../../theme/tokens.dart';
 import '../../utils/fast_route.dart';
 import '../../utils/responsive.dart';
 
@@ -143,7 +144,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     _PanelStat(
                       label: 'COOL',
                       value: p.runState.totalCoolness.toStringAsFixed(0),
-                      color: const Color(0xFF4DD0E1),
+                      color: StatColors.cool,
                       sf: sf,
                       onTap:
                           () => Navigator.push(
@@ -155,7 +156,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     _PanelStat(
                       label: 'CURSE',
                       value: p.runState.totalCurse.toStringAsFixed(0),
-                      color: const Color(0xFFBA68C8),
+                      color: StatColors.curse,
                       sf: sf,
                       onTap:
                           () => Navigator.push(
