@@ -83,7 +83,7 @@ void main() {
     // ignore: avoid_print
     print(
       'PERF synergiesCompletedBy x${catalogNames.length} names (cold, uncached names): '
-      '${sw.elapsedMilliseconds}ms total=${total}',
+      '${sw.elapsedMilliseconds}ms total=$total',
     );
     sw
       ..reset()
