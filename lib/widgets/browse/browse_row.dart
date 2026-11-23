@@ -94,7 +94,7 @@ class BrowseRow extends StatelessWidget {
     }
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 6),
       color: null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -104,14 +104,14 @@ class BrowseRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 10, 12),
+          padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
           child: Row(
             children: [
               GameIcon(
                 assetPath: iconPath,
                 fallback: fallback,
                 quality: quality,
-                size: 48,
+                size: 44,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -175,12 +175,12 @@ class BrowseRow extends StatelessWidget {
                 onTap: inRun ? null : onAdd,
                 behavior: HitTestBehavior.opaque,
                 child: SizedBox(
-                  width: 48,
-                  height: 64,
+                  width: 44,
+                  height: 56,
                   child: Center(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(7),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color:
                             inRun
@@ -203,7 +203,7 @@ class BrowseRow extends StatelessWidget {
                         inRun ? Icons.check_rounded : Icons.add_rounded,
                         color:
                             inRun ? Colors.greenAccent : AppTheme.flair.primary,
-                        size: 22,
+                        size: 20,
                       ),
                     ),
                   ),
