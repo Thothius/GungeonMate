@@ -5,7 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
+import 'package:gungeon_mate/models/player.dart';
+import 'package:gungeon_mate/utils/asset_paths.dart';
+import 'package:gungeon_mate/widgets/paradox/avatar_frame.dart';
 import 'package:gungeon_mate/widgets/paradox/paradox_bar.dart';
+import 'package:gungeon_mate/widgets/paradox/paradox_player_panel.dart';
 import 'package:gungeon_mate/widgets/paradox/pause_overlay.dart';
 import '../helpers/fake_mp_link.dart';
 
@@ -91,6 +95,39 @@ void main() {
     session.resume();
     await tester.pump();
     expect(find.text('GAME PAUSED'), findsNothing);
+
+    await tester.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('ParadoxPlayerPanel falls back to default avatar, never a '
+      'gungeoneer sprite, when avatarId is empty', (tester) async {
+    final (session, rp) = makeSession();
+    await session.startAsMain(
+      nickname: 'T',
+      character:
+          rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
+      avatarId: '',
+      runTitle: 'Test Run',
+    );
+
+    await tester.pumpWidget(
+      wrap(
+        session,
+        rp,
+        const ParadoxPlayerPanel(slot: PlayerSlot.main),
+      ),
+    );
+    await tester.pump();
+
+    // Custom avatar path is used even with an empty wire id.
+    expect(find.byType(FramedAvatar), findsOneWidget);
+    final avatarAsset = avatarPath(kAvatarIds.first);
+    final hasAvatarImage = tester.widgetList<Image>(find.byType(Image)).any(
+      (img) =>
+          img.image is AssetImage &&
+          (img.image as AssetImage).assetName == avatarAsset,
+    );
+    expect(hasAvatarImage, isTrue);
 
     await tester.pump(const Duration(seconds: 3));
   });

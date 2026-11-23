@@ -17,6 +17,7 @@ import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
 import '../../theme/tokens.dart';
+import '../../utils/asset_paths.dart';
 import '../../utils/fast_route.dart';
 import '../../utils/responsive.dart';
 
@@ -90,7 +91,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     ),
                   ),
                   child: FramedAvatar(
-                    id: avatarId,
+                    // Custom avatar always — an empty id (old peer /
+                    // unset) shows the default avatar, never a
+                    // gungeoneer sprite.
+                    id: avatarId.isNotEmpty ? avatarId : kAvatarIds.first,
                     size: double.infinity,
                     radius: 8,
                     idle: true,

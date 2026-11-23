@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../models/gungeoneer.dart';
 import '../models/multiplayer_messages.dart';
-import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
@@ -17,7 +15,6 @@ import '../services/mp_session.dart';
 import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
-import '../widgets/avatar_aura.dart';
 import '../widgets/paradox/avatar_frame.dart';
 import '../widgets/particles/ambient_glow.dart';
 
@@ -187,7 +184,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   @override
   Widget build(BuildContext context) {
     final session = context.watch<MpSession>();
-    final rp = context.watch<RunProvider>();
     final sf = Responsive.factor(context);
     final flair = AppTheme.flair;
 
@@ -271,7 +267,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                       duration: const Duration(milliseconds: 240),
                       child: KeyedSubtree(
                         key: ValueKey(session.phase),
-                        child: _buildContent(session, rp, sf, flair),
+                        child: _buildContent(session, sf, flair),
                       ),
                     ),
                   ),
@@ -359,7 +355,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
 
   Widget _buildContent(
     MpSession session,
-    RunProvider rp,
     double sf,
     ThemeFlair flair,
   ) {
@@ -369,9 +364,9 @@ class _MpConnectScreenState extends State<MpConnectScreen>
       case MpPhase.error:
         return _buildError(session, sf, flair);
       case MpPhase.connected:
-        return _buildConnected(session, rp, sf, flair);
+        return _buildConnected(session, sf, flair);
       default:
-        return _buildConnecting(session, rp, sf, flair);
+        return _buildConnecting(session, sf, flair);
     }
   }
 
@@ -379,11 +374,9 @@ class _MpConnectScreenState extends State<MpConnectScreen>
 
   Widget _buildConnecting(
     MpSession session,
-    RunProvider rp,
     double sf,
     ThemeFlair flair,
   ) {
-    final myChar = rp.gungeoneerByName(session.myCharacterName);
     final message = _connectingMessage(session);
 
     return _cardShell(
@@ -401,7 +394,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             children: [
               Flexible(
                 child: _Portrait(
-                  character: myChar,
                   label: session.myNickname,
                   isMe: true,
                   pulse: _still ? null : _pulseCtrl,
@@ -446,7 +438,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
               SizedBox(width: 20 * sf),
               Flexible(
                 child: _Portrait(
-                  character: null,
                   label: session.peerNickname ?? 'Partner',
                   isMe: false,
                   pulse: _still ? null : _pulseCtrl,
@@ -536,12 +527,9 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   /// run. Reconnects never reach this — they auto-enter instead.
   Widget _buildConnected(
     MpSession session,
-    RunProvider rp,
     double sf,
     ThemeFlair flair,
   ) {
-    final myChar = rp.gungeoneerByName(session.myCharacterName);
-    final peerChar = rp.gungeoneerByName(session.peerCharacterName ?? '');
     final isMain = session.myRole == MpRole.main;
     final peerName = (session.peerNickname ?? 'Partner').toUpperCase();
 
@@ -608,8 +596,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                   children: [
                     Flexible(
                       child: _Portrait(
-                        character: myChar,
-                        label: session.myNickname,
+                              label: session.myNickname,
                         isMe: true,
                         pulse: _still ? null : _pulseCtrl,
                         sf: sf,
@@ -629,7 +616,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                     SizedBox(width: 10 * sf),
                     Flexible(
                       child: _Portrait(
-                        character: peerChar,
                         label: session.peerNickname ?? 'Partner',
                         isMe: false,
                         pulse: _still ? null : _pulseCtrl,
@@ -968,7 +954,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
 // ── Portrait widget ─────────────────────────────────────────────
 
 class _Portrait extends StatelessWidget {
-  final Gungeoneer? character;
   final String label;
   final bool isMe;
   final Animation<double>? pulse;
@@ -989,7 +974,6 @@ class _Portrait extends StatelessWidget {
   final double textScale;
 
   const _Portrait({
-    required this.character,
     required this.label,
     required this.isMe,
     required this.pulse,
@@ -1030,30 +1014,15 @@ class _Portrait extends StatelessWidget {
                       ]
                       : null,
             ),
-            child:
-                avatarId.isNotEmpty
-                    ? FramedAvatar(
-                      id: avatarId,
-                      size: size * sf,
-                      radius: 10,
-                      idle: true,
-                    )
-                    : character != null
-                    ? ClipRRect(
-                      borderRadius: BorderRadius.all(Radii.lg),
-                      child: AvatarAura(
-                        size: size * sf,
-                        borderRadius: 16,
-                        child: _characterImage(character!, sf, color),
-                      ),
-                    )
-                    : Center(
-                      child: Icon(
-                        Icons.person_rounded,
-                        size: size * sf * 0.43,
-                        color: color.withValues(alpha: 0.4),
-                      ),
-                    ),
+            // Custom avatar always — MP never falls back to the
+            // picked gungeoneer's sprite; an empty id (old peer /
+            // unset) shows the default avatar instead.
+            child: FramedAvatar(
+              id: avatarId.isNotEmpty ? avatarId : kAvatarIds.first,
+              size: size * sf,
+              radius: 10,
+              idle: true,
+            ),
           ),
         ),
         SizedBox(height: 10 * sf),
@@ -1083,38 +1052,6 @@ class _Portrait extends StatelessWidget {
     );
   }
 
-  Widget _characterImage(Gungeoneer c, double sf, Color color) {
-    final animPath = gungeoneerAnimatedCardPath(c.name);
-    final gifPath = gungeoneerGifPath(c.name);
-    final edge = size * sf;
-    return SizedBox(
-      width: edge,
-      height: edge,
-      child:
-          animPath.isNotEmpty
-              ? Image.asset(
-                animPath,
-                fit: BoxFit.contain,
-                cacheWidth: (edge * 2).round(),
-                cacheHeight: (edge * 2).round(),
-                errorBuilder:
-                    (_, _, _) =>
-                        gifPath.isNotEmpty
-                            ? Image.asset(
-                              gifPath,
-                              fit: BoxFit.contain,
-                              cacheWidth: (edge * 2).round(),
-                              cacheHeight: (edge * 2).round(),
-                            )
-                            : Icon(
-                              Icons.person_rounded,
-                              size: edge * 0.43,
-                              color: color,
-                            ),
-              )
-              : Icon(Icons.person_rounded, size: edge * 0.43, color: color),
-    );
-  }
 }
 
 // ── VS splash helpers ───────────────────────────────────────────

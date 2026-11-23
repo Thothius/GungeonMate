@@ -13,6 +13,9 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **Idle ticker fix** — the theme overlay's touch-sparkle ticker repeated at display refresh for the app's entire lifetime even though sparkles exist for under a second per tap. It now stops when the particle list empties and restarts on the next tap — zero visual change, one less permanent vsync wakeup on every screen.
 - **Faster cold start** — the six startup preference hydrations (theme, visual prefs, color favorites, custom-theme store, home customization, MP store cleanup) ran as serialized awaits; they now run in parallel via `Future.wait`. All are independent SharedPreferences reads.
 
+### Multiplayer polish
+- **Custom avatars are now unconditional in MP** — the connect-screen portraits (connecting cards + VS splash) and the in-run player panel no longer fall back to the picked gungeoneer's animated sprite/GIF/map icon when an avatar id is missing or empty (old peer, unset). They show the default avatar instead, so MP identity is always the picked custom avatar. Verified: emotes/surprises remain fully disabled (`kMpSocialEnabled`), no avatar tap reveals character text, and no send path for messages/animations exists.
+
 ### Multiplayer hardening (S4)
 - **Mis-pair race fix** — `MpHandshakeGate` extracted + 14 decision tests; concurrent initiations rejected.
 - **Wire compatibility** — `MpSurprise` dual-writes `sprite` + `spriteKey`; shared surprise preset source; `:key:` sprite sender.
