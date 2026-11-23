@@ -70,8 +70,4 @@ void main() {
     expect(t.textAlign, TextAlign.center);
   });
 
-  testWidgets('GoopAnimationManager progress is pinned at 1.0', (tester) async {
-    // The scramble mechanic was removed — the manager must stay inert.
-    expect(GoopAnimationManager.instance.progress.value, 1.0);
-  });
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../services/app_theme.dart';
-import '../services/goop_talk_engine.dart';
 import '../theme/tokens.dart';
 
 /// Snappy page route with a fade + subtle upward slide.
@@ -14,11 +13,8 @@ import '../theme/tokens.dart';
 /// Each route is wrapped in a [ColoredBox] using the current theme's
 /// scaffold color so the new route has an opaque background during the
 /// transition — no see-through to the previous screen.
-/// Also re-triggers the Goop sponge animation so new views show the
-/// cool Goopian→English text scramble when sponge is active.
 PageRoute<T> fastRoute<T>(Widget child) => PageRouteBuilder<T>(
   pageBuilder: (_, _, _) {
-    GoopAnimationManager.instance.pulse();
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
       builder:

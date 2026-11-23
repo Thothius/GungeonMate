@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
 import 'app_theme.dart';
 
-/// The goop text-scramble mechanic was removed (v3.1.1 cleanup) — it
-/// randomized real letters into ⏃⎎⎓-style glyphs mid-read, hurting
-/// readability and breaking text finders in widget tests.
+/// GoopText — the app's standard text widget.
 ///
-/// GoopText is kept as a plain [Text] passthrough so the ~700 call
-/// sites across the app keep working unchanged. The animation manager
-/// is a no-op for API compatibility with the pulse() call sites.
-class GoopAnimationManager {
-  static final GoopAnimationManager instance = GoopAnimationManager._();
-  GoopAnimationManager._();
-
-  /// Always 1.0 ("fully revealed") — kept for any stale listener.
-  final ValueNotifier<double> progress = ValueNotifier(1.0);
-
-  /// No-op — the scramble ticker is gone.
-  void pulse() {}
-}
-
-/// Plain text widget — identical API to the old scrambling widget.
+/// History: this file used to scramble real letters into ⏃⎎⎓-style
+/// "Goopian" glyphs (removed v3.1.1 for readability) and later drove a
+/// route-change re-scramble via [GoopAnimationManager.pulse] (removed
+/// 2026-11-25 — the manager was a no-op). What remains is a plain
+/// [Text] passthrough that applies the user's font weight bias and
+/// letter-spacing prefs, so the ~950 call sites keep working unchanged.
 class GoopText extends StatelessWidget {
   final String text;
   final TextStyle? style;

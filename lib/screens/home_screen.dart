@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/player.dart';
 import '../providers/run_provider.dart';
-import '../services/goop_talk_engine.dart';
 import '../services/mp_session.dart';
 import '../theme/tokens.dart';
 import '../widgets/mp_reconnect_banner.dart';
@@ -190,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // Always drop the soft keyboard when swapping tabs so the
     // search field in Browse can never haunt other tabs.
     FocusManager.instance.primaryFocus?.unfocus();
-    GoopAnimationManager.instance.pulse();
     setState(() {
       _selectedIndex = index;
       _visitedTabs.add(index);
