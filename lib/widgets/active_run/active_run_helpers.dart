@@ -532,7 +532,7 @@ class _RunToolsSheet extends StatelessWidget {
                 iconColor: const Color(0xFFFFD54F),
                 onTap: () => showDiceRollDialog(sheetCtx),
               ),
-              if (mpSession.isActive)
+              if (mpSession.isActive && kMpSocialEnabled)
                 _action(
                   sheetCtx,
                   icon: Icons.auto_awesome_rounded,

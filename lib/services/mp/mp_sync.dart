@@ -359,7 +359,7 @@ class MpSync {
       case MpDiceResult():
         onDiceResult?.call(msg.score, msg.dice);
       case MpEmote():
-        onEmote?.call(msg.from, msg.action);
+        if (kMpSocialEnabled) onEmote?.call(msg.from, msg.action);
       case MpSharedStateDelta():
         _onSharedStateDelta(msg);
       case MpStartRun():
@@ -369,7 +369,7 @@ class MpSync {
       case MpResume():
         onPauseChanged?.call(false);
       case MpSurprise():
-        onSurprise?.call(msg);
+        if (kMpSocialEnabled) onSurprise?.call(msg);
       case MpPeerEdit():
         _onPeerEdit(msg);
       case MpSessionMeta():

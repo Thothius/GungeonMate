@@ -270,7 +270,9 @@ void main() {
   });
 
   group('I6 — Emote', () {
-    test('Emote sent and received', () async {
+    test('Emote dropped while kMpSocialEnabled is false', () async {
+      // Social layer disabled — wire message still flows but the
+      // receiver's dispatch drops it before onEmote fires.
       String? receivedEmoteFrom;
       String? receivedEmoteAction;
 
@@ -292,8 +294,8 @@ void main() {
       await mainSession.sendEmote('wave');
       await Future.delayed(const Duration(milliseconds: 50));
 
-      expect(receivedEmoteFrom, 'HostPlayer');
-      expect(receivedEmoteAction, 'wave');
+      expect(receivedEmoteFrom, isNull);
+      expect(receivedEmoteAction, isNull);
     });
   });
 

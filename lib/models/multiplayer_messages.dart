@@ -21,6 +21,17 @@ import 'package:flutter/painting.dart' show Color;
 ///   tie `requestResp` back to the original ask without needing a full
 ///   correlation framework.
 
+/// Kill-switch for the social MP layer (emotes + surprises).
+///
+/// When false:
+/// * send UI is hidden (tools-sheet Surprise row, panel avatar tap,
+///   panel popup item, own-tab emote menu),
+/// * incoming `MpEmote`/`MpSurprise` messages are dropped at the
+///   `MpSync` dispatch point so older peers can't trigger animations.
+///
+/// The wire protocol is untouched — flip to true to re-enable.
+const bool kMpSocialEnabled = false;
+
 /// Semantic colors for MP UI states. These are intentionally NOT
 /// theme-bound — "connected" should always be green regardless of the
 /// active theme, just like a system status LED.

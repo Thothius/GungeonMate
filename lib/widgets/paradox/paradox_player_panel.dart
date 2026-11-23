@@ -62,17 +62,19 @@ class ParadoxPlayerPanel extends StatelessWidget {
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap:
-                () => showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: flair.card,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(18),
-                    ),
-                  ),
-                  builder: (_) => const SurpriseSheet(),
-                ),
+                kMpSocialEnabled
+                    ? () => showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: flair.card,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(18),
+                        ),
+                      ),
+                      builder: (_) => const SurpriseSheet(),
+                    )
+                    : null,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -226,12 +228,13 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'Diceroller',
                     const Color(0xFFFFD54F),
                   ),
-                  _item(
-                    'surprise',
-                    Icons.auto_awesome_rounded,
-                    'Surprise',
-                    Colors.amberAccent,
-                  ),
+                  if (kMpSocialEnabled)
+                    _item(
+                      'surprise',
+                      Icons.auto_awesome_rounded,
+                      'Surprise',
+                      Colors.amberAccent,
+                    ),
                   _item(
                     'pause',
                     session.isPaused

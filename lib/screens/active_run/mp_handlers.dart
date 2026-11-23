@@ -88,7 +88,9 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
     final session = _mpSession;
     if (session == null) return;
     final myMpPage = session.myRole == MpRole.main ? 0 : 1;
-    if (i == myMpPage && _currentPage == myMpPage) {
+    if (kMpSocialEnabled &&
+        i == myMpPage &&
+        _currentPage == myMpPage) {
       _showEmoteMenu();
     } else {
       if (!mounted || !_page.hasClients) return;
