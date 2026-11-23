@@ -11,7 +11,6 @@ import '../bug_report/bug_report_button.dart';
 import '../../models/bug_report.dart';
 import '../codex/codex_fav_button.dart';
 import '../../utils/responsive.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 class ItemDetailHeader extends StatelessWidget {
   final String name;
@@ -50,9 +49,7 @@ class ItemDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final isFav = context.select<RunProvider, bool>((p) => p.isFavourite(name));
     final favColor =
-        isFav
-            ? Skeuo.inkIf(Colors.pinkAccent)
-            : Theme.of(context).colorScheme.outline;
+        isFav ? Colors.pinkAccent : Theme.of(context).colorScheme.outline;
     final sf = Responsive.factor(context);
 
     // Build all tag chips in one list for a single inline Wrap
@@ -64,10 +61,8 @@ class ItemDetailHeader extends StatelessWidget {
                 : (subtitle.isNotEmpty ? subtitle.toUpperCase() : 'PASSIVE'));
     final typeColor =
         isGun
-            ? Skeuo.inkIf(Colors.deepOrangeAccent)
-            : (isActive
-                ? Skeuo.inkIf(Colors.lightBlueAccent)
-                : Skeuo.inkIf(Colors.lightGreenAccent));
+            ? Colors.deepOrangeAccent
+            : (isActive ? Colors.lightBlueAccent : Colors.lightGreenAccent);
     final typeIcon =
         isGun
             ? Icons.gps_fixed
@@ -82,28 +77,28 @@ class ItemDetailHeader extends StatelessWidget {
         icon: Icons.hub_outlined,
         label: 'Synergies',
         value: '$synergyCount',
-        color: Skeuo.inkIf(Colors.cyanAccent),
+        color: Colors.cyanAccent,
       ),
       if (sellPrice.isNotEmpty)
         MetadataChip(
           icon: Icons.payments_outlined,
           label: 'Sell',
           value: sellPrice,
-          color: Skeuo.inkIf(Colors.yellowAccent),
+          color: Colors.yellowAccent,
         ),
       if (curse > 0)
         MetadataChip(
           icon: Icons.mood_bad_outlined,
           label: 'Curse',
           value: '+${_fmtStat(curse)}',
-          color: Skeuo.inkIf(Colors.redAccent),
+          color: Colors.redAccent,
         ),
       if (coolness > 0)
         MetadataChip(
           icon: Icons.ac_unit,
           label: 'Coolness',
           value: '+${_fmtStat(coolness)}',
-          color: Skeuo.inkIf(Colors.lightBlueAccent),
+          color: Colors.lightBlueAccent,
         ),
     ];
 
@@ -255,8 +250,8 @@ class ItemDetailHeader extends StatelessWidget {
                     label: isActive ? 'ACTIVE' : 'PASSIVE',
                     color:
                         isActive
-                            ? Skeuo.inkIf(Colors.lightBlueAccent)
-                            : Skeuo.inkIf(Colors.lightGreenAccent),
+                            ? Colors.lightBlueAccent
+                            : Colors.lightGreenAccent,
                   ),
                 ],
               ),
@@ -360,28 +355,24 @@ class _SellBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.yellowAccent).withValues(alpha: 0.10),
+        color: Colors.yellowAccent.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.yellowAccent).withValues(alpha: 0.4),
+          color: Colors.yellowAccent.withValues(alpha: 0.4),
           width: 0.8,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.sell_outlined,
-            size: 13,
-            color: Skeuo.inkIf(Colors.yellowAccent),
-          ),
+          Icon(Icons.sell_outlined, size: 13, color: Colors.yellowAccent),
           const SizedBox(width: 4),
           GoopText(
             price,
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w800,
-              color: Skeuo.inkIf(Colors.yellowAccent),
+              color: Colors.yellowAccent,
             ),
           ),
         ],
@@ -517,7 +508,7 @@ class _ChestChip extends StatelessWidget {
     'green': Color(0xFF43A047),
     'black': Color(0xFF222222),
     'brown': Color(0xFF8D6E63),
-    'rainbow': Skeuo.inkIf(Colors.pinkAccent),
+    'rainbow': Colors.pinkAccent,
   };
 
   static const Map<String, String> _ranks = {

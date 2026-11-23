@@ -7,7 +7,7 @@ import '../../services/synergy_stats.dart';
 import '../../theme/tokens.dart';
 import '../game_icon.dart';
 import '../stat_delta_chips.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 import '../state_widgets.dart';
 
 /// Grouped synergy list — COMPLETE / PARTIAL / LOCKED against a given
@@ -130,7 +130,7 @@ class EntitySynergiesView extends StatelessWidget {
           if (complete.isNotEmpty) ...[
             _GroupHeader(
               label: 'COMPLETE',
-              color: Skeuo.inkIf(Colors.greenAccent),
+              color: Colors.greenAccent,
               icon: Icons.check_circle_rounded,
             ),
             const SizedBox(height: 6),
@@ -140,7 +140,7 @@ class EntitySynergiesView extends StatelessWidget {
             if (complete.isNotEmpty) const SizedBox(height: 14),
             _GroupHeader(
               label: 'PARTIAL',
-              color: Skeuo.inkIf(Colors.amberAccent),
+              color: Colors.amberAccent,
               icon: Icons.pie_chart_outline_rounded,
             ),
             const SizedBox(height: 6),
@@ -294,8 +294,8 @@ class _SynergyRowState extends State<_SynergyRow> {
         widget.locked
             ? Colors.white38
             : status.active
-            ? Skeuo.inkIf(Colors.greenAccent)
-            : Skeuo.inkIf(Colors.amberAccent);
+            ? Colors.greenAccent
+            : Colors.amberAccent;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -385,10 +385,10 @@ class _OwnerPill extends StatelessWidget {
         label == 'NONE'
             ? Colors.white38
             : label.contains('+')
-            ? Skeuo.inkIf(Colors.cyanAccent)
+            ? Colors.cyanAccent
             : label == 'P2'
-            ? Skeuo.inkIf(Colors.orangeAccent)
-            : Skeuo.inkIf(Colors.lightGreenAccent);
+            ? Colors.orangeAccent
+            : Colors.lightGreenAccent;
     return Container(
       padding: ChipStyle.paddingMicro,
       decoration: BoxDecoration(

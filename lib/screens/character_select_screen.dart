@@ -13,7 +13,6 @@ import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/scale_button.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
 
@@ -348,8 +347,8 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                       letterSpacing: 1.2,
                       color:
                           flair.primary.computeLuminance() > 0.5
-                              ? Skeuo.collapse(Color(0xFF1C1C1E))
-                              : Skeuo.collapse(Colors.white),
+                              ? Color(0xFF1C1C1E)
+                              : Colors.white,
                     ),
                   ),
                 ),

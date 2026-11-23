@@ -141,15 +141,15 @@ mixin _SettingsTabSections on State<SettingsTab> {
       child: Container(
         height: 64,
         decoration: BoxDecoration(
-          color: Skeuo.inkIf(Colors.red.shade900).withValues(alpha: 0.25),
+          color: Colors.red.shade900.withValues(alpha: 0.25),
           borderRadius: BorderRadius.all(Radii.md),
           border: Border.all(
-            color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.4),
+            color: Colors.redAccent.withValues(alpha: 0.4),
             width: 1.4,
           ),
           boxShadow: [
             BoxShadow(
-              color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.1),
+              color: Colors.redAccent.withValues(alpha: 0.1),
               blurRadius: 8,
               spreadRadius: 0,
             ),
@@ -170,7 +170,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
                   (_, _, _) => Icon(
                     Icons.cancel_presentation_rounded,
                     size: 28,
-                    color: Skeuo.inkIf(Colors.redAccent),
+                    color: Colors.redAccent,
                   ),
             ),
             const SizedBox(width: 12),
@@ -180,14 +180,14 @@ mixin _SettingsTabSections on State<SettingsTab> {
                 fontSize: FontSizes.titleSmall,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
-                color: Skeuo.inkIf(Colors.redAccent),
+                color: Colors.redAccent,
               ),
             ),
             const Spacer(),
             Icon(
               Icons.chevron_right_rounded,
               size: 22,
-              color: Skeuo.inkIf(Colors.redAccent),
+              color: Colors.redAccent,
             ),
             const SizedBox(width: 10),
           ],
@@ -204,15 +204,15 @@ mixin _SettingsTabSections on State<SettingsTab> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.18),
+          color: Colors.deepOrange.withValues(alpha: 0.18),
           borderRadius: const BorderRadius.all(Radii.md),
           border: Border.all(
-            color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.45),
+            color: Colors.deepOrange.withValues(alpha: 0.45),
             width: 1.4,
           ),
           boxShadow: [
             BoxShadow(
-              color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.08),
+              color: Colors.deepOrange.withValues(alpha: 0.08),
               blurRadius: 6,
               spreadRadius: 0,
             ),
@@ -221,11 +221,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
         child: Row(
           children: [
             const SizedBox(width: 14),
-            Icon(
-              Icons.restart_alt,
-              size: 28,
-              color: Skeuo.inkIf(Colors.deepOrange),
-            ),
+            Icon(Icons.restart_alt, size: 28, color: Colors.deepOrange),
             const SizedBox(width: 12),
             GoopText(
               'RESET DATA',
@@ -233,14 +229,14 @@ mixin _SettingsTabSections on State<SettingsTab> {
                 fontSize: FontSizes.titleSmall,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
-                color: Skeuo.inkIf(Colors.deepOrange),
+                color: Colors.deepOrange,
               ),
             ),
             const Spacer(),
             Icon(
               Icons.chevron_right_rounded,
               size: 22,
-              color: Skeuo.inkIf(Colors.deepOrange),
+              color: Colors.deepOrange,
             ),
             const SizedBox(width: 10),
           ],

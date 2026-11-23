@@ -4,7 +4,6 @@ import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 import '../../utils/reduce_motion.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// An interactive horizontal meter for coolness or curse.
 ///
@@ -139,11 +138,7 @@ class _GungeonMeterState extends State<GungeonMeter>
               ),
             ),
             if (widget.isCool && widget.value >= widget.threshold)
-              Icon(
-                Icons.star_rounded,
-                color: Skeuo.inkIf(Colors.amber),
-                size: 14,
-              ),
+              Icon(Icons.star_rounded, color: Colors.amber, size: 14),
           ],
         ),
         const SizedBox(height: 8),
@@ -216,12 +211,10 @@ class _GungeonMeterState extends State<GungeonMeter>
                                       '☠',
                                       style: TextStyle(
                                         fontSize: FontSizes.bodyMedium,
-                                        color: Skeuo.inkIf(Colors.redAccent),
+                                        color: Colors.redAccent,
                                         shadows: [
                                           Shadow(
-                                            color: Skeuo.inkIf(
-                                              Colors.redAccent,
-                                            ),
+                                            color: Colors.redAccent,
                                             blurRadius: 8,
                                           ),
                                         ],
@@ -246,14 +239,10 @@ class _GungeonMeterState extends State<GungeonMeter>
                                             '☠',
                                             style: TextStyle(
                                               fontSize: FontSizes.bodyMedium,
-                                              color: Skeuo.inkIf(
-                                                Colors.redAccent,
-                                              ),
+                                              color: Colors.redAccent,
                                               shadows: [
                                                 Shadow(
-                                                  color: Skeuo.inkIf(
-                                                    Colors.redAccent,
-                                                  ),
+                                                  color: Colors.redAccent,
                                                   blurRadius: 8,
                                                 ),
                                               ],
@@ -312,18 +301,15 @@ class _GungeonMeterState extends State<GungeonMeter>
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: BoxDecoration(
-              color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.15),
+              color: Colors.red.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: Skeuo.inkIf(Colors.redAccent),
-                width: 1.0,
-              ),
+              border: Border.all(color: Colors.redAccent, width: 1.0),
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.warning_amber_rounded,
-                  color: Skeuo.inkIf(Colors.redAccent),
+                  color: Colors.redAccent,
                   size: 16,
                 ),
                 SizedBox(width: 8),
@@ -333,7 +319,7 @@ class _GungeonMeterState extends State<GungeonMeter>
                     style: TextStyle(
                       fontSize: 10.5,
                       fontWeight: FontWeight.w900,
-                      color: Skeuo.inkIf(Colors.redAccent),
+                      color: Colors.redAccent,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -354,9 +340,7 @@ class _GungeonMeterState extends State<GungeonMeter>
         fontWeight: highlight ? FontWeight.w900 : FontWeight.w500,
         color:
             highlight
-                ? (widget.isCool
-                    ? Skeuo.inkIf(Colors.amber)
-                    : Skeuo.inkIf(Colors.redAccent))
+                ? (widget.isCool ? Colors.amber : Colors.redAccent)
                 : Colors.white.withValues(alpha: 0.3),
         fontFamily: 'monospace',
       ),
@@ -433,7 +417,7 @@ class _MeterPainter extends CustomPainter {
                       ? [
                         color.withValues(alpha: 0.6),
                         color,
-                        Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.8),
+                        Colors.redAccent.withValues(alpha: 0.8),
                       ]
                       : [color.withValues(alpha: 0.4), color],
             ).createShader(Rect.fromLTWH(0, 0, fillWidth, height))
@@ -458,10 +442,9 @@ class _MeterPainter extends CustomPainter {
     final thresholdX = thresholdFraction * width;
     final thresholdPaint =
         Paint()
-          ..color = (isCool
-                  ? Skeuo.inkIf(Colors.amber)
-                  : Skeuo.inkIf(Colors.redAccent))
-              .withValues(alpha: 0.7)
+          ..color = (isCool ? Colors.amber : Colors.redAccent).withValues(
+            alpha: 0.7,
+          )
           ..strokeWidth = 1.5;
     canvas.drawLine(
       Offset(thresholdX, 2),
@@ -474,7 +457,7 @@ class _MeterPainter extends CustomPainter {
       final glowAlpha = 0.3 + pulse * 0.4;
       final glowPaint =
           Paint()
-            ..color = Skeuo.inkIf(Colors.redAccent).withValues(alpha: glowAlpha)
+            ..color = Colors.redAccent.withValues(alpha: glowAlpha)
             ..style = PaintingStyle.stroke
             ..strokeWidth = 1.5 + pulse * 1.0
             ..maskFilter = MaskFilter.blur(BlurStyle.outer, 4 + pulse * 4);

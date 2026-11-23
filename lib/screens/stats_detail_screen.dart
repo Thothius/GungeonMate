@@ -5,9 +5,8 @@ import '../providers/run_provider.dart';
 import '../models/run_log_entry.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
-import '../services/app_theme.dart';
 import '../widgets/active_run/gungeon_meter.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 import '../widgets/bug_report/bug_report_button.dart';
 import '../models/bug_report.dart';
 import '../utils/cool_curse_math.dart';
@@ -112,7 +111,7 @@ class _ValueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Skeuo.inkIf(isCool ? StatColors.cool : StatColors.curse);
+    final color = isCool ? StatColors.cool : StatColors.curse;
     final hasBreakdown = base != 0 || fromItems != 0;
 
     // Mathematical calculations for the visual meters
@@ -169,9 +168,7 @@ class _ValueCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
-                      color: Skeuo.collapse(
-                        Colors.white.withValues(alpha: 0.65),
-                      ),
+                      color: Colors.white.withValues(alpha: 0.65),
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -188,17 +185,14 @@ class _ValueCard extends StatelessWidget {
                 SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     activeTrackColor: color,
-                    inactiveTrackColor: Skeuo.collapse(
-                      Colors.white.withValues(alpha: 0.08),
-                    ),
-                    thumbColor: Skeuo.collapse(Colors.white),
+                    inactiveTrackColor: Colors.white.withValues(alpha: 0.08),
+                    thumbColor: Colors.white,
                     overlayColor: color.withValues(alpha: 0.2),
                     valueIndicatorColor: color,
                     // Bubble fill is the ink-collapsed stat color — its
-                    // label must flip to paper under Neo-Skeuo or it
-                    // renders black-on-ink.
-                    valueIndicatorTextStyle: TextStyle(
-                      color: AppTheme.isSkeuo ? Skeuo.paper : Colors.black,
+                    // label stays black to read on the light fill.
+                    valueIndicatorTextStyle: const TextStyle(
+                      color: Colors.black,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -226,7 +220,7 @@ class _ValueCard extends StatelessWidget {
                         '0.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white54),
+                          color: Colors.white54,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -234,14 +228,14 @@ class _ValueCard extends StatelessWidget {
                         '5.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white30),
+                          color: Colors.white30,
                         ),
                       ),
                       GoopText(
                         '10.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white30),
+                          color: Colors.white30,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -249,7 +243,7 @@ class _ValueCard extends StatelessWidget {
                         '15.0+',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white54),
+                          color: Colors.white54,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -267,18 +261,8 @@ class _ValueCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _btn(
-                  '-1.0',
-                  () => onDelta(-1),
-                  Skeuo.inkIf(Colors.redAccent),
-                  isCool,
-                ),
-                _btn(
-                  '-0.5',
-                  () => onDelta(-0.5),
-                  Skeuo.inkIf(Colors.redAccent),
-                  isCool,
-                ),
+                _btn('-1.0', () => onDelta(-1), Colors.redAccent, isCool),
+                _btn('-0.5', () => onDelta(-0.5), Colors.redAccent, isCool),
                 _btn('+0.5', () => onDelta(0.5), color, isCool),
                 _btn('+1.0', () => onDelta(1), color, isCool),
               ],
@@ -313,8 +297,7 @@ class _ValueCard extends StatelessWidget {
     final isMinus = label.startsWith('-');
     final showWarningColor =
         !isCoolMode && !isMinus; // Curse addition highlights orange-red
-    final activeColor =
-        showWarningColor ? Skeuo.inkIf(Colors.deepOrange) : btnColor;
+    final activeColor = showWarningColor ? Colors.deepOrange : btnColor;
 
     return Expanded(
       child: Padding(
@@ -325,17 +308,16 @@ class _ValueCard extends StatelessWidget {
             style: FilledButton.styleFrom(
               backgroundColor:
                   isMinus
-                      ? Skeuo.inkIf(Colors.red).withValues(alpha: 0.12)
+                      ? Colors.red.withValues(alpha: 0.12)
                       : activeColor.withValues(alpha: 0.12),
-              foregroundColor:
-                  isMinus ? Skeuo.inkIf(Colors.redAccent) : activeColor,
+              foregroundColor: isMinus ? Colors.redAccent : activeColor,
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radii.sm),
                 side: BorderSide(
                   color:
                       isMinus
-                          ? Skeuo.inkIf(Colors.red).withValues(alpha: 0.15)
+                          ? Colors.red.withValues(alpha: 0.15)
                           : activeColor.withValues(alpha: 0.15),
                   width: 0.8,
                 ),

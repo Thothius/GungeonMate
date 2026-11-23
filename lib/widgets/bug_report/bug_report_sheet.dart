@@ -10,7 +10,6 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
 import '../../utils/responsive.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Context-aware bug reporter — opened from [BugReportButton] or the
 /// run-tools sheet. The kind/location/entity are pre-filled from the
@@ -101,24 +100,17 @@ class _BugReportSheetState extends State<BugReportSheet> {
   Widget build(BuildContext context) {
     final flair = AppTheme.displayedFlair;
     final sf = Responsive.factor(context);
-    final skeuo = AppTheme.isSkeuo;
-    final surface = skeuo ? Skeuo.card : flair.card;
-    final ink = skeuo ? Skeuo.ink : flair.primary;
+    final surface = flair.card;
+    final ink = flair.primary;
 
     return Padding(
       // Lift above the keyboard.
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.viewInsetsOf(context).bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: Container(
         decoration: BoxDecoration(
           color: surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          border: skeuo
-              ? Border.all(color: Skeuo.ink.withValues(alpha: 0.5), width: 1.4)
-              : Border.all(
-                  color: flair.primary.withValues(alpha: 0.2),
-                ),
+          border: Border.all(color: flair.primary.withValues(alpha: 0.2)),
         ),
         child: SafeArea(
           top: false,
@@ -126,161 +118,164 @@ class _BugReportSheetState extends State<BugReportSheet> {
             child:
                 _done == null
                     ? Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Grab handle.
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    margin: const EdgeInsets.only(top: Insets.sm),
-                    decoration: BoxDecoration(
-                      color: ink.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    Insets.lg,
-                    Insets.md,
-                    Insets.lg,
-                    Insets.sm,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.bug_report_outlined,
-                        size: 22,
-                        color: skeuo ? Skeuo.accent : ink,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: GoopText(
-                          'REPORT A BUG',
-                          style: TextStyle(
-                            fontSize: FontSizes.titleSmall * sf,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.6,
-                            color: skeuo ? Skeuo.ink : flair.primary,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Grab handle.
+                        Center(
+                          child: Container(
+                            width: 36,
+                            height: 4,
+                            margin: const EdgeInsets.only(top: Insets.sm),
+                            decoration: BoxDecoration(
+                              color: ink.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _ctxChip('SCREEN', widget.context.screen, ink, skeuo),
-                      if (widget.context.entity != null &&
-                          widget.context.entity!.trim().isNotEmpty)
-                        _ctxChip('ITEM', widget.context.entity!, ink, skeuo),
-                      const SizedBox(height: Insets.sm),
-                      _kindLabel(ink, skeuo),
-                      const SizedBox(height: 6),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          for (final k in BugReportKind.values)
-                            _kindChip(k, ink, skeuo),
-                        ],
-                      ),
-                      const SizedBox(height: Insets.md),
-                      TextField(
-                        controller: _notesCtrl,
-                        maxLines: 5,
-                        minLines: 3,
-                        textCapitalization: TextCapitalization.sentences,
-                        style: TextStyle(
-                          fontSize: FontSizes.bodyMedium,
-                          color: skeuo ? Skeuo.ink : null,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            Insets.lg,
+                            Insets.md,
+                            Insets.lg,
+                            Insets.sm,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.bug_report_outlined,
+                                size: 22,
+                                color: ink,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: GoopText(
+                                  'REPORT A BUG',
+                                  style: TextStyle(
+                                    fontSize: FontSizes.titleSmall * sf,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.6,
+                                    color: flair.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        decoration: InputDecoration(
-                          hintText:
-                              'What happened? What did you expect?',
-                          hintStyle: TextStyle(
-                            color: (skeuo ? Skeuo.pencil : Colors.white70)
-                                .withValues(alpha: 0.7),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Insets.lg,
                           ),
-                          filled: true,
-                          fillColor: skeuo
-                              ? Skeuo.insetPaper
-                              : flair.primary.withValues(alpha: 0.06),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radii.md),
-                            borderSide: BorderSide(
-                              color: skeuo
-                                  ? Skeuo.ink.withValues(alpha: 0.35)
-                                  : flair.primary.withValues(alpha: 0.25),
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _ctxChip('SCREEN', widget.context.screen, ink),
+                              if (widget.context.entity != null &&
+                                  widget.context.entity!.trim().isNotEmpty)
+                                _ctxChip('ITEM', widget.context.entity!, ink),
+                              const SizedBox(height: Insets.sm),
+                              _kindLabel(ink),
+                              const SizedBox(height: 6),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  for (final k in BugReportKind.values)
+                                    _kindChip(k, ink),
+                                ],
+                              ),
+                              const SizedBox(height: Insets.md),
+                              TextField(
+                                controller: _notesCtrl,
+                                maxLines: 5,
+                                minLines: 3,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                style: const TextStyle(
+                                  fontSize: FontSizes.bodyMedium,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText:
+                                      'What happened? What did you expect?',
+                                  hintStyle: TextStyle(
+                                    color: Colors.white70.withValues(
+                                      alpha: 0.7,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: flair.primary.withValues(
+                                    alpha: 0.06,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radii.md),
+                                    borderSide: BorderSide(
+                                      color: flair.primary.withValues(
+                                        alpha: 0.25,
+                                      ),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radii.md),
+                                    borderSide: BorderSide(
+                                      color: flair.primary.withValues(
+                                        alpha: 0.25,
+                                      ),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radii.md),
+                                    borderSide: BorderSide(
+                                      color: ink,
+                                      width: 1.6,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.all(
+                                    Insets.md,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: Insets.md),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _actionButton(
+                                      label: 'COPY',
+                                      icon: Icons.copy_rounded,
+                                      filled: false,
+                                      onTap: _copy,
+                                      ink: ink,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    flex: 2,
+                                    child: _actionButton(
+                                      label:
+                                          _sending ? 'SENDING…' : 'SEND REPORT',
+                                      icon: Icons.send_rounded,
+                                      filled: true,
+                                      onTap: _send,
+                                      ink: ink,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: Insets.sm),
+                              GoopText(
+                                'Opens your email app — nothing is sent until you '
+                                'hit send there. Includes app version + device info.',
+                                style: TextStyle(
+                                  fontSize: FontSizes.labelSmall,
+                                  color: Colors.white60.withValues(alpha: 0.8),
+                                ),
+                              ),
+                              const SizedBox(height: Insets.lg),
+                            ],
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radii.md),
-                            borderSide: BorderSide(
-                              color: skeuo
-                                  ? Skeuo.ink.withValues(alpha: 0.35)
-                                  : flair.primary.withValues(alpha: 0.25),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radii.md),
-                            borderSide: BorderSide(
-                              color: skeuo ? Skeuo.accent : ink,
-                              width: 1.6,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.all(Insets.md),
                         ),
-                      ),
-                      const SizedBox(height: Insets.md),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _actionButton(
-                              label: 'COPY',
-                              icon: Icons.copy_rounded,
-                              filled: false,
-                              onTap: _copy,
-                              ink: ink,
-                              skeuo: skeuo,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            flex: 2,
-                            child: _actionButton(
-                              label: _sending ? 'SENDING…' : 'SEND REPORT',
-                              icon: Icons.send_rounded,
-                              filled: true,
-                              onTap: _send,
-                              ink: ink,
-                              skeuo: skeuo,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Insets.sm),
-                      GoopText(
-                        'Opens your email app — nothing is sent until you '
-                        'hit send there. Includes app version + device info.',
-                        style: TextStyle(
-                          fontSize: FontSizes.labelSmall,
-                          color: (skeuo ? Skeuo.pencil : Colors.white60)
-                              .withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(height: Insets.lg),
-                    ],
-                  ),
-                ),
-              ],
+                      ],
                     )
-                    : _buildDoneView(skeuo, ink),
+                    : _buildDoneView(ink),
           ),
         ),
       ),
@@ -289,10 +284,10 @@ class _BugReportSheetState extends State<BugReportSheet> {
 
   /// Post-send confirmation — icon pops in with a spring, text rises
   /// behind it. Sheet auto-dismisses ~1.7s after this appears.
-  Widget _buildDoneView(bool skeuo, Color ink) {
+  Widget _buildDoneView(Color ink) {
     final sent = _done == _DonePhase.sent;
-    final accent = skeuo ? Skeuo.accent : ink;
-    final okColor = skeuo ? Skeuo.inkIf(Colors.greenAccent) : Colors.greenAccent;
+    final accent = ink;
+    const okColor = Colors.greenAccent;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         Insets.lg,
@@ -304,22 +299,22 @@ class _BugReportSheetState extends State<BugReportSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 84,
-            height: 84,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: okColor.withValues(alpha: skeuo ? 0.15 : 0.12),
-              border: Border.all(
-                color: okColor.withValues(alpha: 0.55),
-                width: 1.6,
-              ),
-            ),
-            child: Icon(
-              sent ? Icons.send_rounded : Icons.content_copy_rounded,
-              size: 38,
-              color: okColor,
-            ),
-          )
+                width: 84,
+                height: 84,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: okColor.withValues(alpha: 0.12),
+                  border: Border.all(
+                    color: okColor.withValues(alpha: 0.55),
+                    width: 1.6,
+                  ),
+                ),
+                child: Icon(
+                  sent ? Icons.send_rounded : Icons.content_copy_rounded,
+                  size: 38,
+                  color: okColor,
+                ),
+              )
               .animate()
               .scale(
                 begin: const Offset(0.4, 0.4),
@@ -330,32 +325,30 @@ class _BugReportSheetState extends State<BugReportSheet> {
               .fadeIn(duration: 200.ms),
           const SizedBox(height: Insets.lg),
           GoopText(
-            sent ? 'REPORT SENT' : 'COPIED',
-            style: TextStyle(
-              fontSize: FontSizes.titleMedium,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.8,
-              color: skeuo ? Skeuo.ink : null,
-            ),
-          ).animate(delay: 120.ms).fadeIn(duration: 260.ms).moveY(
-            begin: 8,
-            end: 0,
-          ),
+                sent ? 'REPORT SENT' : 'COPIED',
+                style: TextStyle(
+                  fontSize: FontSizes.titleMedium,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.8,
+                ),
+              )
+              .animate(delay: 120.ms)
+              .fadeIn(duration: 260.ms)
+              .moveY(begin: 8, end: 0),
           const SizedBox(height: Insets.sm),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
             child: GoopText(
               sent
                   ? 'Your email app has the draft — '
-                        'hit send there to deliver it.'
+                      'hit send there to deliver it.'
                   : 'No email app found — the report is on your '
-                        'clipboard. Paste it anywhere.',
+                      'clipboard. Paste it anywhere.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: FontSizes.bodyMedium,
                 height: 1.45,
-                color: (skeuo ? Skeuo.pencil : Colors.white60)
-                    .withValues(alpha: 0.85),
+                color: Colors.white60.withValues(alpha: 0.85),
               ),
             ),
           ).animate(delay: 220.ms).fadeIn(duration: 300.ms),
@@ -375,7 +368,7 @@ class _BugReportSheetState extends State<BugReportSheet> {
     );
   }
 
-  Widget _kindLabel(Color ink, bool skeuo) => GoopText(
+  Widget _kindLabel(Color ink) => GoopText(
     'TYPE',
     style: TextStyle(
       fontSize: FontSizes.labelMedium,
@@ -385,7 +378,7 @@ class _BugReportSheetState extends State<BugReportSheet> {
     ),
   );
 
-  Widget _ctxChip(String label, String value, Color ink, bool skeuo) {
+  Widget _ctxChip(String label, String value, Color ink) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
@@ -410,7 +403,6 @@ class _BugReportSheetState extends State<BugReportSheet> {
               style: TextStyle(
                 fontSize: FontSizes.bodyMedium,
                 fontWeight: FontWeight.w800,
-                color: skeuo ? Skeuo.ink : null,
               ),
             ),
           ),
@@ -419,9 +411,9 @@ class _BugReportSheetState extends State<BugReportSheet> {
     );
   }
 
-  Widget _kindChip(BugReportKind k, Color ink, bool skeuo) {
+  Widget _kindChip(BugReportKind k, Color ink) {
     final sel = _kind == k;
-    final chipColor = skeuo ? Skeuo.accent : ink;
+    final chipColor = ink;
     return InkWell(
       borderRadius: Radii.pill,
       onTap: () {
@@ -457,9 +449,8 @@ class _BugReportSheetState extends State<BugReportSheet> {
     required bool filled,
     required VoidCallback onTap,
     required Color ink,
-    required bool skeuo,
   }) {
-    final accent = skeuo ? Skeuo.accent : ink;
+    final accent = ink;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -478,11 +469,7 @@ class _BugReportSheetState extends State<BugReportSheet> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 18,
-                color: filled ? (skeuo ? Skeuo.paper : Colors.white) : accent,
-              ),
+              Icon(icon, size: 18, color: filled ? Colors.white : accent),
               const SizedBox(width: 8),
               GoopText(
                 label,
@@ -490,10 +477,7 @@ class _BugReportSheetState extends State<BugReportSheet> {
                   fontSize: FontSizes.labelMedium,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.0,
-                  color:
-                      filled
-                          ? (skeuo ? Skeuo.paper : Colors.white)
-                          : accent,
+                  color: filled ? Colors.white : accent,
                 ),
               ),
             ],

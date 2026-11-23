@@ -54,7 +54,7 @@ Everything runs **offline, on-device, free forever**. No accounts, no ads, no te
 **🎨 Experience Studio**
 - Preset flow — browse official + your saved presets, or build from scratch / copy an existing look
 - Full editor — DETAILS / COLORS & BG / TYPE / PARTICLES / AMBIANCE / SAVE tabs with a live fullscreen mock preview
-- 40+ themes including Bullet Hell, Forge Master, Robot's Core, Unicorn (multi-palette), Resourceful Rat, Lord Jammed — plus Neo-Skeuo and a custom color editor
+- 40+ themes including Bullet Hell, Forge Master, Robot's Core, Unicorn (multi-palette), Resourceful Rat, Lord Jammed — plus a custom color editor
 - Particles — 37 presets (embers, frost shards, bullet hell, cosmic dust…), physics toggles, or float 12 real game items
 - Ambiance — glow, vignette, film grain, FOG/RAIN shaders, tap sparkles, 4 background modes (gradient, solid, none, 46 wallpapers)
 - Goopian language mode — English rewritten in animated alien text

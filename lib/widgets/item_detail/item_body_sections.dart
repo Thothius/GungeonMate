@@ -120,15 +120,15 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.08),
+        color: Colors.amber.withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.35),
+          color: Colors.amber.withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.04),
+            color: Colors.amber.withValues(alpha: 0.04),
             blurRadius: 8,
             spreadRadius: 1,
           ),
@@ -139,11 +139,7 @@ mixin _ItemBodySections on StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.stars,
-                color: Skeuo.inkIf(Colors.amber.shade300),
-                size: 20,
-              ),
+              Icon(Icons.stars, color: Colors.amber.shade300, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: GoopText(
@@ -151,7 +147,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
-                    color: Skeuo.inkIf(Colors.amber.shade300),
+                    color: Colors.amber.shade300,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -205,7 +201,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Skeuo.inkIf(Colors.amber),
+                        color: Colors.amber,
                       ),
                     ),
                   ),
@@ -234,7 +230,7 @@ mixin _ItemBodySections on StatelessWidget {
                 children: [
                   Icon(
                     Icons.precision_manufacturing_outlined,
-                    color: Skeuo.inkIf(Colors.amber.shade200),
+                    color: Colors.amber.shade200,
                     size: 16,
                   ),
                   const SizedBox(width: 6),
@@ -246,7 +242,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
               Switch(
                 value: hasGoldJunk,
-                activeThumbColor: Skeuo.inkIf(Colors.amber),
+                activeThumbColor: Colors.amber,
                 onChanged: (val) {
                   if (goldJunkItem == null) return;
                   if (val) {
@@ -270,7 +266,7 @@ mixin _ItemBodySections on StatelessWidget {
                   color: Colors.black38,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.35),
+                    color: Colors.amber.withValues(alpha: 0.35),
                     width: 1.2,
                   ),
                 ),
@@ -283,11 +279,8 @@ mixin _ItemBodySections on StatelessWidget {
                     cacheWidth: 144,
                     cacheHeight: 144,
                     errorBuilder:
-                        (_, _, _) => Icon(
-                          Icons.shield,
-                          color: Skeuo.inkIf(Colors.amber),
-                          size: 32,
-                        ),
+                        (_, _, _) =>
+                            Icon(Icons.shield, color: Colors.amber, size: 32),
                   ),
                 ),
               ),
@@ -301,7 +294,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
-                        color: Skeuo.inkIf(Colors.amberAccent),
+                        color: Colors.amberAccent,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -377,22 +370,16 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.08),
+        color: Colors.red.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.spa,
-                color: Skeuo.inkIf(Colors.redAccent.shade100),
-                size: 20,
-              ),
+              Icon(Icons.spa, color: Colors.redAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: GoopText(
@@ -400,7 +387,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.redAccent.shade100),
+                    color: Colors.redAccent.shade100,
                   ),
                 ),
               ),
@@ -478,9 +465,7 @@ mixin _ItemBodySections on StatelessWidget {
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontStyle: FontStyle.italic,
-              color: Skeuo.inkIf(
-                Skeuo.inkIf(Colors.redAccent.shade100),
-              ).withValues(alpha: 0.8),
+              color: Colors.redAccent.shade100.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -509,10 +494,10 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.cyan).withValues(alpha: 0.08),
+        color: Colors.cyan.withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.35),
+          color: Colors.cyanAccent.withValues(alpha: 0.35),
           width: 1.2,
         ),
       ),
@@ -523,7 +508,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.radar_outlined,
-                color: Skeuo.inkIf(Colors.cyanAccent.shade200),
+                color: Colors.cyanAccent.shade200,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -533,7 +518,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w900,
-                    color: Skeuo.inkIf(Colors.cyanAccent.shade200),
+                    color: Colors.cyanAccent.shade200,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -548,7 +533,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Colors.black26,
                 borderRadius: BorderRadius.all(Radii.sm),
                 border: Border.all(
-                  color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.15),
+                  color: Colors.cyanAccent.withValues(alpha: 0.15),
                 ),
               ),
               child: Column(
@@ -556,7 +541,7 @@ mixin _ItemBodySections on StatelessWidget {
                   Icon(
                     Icons.blur_circular_outlined,
                     size: 36,
-                    color: Skeuo.inkIf(Colors.cyanAccent),
+                    color: Colors.cyanAccent,
                   ),
                   const SizedBox(height: 8),
                   const GoopText(
@@ -584,7 +569,7 @@ mixin _ItemBodySections on StatelessWidget {
                     height: 38,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Skeuo.inkIf(Colors.cyan.shade900),
+                        backgroundColor: Colors.cyan.shade900,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radii.sm),
@@ -616,7 +601,7 @@ mixin _ItemBodySections on StatelessWidget {
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
-                color: Skeuo.inkIf(Colors.cyanAccent),
+                color: Colors.cyanAccent,
                 letterSpacing: 0.5,
               ),
             ),
@@ -633,15 +618,13 @@ mixin _ItemBodySections on StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         isMatch
-                            ? Skeuo.inkIf(Colors.cyan).withValues(alpha: 0.18)
+                            ? Colors.cyan.withValues(alpha: 0.18)
                             : Colors.black12,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color:
                           isMatch
-                              ? Skeuo.inkIf(
-                                Skeuo.inkIf(Colors.cyanAccent),
-                              ).withValues(alpha: 0.5)
+                              ? Colors.cyanAccent.withValues(alpha: 0.5)
                               : Colors.white.withValues(alpha: 0.04),
                     ),
                   ),
@@ -650,10 +633,7 @@ mixin _ItemBodySections on StatelessWidget {
                       Icon(
                         isMatch ? Icons.check_circle : Icons.circle_outlined,
                         size: 14,
-                        color:
-                            isMatch
-                                ? Skeuo.inkIf(Colors.cyanAccent)
-                                : Colors.white24,
+                        color: isMatch ? Colors.cyanAccent : Colors.white24,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -682,9 +662,7 @@ mixin _ItemBodySections on StatelessWidget {
                   'Mystery seed decoded successfully.',
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
-                    color: Skeuo.inkIf(
-                      Skeuo.inkIf(Colors.cyanAccent),
-                    ).withValues(alpha: 0.5),
+                    color: Colors.cyanAccent.withValues(alpha: 0.5),
                   ),
                 ),
                 InkWell(
@@ -699,7 +677,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.bold,
-                        color: Skeuo.inkIf(Colors.cyanAccent.shade100),
+                        color: Colors.cyanAccent.shade100,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -714,13 +692,13 @@ mixin _ItemBodySections on StatelessWidget {
             decoration: BoxDecoration(
               color:
                   isWindgunnerActive
-                      ? Skeuo.inkIf(Colors.cyan).withValues(alpha: 0.12)
+                      ? Colors.cyan.withValues(alpha: 0.12)
                       : Colors.black12,
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
                 color:
                     isWindgunnerActive
-                        ? Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.3)
+                        ? Colors.cyanAccent.withValues(alpha: 0.3)
                         : Colors.transparent,
               ),
             ),
@@ -739,7 +717,7 @@ mixin _ItemBodySections on StatelessWidget {
                           fontWeight: FontWeight.w900,
                           color:
                               isWindgunnerActive
-                                  ? Skeuo.inkIf(Colors.cyanAccent)
+                                  ? Colors.cyanAccent
                                   : Colors.white54,
                           letterSpacing: 0.3,
                         ),
@@ -761,8 +739,8 @@ mixin _ItemBodySections on StatelessWidget {
                   ),
                 ),
                 Switch(
-                  activeThumbColor: Skeuo.inkIf(Colors.cyanAccent),
-                  activeTrackColor: Skeuo.inkIf(Colors.cyan.shade900),
+                  activeThumbColor: Colors.cyanAccent,
+                  activeTrackColor: Colors.cyan.shade900,
                   value: isWindgunnerActive,
                   onChanged: (val) {
                     if (val) {
@@ -818,10 +796,10 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.08),
+        color: Colors.blueAccent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.35),
+          color: Colors.blueAccent.withValues(alpha: 0.35),
           width: 1.2,
         ),
       ),
@@ -832,7 +810,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.groups_outlined,
-                color: Skeuo.inkIf(Colors.blueAccent.shade100),
+                color: Colors.blueAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -845,7 +823,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w900,
-                        color: Skeuo.inkIf(Colors.blueAccent),
+                        color: Colors.blueAccent,
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -869,9 +847,7 @@ mixin _ItemBodySections on StatelessWidget {
                   color: Colors.black45,
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: Skeuo.inkIf(
-                      Skeuo.inkIf(Colors.blueAccent),
-                    ).withValues(alpha: 0.3),
+                    color: Colors.blueAccent.withValues(alpha: 0.3),
                   ),
                 ),
                 child: GoopText(
@@ -880,7 +856,7 @@ mixin _ItemBodySections on StatelessWidget {
                     fontSize: 11,
                     fontFamily: 'ArcadeClassic',
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.blueAccent),
+                    color: Colors.blueAccent,
                   ),
                 ),
               ),
@@ -928,7 +904,7 @@ mixin _ItemBodySections on StatelessWidget {
               color: Colors.black38,
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
-                color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.15),
+                color: Colors.blueAccent.withValues(alpha: 0.15),
               ),
             ),
             child: Column(
@@ -939,7 +915,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
                     fontWeight: FontWeight.w900,
-                    color: Skeuo.inkIf(Colors.blueAccent),
+                    color: Colors.blueAccent,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -968,7 +944,7 @@ mixin _ItemBodySections on StatelessWidget {
                     'Dallas + Wolf Active: Added blank defense. Deletes projectiles.',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Skeuo.inkIf(Colors.cyanAccent),
+                      color: Colors.cyanAccent,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                     ),
@@ -978,7 +954,7 @@ mixin _ItemBodySections on StatelessWidget {
                     'Dallas + Wolf + Chains Active: FULL HEIST CREW ASSEMBLED! Automated shotgun scaling active. Infinite heister capabilities!',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Skeuo.inkIf(Colors.greenAccent),
+                      color: Colors.greenAccent,
                       fontWeight: FontWeight.w900,
                       height: 1.2,
                     ),
@@ -1018,13 +994,13 @@ mixin _ItemBodySections on StatelessWidget {
               decoration: BoxDecoration(
                 color:
                     active
-                        ? Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.18)
+                        ? Colors.blueAccent.withValues(alpha: 0.18)
                         : Colors.black26,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color:
                       active
-                          ? Skeuo.inkIf(Colors.blueAccent)
+                          ? Colors.blueAccent
                           : Colors.white.withValues(alpha: 0.05),
                   width: active ? 1.5 : 1.0,
                 ),
@@ -1035,10 +1011,7 @@ mixin _ItemBodySections on StatelessWidget {
                   Icon(
                     avatar,
                     size: 24,
-                    color:
-                        active
-                            ? Skeuo.inkIf(Colors.blueAccent.shade100)
-                            : Colors.white24,
+                    color: active ? Colors.blueAccent.shade100 : Colors.white24,
                   ),
                   const SizedBox(height: 4),
                   GoopText(
@@ -1058,10 +1031,7 @@ mixin _ItemBodySections on StatelessWidget {
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
                       fontWeight: FontWeight.bold,
-                      color:
-                          active
-                              ? Skeuo.inkIf(Colors.greenAccent)
-                              : Colors.white24,
+                      color: active ? Colors.greenAccent : Colors.white24,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -1085,11 +1055,9 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.indigo).withValues(alpha: 0.08),
+        color: Colors.indigo.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.indigoAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.indigoAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1098,7 +1066,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.trending_up,
-                color: Skeuo.inkIf(Colors.indigoAccent.shade100),
+                color: Colors.indigoAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -1108,7 +1076,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.indigoAccent.shade100),
+                    color: Colors.indigoAccent.shade100,
                   ),
                 ),
               ),
@@ -1179,11 +1147,9 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.08),
+        color: Colors.amber.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.amberAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1192,7 +1158,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.monetization_on,
-                color: Skeuo.inkIf(Colors.amberAccent.shade100),
+                color: Colors.amberAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -1202,7 +1168,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.amberAccent.shade100),
+                    color: Colors.amberAccent.shade100,
                   ),
                 ),
               ),
@@ -1244,8 +1210,7 @@ mixin _ItemBodySections on StatelessWidget {
                 child: Icon(
                   spent ? Icons.radio_button_unchecked : Icons.check_circle,
                   size: 18,
-                  color:
-                      spent ? Colors.white24 : Skeuo.inkIf(Colors.amberAccent),
+                  color: spent ? Colors.white24 : Colors.amberAccent,
                 ),
               );
             }),
@@ -1279,11 +1244,9 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.purple).withValues(alpha: 0.08),
+        color: Colors.purple.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1292,7 +1255,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.brightness_3,
-                color: Skeuo.inkIf(Colors.purpleAccent.shade100),
+                color: Colors.purpleAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -1302,7 +1265,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.purpleAccent.shade100),
+                    color: Colors.purpleAccent.shade100,
                   ),
                 ),
               ),
@@ -1321,10 +1284,7 @@ mixin _ItemBodySections on StatelessWidget {
                       Icon(
                         has ? Icons.check_circle : Icons.circle_outlined,
                         size: 14,
-                        color:
-                            has
-                                ? Skeuo.inkIf(Colors.purpleAccent)
-                                : Colors.white24,
+                        color: has ? Colors.purpleAccent : Colors.white24,
                       ),
                       const SizedBox(width: 4),
                       GoopText(
@@ -1335,10 +1295,7 @@ mixin _ItemBodySections on StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: has ? FontWeight.bold : FontWeight.normal,
-                          color:
-                              has
-                                  ? Skeuo.inkIf(Colors.purpleAccent)
-                                  : Colors.white38,
+                          color: has ? Colors.purpleAccent : Colors.white38,
                         ),
                       ),
                     ],

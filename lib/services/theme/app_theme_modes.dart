@@ -1751,48 +1751,6 @@ enum AppThemeMode {
       pageFrame: true,
       font: AppFont.fjallaOne,
     ),
-  ),
-  // ── Alternate UI skin (toggle-only, never in the picker). Cream
-  // paper + black ink "hand-drawn kit" look; ambiance layers are
-  // suppressed per-mode in ThemeOverlay so user prefs stay untouched.
-  // font stays null: the skeuo font is resolved in themeFor so the
-  // user's font pref is never overwritten by entering this mode.
-  neoSkeuo(
-    label: 'Neo-Skeuo',
-    vibe: 'SKETCH',
-    diff: 'NORMAL',
-    elem: 'PAPER',
-    whimsicalDescription:
-        'A field-manual page torn from the Gungeon. Cream paper, confident ink strokes, and hatched shadows drawn by a very careful Gungeoneer.',
-    staticFlair: ThemeFlair(
-      scaffold: Color(0xFFF2E9D3), // warm paper
-      card: Color(0xFFFAF5E8), // raised card paper
-      primary: Color(0xFF1F1B16), // ink
-      secondary: Color(0xFF5C5548), // pencil gray
-      headlineStat: Color(0xFF1F1B16),
-      bulletColor: Color(0xFF1F1B16),
-      bulletGlyph: '•',
-      tabularFigures: true,
-      numberSizeScale: 1.0,
-      numberWeight: FontWeight.w700,
-      chipRadius: 8,
-      cardRadius: 8,
-      cardBorderColor: Color(0xE61F1B16),
-      cardBorderWidth: 2.0,
-      chipFilled: false,
-      dividerColor: Color(0x591F1B16),
-      dividerThickness: 1.0,
-      glowPrimary: Color(0x00000000),
-      glowSecondary: Color(0x00000000),
-      auraStyle: AvatarAuraStyle.none,
-      headerGlyph: '✎',
-      headerAllCaps: true,
-      headerUnderlineColor: Color(0x661F1B16),
-      statGroupCombat: Color(0xFF8C3B2E), // red pencil
-      statGroupHandling: Color(0xFF3E5C6E), // blue pencil
-      statGroupMeta: Color(0xFF8A6D2F), // ochre pencil
-      font: null,
-    ),
   );
 
   final String label;
@@ -2048,7 +2006,7 @@ enum AppFont {
   merriweather,
   specialElite,
   playfairDisplay,
-  // ── Hand-lettered (Neo-Skeuo signature, bundled assets) ──
+  // ── Hand-lettered (bundled assets) ──
   shantellSans,
   architectsDaughter,
   patrickHand,
@@ -2130,7 +2088,7 @@ extension AppFontLabel on AppFont {
       ThemeData.dark().textTheme.apply(fontFamily: bundledFontFamily);
 
   /// The curated picker set — the ONLY fonts offered in the studio
-  /// typography step (plus the Neo-Skeuo trio, which is skin-locked).
+  /// typography step.
   /// Order here is the display order: signature → fat display →
   /// stylized accent → readable workhorse.
   static const List<AppFont> curated = [
@@ -2146,17 +2104,10 @@ extension AppFontLabel on AppFont {
     AppFont.pressStart2p,
   ];
 
-  /// Hand-lettered trio — valid persisted values, but only reachable
-  /// through the Neo-Skeuo skin's own font picker.
-  static const List<AppFont> skeuoOnly = [
-    AppFont.shantellSans,
-    AppFont.architectsDaughter,
-    AppFont.patrickHand,
-  ];
-
   /// True when [f] has a bundled asset and may be selected/applied.
-  static bool isOffered(AppFont f) =>
-      curated.contains(f) || skeuoOnly.contains(f);
+  /// The hand-lettered trio stays unoffered — persisted picks migrate
+  /// to a live font via [migrate].
+  static bool isOffered(AppFont f) => curated.contains(f);
 
   /// Maps a possibly-deprecated persisted font onto a live one.
   /// Role-preserving: pixel→pixel, heavy display→heavy display,
@@ -2180,8 +2131,15 @@ extension AppFontLabel on AppFont {
       AppFont.audiowide ||
       AppFont.jetBrainsMono ||
       AppFont.dmSans ||
-      AppFont.montserrat => AppFont.fjallaOne,
+      AppFont.montserrat ||
+      AppFont.shantellSans ||
+      AppFont.architectsDaughter ||
+      AppFont.patrickHand => AppFont.fjallaOne,
       AppFont.fredoka || AppFont.carterOne => AppFont.lilitaOne,
+      // Hand-lettered trio (removed skin's fonts) → friendly grotesque.
+      AppFont.shantellSans ||
+      AppFont.architectsDaughter ||
+      AppFont.patrickHand => AppFont.fjallaOne,
       _ => AppFont.anton, // heavy display cluster
     };
   }
@@ -2348,8 +2306,6 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'R&G Department';
       case AppThemeMode.minimalist:
         return 'Minimalist';
-      case AppThemeMode.neoSkeuo:
-        return 'Neo-Skeuo';
       case AppThemeMode.custom:
         return AppTheme._customThemeName;
     }
@@ -2457,8 +2413,6 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Bureaucratic — neon green, paper white, office grey';
       case AppThemeMode.minimalist:
         return 'Stripped Back — pure black, clean white, cold grey';
-      case AppThemeMode.neoSkeuo:
-        return 'Hand-drawn: cream paper, black ink, sketch chrome';
       case AppThemeMode.custom:
         return 'Custom — your personal palette';
     }

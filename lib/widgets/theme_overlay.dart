@@ -17,7 +17,6 @@ import 'particles/liquid_tank.dart';
 import 'backgrounds/page_frame.dart';
 import 'backgrounds/ambient_shader.dart';
 import 'backgrounds/custom_wallpaper.dart';
-import 'skeuo/skeuo_backdrop.dart' show SkeuoGrainPainter;
 
 /// Shared RouteObserver — MainMenuScreen subscribes (RouteAware) to
 /// learn when a route is pushed above it or popped back to it.
@@ -116,10 +115,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
   }
 
   void _spawnTouchSparkles(Offset globalPosition, VisualPrefs prefs) {
-    if (_reduceMotion ||
-        !prefs.particlesEnabled ||
-        !prefs.tapSparkles ||
-        AppTheme.isSkeuo) {
+    if (_reduceMotion || !prefs.particlesEnabled || !prefs.tapSparkles) {
       return;
     }
     final box = context.findRenderObject() as RenderBox?;
@@ -201,11 +197,6 @@ class _ThemeOverlayState extends State<ThemeOverlay>
               ThemeOverlay.currentScreenIndex.value = desiredIndex;
             }
             final f = AppTheme.displayedFlair;
-            // Neo-Skeuo suppresses every ambiance layer to clean paper —
-            // particles, glow, shader, grain prefs all stay untouched on
-            // disk and come back the moment the skin exits. The skin's
-            // only texture is its own ink speckle + pencil vignette below.
-            final skeuo = mode == AppThemeMode.neoSkeuo;
             // Auto-glow: themes with a non-transparent glowPrimary get a
             // subtle ambient glow even if the user hasn't manually enabled
             // it. This ensures every themed mode "feels" alive out of the
@@ -217,8 +208,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                 prefs.glowIntensity > 0.001
                     ? prefs.glowIntensity
                     : autoGlowIntensity;
-            final showGlow =
-                !skeuo && !reduceMotion && effectiveUserGlow > 0.001;
+            final showGlow = !reduceMotion && effectiveUserGlow > 0.001;
             final userGlowColor = prefs.glowColor;
             // 3x boost: user requested glow be more significant at 100%.
             // Cap at 1.8 to prevent total washout while making max clearly visible.
@@ -258,21 +248,18 @@ class _ThemeOverlayState extends State<ThemeOverlay>
             // is the most disposable layer: drop it rather than stack
             // noise on noise. Studio shows the same load as a meter.
             final maxedAmbience = prefs.ambienceLoad >= 4;
-            final particleBackdropBg =
-                skeuo
-                    ? null
-                    : buildBackdropParticleField(
-                      mode,
-                      prefs,
-                      menuVisible: menuVisible,
-                      reduceMotion: reduceMotion,
-                    );
+            final particleBackdropBg = buildBackdropParticleField(
+              mode,
+              prefs,
+              menuVisible: menuVisible,
+              reduceMotion: reduceMotion,
+            );
             // Custom theme wallpaper — replaces the flat scaffold fill
             // with a bundled image + scrim. Sits above the base color,
             // below shader/particles/glow so all effects stay on top.
             // bgMode gates it: solid/gradient/none suppress the image.
             final customBgMode =
-                (!menuVisible && !skeuo && mode == AppThemeMode.custom)
+                (!menuVisible && mode == AppThemeMode.custom)
                     ? (AppTheme.cachedCustomTheme?.bgMode ??
                         CustomThemeData.bgWallpaper)
                     : CustomThemeData.bgWallpaper;
@@ -330,7 +317,6 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 0.45. Custom-theme gradient backdrop — palette sweep
                   // over the canvas for the GRADIENT bg mode.
                   if (!menuVisible &&
-                      !skeuo &&
                       customBgMode == CustomThemeData.bgGradient)
                     Positioned.fill(
                       child: IgnorePointer(
@@ -354,7 +340,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // (blood/venom/umbra) or tilt-sliding brass shells.
                   // Studio AMBIENCE pick; reduced-motion gets a frozen
                   // composed frame inside the widget itself.
-                  if (!menuVisible && !skeuo && liquidKind != LiquidKind.off)
+                  if (!menuVisible && liquidKind != LiquidKind.off)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: LiquidTankField(
@@ -368,7 +354,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // scanlines / abyss painter scenes. Sits above the
                   // liquid tank, below shaders + particles so textures
                   // never cover the particle identity.
-                  if (!menuVisible && !skeuo && ambientKind != AmbientKind.off)
+                  if (!menuVisible && ambientKind != AmbientKind.off)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: AmbientField(
@@ -383,10 +369,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
                   // rain or dark neon fog. Sits behind particles but above the
                   // base background + video wallpaper. Opt-in via VisualPrefs.
-                  if (!reduceMotion &&
-                      !menuVisible &&
-                      !skeuo &&
-                      prefs.shaderEnabled)
+                  if (!reduceMotion && !menuVisible && prefs.shaderEnabled)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: AmbientShaderLayer(
@@ -424,39 +407,27 @@ class _ThemeOverlayState extends State<ThemeOverlay>
 
                   // 3.5. Chamber Vignette — user-tweakable depth shadow
                   // (prefs.vignetteIntensity scales edge darkness).
-                  // Neo-Skeuo gets a fixed pencil vignette instead: soft
-                  // ink shading at the edges, no user-pref scaling.
-                  if (!menuVisible && (skeuo || prefs.vignetteIntensity > 0.01))
+                  if (!menuVisible && prefs.vignetteIntensity > 0.01)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: RadialGradient(
                               center: Alignment.center,
-                              radius: skeuo ? 1.3 : 1.25,
-                              colors:
-                                  skeuo
-                                      ? const [
-                                        Colors.transparent,
-                                        Color(0x0A1F1B16),
-                                        Color(0x241F1B16),
-                                      ]
-                                      : [
-                                        Colors.transparent,
-                                        Colors.black.withValues(
-                                          alpha: 0.05 * prefs.vignetteIntensity,
-                                        ),
-                                        Colors.black.withValues(
-                                          alpha: 0.25 * prefs.vignetteIntensity,
-                                        ),
-                                        Colors.black.withValues(
-                                          alpha: 0.48 * prefs.vignetteIntensity,
-                                        ),
-                                      ],
-                              stops:
-                                  skeuo
-                                      ? const [0.0, 0.62, 1.0]
-                                      : const [0.0, 0.45, 0.82, 1.0],
+                              radius: 1.25,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withValues(
+                                  alpha: 0.05 * prefs.vignetteIntensity,
+                                ),
+                                Colors.black.withValues(
+                                  alpha: 0.25 * prefs.vignetteIntensity,
+                                ),
+                                Colors.black.withValues(
+                                  alpha: 0.48 * prefs.vignetteIntensity,
+                                ),
+                              ],
+                              stops: const [0.0, 0.45, 0.82, 1.0],
                             ),
                           ),
                         ),
@@ -465,17 +436,12 @@ class _ThemeOverlayState extends State<ThemeOverlay>
 
                   // 3.6. Film grain — static speckle at prefs.grainIntensity
                   // opacity; RepaintBoundary so it paints once per resize.
-                  // Neo-Skeuo always gets its ink speckle (paper tooth).
-                  if (!menuVisible && (skeuo || prefs.grainIntensity > 0.005))
+                  if (!menuVisible && prefs.grainIntensity > 0.005)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: RepaintBoundary(
                           child:
-                              skeuo
-                                  ? const CustomPaint(
-                                    painter: SkeuoGrainPainter(),
-                                  )
-                                  : reduceMotion
+                              reduceMotion
                                   ? CustomPaint(
                                     painter: GrainPainter(
                                       opacity: prefs.grainIntensity * 0.35,
@@ -488,7 +454,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                       ),
                     ),
 
-                  if (!menuVisible && !skeuo && f.pageFrame)
+                  if (!menuVisible && f.pageFrame)
                     const Positioned.fill(
                       child: IgnorePointer(child: PageFrame()),
                     ),
@@ -515,7 +481,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 3.7. Cinematic letterbox — soft black bars framing
                   // top + bottom edges. Static dressing; sits above all
                   // backdrop dressing but below tap sparkles.
-                  if (!menuVisible && !skeuo && prefs.cinematicBars)
+                  if (!menuVisible && prefs.cinematicBars)
                     const Positioned.fill(
                       child: IgnorePointer(
                         child: CustomPaint(painter: _CinemaBarsPainter()),
@@ -544,7 +510,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   //    backdrop field entirely; this keeps the user's
                   //    particle identity visible without covering UI.
                   //    Skipped at max ambience load — see above.
-                  if (!menuVisible && !skeuo && !maxedAmbience)
+                  if (!menuVisible && !maxedAmbience)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: Opacity(

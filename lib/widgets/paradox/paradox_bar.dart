@@ -7,7 +7,6 @@ import '../../models/multiplayer_messages.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/mp_session.dart';
 import '../../utils/responsive.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Unified top MP bar — always visible during any MP session
 /// (classic + paradox):
@@ -150,9 +149,9 @@ class _ParadoxBarState extends State<ParadoxBar> {
                               style: TextStyle(
                                 fontSize: 10.5 * sf,
                                 fontWeight: FontWeight.w600,
-                                color: Skeuo.inkIf(
-                                  Colors.orangeAccent,
-                                ).withValues(alpha: 0.8),
+                                color: Colors.orangeAccent.withValues(
+                                  alpha: 0.8,
+                                ),
                               ),
                             );
                           },
@@ -272,8 +271,8 @@ class _HealthChip extends StatelessWidget {
         health >= 70
             ? const Color(0xFF00E676)
             : health >= 35
-            ? Skeuo.inkIf(Colors.orangeAccent)
-            : Skeuo.inkIf(Colors.redAccent);
+            ? Colors.orangeAccent
+            : Colors.redAccent;
     return Tooltip(
       message: 'Connection health $health%',
       child: Container(

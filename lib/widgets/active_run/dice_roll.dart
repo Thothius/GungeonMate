@@ -8,7 +8,7 @@ import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
 import '../../services/goop_talk_engine.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 import '../bug_report/bug_report_sheet.dart';
 import '../../models/bug_report.dart';
 part 'dice_roll/dice_roll_logic.dart';
@@ -131,7 +131,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                               tooltip: 'Report a bug',
                               icon: Icon(
                                 Icons.bug_report_outlined,
-                                color: Skeuo.inkIf(Colors.deepOrangeAccent),
+                                color: Colors.deepOrangeAccent,
                                 size: 20,
                               ),
                               onPressed: () {
@@ -313,7 +313,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
         key: const ValueKey('challenging'),
         children: [
           const SizedBox(height: 10),
-          CircularProgressIndicator(color: Skeuo.inkIf(Colors.amberAccent)),
+          CircularProgressIndicator(color: Colors.amberAccent),
           const SizedBox(height: 16),
           const GoopText(
             'Waiting for partner to accept...',
@@ -353,7 +353,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
             'Tap each die individually to stop its spin!',
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
-              color: Skeuo.inkIf(Colors.amberAccent),
+              color: Colors.amberAccent,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -441,7 +441,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   height: 14,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Skeuo.inkIf(Colors.cyanAccent),
+                    color: Colors.cyanAccent,
                   ),
                 ),
                 SizedBox(width: 10),
@@ -450,7 +450,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   style: TextStyle(
                     fontSize: 11,
                     fontStyle: FontStyle.italic,
-                    color: Skeuo.inkIf(Colors.cyanAccent),
+                    color: Colors.cyanAccent,
                   ),
                 ),
               ],
@@ -469,9 +469,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
               : (isDraw
                   ? Colors.white54
-                  : (isMyVictory
-                      ? Skeuo.inkIf(Colors.greenAccent)
-                      : Skeuo.inkIf(Colors.redAccent)));
+                  : (isMyVictory ? Colors.greenAccent : Colors.redAccent));
 
       return Column(
         key: const ValueKey('finished_results'),
@@ -516,11 +514,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               Expanded(
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.person,
-                      color: Skeuo.inkIf(Colors.cyanAccent),
-                      size: 24,
-                    ),
+                    Icon(Icons.person, color: Colors.cyanAccent, size: 24),
                     const SizedBox(height: 4),
                     GoopText(
                       _mp.myNickname.toUpperCase(),
@@ -573,7 +567,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                     children: [
                       Icon(
                         Icons.person_outline,
-                        color: Skeuo.inkIf(Colors.pinkAccent),
+                        color: Colors.pinkAccent,
                         size: 24,
                       ),
                       const SizedBox(height: 4),

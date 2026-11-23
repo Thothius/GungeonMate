@@ -8,7 +8,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import 'description_blocks.dart';
 import 'gun_stats.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 part 'item_body_sections.dart';
 
 class ItemBody extends StatelessWidget with _ItemBodySections {

@@ -23,7 +23,6 @@ import '../bug_report/bug_report_sheet.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../screens/quiz/quiz_home_screen.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -40,10 +39,7 @@ void confirmClearInventoryDialog(
     context: context,
     builder:
         (c) => AlertDialog(
-          icon: Icon(
-            Icons.delete_sweep_rounded,
-            color: Skeuo.inkIf(Colors.redAccent),
-          ),
+          icon: Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
           title: GoopText("Clear $name's inventory?"),
           content: const GoopText(
             'Removes all guns and items except their starter loadout. '
@@ -56,7 +52,7 @@ void confirmClearInventoryDialog(
             ),
             FilledButton.tonal(
               style: FilledButton.styleFrom(
-                backgroundColor: Skeuo.inkIf(Colors.red.shade900),
+                backgroundColor: Colors.red.shade900,
               ),
               onPressed: () {
                 p.clearInventory(slot: slot);
@@ -115,11 +111,7 @@ class EffectsTileState extends State<EffectsTile> {
                 padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.auto_awesome,
-                      color: Skeuo.inkIf(Colors.amber),
-                      size: 18,
-                    ),
+                    Icon(Icons.auto_awesome, color: Colors.amber, size: 18),
                     const SizedBox(width: 8),
                     const GoopText(
                       'Effects',
@@ -139,9 +131,7 @@ class EffectsTileState extends State<EffectsTile> {
                         color:
                             totalTags == 0
                                 ? Colors.white.withValues(alpha: 0.05)
-                                : Skeuo.inkIf(
-                                  Colors.amber,
-                                ).withValues(alpha: 0.18),
+                                : Colors.amber.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: GoopText(
@@ -152,7 +142,7 @@ class EffectsTileState extends State<EffectsTile> {
                           color:
                               totalTags == 0
                                   ? Colors.white.withValues(alpha: 0.6)
-                                  : Skeuo.inkIf(Colors.amber),
+                                  : Colors.amber,
                         ),
                       ),
                     ),
@@ -309,10 +299,6 @@ class _RunToolsSheet extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final flair = AppTheme.flair;
-    // Hidden entirely when the Neo-Skeuo flag is off.
-    if (label.startsWith('Neo-Skeuo') && !AppTheme.kNeoSkeuoEnabled) {
-      return const SizedBox.shrink();
-    }
     return InkWell(
       borderRadius: BorderRadius.all(Radii.sm),
       onTap: () {
@@ -415,7 +401,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.temple_buddhist,
                 label: 'Shrines',
-                iconColor: Skeuo.inkIf(Colors.amberAccent),
+                iconColor: Colors.amberAccent,
                 onTap: () {
                   if (sheetCtx.mounted) {
                     Navigator.push(
@@ -432,10 +418,7 @@ class _RunToolsSheet extends StatelessWidget {
                         ? Icons.remove_circle_outline
                         : Icons.person_add_alt_1,
                 label: hasCoop ? 'Remove Co-op' : 'Add Co-op',
-                iconColor:
-                    hasCoop
-                        ? Skeuo.inkIf(Colors.redAccent)
-                        : Skeuo.inkIf(Colors.pinkAccent),
+                iconColor: hasCoop ? Colors.redAccent : Colors.pinkAccent,
                 onTap: () {
                   if (hasCoop) {
                     showDialog(
@@ -444,7 +427,7 @@ class _RunToolsSheet extends StatelessWidget {
                           (c) => AlertDialog(
                             icon: Icon(
                               Icons.remove_circle_outline,
-                              color: Skeuo.inkIf(Colors.redAccent),
+                              color: Colors.redAccent,
                             ),
                             title: const GoopText('Remove Co-op Player?'),
                             content: GoopText(
@@ -457,9 +440,7 @@ class _RunToolsSheet extends StatelessWidget {
                               ),
                               FilledButton.tonal(
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: Skeuo.inkIf(
-                                    Colors.red.shade900,
-                                  ),
+                                  backgroundColor: Colors.red.shade900,
                                 ),
                                 onPressed: () {
                                   p.endCoopPlayer();
@@ -484,7 +465,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.save_outlined,
                 label: 'Save Run',
-                iconColor: Skeuo.inkIf(Colors.greenAccent),
+                iconColor: Colors.greenAccent,
                 onTap: () {
                   p
                       .saveRun()
@@ -524,7 +505,7 @@ class _RunToolsSheet extends StatelessWidget {
                   sheetCtx,
                   icon: Icons.auto_awesome_rounded,
                   label: 'Surprise',
-                  iconColor: Skeuo.inkIf(Colors.amberAccent),
+                  iconColor: Colors.amberAccent,
                   onTap:
                       () => showModalBottomSheet<void>(
                         context: sheetCtx,
@@ -543,7 +524,7 @@ class _RunToolsSheet extends StatelessWidget {
                   sheetCtx,
                   icon: Icons.bluetooth_disabled,
                   label: 'Leave MP',
-                  iconColor: Skeuo.inkIf(Colors.lightBlueAccent),
+                  iconColor: Colors.lightBlueAccent,
                   onTap: () {
                     showDialog(
                       context: sheetCtx,
@@ -551,7 +532,7 @@ class _RunToolsSheet extends StatelessWidget {
                           (c) => AlertDialog(
                             icon: Icon(
                               Icons.bluetooth_disabled,
-                              color: Skeuo.inkIf(Colors.lightBlueAccent),
+                              color: Colors.lightBlueAccent,
                             ),
                             title: const GoopText('Leave Multiplayer?'),
                             content: const GoopText(
@@ -564,12 +545,9 @@ class _RunToolsSheet extends StatelessWidget {
                               ),
                               FilledButton.tonal(
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: Skeuo.inkIf(
-                                    Colors.lightBlueAccent,
-                                  ).withValues(alpha: 0.15),
-                                  foregroundColor: Skeuo.inkIf(
-                                    Colors.lightBlueAccent,
-                                  ),
+                                  backgroundColor: Colors.lightBlueAccent
+                                      .withValues(alpha: 0.15),
+                                  foregroundColor: Colors.lightBlueAccent,
                                 ),
                                 onPressed: () {
                                   mpSession.cancel();
@@ -594,7 +572,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.restart_alt_rounded,
                 label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
-                iconColor: Skeuo.inkIf(Colors.cyanAccent),
+                iconColor: Colors.cyanAccent,
                 onTap:
                     () => confirmClearInventoryDialog(
                       sheetCtx,
@@ -607,7 +585,7 @@ class _RunToolsSheet extends StatelessWidget {
                   sheetCtx,
                   icon: Icons.restart_alt_rounded,
                   label: 'Reset P2 Items',
-                  iconColor: Skeuo.inkIf(Colors.cyanAccent),
+                  iconColor: Colors.cyanAccent,
                   onTap:
                       () => confirmClearInventoryDialog(
                         sheetCtx,
@@ -624,36 +602,11 @@ class _RunToolsSheet extends StatelessWidget {
               ),
               _action(
                 sheetCtx,
-                icon: Icons.draw_rounded,
-                label: 'Neo-Skeuo ${AppTheme.isSkeuo ? '· ON' : '· OFF'}',
-                iconColor:
-                    AppTheme.isSkeuo
-                        ? const Color(0xFF1F1B16)
-                        : const Color(0xFF8D6E63),
+                icon: Icons.palette_rounded,
+                label: 'Customization',
+                iconColor: const Color(0xFFB388FF),
                 onTap: () {
-                  if (AppTheme.isSkeuo) {
-                    AppTheme.exitSkeuo();
-                  } else {
-                    AppTheme.enterSkeuo();
-                  }
-                },
-              ),
-              _action(
-                sheetCtx,
-                icon:
-                    AppTheme.isSkeuo
-                        ? Icons.lock_outline_rounded
-                        : Icons.palette_rounded,
-                label:
-                    AppTheme.isSkeuo
-                        ? 'Customization (locked in Neo-Skeuo)'
-                        : 'Customization',
-                iconColor:
-                    AppTheme.isSkeuo
-                        ? flair.primary.withValues(alpha: 0.35)
-                        : const Color(0xFFB388FF),
-                onTap: () {
-                  if (AppTheme.isSkeuo || !sheetCtx.mounted) return;
+                  if (!sheetCtx.mounted) return;
                   Navigator.push(
                     sheetCtx,
                     fastRoute(const ExperienceStudioScreen()),
@@ -678,7 +631,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.bug_report_outlined,
                 label: 'Report a Bug',
-                iconColor: Skeuo.inkIf(Colors.deepOrangeAccent),
+                iconColor: Colors.deepOrangeAccent,
                 onTap: () {
                   if (sheetCtx.mounted) {
                     BugReportSheet.show(
@@ -713,7 +666,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.flag_rounded,
                 label: 'End Run',
-                iconColor: Skeuo.inkIf(Colors.redAccent),
+                iconColor: Colors.redAccent,
                 onTap: () => RunLifecycle.confirmEndRun(sheetCtx),
               ),
               const SizedBox(height: Insets.sm),
@@ -861,7 +814,7 @@ class SectionHeaderSliver extends StatelessWidget {
                               size: 15,
                               color:
                                   currentInvView == InvView.list
-                                      ? Skeuo.inkIf(Colors.amberAccent)
+                                      ? Colors.amberAccent
                                       : Colors.white60,
                             ),
                             const SizedBox(width: 8),
@@ -871,7 +824,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                 fontSize: FontSizes.labelMedium,
                                 color:
                                     currentInvView == InvView.list
-                                        ? Skeuo.inkIf(Colors.amberAccent)
+                                        ? Colors.amberAccent
                                         : Colors.white,
                               ),
                             ),
@@ -891,7 +844,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                           currentDisplayMode ==
                                               InventoryDisplayMode
                                                   .classicPeriodic)
-                                      ? Skeuo.inkIf(Colors.amberAccent)
+                                      ? Colors.amberAccent
                                       : Colors.white60,
                             ),
                             const SizedBox(width: 8),
@@ -904,7 +857,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                             currentDisplayMode ==
                                                 InventoryDisplayMode
                                                     .classicPeriodic)
-                                        ? Skeuo.inkIf(Colors.amberAccent)
+                                        ? Colors.amberAccent
                                         : Colors.white,
                               ),
                             ),
@@ -923,7 +876,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                           currentDisplayMode ==
                                               InventoryDisplayMode
                                                   .tacticalStats)
-                                      ? Skeuo.inkIf(Colors.amberAccent)
+                                      ? Colors.amberAccent
                                       : Colors.white60,
                             ),
                             const SizedBox(width: 8),
@@ -936,7 +889,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                             currentDisplayMode ==
                                                 InventoryDisplayMode
                                                     .tacticalStats)
-                                        ? Skeuo.inkIf(Colors.amberAccent)
+                                        ? Colors.amberAccent
                                         : Colors.white,
                               ),
                             ),

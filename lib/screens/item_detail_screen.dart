@@ -24,7 +24,6 @@ import '../widgets/item_detail/gun_synergies_tab.dart';
 import '../widgets/item_detail/entity_synergies_view.dart';
 import '../widgets/item_detail/leb_view_scope.dart';
 import '../widgets/item_detail/destroy_banner.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final Gun? gun;
@@ -537,12 +536,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   borderRadius: BorderRadius.all(Radii.lg),
                                 ),
                                 side: BorderSide(
-                                  color: Skeuo.inkIf(Colors.redAccent),
+                                  color: Colors.redAccent,
                                   width: 1.5,
                                 ),
-                                backgroundColor: Skeuo.inkIf(
-                                  Colors.red,
-                                ).withValues(alpha: 0.08),
+                                backgroundColor: Colors.red.withValues(
+                                  alpha: 0.08,
+                                ),
                               ),
                               onPressed: () {
                                 Haptics.selection();
@@ -575,7 +574,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               child: Icon(
                                 Icons.delete_outline,
                                 size: 28,
-                                color: Skeuo.inkIf(Colors.redAccent),
+                                color: Colors.redAccent,
                               ),
                             )
                             : FilledButton(

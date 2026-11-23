@@ -98,7 +98,7 @@ List<ContrastResult> auditThemeContrast({
 }) {
   // Heuristic text colours: most text in the app is white or near-white
   // on dark surfaces, with accent colours for headlines and labels.
-  // Light-surface themes (Neo-Skeuo) render dark text instead.
+  // Light-surface themes render dark text instead.
   final bodyText =
       lightSurface ? const Color(0xFF1E1E22) : const Color(0xFFFFFFFF);
   final subtleText =

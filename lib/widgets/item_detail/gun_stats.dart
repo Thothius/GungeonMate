@@ -7,7 +7,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/themed_number.dart';
 import 'quick_jump_button.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 part 'gun_stats_parts.dart';
 part 'gun_stats_sections.dart';
 
@@ -159,7 +159,7 @@ class StatPill extends StatelessWidget {
     'green': Color(0xFF43A047),
     'black': Color(0xFF222222),
     'brown': Color(0xFF8D6E63),
-    'rainbow': Skeuo.inkIf(Colors.pinkAccent),
+    'rainbow': Colors.pinkAccent,
   };
 
   static const Map<String, String> _chestRanks = {
@@ -183,9 +183,9 @@ class StatPill extends StatelessWidget {
     final filled = flair.chipFilled;
     final accentColor =
         isCharge
-            ? Skeuo.inkIf(Colors.lightBlueAccent)
+            ? Colors.lightBlueAccent
             : isDuration
-            ? Skeuo.inkIf(Colors.greenAccent.shade200)
+            ? Colors.greenAccent.shade200
             : null;
     return Container(
       padding: EdgeInsets.symmetric(
@@ -218,18 +218,14 @@ class StatPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (isCharge) ...[
-            Icon(
-              Icons.electric_bolt,
-              size: 12,
-              color: Skeuo.inkIf(Colors.lightBlueAccent),
-            ),
+            Icon(Icons.electric_bolt, size: 12, color: Colors.lightBlueAccent),
             const SizedBox(width: 3),
           ],
           if (isDuration) ...[
             Icon(
               Icons.timer_outlined,
               size: 12,
-              color: Skeuo.inkIf(Colors.greenAccent.shade200),
+              color: Colors.greenAccent.shade200,
             ),
             const SizedBox(width: 3),
           ],

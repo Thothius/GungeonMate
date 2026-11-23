@@ -15,7 +15,7 @@ import '../widgets/game_icon.dart';
 import '../widgets/scale_button.dart';
 import 'item_detail_screen.dart';
 import 'home_screen.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 import '../widgets/bug_report/bug_report_button.dart';
 import '../models/bug_report.dart';
 
@@ -416,7 +416,7 @@ class _LorePage extends StatelessWidget {
         children: [
           if (g.loreIntro.isNotEmpty)
             _ContentCard(
-              color: Skeuo.inkIf(Colors.purpleAccent),
+              color: Colors.purpleAccent,
               child: GoopText(
                 g.loreIntro,
                 style: TextStyle(
@@ -431,7 +431,7 @@ class _LorePage extends StatelessWidget {
           if (g.nicknames.isNotEmpty || g.voice.isNotEmpty) ...[
             const SizedBox(height: 12),
             _ContentCard(
-              color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.5),
+              color: Colors.purpleAccent.withValues(alpha: 0.5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -548,7 +548,7 @@ class _PlaystylePage extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       child: _ContentCard(
-        color: Skeuo.inkIf(Colors.cyanAccent),
+        color: Colors.cyanAccent,
         child: GoopText(
           g.playstyle,
           style: TextStyle(
@@ -575,7 +575,7 @@ class _TipsPage extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       child: _ContentCard(
-        color: Skeuo.inkIf(Colors.amberAccent),
+        color: Colors.amberAccent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
@@ -589,9 +589,7 @@ class _TipsPage extends StatelessWidget {
                           Icon(
                             Icons.arrow_right_rounded,
                             size: 18,
-                            color: Skeuo.inkIf(
-                              Colors.amberAccent,
-                            ).withValues(alpha: 0.7),
+                            color: Colors.amberAccent.withValues(alpha: 0.7),
                           ),
                           const SizedBox(width: 4),
                           Expanded(
@@ -635,10 +633,10 @@ class _SpoilersPage extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
             decoration: BoxDecoration(
-              color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.08),
+              color: Colors.redAccent.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.25),
+                color: Colors.redAccent.withValues(alpha: 0.25),
                 width: 0.8,
               ),
             ),
@@ -647,7 +645,7 @@ class _SpoilersPage extends StatelessWidget {
                 Icon(
                   Icons.warning_amber_rounded,
                   size: 18,
-                  color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.7),
+                  color: Colors.redAccent.withValues(alpha: 0.7),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -656,9 +654,7 @@ class _SpoilersPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: Skeuo.inkIf(
-                        Colors.redAccent,
-                      ).withValues(alpha: 0.8),
+                      color: Colors.redAccent.withValues(alpha: 0.8),
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -770,7 +766,7 @@ class _LoadoutTile extends StatelessWidget {
             Icon(
               Icons.shuffle,
               size: 16,
-              color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.7),
+              color: Colors.purpleAccent.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 6),
             GoopText(
@@ -778,7 +774,7 @@ class _LoadoutTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.w700,
-                color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.85),
+                color: Colors.purpleAccent.withValues(alpha: 0.85),
               ),
             ),
           ],
@@ -873,7 +869,7 @@ class _ArmorTile extends StatelessWidget {
         color: AppTheme.flair.card,
         borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.25),
+          color: Colors.blueAccent.withValues(alpha: 0.25),
           width: 0.8,
         ),
       ),
@@ -883,7 +879,7 @@ class _ArmorTile extends StatelessWidget {
           Icon(
             Icons.shield,
             size: 16,
-            color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.7),
+            color: Colors.blueAccent.withValues(alpha: 0.7),
           ),
           const SizedBox(width: 6),
           GoopText(
@@ -918,7 +914,7 @@ class _SpoilerContent extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w800,
-              color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.9),
+              color: Colors.amber.withValues(alpha: 0.9),
             ),
           ),
           const SizedBox(height: 6),

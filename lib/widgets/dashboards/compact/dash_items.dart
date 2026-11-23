@@ -41,7 +41,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.35),
+              color: Colors.purpleAccent.withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -60,7 +60,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                     children: [
                       Icon(
                         Icons.military_tech_rounded,
-                        color: Skeuo.inkIf(Colors.purpleAccent),
+                        color: Colors.purpleAccent,
                         size: 18,
                       ),
                       const SizedBox(width: Insets.sm),
@@ -69,7 +69,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.purpleAccent),
+                          color: Colors.purpleAccent,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -79,7 +79,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.purpleAccent),
+                          color: Colors.purpleAccent,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -108,7 +108,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                               dmgMult,
                               seconds,
                               750,
-                              Skeuo.inkIf(Colors.redAccent),
+                              Colors.redAccent,
                               tierLabel(dmgMult),
                             ),
                             const SizedBox(height: Insets.sm),
@@ -118,7 +118,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                               fireRateMult,
                               seconds,
                               375,
-                              Skeuo.inkIf(Colors.orangeAccent),
+                              Colors.orangeAccent,
                               tierLabel(fireRateMult),
                             ),
                             const SizedBox(height: 10),
@@ -146,7 +146,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Skeuo.inkIf(Colors.purpleAccent),
+                                    color: Colors.purpleAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Decrease platinum bullets',
@@ -172,7 +172,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                                   },
                                   icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Skeuo.inkIf(Colors.purpleAccent),
+                                    color: Colors.purpleAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Increase platinum bullets',
@@ -191,7 +191,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                                     'Reset',
                                     style: TextStyle(
                                       fontSize: FontSizes.labelSmall,
-                                      color: Skeuo.inkIf(Colors.redAccent),
+                                      color: Colors.redAccent,
                                     ),
                                   ),
                                 ),
@@ -300,7 +300,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.brown).withValues(alpha: 0.4),
+              color: Colors.brown.withValues(alpha: 0.4),
               width: 1.2,
             ),
           ),
@@ -317,18 +317,14 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                   padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.paid_rounded,
-                        color: Skeuo.inkIf(Colors.amber),
-                        size: 18,
-                      ),
+                      Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
                       const SizedBox(width: Insets.sm),
                       GoopText(
                         'IRON COIN',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.amber),
+                          color: Colors.amber,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -338,10 +334,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color:
-                              uses > 0
-                                  ? Skeuo.inkIf(Colors.amber)
-                                  : Colors.white30,
+                          color: uses > 0 ? Colors.amber : Colors.white30,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -374,7 +367,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                                     size: 32,
                                     color:
                                         i < uses
-                                            ? Skeuo.inkIf(Colors.amber)
+                                            ? Colors.amber
                                             : Colors.white.withValues(
                                               alpha: 0.1,
                                             ),
@@ -404,7 +397,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Skeuo.inkIf(Colors.amber),
+                                    color: Colors.amber,
                                     size: 30,
                                   ),
                                   tooltip: 'Increase iron coin uses',
@@ -423,7 +416,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Skeuo.inkIf(Colors.amber),
+                                    color: Colors.amber,
                                     size: 30,
                                   ),
                                   tooltip: 'Decrease iron coin uses',
@@ -488,7 +481,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.35),
+              color: Colors.redAccent.withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -505,18 +498,14 @@ class SpiceDashboardState extends State<SpiceDashboard>
                   padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.spa,
-                        color: Skeuo.inkIf(Colors.redAccent),
-                        size: 18,
-                      ),
+                      Icon(Icons.spa, color: Colors.redAccent, size: 18),
                       const SizedBox(width: Insets.sm),
                       GoopText(
                         'SPICE',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.redAccent),
+                          color: Colors.redAccent,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -526,7 +515,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.redAccent),
+                          color: Colors.redAccent,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -599,7 +588,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Skeuo.inkIf(Colors.redAccent),
+                                    color: Colors.redAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Decrease spice uses',
@@ -613,7 +602,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                   style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.bold,
-                                    color: Skeuo.inkIf(Colors.redAccent),
+                                    color: Colors.redAccent,
                                   ),
                                 ),
                                 IconButton(
@@ -623,7 +612,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                   },
                                   icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Skeuo.inkIf(Colors.redAccent),
+                                    color: Colors.redAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Increase spice uses',
@@ -659,7 +648,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
           style: TextStyle(
             fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.bold,
-            color: Skeuo.inkIf(Colors.redAccent),
+            color: Colors.redAccent,
           ),
         ),
       ],
@@ -698,7 +687,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.tealAccent).withValues(alpha: 0.35),
+              color: Colors.tealAccent.withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -715,18 +704,14 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                   padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.speed,
-                        color: Skeuo.inkIf(Colors.tealAccent),
-                        size: 18,
-                      ),
+                      Icon(Icons.speed, color: Colors.tealAccent, size: 18),
                       const SizedBox(width: Insets.sm),
                       GoopText(
                         'METRONOME',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.tealAccent),
+                          color: Colors.tealAccent,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -736,7 +721,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.tealAccent),
+                          color: Colors.tealAccent,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -769,9 +754,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                   alpha: 0.08,
                                 ),
                                 valueColor: AlwaysStoppedAnimation(
-                                  Skeuo.inkIf(
-                                    Colors.tealAccent,
-                                  ).withValues(alpha: 0.8),
+                                  Colors.tealAccent.withValues(alpha: 0.8),
                                 ),
                               ),
                             ),
@@ -792,9 +775,9 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                       : '${75 - kills} to max',
                                   style: TextStyle(
                                     fontSize: FontSizes.labelSmall,
-                                    color: Skeuo.inkIf(
-                                      Colors.tealAccent,
-                                    ).withValues(alpha: 0.6),
+                                    color: Colors.tealAccent.withValues(
+                                      alpha: 0.6,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -822,7 +805,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Skeuo.inkIf(Colors.tealAccent),
+                                    color: Colors.tealAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Decrease metronome kills',
@@ -836,7 +819,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                   style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.bold,
-                                    color: Skeuo.inkIf(Colors.tealAccent),
+                                    color: Colors.tealAccent,
                                   ),
                                 ),
                                 IconButton(
@@ -849,7 +832,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Skeuo.inkIf(Colors.tealAccent),
+                                    color: Colors.tealAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Increase metronome kills',
@@ -868,7 +851,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                     'Reset',
                                     style: TextStyle(
                                       fontSize: FontSizes.labelSmall,
-                                      color: Skeuo.inkIf(Colors.redAccent),
+                                      color: Colors.redAccent,
                                     ),
                                   ),
                                 ),

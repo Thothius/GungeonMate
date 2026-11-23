@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../particles/curse_fog.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Gungeon-styled "End Run" confirmation — fullscreen takeover
 /// featuring the Lord of the Jammed as a floating centerpiece
@@ -101,9 +100,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                     fontSize: 30,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 2,
-                    color: Skeuo.inkIf(
-                      Colors.redAccent,
-                    ).withValues(alpha: 0.95),
+                    color: Colors.redAccent.withValues(alpha: 0.95),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -148,9 +145,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                             0xFF8E0000,
                           ).withValues(alpha: 0.85),
                           textColor: Colors.white,
-                          borderColor: Skeuo.inkIf(
-                            Colors.redAccent,
-                          ).withValues(alpha: 0.7),
+                          borderColor: Colors.redAccent.withValues(alpha: 0.7),
                           onTap: () {
                             Navigator.pop(context);
                             widget.onConfirm();
@@ -188,12 +183,10 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                         shape: BoxShape.circle,
                         gradient: RadialGradient(
                           colors: [
-                            Skeuo.inkIf(
-                              Colors.redAccent,
-                            ).withValues(alpha: 0.20 * (1 - t * 0.5)),
-                            Skeuo.inkIf(
-                              Colors.amber,
-                            ).withValues(alpha: 0.07 * (1 - t)),
+                            Colors.redAccent.withValues(
+                              alpha: 0.20 * (1 - t * 0.5),
+                            ),
+                            Colors.amber.withValues(alpha: 0.07 * (1 - t)),
                             Colors.transparent,
                           ],
                         ),
@@ -234,7 +227,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                               (_, _, _) => Icon(
                                 Icons.dangerous_rounded,
                                 size: 128,
-                                color: Skeuo.inkIf(Colors.redAccent),
+                                color: Colors.redAccent,
                               ),
                         ),
                   ),

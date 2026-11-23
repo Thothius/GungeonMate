@@ -20,7 +20,7 @@ import '../widgets/theme_overlay.dart';
 import '../widgets/backgrounds/custom_wallpaper.dart';
 import '../widgets/backgrounds/ambient_shader.dart';
 import '../widgets/particles/ambient_glow.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 import '../providers/run_provider.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
@@ -255,86 +255,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       fontFamily: 'GoogleFonts.Montserrat',
     );
     final cleanTheme = Theme.of(context).copyWith(textTheme: cleanTextTheme);
-
-    // Neo-Skeuo locks Customization — the skin ships as a fixed
-    // hand-drawn identity with nothing to tune. Deep links land on a
-    // locked page instead of the hub.
-    if (AppTheme.isSkeuo) {
-      return Theme(
-        data: cleanTheme,
-        child: Scaffold(
-          backgroundColor: const Color(0xFFF0E9D8),
-          body: SafeArea(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(Insets.xl),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.lock_outline_rounded,
-                      size: 44,
-                      color: Color(0xFF1F1B16),
-                    ),
-                    const SizedBox(height: Insets.lg),
-                    const GoopText(
-                      'CUSTOMIZATION IS LOCKED',
-                      style: TextStyle(
-                        fontSize: FontSizes.titleSmall,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.4,
-                        color: Color(0xFF1F1B16),
-                      ),
-                    ),
-                    const SizedBox(height: Insets.sm),
-                    const GoopText(
-                      'Neo-Skeuo is a fixed hand-drawn identity — nothing to tune here.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13, color: Color(0xFF5C5548)),
-                    ),
-                    const SizedBox(height: Insets.xl),
-                    TextButton(
-                      onPressed: () {
-                        Haptics.selection();
-                        AppTheme.exitSkeuo();
-                      },
-                      child: const GoopText(
-                        'EXIT NEO-SKEUO',
-                        style: TextStyle(
-                          fontSize: FontSizes.bodyMedium,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.2,
-                          color: Color(0xFF1F1B16),
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: Insets.sm),
-                    TextButton(
-                      onPressed: () {
-                        Haptics.selection();
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: const GoopText(
-                        'BACK',
-                        style: TextStyle(
-                          fontSize: FontSizes.labelMedium,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.2,
-                          color: Color(0xFF5C5548),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     // The hero pulse only earns its vsync frames on the dashboard —
     // stop it in the editor/flow stages and under reduced motion.
@@ -4136,15 +4056,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       decoration: BoxDecoration(
                         color:
                             p == active
-                                ? Skeuo.inkIf(
-                                  Colors.pinkAccent,
-                                ).withValues(alpha: 0.2)
+                                ? Colors.pinkAccent.withValues(alpha: 0.2)
                                 : Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
                           color:
                               p == active
-                                  ? Skeuo.inkIf(Colors.pinkAccent)
+                                  ? Colors.pinkAccent
                                   : Colors.white.withValues(alpha: 0.12),
                           width: p == active ? 1.5 : 1.0,
                         ),
@@ -4157,7 +4075,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                           letterSpacing: 0.8,
                           color:
                               p == active
-                                  ? Skeuo.inkIf(Colors.pinkAccent)
+                                  ? Colors.pinkAccent
                                   : Colors.white.withValues(alpha: 0.5),
                         ),
                       ),

@@ -20,7 +20,7 @@ import '../widgets/paradox/pause_overlay.dart';
 import '../widgets/paradox/surprise_overlay.dart';
 import '../widgets/state_widgets.dart';
 import '../utils/responsive.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 part 'active_run/emote_button.dart';
 part 'active_run/mp_handlers.dart';
 
@@ -367,18 +367,12 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                                 : 'PASSIVE'));
                                 final kindColor =
                                     isGun
-                                        ? Skeuo.inkIf(Colors.amberAccent)
+                                        ? Colors.amberAccent
                                         : (item.isActive
-                                            ? Skeuo.inkIf(
-                                              Colors.lightBlueAccent,
-                                            )
+                                            ? Colors.lightBlueAccent
                                             : (item.isCompanion
-                                                ? Skeuo.inkIf(
-                                                  Colors.purpleAccent,
-                                                )
-                                                : Skeuo.inkIf(
-                                                  Colors.lightGreenAccent,
-                                                )));
+                                                ? Colors.purpleAccent
+                                                : Colors.lightGreenAccent));
 
                                 void addIt() {
                                   Haptics.selection();
@@ -495,9 +489,8 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                               GoopText(
                                                 'OWNED',
                                                 style: TextStyle(
-                                                  color: Skeuo.inkIf(
-                                                    Colors.greenAccent,
-                                                  ).withValues(alpha: 0.85),
+                                                  color: Colors.greenAccent
+                                                      .withValues(alpha: 0.85),
                                                   fontSize:
                                                       FontSizes.labelSmall,
                                                   fontWeight: FontWeight.w800,
@@ -528,9 +521,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                       vertical: 6,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Skeuo.inkIf(
-                                        Colors.green,
-                                      ).withValues(alpha: 0.9),
+                                      color: Colors.green.withValues(
+                                        alpha: 0.9,
+                                      ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: GoopText(
@@ -560,7 +553,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                         color: Colors.white,
                         fontSize: FontSizes.labelMedium,
                       ),
-                      cursorColor: Skeuo.inkIf(Colors.amberAccent),
+                      cursorColor: Colors.amberAccent,
                       decoration: InputDecoration(
                         hintText: 'Search items, guns...',
                         hintStyle: TextStyle(
@@ -597,7 +590,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radii.sm),
                           borderSide: BorderSide(
-                            color: Skeuo.inkIf(Colors.amberAccent),
+                            color: Colors.amberAccent,
                             width: 1.5,
                           ),
                         ),

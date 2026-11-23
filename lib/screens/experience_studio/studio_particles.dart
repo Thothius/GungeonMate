@@ -878,13 +878,13 @@ class _TypeGlyphPainter extends CustomPainter {
       case ParticleType.rainbowDot:
         p.shader = SweepGradient(
           colors: [
-            Skeuo.inkIf(Colors.red),
-            Skeuo.inkIf(Colors.orange),
-            Skeuo.inkIf(Colors.yellow),
-            Skeuo.inkIf(Colors.green),
-            Skeuo.inkIf(Colors.blue),
-            Skeuo.inkIf(Colors.purple),
-            Skeuo.inkIf(Colors.red),
+            Colors.red,
+            Colors.orange,
+            Colors.yellow,
+            Colors.green,
+            Colors.blue,
+            Colors.purple,
+            Colors.red,
           ],
         ).createShader(Rect.fromCircle(center: c, radius: 6));
         canvas.drawCircle(c, 6, p);

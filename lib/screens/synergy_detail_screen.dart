@@ -11,7 +11,7 @@ import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import 'item_detail_screen.dart';
 import '../widgets/codex/codex_fav_button.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 import '../widgets/bug_report/bug_report_button.dart';
 import '../models/bug_report.dart';
 
@@ -81,15 +81,13 @@ class SynergyDetailScreen extends StatelessWidget {
                       vertical: 3,
                     ),
                     decoration: BoxDecoration(
-                      color: (complete
-                              ? Skeuo.inkIf(Colors.lightGreenAccent)
-                              : Skeuo.inkIf(Colors.amber))
+                      color: (complete ? Colors.lightGreenAccent : Colors.amber)
                           .withValues(alpha: 0.14),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: (complete
-                                ? Skeuo.inkIf(Colors.lightGreenAccent)
-                                : Skeuo.inkIf(Colors.amber))
+                                ? Colors.lightGreenAccent
+                                : Colors.amber)
                             .withValues(alpha: 0.5),
                       ),
                     ),
@@ -100,9 +98,7 @@ class SynergyDetailScreen extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.8,
                         color:
-                            complete
-                                ? Skeuo.inkIf(Colors.lightGreenAccent)
-                                : Skeuo.inkIf(Colors.amber),
+                            complete ? Colors.lightGreenAccent : Colors.amber,
                       ),
                     ),
                   ),
@@ -207,7 +203,7 @@ class _ItemChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isOwned = owned.contains(name.toLowerCase());
-    final c = isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white;
+    final c = isOwned ? Colors.lightGreenAccent : Colors.white;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -232,15 +228,14 @@ class _ItemChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
-          color: (isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white)
-              .withValues(alpha: isOwned ? 0.14 : 0.06),
+          color: (isOwned ? Colors.lightGreenAccent : Colors.white).withValues(
+            alpha: isOwned ? 0.14 : 0.06,
+          ),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color:
                 isOwned
-                    ? Skeuo.inkIf(
-                      Colors.lightGreenAccent,
-                    ).withValues(alpha: 0.55)
+                    ? Colors.lightGreenAccent.withValues(alpha: 0.55)
                     : (required
                         ? Colors.white.withValues(alpha: 0.25)
                         : Colors.white.withValues(alpha: 0.15)),
@@ -254,7 +249,7 @@ class _ItemChip extends StatelessWidget {
               Icon(
                 Icons.check_circle_rounded,
                 size: 13,
-                color: Skeuo.inkIf(Colors.lightGreenAccent),
+                color: Colors.lightGreenAccent,
               ),
             if (isOwned) const SizedBox(width: 5),
             GoopText(

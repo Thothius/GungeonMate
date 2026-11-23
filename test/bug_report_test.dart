@@ -446,28 +446,5 @@ void main() {
       expect(find.text('GUN DETAIL'), findsOneWidget);
       expect(find.text('HEGEMONY'), findsOneWidget);
     });
-
-    testWidgets('sheet renders under Neo-Skeuo without errors', (
-      tester,
-    ) async {
-      SharedPreferences.setMockInitialValues({});
-      AppTheme.previewNotifier.value = null;
-      AppTheme.notifier.value = AppThemeMode.paperInk;
-      addTearDown(() async {
-        await AppTheme.exitSkeuo();
-        AppTheme.notifier.value = AppThemeMode.paperInk;
-      });
-      await AppTheme.enterSkeuo();
-      expect(AppTheme.isSkeuo, isTrue);
-
-      await tester.pumpWidget(wrap());
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('REPORT A BUG'), findsOneWidget);
-      expect(find.text('ITEM DETAIL'), findsOneWidget);
-      expect(find.text('SEND REPORT'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
   });
 }

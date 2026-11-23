@@ -12,7 +12,6 @@ import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/widgets/paradox/paradox_player_panel.dart';
 import 'package:gungeon_mate/widgets/paradox/surprise_overlay.dart';
 import 'package:gungeon_mate/screens/ammonomicon_detail_screen.dart';
-import 'package:gungeon_mate/screens/neo_skeuo_lab_screen.dart';
 
 void main() {
   late RunProvider p;
@@ -198,23 +197,5 @@ void main() {
     await t.pump(const Duration(seconds: 1));
     expect(t.takeException(), isNull);
     expect(find.textContaining('BODY DMG: 0.5'), findsOneWidget);
-  });
-
-  // ── NeoSkeuoLabScreen (dev sandbox — smoke only per H-L9) ───────
-
-  testWidgets('NeoSkeuoLabScreen smoke renders', (t) async {
-    await t.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(value: p),
-          ChangeNotifierProvider.value(value: mp),
-        ],
-        child: const MaterialApp(home: NeoSkeuoLabScreen()),
-      ),
-    );
-    await t.pump();
-    await t.pump(const Duration(seconds: 1));
-    expect(t.takeException(), isNull);
-    expect(find.byType(NeoSkeuoLabScreen), findsOneWidget);
   });
 }

@@ -12,7 +12,7 @@ void main() {
 
   test('catalog covers fonts, backgrounds and avatars with stable ids', () {
     final cat = AssetVotes.catalog();
-    expect(cat.where((e) => e.category == 'font').length, greaterThan(10));
+    expect(cat.where((e) => e.category == 'font').length, greaterThanOrEqualTo(10));
     expect(cat.where((e) => e.category == 'bg').length, 60); // 46 wp + 14 splash
     expect(cat.where((e) => e.category == 'avatar').length, greaterThan(50));
     // Every asset has a unique vote id.

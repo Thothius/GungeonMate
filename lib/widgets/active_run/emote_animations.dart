@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 import '../../theme/tokens.dart';
 
 /// Floating emote overlay shown on the receiver's screen when a peer
@@ -76,9 +76,7 @@ class _KissAnimationState extends State<KissAnimation>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Skeuo.inkIf(
-                            Colors.pinkAccent,
-                          ).withValues(alpha: 0.5),
+                          color: Colors.pinkAccent.withValues(alpha: 0.5),
                           blurRadius: 24,
                           spreadRadius: 4,
                         ),
@@ -87,7 +85,7 @@ class _KissAnimationState extends State<KissAnimation>
                     child: Icon(
                       Icons.favorite,
                       size: 80,
-                      color: Skeuo.inkIf(Colors.pinkAccent),
+                      color: Colors.pinkAccent,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -199,9 +197,7 @@ class _SlapAnimationState extends State<SlapAnimation>
             if (flashOpacity > 0)
               Positioned.fill(
                 child: Container(
-                  color: Skeuo.inkIf(
-                    Colors.red,
-                  ).withValues(alpha: flashOpacity),
+                  color: Colors.red.withValues(alpha: flashOpacity),
                 ),
               ),
             // Angry face + label with screen shake
@@ -221,9 +217,7 @@ class _SlapAnimationState extends State<SlapAnimation>
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Skeuo.inkIf(
-                                    Colors.orange,
-                                  ).withValues(alpha: 0.5),
+                                  color: Colors.orange.withValues(alpha: 0.5),
                                   blurRadius: 20,
                                   spreadRadius: 4,
                                 ),
@@ -234,8 +228,8 @@ class _SlapAnimationState extends State<SlapAnimation>
                               size: 100,
                               color:
                                   t < 0.15
-                                      ? Skeuo.inkIf(Colors.orange)
-                                      : Skeuo.inkIf(Colors.red.shade700),
+                                      ? Colors.orange
+                                      : Colors.red.shade700,
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -248,9 +242,9 @@ class _SlapAnimationState extends State<SlapAnimation>
                               color: Colors.black.withValues(alpha: 0.7),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: Skeuo.inkIf(
-                                  Colors.red.shade700,
-                                ).withValues(alpha: 0.5),
+                                color: Colors.red.shade700.withValues(
+                                  alpha: 0.5,
+                                ),
                                 width: 1,
                               ),
                             ),
@@ -261,7 +255,7 @@ class _SlapAnimationState extends State<SlapAnimation>
                               style: TextStyle(
                                 fontSize: FontSizes.titleSmall,
                                 fontWeight: FontWeight.w900,
-                                color: Skeuo.inkIf(Colors.red.shade300),
+                                color: Colors.red.shade300,
                                 letterSpacing: 1.5,
                               ),
                             ),

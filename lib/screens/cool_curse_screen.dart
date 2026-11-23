@@ -8,7 +8,7 @@ import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../utils/responsive.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 import '../widgets/bug_report/bug_report_button.dart';
 import '../models/bug_report.dart';
 
@@ -40,12 +40,12 @@ class CoolCurseScreen extends StatelessWidget {
     final curseFuseBonusPct = curseFuseBonus(curse);
     final ammoMult = ammoDropMultiplier(curse);
 
-    // Semantic stat colors — collapse to ink under Neo-Skeuo; title
-    // follows the theme accent like every other pushed screen.
-    final coolColor = Skeuo.inkIf(StatColors.cool);
-    final curseColor = Skeuo.inkIf(StatColors.curse);
-    final jammedColor = Skeuo.inkIf(const Color(0xFFFF5252));
-    final titleColor = Skeuo.inkIf(AppTheme.flair.primary);
+    // Semantic stat colors; title follows the theme accent like
+    // every other pushed screen.
+    final coolColor = StatColors.cool;
+    final curseColor = StatColors.curse;
+    final jammedColor = const Color(0xFFFF5252);
+    final titleColor = AppTheme.flair.primary;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -187,16 +187,14 @@ class CoolCurseScreen extends StatelessWidget {
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 28 * sf,
-                    color: Skeuo.collapse(Colors.white.withValues(alpha: 0.35)),
+                    color: Colors.white.withValues(alpha: 0.35),
                   ),
                   GoopText(
                     'scroll for the full picture',
                     style: TextStyle(
                       fontSize: 10.5 * sf,
                       fontStyle: FontStyle.italic,
-                      color: Skeuo.collapse(
-                        Colors.white.withValues(alpha: 0.35),
-                      ),
+                      color: Colors.white.withValues(alpha: 0.35),
                     ),
                   ),
                 ],
@@ -365,9 +363,7 @@ class _MeterPanel extends StatelessWidget {
                       Icon(
                         Icons.restart_alt_rounded,
                         size: 15 * sf,
-                        color: Skeuo.collapse(
-                          Colors.white.withValues(alpha: 0.55),
-                        ),
+                        color: Colors.white.withValues(alpha: 0.55),
                       ),
                       SizedBox(width: 4 * sf),
                       GoopText(
@@ -376,9 +372,7 @@ class _MeterPanel extends StatelessWidget {
                           fontSize: 10 * sf,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(
-                            Colors.white.withValues(alpha: 0.55),
-                          ),
+                          color: Colors.white.withValues(alpha: 0.55),
                         ),
                       ),
                     ],
@@ -460,20 +454,15 @@ class _EffectsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Skeuo.collapse(Colors.white.withValues(alpha: 0.04)),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: Skeuo.collapse(Colors.white.withValues(alpha: 0.1)),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
             if (i > 0)
-              Divider(
-                height: 1,
-                color: Skeuo.collapse(Colors.white.withValues(alpha: 0.06)),
-              ),
+              Divider(height: 1, color: Colors.white.withValues(alpha: 0.06)),
             Padding(
               padding: EdgeInsets.all(12 * sf),
               child: Row(
@@ -488,9 +477,7 @@ class _EffectsCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.5 * sf,
                             fontWeight: FontWeight.w800,
-                            color: Skeuo.collapse(
-                              Colors.white.withValues(alpha: 0.85),
-                            ),
+                            color: Colors.white.withValues(alpha: 0.85),
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -499,9 +486,7 @@ class _EffectsCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10.5 * sf,
                             height: 1.35,
-                            color: Skeuo.collapse(
-                              Colors.white.withValues(alpha: 0.45),
-                            ),
+                            color: Colors.white.withValues(alpha: 0.45),
                           ),
                         ),
                       ],
@@ -579,7 +564,7 @@ class _InfoBlock extends StatelessWidget {
             style: TextStyle(
               fontSize: 12 * sf,
               height: 1.5,
-              color: Skeuo.collapse(Colors.white.withValues(alpha: 0.7)),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           ),
         ],

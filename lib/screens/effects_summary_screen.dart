@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/player.dart';
 import '../services/effect_tagger.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Aggregates every passive/active effect currently in a player's (or the
 /// team's) loadout into a categorized list. Each tag shows the source
@@ -101,11 +100,7 @@ class _Summary extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
         child: Row(
           children: [
-            Icon(
-              Icons.auto_awesome,
-              color: Skeuo.inkIf(Colors.amber),
-              size: 22,
-            ),
+            Icon(Icons.auto_awesome, color: Colors.amber, size: 22),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -346,8 +341,8 @@ class _SourceLine extends StatelessWidget {
   Widget build(BuildContext context) {
     final c =
         occurrence.sourceIsGun
-            ? Skeuo.inkIf(Colors.deepOrangeAccent)
-            : Skeuo.inkIf(Colors.lightGreenAccent);
+            ? Colors.deepOrangeAccent
+            : Colors.lightGreenAccent;
     final hasExcerpt = occurrence.excerpt.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.only(top: 3),

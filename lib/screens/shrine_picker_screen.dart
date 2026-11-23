@@ -8,7 +8,7 @@ import 'dart:math' as math;
 
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 part 'shrine_picker/shrine_sheet.dart';
 
 /// Resolves the correct shrine icon asset, applying bundled art overrides
@@ -86,10 +86,10 @@ class ShrinePickerScreen extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.14),
+                    color: Colors.amber.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.4),
+                      color: Colors.amber.withValues(alpha: 0.4),
                     ),
                   ),
                   child: Row(
@@ -97,14 +97,14 @@ class ShrinePickerScreen extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.temple_buddhist_outlined,
-                        color: Skeuo.inkIf(Colors.amber),
+                        color: Colors.amber,
                         size: 16,
                       ),
                       const SizedBox(width: 6),
                       GoopText(
                         '${provider.runState.shrinesUsed.length} used',
                         style: TextStyle(
-                          color: Skeuo.inkIf(Colors.amber),
+                          color: Colors.amber,
                           fontSize: FontSizes.bodyMedium,
                           fontWeight: FontWeight.w800,
                         ),
@@ -175,10 +175,10 @@ class _ShrineTile extends StatelessWidget {
     final iconAsset = resolveShrineIcon(shrine.name, shrine.icon);
     final costColor =
         hasCleanse
-            ? Skeuo.inkIf(Colors.lightGreenAccent)
+            ? Colors.lightGreenAccent
             : hasCurse
-            ? Skeuo.inkIf(Colors.deepOrangeAccent)
-            : Skeuo.inkIf(Colors.amber);
+            ? Colors.deepOrangeAccent
+            : Colors.amber;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -187,13 +187,13 @@ class _ShrineTile extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               used > 0
-                  ? Skeuo.collapse(Colors.white).withValues(alpha: 0.02)
+                  ? Colors.white.withValues(alpha: 0.02)
                   : AppTheme.flair.card,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color:
                 used > 0
-                    ? Skeuo.collapse(Colors.white).withValues(alpha: 0.08)
+                    ? Colors.white.withValues(alpha: 0.08)
                     : costColor.withValues(alpha: 0.3),
             width: 1.0,
           ),
@@ -253,7 +253,7 @@ class _ShrineTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: FontSizes.titleSmall,
                   fontWeight: FontWeight.w900,
-                  color: Skeuo.collapse(Colors.white),
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -269,21 +269,17 @@ class _ShrineTile extends StatelessWidget {
                   if (hasCurse && !hasCleanse && name != 'hero')
                     _chip(
                       'CURSE ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(1)}',
-                      Skeuo.inkIf(Colors.deepOrangeAccent),
+                      Colors.deepOrangeAccent,
                     ),
                   if (hasCool)
                     _chip(
                       'COOL ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(1)}',
-                      Skeuo.inkIf(Colors.lightBlueAccent),
+                      Colors.lightBlueAccent,
                     ),
-                  if (hasCleanse)
-                    _chip('CLEANSE', Skeuo.inkIf(Colors.lightGreenAccent)),
-                  if (name == 'hero')
-                    _chip('CURSE 9', Skeuo.inkIf(Colors.deepOrangeAccent)),
-                  if (hasHeartCost)
-                    _chip('HEART -1', Skeuo.inkIf(Colors.redAccent)),
-                  if (used > 0)
-                    _chip('USED ${used}X', Skeuo.inkIf(Colors.amber)),
+                  if (hasCleanse) _chip('CLEANSE', Colors.lightGreenAccent),
+                  if (name == 'hero') _chip('CURSE 9', Colors.deepOrangeAccent),
+                  if (hasHeartCost) _chip('HEART -1', Colors.redAccent),
+                  if (used > 0) _chip('USED ${used}X', Colors.amber),
                 ],
               ),
             ),
@@ -298,7 +294,7 @@ class _ShrineTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10.5,
                   height: 1.3,
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -408,7 +404,7 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
           ),
           title: Row(
             children: [
-              Icon(Icons.temple_buddhist, color: Skeuo.inkIf(Colors.amber)),
+              Icon(Icons.temple_buddhist, color: Colors.amber),
               const SizedBox(width: 8),
               GoopText(
                 used.isEmpty ? 'Shrines used' : '${used.length} shrines used',
@@ -436,17 +432,13 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
                         final count = counts[name]!;
                         final s = p.shrineByName(name);
                         return Card(
-                          color: Skeuo.inkIf(
-                            Colors.amber,
-                          ).withValues(alpha: 0.06),
+                          color: Colors.amber.withValues(alpha: 0.06),
                           elevation: 0,
                           margin: const EdgeInsets.only(bottom: 8),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                             side: BorderSide(
-                              color: Skeuo.inkIf(
-                                Colors.amber,
-                              ).withValues(alpha: 0.2),
+                              color: Colors.amber.withValues(alpha: 0.2),
                             ),
                           ),
                           child: Padding(
@@ -472,9 +464,9 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
                                           vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: Skeuo.inkIf(
-                                            Colors.amber,
-                                          ).withValues(alpha: 0.2),
+                                          color: Colors.amber.withValues(
+                                            alpha: 0.2,
+                                          ),
                                           borderRadius: BorderRadius.circular(
                                             4,
                                           ),
@@ -484,7 +476,7 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
                                           style: TextStyle(
                                             fontSize: FontSizes.labelMedium,
                                             fontWeight: FontWeight.w800,
-                                            color: Skeuo.inkIf(Colors.amber),
+                                            color: Colors.amber,
                                           ),
                                         ),
                                       ),
@@ -497,9 +489,9 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
                                     style: TextStyle(
                                       fontSize: 12.5,
                                       height: 1.35,
-                                      color: Skeuo.collapse(
-                                        Colors.white,
-                                      ).withValues(alpha: 0.75),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.75,
+                                      ),
                                     ),
                                   ),
                               ],

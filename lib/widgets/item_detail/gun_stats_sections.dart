@@ -57,15 +57,15 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.purple).withValues(alpha: 0.08),
+        color: Colors.purple.withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.35),
+          color: Colors.purpleAccent.withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.04),
+            color: Colors.purpleAccent.withValues(alpha: 0.04),
             blurRadius: 8,
             spreadRadius: 1,
           ),
@@ -76,11 +76,7 @@ mixin _GunStatsSections on StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.bolt,
-                color: Skeuo.inkIf(Colors.purpleAccent.shade100),
-                size: 20,
-              ),
+              Icon(Icons.bolt, color: Colors.purpleAccent.shade100, size: 20),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -88,7 +84,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
-                    color: Skeuo.inkIf(Colors.purpleAccent.shade100),
+                    color: Colors.purpleAccent.shade100,
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -120,7 +116,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Skeuo.inkIf(Colors.purpleAccent),
+                        color: Colors.purpleAccent,
                       ),
                     ),
                   ),
@@ -142,15 +138,11 @@ mixin _GunStatsSections on StatelessWidget {
           const SizedBox(height: 10),
           SliderTheme(
             data: SliderThemeData(
-              activeTrackColor: Skeuo.inkIf(Colors.purpleAccent),
-              inactiveTrackColor: Skeuo.inkIf(
-                Skeuo.inkIf(Colors.purple),
-              ).withValues(alpha: 0.2),
-              thumbColor: Skeuo.inkIf(Colors.purpleAccent),
-              overlayColor: Skeuo.inkIf(
-                Skeuo.inkIf(Colors.purpleAccent),
-              ).withValues(alpha: 0.2),
-              valueIndicatorColor: Skeuo.inkIf(Colors.purple),
+              activeTrackColor: Colors.purpleAccent,
+              inactiveTrackColor: Colors.purple.withValues(alpha: 0.2),
+              thumbColor: Colors.purpleAccent,
+              overlayColor: Colors.purpleAccent.withValues(alpha: 0.2),
+              valueIndicatorColor: Colors.purple,
               trackHeight: 4,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
               overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
@@ -190,8 +182,8 @@ mixin _GunStatsSections on StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color:
                       lvl == 60
-                          ? Skeuo.inkIf(Colors.amberAccent)
-                          : Skeuo.inkIf(Colors.purpleAccent.shade100),
+                          ? Colors.amberAccent
+                          : Colors.purpleAccent.shade100,
                 ),
               ),
             ],
@@ -202,13 +194,9 @@ mixin _GunStatsSections on StatelessWidget {
             child: LinearProgressIndicator(
               value: xpProgress,
               minHeight: 6,
-              backgroundColor: Skeuo.inkIf(
-                Skeuo.inkIf(Colors.purple),
-              ).withValues(alpha: 0.15),
+              backgroundColor: Colors.purple.withValues(alpha: 0.15),
               valueColor: AlwaysStoppedAnimation<Color>(
-                lvl == 60
-                    ? Skeuo.inkIf(Colors.amber)
-                    : Skeuo.inkIf(Colors.purpleAccent),
+                lvl == 60 ? Colors.amber : Colors.purpleAccent,
               ),
             ),
           ),
@@ -261,9 +249,7 @@ mixin _GunStatsSections on StatelessWidget {
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(
-                    color: Skeuo.inkIf(
-                      Skeuo.inkIf(Colors.purpleAccent),
-                    ).withValues(alpha: 0.3),
+                    color: Colors.purpleAccent.withValues(alpha: 0.3),
                     width: 1.2,
                   ),
                 ),
@@ -285,7 +271,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.5,
                         fontWeight: FontWeight.w900,
-                        color: Skeuo.inkIf(Colors.purpleAccent),
+                        color: Colors.purpleAccent,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -337,11 +323,9 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.blue).withValues(alpha: 0.08),
+        color: Colors.blue.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,7 +334,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.alt_route,
-                color: Skeuo.inkIf(Colors.blueAccent.shade100),
+                color: Colors.blueAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: Insets.sm),
@@ -360,7 +344,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.blueAccent.shade100),
+                    color: Colors.blueAccent.shade100,
                   ),
                 ),
               ),
@@ -421,7 +405,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '13.5 DPS',
         bullet: 'Base round shots',
         icon: Icons.bubble_chart_outlined,
-        color: Skeuo.inkIf(Colors.tealAccent),
+        color: Colors.tealAccent,
       ),
       EvolverStageSpec(
         id: 2,
@@ -429,7 +413,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '19.1 DPS',
         bullet: 'Soaks up shots',
         icon: Icons.layers_outlined,
-        color: Skeuo.inkIf(Colors.greenAccent),
+        color: Colors.greenAccent,
       ),
       EvolverStageSpec(
         id: 3,
@@ -437,7 +421,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '25.8 DPS',
         bullet: 'Wide flattened shots',
         icon: Icons.gesture_outlined,
-        color: Skeuo.inkIf(Colors.limeAccent),
+        color: Colors.limeAccent,
       ),
       EvolverStageSpec(
         id: 4,
@@ -445,7 +429,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '34.5 DPS',
         bullet: '3-spiked shell spread',
         icon: Icons.gps_fixed_outlined,
-        color: Skeuo.inkIf(Colors.amberAccent),
+        color: Colors.amberAccent,
       ),
       EvolverStageSpec(
         id: 5,
@@ -453,7 +437,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '23.0 DPS',
         bullet: 'Continuous tracking tongue',
         icon: Icons.pets_outlined,
-        color: Skeuo.inkIf(Colors.orangeAccent),
+        color: Colors.orangeAccent,
       ),
       EvolverStageSpec(
         id: 6,
@@ -461,7 +445,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '93.8 DPS',
         bullet: 'Accelerating homing blue flames',
         icon: Icons.fireplace_outlined,
-        color: Skeuo.inkIf(Colors.redAccent),
+        color: Colors.redAccent,
       ),
     ];
 
@@ -470,15 +454,15 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.green).withValues(alpha: 0.08),
+        color: Colors.green.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.35),
+          color: Colors.greenAccent.withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Skeuo.inkIf(Colors.green).withValues(alpha: 0.03),
+            color: Colors.green.withValues(alpha: 0.03),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -491,7 +475,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.science_outlined,
-                color: Skeuo.inkIf(Colors.greenAccent.shade200),
+                color: Colors.greenAccent.shade200,
                 size: 22,
               ),
               const SizedBox(width: Insets.sm),
@@ -504,7 +488,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w900,
-                        color: Skeuo.inkIf(Colors.greenAccent.shade200),
+                        color: Colors.greenAccent.shade200,
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -512,9 +496,7 @@ mixin _GunStatsSections on StatelessWidget {
                       'Biological Adaptations Slay Counter',
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
-                        color: Skeuo.inkIf(
-                          Skeuo.inkIf(Colors.greenAccent),
-                        ).withValues(alpha: 0.6),
+                        color: Colors.greenAccent.withValues(alpha: 0.6),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -526,9 +508,7 @@ mixin _GunStatsSections on StatelessWidget {
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(
-                    color: Skeuo.inkIf(
-                      Skeuo.inkIf(Colors.greenAccent),
-                    ).withValues(alpha: 0.25),
+                    color: Colors.greenAccent.withValues(alpha: 0.25),
                   ),
                 ),
                 child: Row(
@@ -540,7 +520,7 @@ mixin _GunStatsSections on StatelessWidget {
                       icon: Icon(
                         Icons.remove,
                         size: 16,
-                        color: Skeuo.inkIf(Colors.greenAccent),
+                        color: Colors.greenAccent,
                       ),
                       onPressed:
                           totalKills > 0
@@ -557,7 +537,7 @@ mixin _GunStatsSections on StatelessWidget {
                           fontSize: 13,
                           fontFamily: 'ArcadeClassic',
                           fontWeight: FontWeight.bold,
-                          color: Skeuo.inkIf(Colors.greenAccent),
+                          color: Colors.greenAccent,
                         ),
                       ),
                     ),
@@ -567,7 +547,7 @@ mixin _GunStatsSections on StatelessWidget {
                       icon: Icon(
                         Icons.add,
                         size: 16,
-                        color: Skeuo.inkIf(Colors.greenAccent),
+                        color: Colors.greenAccent,
                       ),
                       onPressed:
                           totalKills < 25
@@ -591,9 +571,7 @@ mixin _GunStatsSections on StatelessWidget {
                 final color =
                     isActive
                         ? spec.color
-                        : (isUnlocked
-                            ? Skeuo.inkIf(Colors.green.shade700)
-                            : Colors.white12);
+                        : (isUnlocked ? Colors.green.shade700 : Colors.white12);
 
                 return Expanded(
                   child: Stack(
@@ -608,9 +586,7 @@ mixin _GunStatsSections on StatelessWidget {
                             height: 2.5,
                             color:
                                 isUnlocked && activeStage > spec.id
-                                    ? Skeuo.inkIf(
-                                      Skeuo.inkIf(Colors.green),
-                                    ).withValues(alpha: 0.5)
+                                    ? Colors.green.withValues(alpha: 0.5)
                                     : Colors.white10,
                           ),
                         ),
@@ -683,7 +659,7 @@ mixin _GunStatsSections on StatelessWidget {
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
-              color: Skeuo.inkIf(Colors.greenAccent),
+              color: Colors.greenAccent,
               letterSpacing: 0.5,
             ),
           ),
@@ -712,20 +688,16 @@ mixin _GunStatsSections on StatelessWidget {
                     color:
                         isChecked
                             ? (isThresholdNode
-                                ? Skeuo.inkIf(Colors.green.shade800)
-                                : Skeuo.inkIf(
-                                  Skeuo.inkIf(Colors.green),
-                                ).withValues(alpha: 0.35))
+                                ? Colors.green.shade800
+                                : Colors.green.withValues(alpha: 0.35))
                             : Colors.black38,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color:
                           isChecked
-                              ? Skeuo.inkIf(Colors.greenAccent)
+                              ? Colors.greenAccent
                               : (isThresholdNode
-                                  ? Skeuo.inkIf(
-                                    Skeuo.inkIf(Colors.greenAccent),
-                                  ).withValues(alpha: 0.3)
+                                  ? Colors.greenAccent.withValues(alpha: 0.3)
                                   : Colors.white12),
                       width: isThresholdNode ? 1.5 : 1.0,
                     ),
@@ -736,7 +708,7 @@ mixin _GunStatsSections on StatelessWidget {
                             ? Icon(
                               isThresholdNode ? Icons.star : Icons.check,
                               size: 13,
-                              color: Skeuo.inkIf(Colors.greenAccent),
+                              color: Colors.greenAccent,
                             )
                             : GoopText(
                               '$killNum',
@@ -745,9 +717,9 @@ mixin _GunStatsSections on StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color:
                                     isThresholdNode
-                                        ? Skeuo.inkIf(
-                                          Skeuo.inkIf(Colors.greenAccent),
-                                        ).withValues(alpha: 0.4)
+                                        ? Colors.greenAccent.withValues(
+                                          alpha: 0.4,
+                                        )
                                         : Colors.white54,
                               ),
                             ),
@@ -841,22 +813,16 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.teal).withValues(alpha: 0.08),
+        color: Colors.teal.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.tealAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.tune,
-                color: Skeuo.inkIf(Colors.tealAccent.shade100),
-                size: 20,
-              ),
+              Icon(Icons.tune, color: Colors.tealAccent.shade100, size: 20),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -864,7 +830,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.tealAccent.shade100),
+                    color: Colors.tealAccent.shade100,
                   ),
                 ),
               ),
@@ -944,10 +910,10 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.08),
+        color: Colors.deepOrange.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.deepOrangeAccent).withValues(alpha: 0.3),
+          color: Colors.deepOrangeAccent.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -957,7 +923,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.layers,
-                color: Skeuo.inkIf(Colors.deepOrangeAccent.shade100),
+                color: Colors.deepOrangeAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: Insets.sm),
@@ -967,7 +933,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.deepOrangeAccent.shade100),
+                    color: Colors.deepOrangeAccent.shade100,
                   ),
                 ),
               ),
@@ -1012,11 +978,9 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Skeuo.inkIf(Colors.lime).withValues(alpha: 0.08),
+        color: Colors.lime.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.inkIf(Colors.limeAccent).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.limeAccent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1025,7 +989,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.sports_baseball,
-                color: Skeuo.inkIf(Colors.limeAccent.shade100),
+                color: Colors.limeAccent.shade100,
                 size: 20,
               ),
               const SizedBox(width: Insets.sm),
@@ -1035,7 +999,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Skeuo.inkIf(Colors.limeAccent.shade100),
+                    color: Colors.limeAccent.shade100,
                   ),
                 ),
               ),

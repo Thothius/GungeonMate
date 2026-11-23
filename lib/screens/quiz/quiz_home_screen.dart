@@ -16,7 +16,7 @@ import '../../utils/reduce_motion.dart';
 import '../../widgets/quality_badge.dart';
 import '../../widgets/scale_button.dart';
 import 'quiz_session_screen.dart';
-import '../../widgets/skeuo/skeuo_tokens.dart';
+
 import '../../widgets/bug_report/bug_report_button.dart';
 import '../../models/bug_report.dart';
 
@@ -93,7 +93,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                             fontSize: FontSizes.titleLarge,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.6,
-                            color: Skeuo.inkIf(const Color(0xFFFFD54F)),
+                            color: const Color(0xFFFFD54F),
                             shadows: const [
                               Shadow(
                                 offset: Offset(0, 2),
@@ -110,9 +110,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                             fontSize: FontSizes.labelMedium,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
-                            color: Skeuo.collapse(
-                              Colors.white.withValues(alpha: 0.45),
-                            ),
+                            color: Colors.white.withValues(alpha: 0.45),
                           ),
                         ),
                       ],
@@ -181,14 +179,10 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                   vertical: Insets.sm,
                 ),
                 decoration: BoxDecoration(
-                  color: Skeuo.inkIf(
-                    const Color(0xFFFFD54F),
-                  ).withValues(alpha: 0.10),
+                  color: const Color(0xFFFFD54F).withValues(alpha: 0.10),
                   borderRadius: Radii.pill,
                   border: Border.all(
-                    color: Skeuo.inkIf(
-                      const Color(0xFFFFD54F),
-                    ).withValues(alpha: 0.35),
+                    color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
                   ),
                 ),
                 child: GoopText(
@@ -197,7 +191,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.4,
-                    color: Skeuo.inkIf(const Color(0xFFFFD54F)),
+                    color: const Color(0xFFFFD54F),
                   ),
                 ),
               ),
@@ -300,9 +294,7 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.titleSmall,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(
-                            Colors.white.withValues(alpha: 0.95),
-                          ),
+                          color: Colors.white.withValues(alpha: 0.95),
                         ),
                       ),
                       GoopText(
@@ -310,9 +302,7 @@ class _ChestCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w600,
-                          color: Skeuo.collapse(
-                            Colors.white.withValues(alpha: 0.45),
-                          ),
+                          color: Colors.white.withValues(alpha: 0.45),
                         ),
                       ),
                     ],
@@ -325,9 +315,7 @@ class _ChestCard extends StatelessWidget {
                       Icon(
                         Icons.lock_rounded,
                         size: 14,
-                        color: Skeuo.collapse(
-                          Colors.white.withValues(alpha: 0.5),
-                        ),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                       const SizedBox(width: 4),
                       GoopText(
@@ -336,9 +324,7 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.8,
-                          color: Skeuo.collapse(
-                            Colors.white.withValues(alpha: 0.5),
-                          ),
+                          color: Colors.white.withValues(alpha: 0.5),
                         ),
                       ),
                     ],
@@ -355,9 +341,7 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(
-                            Colors.white.withValues(alpha: 0.4),
-                          ),
+                          color: Colors.white.withValues(alpha: 0.4),
                         ),
                       ),
                       GoopText(
@@ -405,7 +389,7 @@ class _ChestCard extends StatelessWidget {
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.4,
-                color: Skeuo.collapse(Colors.white.withValues(alpha: 0.35)),
+                color: Colors.white.withValues(alpha: 0.35),
               ),
             ),
           ],
@@ -527,7 +511,7 @@ class _CompletedLabelState extends State<_CompletedLabel>
           fontSize: FontSizes.titleMedium,
           fontWeight: FontWeight.w900,
           letterSpacing: 1.4,
-          color: Skeuo.inkIf(const Color(0xFFFFD700)),
+          color: const Color(0xFFFFD700),
           shadows: [
             Shadow(
               offset: Offset(0, 2),
@@ -536,9 +520,7 @@ class _CompletedLabelState extends State<_CompletedLabel>
             ),
             Shadow(
               blurRadius: 16,
-              color: Skeuo.inkIf(
-                const Color(0xFFFFD700),
-              ).withValues(alpha: 0.4),
+              color: const Color(0xFFFFD700).withValues(alpha: 0.4),
             ),
           ],
         ),

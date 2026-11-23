@@ -5,7 +5,6 @@ import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 class RobotDashboardSliver extends StatefulWidget {
   const RobotDashboardSliver({super.key});
@@ -47,12 +46,12 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
             color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.cyan).withValues(alpha: 0.35),
+              color: Colors.cyan.withValues(alpha: 0.35),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.04),
+                color: Colors.cyanAccent.withValues(alpha: 0.04),
                 blurRadius: 10,
                 spreadRadius: 1,
               ),
@@ -77,7 +76,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                         children: [
                           Icon(
                             Icons.android_rounded,
-                            color: Skeuo.inkIf(Colors.cyanAccent),
+                            color: Colors.cyanAccent,
                             size: 20,
                           ),
                           SizedBox(width: 8),
@@ -86,7 +85,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                             style: TextStyle(
                               fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
-                              color: Skeuo.inkIf(Colors.cyanAccent),
+                              color: Colors.cyanAccent,
                               letterSpacing: 0.8,
                             ),
                           ),
@@ -103,22 +102,14 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                             decoration: BoxDecoration(
                               color:
                                   robotGoldJunk
-                                      ? Skeuo.inkIf(
-                                        Colors.amber,
-                                      ).withValues(alpha: 0.18)
-                                      : Skeuo.inkIf(
-                                        Colors.cyan,
-                                      ).withValues(alpha: 0.15),
+                                      ? Colors.amber.withValues(alpha: 0.18)
+                                      : Colors.cyan.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.all(Radii.sm),
                               border: Border.all(
                                 color:
                                     robotGoldJunk
-                                        ? Skeuo.inkIf(
-                                          Colors.amber,
-                                        ).withValues(alpha: 0.5)
-                                        : Skeuo.inkIf(
-                                          Colors.cyan,
-                                        ).withValues(alpha: 0.4),
+                                        ? Colors.amber.withValues(alpha: 0.5)
+                                        : Colors.cyan.withValues(alpha: 0.4),
                                 width: 1.0,
                               ),
                             ),
@@ -129,8 +120,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 fontWeight: FontWeight.w900,
                                 color:
                                     robotGoldJunk
-                                        ? Skeuo.inkIf(Colors.amberAccent)
-                                        : Skeuo.inkIf(Colors.cyanAccent),
+                                        ? Colors.amberAccent
+                                        : Colors.cyanAccent,
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -184,7 +175,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w900,
-                                          color: Skeuo.inkIf(Colors.cyanAccent),
+                                          color: Colors.cyanAccent,
                                           letterSpacing: 0.5,
                                         ),
                                       ),
@@ -209,7 +200,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         ),
                                         icon: Icon(
                                           Icons.remove_circle_outline,
-                                          color: Skeuo.inkIf(Colors.cyanAccent),
+                                          color: Colors.cyanAccent,
                                           size: 30,
                                         ),
                                         tooltip: 'Decrease junk',
@@ -244,7 +235,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         ),
                                         icon: Icon(
                                           Icons.add_circle_outline,
-                                          color: Skeuo.inkIf(Colors.cyanAccent),
+                                          color: Colors.cyanAccent,
                                           size: 30,
                                         ),
                                         tooltip: 'Increase junk',
@@ -286,7 +277,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w900,
-                                          color: Skeuo.inkIf(Colors.cyanAccent),
+                                          color: Colors.cyanAccent,
                                           letterSpacing: 0.5,
                                         ),
                                       ),
@@ -311,7 +302,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         ),
                                         icon: Icon(
                                           Icons.remove_circle_outline,
-                                          color: Skeuo.inkIf(Colors.cyanAccent),
+                                          color: Colors.cyanAccent,
                                           size: 30,
                                         ),
                                         tooltip: 'Decrease armor',
@@ -348,7 +339,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         ),
                                         icon: Icon(
                                           Icons.add_circle_outline,
-                                          color: Skeuo.inkIf(Colors.cyanAccent),
+                                          color: Colors.cyanAccent,
                                           size: 30,
                                         ),
                                         tooltip: 'Increase armor',
@@ -372,9 +363,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                     label: 'GOLD JUNK',
                                     subtitle: '+500%',
                                     value: robotGoldJunk,
-                                    activeColor: Skeuo.inkIf(
-                                      Colors.amberAccent,
-                                    ),
+                                    activeColor: Colors.amberAccent,
                                     onChanged: p.setRobotGoldJunk,
                                   ),
                                 ),
@@ -384,9 +373,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                     label: 'LIES',
                                     subtitle: '+5%',
                                     value: robotLies,
-                                    activeColor: Skeuo.inkIf(
-                                      Colors.purpleAccent,
-                                    ),
+                                    activeColor: Colors.purpleAccent,
                                     onChanged: p.setRobotLies,
                                   ),
                                 ),
@@ -402,7 +389,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                     label: 'FIREPLACE OUT',
                                     subtitle: 'Extinguished',
                                     value: fireplaceExtinguished,
-                                    activeColor: Skeuo.inkIf(Colors.blueAccent),
+                                    activeColor: Colors.blueAccent,
                                     onChanged: p.setFireplaceExtinguished,
                                   ),
                                 ),
@@ -412,9 +399,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                     label: 'BATTERY',
                                     subtitle: 'Bullets synergy',
                                     value: batteryBulletsSynergy,
-                                    activeColor: Skeuo.inkIf(
-                                      Colors.greenAccent,
-                                    ),
+                                    activeColor: Colors.greenAccent,
                                     onChanged: p.setBatteryBulletsSynergy,
                                   ),
                                 ),
@@ -427,7 +412,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                               label: 'FUSE DISARMER',
                               subtitle: 'Disables bomb fuses',
                               value: fuseDisarmer,
-                              activeColor: Skeuo.inkIf(Colors.orangeAccent),
+                              activeColor: Colors.orangeAccent,
                               onChanged: p.setFuseDisarmer,
                             ),
 

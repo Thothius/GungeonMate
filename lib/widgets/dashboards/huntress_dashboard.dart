@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Compact Huntress HUD: dig chance + item weights. Single concise card.
 /// Toggle on left switches between full pickup weights and health-focused stats.
@@ -42,7 +41,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
             color: const Color(0xFF101408),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.lightGreen).withValues(alpha: 0.35),
+              color: Colors.lightGreen.withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -54,7 +53,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                 children: [
                   Icon(
                     Icons.pets_rounded,
-                    color: Skeuo.inkIf(Colors.lightGreenAccent),
+                    color: Colors.lightGreenAccent,
                     size: 24,
                   ),
                   const SizedBox(width: 8),
@@ -63,7 +62,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w900,
-                      color: Skeuo.inkIf(Colors.lightGreenAccent),
+                      color: Colors.lightGreenAccent,
                       letterSpacing: 0.8,
                     ),
                   ),
@@ -81,16 +80,12 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                       decoration: BoxDecoration(
                         color:
                             _healthMode
-                                ? Skeuo.inkIf(
-                                  Colors.redAccent,
-                                ).withValues(alpha: 0.2)
+                                ? Colors.redAccent.withValues(alpha: 0.2)
                                 : Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(
                           color:
-                              _healthMode
-                                  ? Skeuo.inkIf(Colors.redAccent)
-                                  : Colors.white24,
+                              _healthMode ? Colors.redAccent : Colors.white24,
                           width: _healthMode ? 1.0 : 0.6,
                         ),
                       ),
@@ -103,9 +98,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                                 : Icons.favorite_border_rounded,
                             size: 11,
                             color:
-                                _healthMode
-                                    ? Skeuo.inkIf(Colors.redAccent)
-                                    : Colors.white38,
+                                _healthMode ? Colors.redAccent : Colors.white38,
                           ),
                           const SizedBox(width: 3),
                           GoopText(
@@ -115,7 +108,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                               fontWeight: FontWeight.w800,
                               color:
                                   _healthMode
-                                      ? Skeuo.inkIf(Colors.redAccent)
+                                      ? Colors.redAccent
                                       : Colors.white38,
                               letterSpacing: 0.5,
                             ),
@@ -133,18 +126,14 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                     decoration: BoxDecoration(
                       color:
                           hasBabyGoodMimic
-                              ? Skeuo.inkIf(
-                                Colors.purple,
-                              ).withValues(alpha: 0.2)
-                              : Skeuo.inkIf(
-                                Colors.green,
-                              ).withValues(alpha: 0.2),
+                              ? Colors.purple.withValues(alpha: 0.2)
+                              : Colors.green.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
                         color:
                             hasBabyGoodMimic
-                                ? Skeuo.inkIf(Colors.purpleAccent)
-                                : Skeuo.inkIf(Colors.lightGreenAccent),
+                                ? Colors.purpleAccent
+                                : Colors.lightGreenAccent,
                         width: 0.8,
                       ),
                     ),
@@ -155,8 +144,8 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                         fontWeight: FontWeight.bold,
                         color:
                             hasBabyGoodMimic
-                                ? Skeuo.inkIf(Colors.purpleAccent)
-                                : Skeuo.inkIf(Colors.lightGreenAccent),
+                                ? Colors.purpleAccent
+                                : Colors.lightGreenAccent,
                       ),
                     ),
                   ),
@@ -169,7 +158,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
                     fontStyle: FontStyle.italic,
-                    color: Skeuo.inkIf(Colors.purpleAccent.shade100),
+                    color: Colors.purpleAccent.shade100,
                   ),
                 ),
               ],
@@ -185,11 +174,11 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildWeight('❤', '45%', Skeuo.inkIf(Colors.redAccent)),
-                    _buildWeight('🔑', '20%', Skeuo.inkIf(Colors.amberAccent)),
-                    _buildWeight('🛡', '15%', Skeuo.inkIf(Colors.blueAccent)),
-                    _buildWeight('📦', '15%', Skeuo.inkIf(Colors.orangeAccent)),
-                    _buildWeight('💥', '5%', Skeuo.inkIf(Colors.pinkAccent)),
+                    _buildWeight('❤', '45%', Colors.redAccent),
+                    _buildWeight('🔑', '20%', Colors.amberAccent),
+                    _buildWeight('🛡', '15%', Colors.blueAccent),
+                    _buildWeight('📦', '15%', Colors.orangeAccent),
+                    _buildWeight('💥', '5%', Colors.pinkAccent),
                   ],
                 ),
             ],
@@ -212,25 +201,25 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
             _buildHealthStat(
               '❤ PER ROOM',
               '${effectivePerRoom.toStringAsFixed(2)}%',
-              Skeuo.inkIf(Colors.redAccent),
+              Colors.redAccent,
             ),
             const SizedBox(width: 12),
             _buildHealthStat(
               'LOST W/O DOG',
               '${lostPerRoom.toStringAsFixed(2)}%',
-              Skeuo.inkIf(Colors.redAccent.shade100),
+              Colors.redAccent.shade100,
             ),
           ],
         ),
         const SizedBox(height: 8),
         Row(
           children: [
-            _buildHealthStat('❤ WEIGHT', '45%', Skeuo.inkIf(Colors.redAccent)),
+            _buildHealthStat('❤ WEIGHT', '45%', Colors.redAccent),
             const SizedBox(width: 12),
             _buildHealthStat(
               'ROOMS/❤',
               (100 / effectivePerRoom).toStringAsFixed(1),
-              Skeuo.inkIf(Colors.amberAccent),
+              Colors.amberAccent,
             ),
           ],
         ),

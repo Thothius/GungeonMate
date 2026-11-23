@@ -6,7 +6,7 @@ import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
 import 'settings_screen.dart';
 import 'ammonomicon_screen.dart';
-import 'neo_skeuo_lab_screen.dart';
+
 import 'asset_viewer_screen.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
@@ -17,9 +17,7 @@ import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../utils/asset_paths.dart' show kAppVersion;
 import '../widgets/home/home_backdrop.dart';
-import '../widgets/skeuo/skeuo_backdrop.dart';
-import '../widgets/skeuo/skeuo_surface.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
+
 import '../widgets/theme_overlay.dart';
 import '../widgets/bug_report/bug_report_sheet.dart';
 import '../models/bug_report.dart';
@@ -30,8 +28,7 @@ import '../models/bug_report.dart';
 /// the active [AppTheme.flair] — switching themes, Unicorn palettes,
 /// remixes, or custom presets re-skins the menu in the same frame.
 /// [MainMenuBackdrop] follows the same palette for its gradient,
-/// embers, and glow. The Neo-Skeuo skin keeps its cream paper but
-/// picks up the theme accent on its hero button and chips.
+/// embers, and glow.
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
 
@@ -79,7 +76,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   // this screen on any theme/palette/remix change).
   ThemeFlair get _flair => AppTheme.flair;
 
-  /// Translucent panel fill for outline buttons and the skeuo chip.
+  /// Translucent panel fill for outline buttons and corner chips.
   Color get _panel => _flair.card.withValues(alpha: 0.72);
 
   /// Primary accent — borders, icons, glows (was fixed ember).
@@ -97,10 +94,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
           ? const Color(0xFF1C1C1E)
           : Colors.white;
 
-  /// Skeuo pencil-tone version of the accent — darkened enough to
-  /// read as ink on cream paper.
-  Color get _skeuoAccent => Color.lerp(_accent, Skeuo.ink, 0.45)!;
-
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
@@ -109,17 +102,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
     return AnimatedBuilder(
       animation: AppTheme.notifier,
       builder: (context, _) {
-        final skeuo = AppTheme.isSkeuo;
         return Scaffold(
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              // Fixed backdrop — pixel dungeon normally, cream paper
-              // while the Neo-Skeuo skin is active.
-              if (skeuo)
-                const SkeuoPaperBackdrop()
-              else
-                const MainMenuBackdrop(),
+              // Fixed backdrop — pixel dungeon.
+              const MainMenuBackdrop(),
               Positioned.fill(
                 child: SafeArea(
                   child: LayoutBuilder(
@@ -142,269 +130,182 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                       // ── Logo + subtitle ──
                                       FittedBox(
                                         fit: BoxFit.scaleDown,
-                                        child:
-                                            skeuo
-                                                ? Stack(
-                                                  alignment: Alignment.center,
-                                                  children: [
-                                                    // Cream offset under
-                                                    // ink letters — printed
-                                                    // letterpress look.
-                                                    Transform.translate(
-                                                      offset: const Offset(
-                                                        3,
-                                                        3,
-                                                      ),
-                                                      child: const GoopText(
-                                                        'GUNGEON MATE',
-                                                        style: TextStyle(
-                                                          fontSize: 48,
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          letterSpacing: 2.0,
-                                                          color: Skeuo.card,
-                                                        ),
-                                                      ),
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            GoopText(
+                                              'GUNGEON MATE',
+                                              style: TextStyle(
+                                                fontSize: 48,
+                                                fontWeight: FontWeight.w900,
+                                                letterSpacing: 2.0,
+                                                foreground:
+                                                    Paint()
+                                                      ..style =
+                                                          PaintingStyle.stroke
+                                                      ..strokeWidth = 7
+                                                      ..color = _accent2,
+                                              ),
+                                            ),
+                                            GoopText(
+                                              'GUNGEON MATE',
+                                              style: TextStyle(
+                                                fontSize: 48,
+                                                fontWeight: FontWeight.w900,
+                                                letterSpacing: 2.0,
+                                                color: _accentHi,
+                                                shadows: [
+                                                  const Shadow(
+                                                    offset: Offset(0, 3),
+                                                    blurRadius: 4,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  Shadow(
+                                                    offset: const Offset(0, 0),
+                                                    blurRadius: 18,
+                                                    color: _accent.withValues(
+                                                      alpha: 0.4,
                                                     ),
-                                                    const GoopText(
-                                                      'GUNGEON MATE',
-                                                      style: TextStyle(
-                                                        fontSize: 48,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        letterSpacing: 2.0,
-                                                        color: Skeuo.ink,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                                : Stack(
-                                                  alignment: Alignment.center,
-                                                  children: [
-                                                    GoopText(
-                                                      'GUNGEON MATE',
-                                                      style: TextStyle(
-                                                        fontSize: 48,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        letterSpacing: 2.0,
-                                                        foreground:
-                                                            Paint()
-                                                              ..style =
-                                                                  PaintingStyle
-                                                                      .stroke
-                                                              ..strokeWidth = 7
-                                                              ..color = _accent2,
-                                                      ),
-                                                    ),
-                                                    GoopText(
-                                                      'GUNGEON MATE',
-                                                      style: TextStyle(
-                                                        fontSize: 48,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        letterSpacing: 2.0,
-                                                        color: _accentHi,
-                                                        shadows: [
-                                                          const Shadow(
-                                                            offset: Offset(
-                                                              0,
-                                                              3,
-                                                            ),
-                                                            blurRadius: 4,
-                                                            color:
-                                                                Colors.black54,
-                                                          ),
-                                                          Shadow(
-                                                            offset: const Offset(
-                                                              0,
-                                                              0,
-                                                            ),
-                                                            blurRadius: 18,
-                                                            color: _accent
-                                                                .withValues(
-                                                                  alpha: 0.4,
-                                                                ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       const SizedBox(height: 8),
-                                      // Sublabel pill — accent chip, or an
-                                      // ink-bordered paper chip in skeuo.
-                                      if (skeuo)
-                                        SkeuoSurface(
-                                          elevation: SkeuoElevation.base,
-                                          radius: Skeuo.rSm,
-                                          sketchy: false,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 5,
+                                      // Sublabel pill — accent chip.
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: _accent.withValues(
+                                            alpha: 0.10,
                                           ),
-                                          child: GoopText(
-                                            'YOUR COMPANION IN THE GUNGEON',
-                                            style: TextStyle(
-                                              fontSize: FontSizes.labelMedium,
-                                              fontWeight: FontWeight.w900,
-                                              color: _skeuoAccent,
-                                              letterSpacing: 1.5,
-                                            ),
+                                          borderRadius: BorderRadius.circular(
+                                            6,
                                           ),
-                                        )
-                                      else
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 5,
-                                          ),
-                                          decoration: BoxDecoration(
+                                          border: Border.all(
                                             color: _accent.withValues(
-                                              alpha: 0.10,
+                                              alpha: 0.55,
                                             ),
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                            border: Border.all(
-                                              color: _accent.withValues(
-                                                alpha: 0.55,
-                                              ),
-                                              width: 1.4,
-                                            ),
-                                          ),
-                                          child: GoopText(
-                                            'YOUR COMPANION IN THE GUNGEON',
-                                            style: TextStyle(
-                                              fontSize: FontSizes.labelMedium,
-                                              fontWeight: FontWeight.w900,
-                                              color: _accentHi,
-                                              letterSpacing: 1.5,
-                                            ),
+                                            width: 1.4,
                                           ),
                                         ),
+                                        child: GoopText(
+                                          'YOUR COMPANION IN THE GUNGEON',
+                                          style: TextStyle(
+                                            fontSize: FontSizes.labelMedium,
+                                            fontWeight: FontWeight.w900,
+                                            color: _accentHi,
+                                            letterSpacing: 1.5,
+                                          ),
+                                        ),
+                                      ),
                                       const SizedBox(height: 28),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: sideInset,
                                         ),
-                                        child:
-                                            skeuo
-                                                ? _skeuoMenuButtons(context)
-                                                : Column(
-                                                  children: [
-                                                    // Local Run — solid hero button.
-                                                    _menuButton(
-                                                          icon:
-                                                              Icons
-                                                                  .play_arrow_rounded,
-                                                          label: 'Local Run',
-                                                          solid: true,
-                                                          sf: sf,
-                                                          onTap: () {
-                                                            Haptics.selection();
-                                                            Navigator.push(
-                                                              context,
-                                                              fastRoute(
-                                                                const CharacterSelectScreen(),
-                                                              ),
-                                                            );
-                                                          },
-                                                        )
-                                                        .animate(delay: 80.ms)
-                                                        .fadeIn(
-                                                          duration: 350.ms,
-                                                        )
-                                                        .slideY(
-                                                          begin: 0.15,
-                                                          duration: 350.ms,
-                                                          curve: Curves.easeOut,
-                                                        ),
-                                                    const SizedBox(height: 10),
-                                                    _menuButton(
-                                                          icon:
-                                                              Icons
-                                                                  .bluetooth_searching,
-                                                          label: 'Multiplayer',
-                                                          sf: sf,
-                                                          onTap: () {
-                                                            Haptics.selection();
-                                                            Navigator.push(
-                                                              context,
-                                                              fastRoute(
-                                                                const MpLobbyScreen(),
-                                                              ),
-                                                            );
-                                                          },
-                                                        )
-                                                        .animate(delay: 160.ms)
-                                                        .fadeIn(
-                                                          duration: 350.ms,
-                                                        )
-                                                        .slideY(
-                                                          begin: 0.15,
-                                                          duration: 350.ms,
-                                                          curve: Curves.easeOut,
-                                                        ),
-                                                    const SizedBox(height: 14),
-                                                    _menuButton(
-                                                          icon:
-                                                              Icons
-                                                                  .palette_rounded,
-                                                          label:
-                                                              'Customization',
-                                                          sf: sf,
-                                                          onTap: () {
-                                                            Haptics.selection();
-                                                            Navigator.push(
-                                                              context,
-                                                              fastRoute(
-                                                                const ExperienceStudioScreen(),
-                                                              ),
-                                                            );
-                                                          },
-                                                        )
-                                                        .animate(delay: 240.ms)
-                                                        .fadeIn(
-                                                          duration: 350.ms,
-                                                        )
-                                                        .slideY(
-                                                          begin: 0.15,
-                                                          duration: 350.ms,
-                                                          curve: Curves.easeOut,
-                                                        ),
-                                                    const SizedBox(height: 10),
-                                                    _menuButton(
-                                                          icon:
-                                                              Icons
-                                                                  .menu_book_rounded,
-                                                          label: 'Ammonomicon',
-                                                          sf: sf,
-                                                          onTap: () {
-                                                            Haptics.selection();
-                                                            Navigator.push(
-                                                              context,
-                                                              fastRoute(
-                                                                const AmmonomiconScreen(
-                                                                  showBackButton:
-                                                                      true,
-                                                                ),
-                                                              ),
-                                                            );
-                                                          },
-                                                        )
-                                                        .animate(delay: 320.ms)
-                                                        .fadeIn(
-                                                          duration: 350.ms,
-                                                        )
-                                                        .slideY(
-                                                          begin: 0.15,
-                                                          duration: 350.ms,
-                                                          curve: Curves.easeOut,
-                                                        ),
-                                                  ],
+                                        child: Column(
+                                          children: [
+                                            // Local Run — solid hero button.
+                                            _menuButton(
+                                                  icon:
+                                                      Icons.play_arrow_rounded,
+                                                  label: 'Local Run',
+                                                  solid: true,
+                                                  sf: sf,
+                                                  onTap: () {
+                                                    Haptics.selection();
+                                                    Navigator.push(
+                                                      context,
+                                                      fastRoute(
+                                                        const CharacterSelectScreen(),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                                .animate(delay: 80.ms)
+                                                .fadeIn(duration: 350.ms)
+                                                .slideY(
+                                                  begin: 0.15,
+                                                  duration: 350.ms,
+                                                  curve: Curves.easeOut,
                                                 ),
+                                            const SizedBox(height: 10),
+                                            _menuButton(
+                                                  icon:
+                                                      Icons.bluetooth_searching,
+                                                  label: 'Multiplayer',
+                                                  sf: sf,
+                                                  onTap: () {
+                                                    Haptics.selection();
+                                                    Navigator.push(
+                                                      context,
+                                                      fastRoute(
+                                                        const MpLobbyScreen(),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                                .animate(delay: 160.ms)
+                                                .fadeIn(duration: 350.ms)
+                                                .slideY(
+                                                  begin: 0.15,
+                                                  duration: 350.ms,
+                                                  curve: Curves.easeOut,
+                                                ),
+                                            const SizedBox(height: 14),
+                                            _menuButton(
+                                                  icon: Icons.palette_rounded,
+                                                  label: 'Customization',
+                                                  sf: sf,
+                                                  onTap: () {
+                                                    Haptics.selection();
+                                                    Navigator.push(
+                                                      context,
+                                                      fastRoute(
+                                                        const ExperienceStudioScreen(),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                                .animate(delay: 240.ms)
+                                                .fadeIn(duration: 350.ms)
+                                                .slideY(
+                                                  begin: 0.15,
+                                                  duration: 350.ms,
+                                                  curve: Curves.easeOut,
+                                                ),
+                                            const SizedBox(height: 10),
+                                            _menuButton(
+                                                  icon: Icons.menu_book_rounded,
+                                                  label: 'Ammonomicon',
+                                                  sf: sf,
+                                                  onTap: () {
+                                                    Haptics.selection();
+                                                    Navigator.push(
+                                                      context,
+                                                      fastRoute(
+                                                        const AmmonomiconScreen(
+                                                          showBackButton: true,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                                .animate(delay: 320.ms)
+                                                .fadeIn(duration: 350.ms)
+                                                .slideY(
+                                                  begin: 0.15,
+                                                  duration: 350.ms,
+                                                  curve: Curves.easeOut,
+                                                ),
+                                          ],
+                                        ),
                                       ),
                                       const SizedBox(height: 16),
                                       GoopText(
@@ -412,12 +313,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w700,
-                                          color:
-                                              skeuo
-                                                  ? Skeuo.pencil
-                                                  : Colors.white.withValues(
-                                                    alpha: 0.4,
-                                                  ),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.4,
+                                          ),
                                           letterSpacing: 1.0,
                                         ),
                                       ),
@@ -431,23 +329,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                   ),
                 ),
               ),
-              // Neo-Skeuo toggle — always top-right; a ghost pencil on the
-              // locked menu, a pressed ink chip while the skin is active.
-              Positioned(
-                top: 0,
-                right: 0,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(Insets.md),
-                    child:
-                        AppTheme.kNeoSkeuoEnabled
-                            ? _skeuoToggleChip(skeuo)
-                            : const SizedBox.shrink(),
-                  ),
-                ),
-              ),
-              // Top-left corner controls — Settings gear + Asset Viewer,
-              // same circular chrome as the skeuo toggle top-right.
+              // Top-left corner controls — Settings gear + Asset Viewer
+              // + bug report, same circular chrome.
               Positioned(
                 top: 0,
                 left: 0,
@@ -457,11 +340,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _settingsChip(skeuo),
+                        _settingsChip(),
                         const SizedBox(width: 8),
-                        _assetViewerChip(skeuo),
+                        _assetViewerChip(),
                         const SizedBox(width: 8),
-                        _bugChip(skeuo),
+                        _bugChip(),
                       ],
                     ),
                   ),
@@ -474,68 +357,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
     );
   }
 
-  /// Skeuo menu — Local Run as the ink hero, the rest as paper
-  /// outlines. DEMO showcases the kit; Customization sits locked.
-  Widget _skeuoMenuButtons(BuildContext context) {
-    return Column(
-      children: [
-        SkeuoButton.primary(
-          label: 'Local Run',
-          icon: Icons.play_arrow_rounded,
-          accent: AppTheme.flair.primary,
-          drawDelay: const Duration(milliseconds: 60),
-          onTap: () {
-            Navigator.push(context, fastRoute(const CharacterSelectScreen()));
-          },
-        ),
-        const SizedBox(height: 10),
-        SkeuoButton(
-          label: 'Multiplayer',
-          icon: Icons.bluetooth_searching,
-          drawDelay: const Duration(milliseconds: 150),
-          onTap: () {
-            Navigator.push(context, fastRoute(const MpLobbyScreen()));
-          },
-        ),
-        const SizedBox(height: 10),
-        SkeuoButton(
-          label: 'Style Demo',
-          icon: Icons.auto_stories_rounded,
-          drawDelay: const Duration(milliseconds: 240),
-          onTap: () {
-            Navigator.push(context, fastRoute(const NeoSkeuoLabScreen()));
-          },
-        ),
-        const SizedBox(height: 10),
-        const Tooltip(
-          message: 'Locked while Neo-Skeuo is on',
-          child: SkeuoButton.disabled(
-            label: 'Customization',
-            icon: Icons.lock_outline_rounded,
-            drawDelay: Duration(milliseconds: 330),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SkeuoButton(
-          label: 'Ammonomicon',
-          icon: Icons.menu_book_rounded,
-          drawDelay: const Duration(milliseconds: 420),
-          onTap: () {
-            Navigator.push(
-              context,
-              fastRoute(const AmmonomiconScreen(showBackButton: true)),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  /// The Neo-Skeuo mode toggle — ghost pencil chip on the themed menu,
-  /// pressed ink chip while the skin is on.
   /// Settings chip — gear in the same circular chrome as the other
   /// corner controls; pushes the prefs-only Settings screen.
-  Widget _settingsChip(bool skeuo) {
+  Widget _settingsChip() {
     return Tooltip(
       message: 'Settings',
       child: ScaleButton(
@@ -543,43 +367,26 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
           Haptics.selection();
           Navigator.push(context, fastRoute(const SettingsScreen()));
         },
-        child:
-            skeuo
-                ? const SkeuoSurface(
-                  elevation: SkeuoElevation.pressed,
-                  radius: Skeuo.rLg,
-                  sketchy: false,
-                  padding: EdgeInsets.all(11),
-                  child: Icon(
-                    Icons.settings_outlined,
-                    size: 22,
-                    color: Skeuo.ink,
-                  ),
-                )
-                : Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: _panel,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: _accent.withValues(alpha: 0.5),
-                      width: 1.4,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.settings_outlined,
-                    size: 22,
-                    color: _accent,
-                  ),
-                ),
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: _panel,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: _accent.withValues(alpha: 0.5),
+              width: 1.4,
+            ),
+          ),
+          child: Icon(Icons.settings_outlined, size: 22, color: _accent),
+        ),
       ),
     );
   }
 
   /// Bug-report chip — same circular chrome as the other corner
   /// controls; opens the reporter sheet with menu context.
-  Widget _bugChip(bool skeuo) {
+  Widget _bugChip() {
     return Tooltip(
       message: 'Report a bug',
       child: ScaleButton(
@@ -593,43 +400,26 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
             ),
           );
         },
-        child:
-            skeuo
-                ? const SkeuoSurface(
-                  elevation: SkeuoElevation.pressed,
-                  radius: Skeuo.rLg,
-                  sketchy: false,
-                  padding: EdgeInsets.all(11),
-                  child: Icon(
-                    Icons.bug_report_outlined,
-                    size: 22,
-                    color: Skeuo.ink,
-                  ),
-                )
-                : Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: _panel,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: _accent.withValues(alpha: 0.5),
-                      width: 1.4,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.bug_report_outlined,
-                    size: 22,
-                    color: _accent,
-                  ),
-                ),
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: _panel,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: _accent.withValues(alpha: 0.5),
+              width: 1.4,
+            ),
+          ),
+          child: Icon(Icons.bug_report_outlined, size: 22, color: _accent),
+        ),
       ),
     );
   }
 
   /// Top-left chip into the Asset Viewer — same circular chrome as the
-  /// skeuo toggle so the two corner controls read as a pair.
-  Widget _assetViewerChip(bool skeuo) {
+  /// other corner controls.
+  Widget _assetViewerChip() {
     return Tooltip(
       message: 'Asset Viewer — vote on fonts, backgrounds & avatars',
       child: ScaleButton(
@@ -637,77 +427,19 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
           Haptics.selection();
           Navigator.push(context, fastRoute(const AssetViewerScreen()));
         },
-        child:
-            skeuo
-                ? const SkeuoSurface(
-                  elevation: SkeuoElevation.pressed,
-                  radius: Skeuo.rLg,
-                  sketchy: false,
-                  padding: EdgeInsets.all(11),
-                  child: Icon(
-                    Icons.photo_library_rounded,
-                    size: 22,
-                    color: Skeuo.ink,
-                  ),
-                )
-                : Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: _panel,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: _accent.withValues(alpha: 0.5),
-                      width: 1.4,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.photo_library_rounded,
-                    size: 22,
-                    color: _accent,
-                  ),
-                ),
-      ),
-    );
-  }
-
-  Widget _skeuoToggleChip(bool active) {
-    return Tooltip(
-      message: active ? 'Exit Neo-Skeuo' : 'Neo-Skeuo theme',
-      child: ScaleButton(
-        onTap: () {
-          if (active) {
-            AppTheme.exitSkeuo();
-          } else {
-            AppTheme.enterSkeuo();
-          }
-        },
-        child:
-            active
-                ? const SkeuoSurface(
-                  elevation: SkeuoElevation.pressed,
-                  radius: Skeuo.rLg,
-                  sketchy: false,
-                  padding: EdgeInsets.all(11),
-                  child: Icon(Icons.draw_rounded, size: 22, color: Skeuo.ink),
-                )
-                : Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: _panel,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: _accent.withValues(alpha: 0.5),
-                      width: 1.4,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.draw_rounded,
-                    size: 22,
-                    color: _accent,
-                  ),
-                ),
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: _panel,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: _accent.withValues(alpha: 0.5),
+              width: 1.4,
+            ),
+          ),
+          child: Icon(Icons.photo_library_rounded, size: 22, color: _accent),
+        ),
       ),
     );
   }

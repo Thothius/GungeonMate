@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'theme_overlay.dart' show ThemeOverlay;
-import 'skeuo/skeuo_tokens.dart';
+
 part 'particle_engine/particle_presets.dart';
 part 'particle_engine/particle_types.dart';
 
@@ -850,9 +850,7 @@ class _ParticlePainter extends CustomPainter {
           _paint.color = driftedColor.withValues(alpha: alpha * 0.7);
           canvas.drawCircle(Offset(p.x, p.y), drawSize * 1.4, _paint);
           _paint.maskFilter = null;
-          _paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.6);
+          _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
           canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.5, _paint);
           break;
         case GlowEffect.aurora:
@@ -989,9 +987,7 @@ class _ParticlePainter extends CustomPainter {
         canvas.drawCircle(Offset(cx, cy), drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.5);
+          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.3, paint);
         }
         break;
@@ -999,9 +995,7 @@ class _ParticlePainter extends CustomPainter {
         _drawStar(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.6);
+          paint.color = Colors.white.withValues(alpha: alpha * 0.6);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.2, paint);
         }
         break;
@@ -1023,9 +1017,7 @@ class _ParticlePainter extends CustomPainter {
         _drawBullet(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.4);
+          paint.color = Colors.white.withValues(alpha: alpha * 0.4);
           canvas.drawCircle(
             Offset(cx, cy - drawSize * 0.3),
             drawSize * 0.15,
@@ -1037,9 +1029,7 @@ class _ParticlePainter extends CustomPainter {
         _drawHeart(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.5);
+          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
         }
         break;
@@ -1056,9 +1046,7 @@ class _ParticlePainter extends CustomPainter {
         _drawCrescent(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.4);
+          paint.color = Colors.white.withValues(alpha: alpha * 0.4);
           canvas.drawCircle(
             Offset(cx - drawSize * 0.15, cy),
             drawSize * 0.12,
@@ -1070,9 +1058,7 @@ class _ParticlePainter extends CustomPainter {
         _drawBolt(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: alpha * 0.5);
+          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
         }
         break;
@@ -1170,8 +1156,7 @@ class _ParticlePainter extends CustomPainter {
       Radius.circular(r * 0.12),
     );
     canvas.drawRRect(jawRect, paint);
-    final eyePaint =
-        Paint()..color = Skeuo.collapse(Colors.black).withValues(alpha: 0.55);
+    final eyePaint = Paint()..color = Colors.black.withValues(alpha: 0.55);
     canvas.drawCircle(Offset(cx - r * 0.22, cy - r * 0.2), r * 0.14, eyePaint);
     canvas.drawCircle(Offset(cx + r * 0.22, cy - r * 0.2), r * 0.14, eyePaint);
   }

@@ -319,7 +319,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
             style: TextStyle(
               fontSize: 10.5 * sf,
               fontWeight: FontWeight.w900,
-              color: Skeuo.inkIf(Colors.orangeAccent),
+              color: Colors.orangeAccent,
               height: 1.1,
             ),
           ),
@@ -327,7 +327,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
           Icon(
             Icons.battery_charging_full_rounded,
             size: 8 * sf,
-            color: Skeuo.inkIf(Colors.orangeAccent).withValues(alpha: 0.8),
+            color: Colors.orangeAccent.withValues(alpha: 0.8),
           ),
         ],
       ),
@@ -350,7 +350,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
                     style: TextStyle(
                       fontSize: 10.5 * sf,
                       fontWeight: FontWeight.w700,
-                      color: Skeuo.inkIf(Colors.lightBlueAccent),
+                      color: Colors.lightBlueAccent,
                       height: 1.1,
                     ),
                   ),
@@ -358,9 +358,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
                   Icon(
                     Icons.schedule_rounded,
                     size: 8 * sf,
-                    color: Skeuo.inkIf(
-                      Colors.lightBlueAccent,
-                    ).withValues(alpha: 0.8),
+                    color: Colors.lightBlueAccent.withValues(alpha: 0.8),
                   ),
                 ],
               ),

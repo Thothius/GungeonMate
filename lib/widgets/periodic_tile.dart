@@ -15,7 +15,7 @@ import 'quality_badge.dart';
 import 'synergy_glow.dart' hide SynergyGlowOverlay;
 import '../utils/reduce_motion.dart';
 import '../utils/responsive.dart';
-import 'skeuo/skeuo_tokens.dart';
+
 part 'periodic_tile/tile_logic.dart';
 part 'periodic_tile/tile_parts.dart';
 
@@ -73,33 +73,33 @@ class _PeriodicTileState extends State<PeriodicTile>
       final cls = widget.gun!.gunClass.toUpperCase();
       switch (cls) {
         case 'FIRE':
-          return Skeuo.inkIf(Colors.deepOrangeAccent);
+          return Colors.deepOrangeAccent;
         case 'ICE':
-          return Skeuo.inkIf(Colors.lightBlueAccent);
+          return Colors.lightBlueAccent;
         case 'POISON':
-          return Skeuo.inkIf(Colors.lightGreenAccent);
+          return Colors.lightGreenAccent;
         case 'CHARM':
-          return Skeuo.inkIf(Colors.pinkAccent);
+          return Colors.pinkAccent;
         case 'EXPLOSIVE':
-          return Skeuo.inkIf(Colors.redAccent);
+          return Colors.redAccent;
         case 'BEAM':
-          return Skeuo.inkIf(Colors.cyanAccent);
+          return Colors.cyanAccent;
         case 'SHOTGUN':
-          return Skeuo.inkIf(Colors.amberAccent);
+          return Colors.amberAccent;
         case 'PISTOL':
         case 'RIFLE':
         case 'FULLAUTO':
         case 'CHARGE':
-          return Skeuo.inkIf(Colors.orangeAccent);
+          return Colors.orangeAccent;
         default:
-          return Skeuo.inkIf(Colors.deepOrangeAccent);
+          return Colors.deepOrangeAccent;
       }
     }
     final it = widget.item;
     if (it == null) return Colors.white54;
-    if (it.isCompanion) return Skeuo.inkIf(Colors.purpleAccent);
-    if (it.isActive) return Skeuo.inkIf(Colors.lightBlueAccent);
-    if (it.isPassive) return Skeuo.inkIf(Colors.lightGreenAccent);
+    if (it.isCompanion) return Colors.purpleAccent;
+    if (it.isActive) return Colors.lightBlueAccent;
+    if (it.isPassive) return Colors.lightGreenAccent;
     return Colors.white54;
   }
 
@@ -168,9 +168,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                             borderRadius: BorderRadius.all(Radii.sm),
                             boxShadow: [
                               BoxShadow(
-                                color: Skeuo.inkIf(
-                                  Colors.amber,
-                                ).withValues(alpha: 0.45 * glow),
+                                color: Colors.amber.withValues(
+                                  alpha: 0.45 * glow,
+                                ),
                                 blurRadius: 14,
                                 spreadRadius: 2,
                               ),
@@ -218,8 +218,8 @@ class _PeriodicTileState extends State<PeriodicTile>
     final cardBgColor = isS ? const Color(0xFF14120E) : null;
     // Global panel chrome (studio PANELS section): when the user overrode
     // panel color/opacity the tile surface follows flair.card (which
-    // already carries the resolved chrome); otherwise keep the skeuo
-    // default. Border color/width/radius honor the same overrides.
+    // already carries the resolved chrome); otherwise keep the default.
+    // Border color/width/radius honor the same overrides.
     final panelBg =
         prefs.panelColor != 0 || prefs.panelOpacity < 0.999
             ? AppTheme.flair.card
@@ -256,9 +256,7 @@ class _PeriodicTileState extends State<PeriodicTile>
               child: RepaintBoundary(
                 child: CustomPaint(
                   painter: _StrikethroughPainter(
-                    color: Skeuo.inkIf(
-                      Colors.redAccent,
-                    ).withValues(alpha: 0.42),
+                    color: Colors.redAccent.withValues(alpha: 0.42),
                   ),
                 ),
               ),
@@ -434,7 +432,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                       if (widget.isTopDps)
                         Icon(
                           Icons.local_fire_department_rounded,
-                          color: Skeuo.inkIf(Colors.orangeAccent),
+                          color: Colors.orangeAccent,
                           size: 16,
                         ),
                     ],
@@ -455,32 +453,32 @@ class _PeriodicTileState extends State<PeriodicTile>
                                 (
                                   'DPS',
                                   _cleanStat(widget.gun!.dps),
-                                  Skeuo.inkIf(Colors.amberAccent),
+                                  Colors.amberAccent,
                                 ),
                                 (
                                   'MAG',
                                   _cleanStat(widget.gun!.magazineSize),
-                                  Skeuo.inkIf(Colors.cyanAccent),
+                                  Colors.cyanAccent,
                                 ),
                                 (
                                   'RELOAD',
                                   _cleanStat(widget.gun!.reloadTime),
-                                  Skeuo.inkIf(Colors.orangeAccent),
+                                  Colors.orangeAccent,
                                 ),
                                 (
                                   'RANGE',
                                   _cleanStat(widget.gun!.range),
-                                  Skeuo.inkIf(Colors.lightBlueAccent),
+                                  Colors.lightBlueAccent,
                                 ),
                                 (
                                   'FORCE',
                                   _cleanStat(widget.gun!.force),
-                                  Skeuo.inkIf(Colors.redAccent),
+                                  Colors.redAccent,
                                 ),
                                 (
                                   'SPREAD',
                                   _cleanStat(widget.gun!.spread),
-                                  Skeuo.inkIf(Colors.purpleAccent),
+                                  Colors.purpleAccent,
                                 ),
                               ],
                               valueSize: statsFontSize,
@@ -491,28 +489,28 @@ class _PeriodicTileState extends State<PeriodicTile>
                                 (
                                   'CURSE',
                                   '+${widget.item!.curse.toStringAsFixed(0)}',
-                                  Skeuo.inkIf(Colors.deepPurpleAccent),
+                                  Colors.deepPurpleAccent,
                                 ),
                                 (
                                   'COOL',
                                   '+${widget.item!.coolness.toStringAsFixed(0)}',
-                                  Skeuo.inkIf(Colors.tealAccent),
+                                  Colors.tealAccent,
                                 ),
                                 (
                                   'RCHRG',
                                   _cleanStat(widget.item!.rechargeTime),
-                                  Skeuo.inkIf(Colors.orangeAccent),
+                                  Colors.orangeAccent,
                                 ),
                                 (
                                   'DUR',
                                   _cleanStat(widget.item!.duration),
-                                  Skeuo.inkIf(Colors.pinkAccent),
+                                  Colors.pinkAccent,
                                 ),
                                 ('CLASS', widget.item!.type, Colors.white60),
                                 (
                                   'PRICE',
                                   _cleanStat(widget.item!.sellPrice),
-                                  Skeuo.inkIf(Colors.greenAccent),
+                                  Colors.greenAccent,
                                 ),
                               ],
                               valueSize: statsFontSize,

@@ -46,19 +46,10 @@ part 'theme/theme_flair_prefs.dart';
 part 'theme/theme_store.dart';
 
 class AppTheme {
-  /// Neo-Skeuo skin toggle — visible on the home menu (top-right) and
-  /// in run tools. Set false to park the feature again.
-  static const bool kNeoSkeuoEnabled = true;
   const AppTheme._();
 
   static const String _prefsKey = 'theme.mode.v2';
   static const String _unicornPaletteKey = 'theme.unicorn.palette.v1';
-  // Neo-Skeuo toggle: remembers what to restore on exit.
-  static const String _skeuoPrevModeKey = 'theme.skeuo.prev_mode.v1';
-  static const String _skeuoPrevFontKey = 'theme.skeuo.prev_font.v1';
-  // Neo-Skeuo's own typeface pick — persisted separately so the user's
-  // VisualPrefs.font is never touched by the skin.
-  static const String _skeuoFontKey = 'theme.skeuo.font.v1';
   // Old key from the 4-mode era. Migrated on first run then cleared so
   // returning users don't get parked on an invalid index.
   static const String _legacyKey = 'theme.mode';
@@ -194,12 +185,6 @@ class AppTheme {
       }
 
       // Load custom theme palette data (if previously saved).
-      // Neo-Skeuo typeface pick.
-      _skeuoFontIndex = (prefs.getInt(_skeuoFontKey) ?? 0).clamp(
-        0,
-        skeuoFonts.length - 1,
-      );
-
       final customJson = prefs.getString(CustomThemeData._prefsKey);
       if (customJson != null) {
         try {
@@ -263,7 +248,7 @@ class AppTheme {
   /// Runs once at startup. Themes that fail the large-text threshold
   /// (3:1) are flagged as FAIL; those that pass large but fail body
   /// (4.5:1) are flagged as WARN. The simulated body-text color follows
-  /// the surface luminance — light themes (Neo-Skeuo) are judged with
+  /// the surface luminance — light surfaces are judged with
   /// dark text, matching what [themeFor] actually renders.
   static void _auditAllThemeContrast() {
     for (final mode in kVisibleThemes) {
@@ -321,78 +306,6 @@ class AppTheme {
   /// changing the mode. Used after custom theme data is edited.
   static void refresh() => notifier.refresh();
 
-  /// True while the Neo-Skeuo alternate skin is the active mode.
-  /// Widgets use this to gate skeuo chrome + lock customization.
-  static bool get isSkeuo => notifier.value == AppThemeMode.neoSkeuo;
-
-  /// Typefaces the skin can wear — index into this list is persisted
-  /// under [_skeuoFontKey]. Architects Daughter is the default: the
-  /// crispest upright hand print, closest to the reference kit.
-  static const List<AppFont> skeuoFonts = [
-    AppFont.architectsDaughter,
-    AppFont.patrickHand,
-    AppFont.shantellSans,
-  ];
-
-  static int _skeuoFontIndex = 0;
-  static int get skeuoFontIndex => _skeuoFontIndex;
-  static AppFont get skeuoFont =>
-      skeuoFonts[_skeuoFontIndex.clamp(0, skeuoFonts.length - 1)];
-
-  /// Pick the skeuo typeface (index into [skeuoFonts]) + persist.
-  static Future<void> setSkeuoFont(int idx) async {
-    _skeuoFontIndex = idx.clamp(0, skeuoFonts.length - 1);
-    notifier.refresh();
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(_skeuoFontKey, _skeuoFontIndex);
-    } catch (_) {}
-  }
-
-  /// Enter the Neo-Skeuo skin. Remembers the current mode AND the
-  /// user's current font so [exitSkeuo] restores the exact prior look.
-  /// skeuo's `flair.font` is null and it has no `kThemeCuration` entry,
-  /// so entering never mutates VisualPrefs — everything returns intact.
-  static Future<void> enterSkeuo() async {
-    if (!kNeoSkeuoEnabled) return;
-    if (isSkeuo) return;
-    final prevMode = notifier.value;
-    final prevFont = VisualPrefs.notifier.value.font;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(_skeuoPrevModeKey, prevMode.index);
-      await prefs.setInt(_skeuoPrevFontKey, prevFont.index);
-    } catch (_) {}
-    await setMode(AppThemeMode.neoSkeuo);
-  }
-
-  /// Exit the Neo-Skeuo skin back to the remembered mode (+ font).
-  /// Falls back to the visible default (paperInk / Gungeon font) when
-  /// no memory exists or the remembered mode is no longer valid.
-  static Future<void> exitSkeuo() async {
-    if (!isSkeuo) return;
-    var prev = kVisibleThemes.first;
-    var prevFont = AppFont.gungeon;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final mIdx = prefs.getInt(_skeuoPrevModeKey);
-      if (mIdx != null && mIdx >= 0 && mIdx < AppThemeMode.values.length) {
-        final m = AppThemeMode.values[mIdx];
-        if (m != AppThemeMode.neoSkeuo && kVisibleThemes.contains(m)) {
-          prev = m;
-        }
-      }
-      final fIdx = prefs.getInt(_skeuoPrevFontKey);
-      if (fIdx != null && fIdx >= 0 && fIdx < AppFont.values.length) {
-        prevFont = AppFontLabel.migrate(AppFont.values[fIdx]);
-      }
-    } catch (_) {}
-    // setMode applies the restored theme's curated font first, then we
-    // put back the user's own pick (covers manual overrides).
-    await setMode(prev);
-    await VisualPrefs.setFont(prevFont);
-  }
-
   /// Shift every FontWeight in [base] by [bias] × 3 index steps.
   static TextTheme _applyWeightBias(TextTheme base, int bias) {
     if (bias == 0) return base;
@@ -430,9 +343,7 @@ class AppTheme {
     final prefs = VisualPrefs.notifier.value;
     final bias = prefs.fontWeightBias;
     final selectedFont =
-        m == AppThemeMode.neoSkeuo
-            ? skeuoFont
-            : m == AppThemeMode.custom && _cachedCustomTheme != null
+        m == AppThemeMode.custom && _cachedCustomTheme != null
             ? _cachedCustomTheme!.font
             : prefs.font;
 
@@ -451,7 +362,7 @@ class AppTheme {
             ? const Color(0xFF1E1E22) // dark text on light surface
             : const Color(0xFFF0F0F0); // off-white text on dark surface
     final onSurfaceVariant = onSurface.withValues(alpha: 0.7);
-    // Light surfaces (Neo-Skeuo's cream paper) need a light scheme so
+    // Light surfaces need a light scheme so
     // M3 chrome roles (nav bar, dialogs, sheets, switches) stay
     // coherent — a dark scheme would paint dark containers on paper.
     final scheme =

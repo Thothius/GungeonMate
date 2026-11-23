@@ -13,7 +13,7 @@ import '../../utils/fast_route.dart';
 import 'debug_tab.dart';
 import '../active_run/dice_roll.dart';
 import 'swipe_picker.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 part 'settings_sections.dart';
 part 'settings_widgets.dart';
 
@@ -47,11 +47,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
       context: context,
       builder:
           (c) => AlertDialog(
-            icon: Icon(
-              Icons.restart_alt,
-              color: Skeuo.inkIf(Colors.deepOrange),
-              size: 32,
-            ),
+            icon: Icon(Icons.restart_alt, color: Colors.deepOrange, size: 32),
             title: const GoopText('Reset All App Data?'),
             content: const GoopText(
               'This permanently erases ALL saved data:\n\n'
@@ -69,7 +65,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ),
               FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor: Skeuo.inkIf(Colors.deepOrange),
+                  backgroundColor: Colors.deepOrange,
                 ),
                 onPressed: () => Navigator.pop(c, true),
                 child: const GoopText('RESET EVERYTHING'),
@@ -210,20 +206,10 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
             flair: flair,
             child: _CompactActionTile(
               data: _TileData(
-                icon:
-                    AppTheme.isSkeuo
-                        ? Icons.lock_outline_rounded
-                        : Icons.palette_rounded,
-                label:
-                    AppTheme.isSkeuo
-                        ? 'Customization (locked in Neo-Skeuo)'
-                        : 'Customization',
-                color:
-                    AppTheme.isSkeuo
-                        ? Skeuo.inkIf(Colors.grey)
-                        : Skeuo.inkIf(Colors.pinkAccent),
+                icon: Icons.palette_rounded,
+                label: 'Customization',
+                color: Colors.pinkAccent,
                 onTap: () {
-                  if (AppTheme.isSkeuo) return;
                   Navigator.push(
                     context,
                     fastRoute(const ExperienceStudioScreen()),
@@ -276,7 +262,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   _TileData(
                     icon: Icons.grid_view_rounded,
                     label: 'Dev Tools',
-                    color: Skeuo.inkIf(Colors.amber),
+                    color: Colors.amber,
                     onTap: () {
                       if (p.runState.main.character != null) {
                         Haptics.selection();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../services/codex_prefs.dart';
 import '../../services/haptics.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Codex favorite toggle — bookmark icon (distinct from the loadout
 /// heart favourite on item/gun headers). Persists via [CodexPrefs] and
@@ -34,7 +33,7 @@ class CodexFavButton extends StatelessWidget {
             size: 22,
             color:
                 on
-                    ? Skeuo.inkIf(const Color(0xFFFF6E8A))
+                    ? const Color(0xFFFF6E8A)
                     : Theme.of(context).colorScheme.outline,
           ),
           constraints: const BoxConstraints(minWidth: 44, minHeight: 44),

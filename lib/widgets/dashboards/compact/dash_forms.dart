@@ -60,7 +60,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.purple).withValues(alpha: 0.35),
+              color: Colors.purple.withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -79,7 +79,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                     children: [
                       Icon(
                         Icons.chat_bubble,
-                        color: Skeuo.inkIf(Colors.purpleAccent),
+                        color: Colors.purpleAccent,
                         size: 18,
                       ),
                       const SizedBox(width: Insets.sm),
@@ -88,7 +88,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Skeuo.inkIf(Colors.purpleAccent),
+                          color: Colors.purpleAccent,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -99,14 +99,10 @@ class GuntherDashboardState extends State<GuntherDashboard>
                           vertical: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: Skeuo.inkIf(
-                            Colors.purple,
-                          ).withValues(alpha: 0.15),
+                          color: Colors.purple.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(
-                            color: Skeuo.inkIf(
-                              Colors.purple,
-                            ).withValues(alpha: 0.4),
+                            color: Colors.purple.withValues(alpha: 0.4),
                           ),
                         ),
                         child: GoopText(
@@ -114,7 +110,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
-                            color: Skeuo.inkIf(Colors.purpleAccent),
+                            color: Colors.purpleAccent,
                           ),
                         ),
                       ),
@@ -152,7 +148,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                     alpha: 0.08,
                                   ),
                                   valueColor: AlwaysStoppedAnimation(
-                                    Skeuo.inkIf(Colors.purpleAccent),
+                                    Colors.purpleAccent,
                                   ),
                                 ),
                               ),
@@ -170,9 +166,9 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                 style: TextStyle(
                                   fontSize: FontSizes.labelSmall,
                                   fontWeight: FontWeight.bold,
-                                  color: Skeuo.inkIf(
-                                    Colors.purpleAccent,
-                                  ).withValues(alpha: 0.8),
+                                  color: Colors.purpleAccent.withValues(
+                                    alpha: 0.8,
+                                  ),
                                 ),
                               ),
                             const SizedBox(height: 10),
@@ -213,7 +209,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                           : null,
                                   icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Skeuo.inkIf(Colors.purpleAccent),
+                                    color: Colors.purpleAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Decrease Gunther friendship',
@@ -237,7 +233,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                   },
                                   icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Skeuo.inkIf(Colors.purpleAccent),
+                                    color: Colors.purpleAccent,
                                     size: 30,
                                   ),
                                   tooltip: 'Increase Gunther friendship',
@@ -273,7 +269,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
           style: TextStyle(
             fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.bold,
-            color: Skeuo.inkIf(Colors.purpleAccent),
+            color: Colors.purpleAccent,
           ),
         ),
       ],

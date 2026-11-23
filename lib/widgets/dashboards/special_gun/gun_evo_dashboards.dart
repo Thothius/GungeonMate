@@ -67,12 +67,12 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
             color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.35),
+              color: Colors.purpleAccent.withValues(alpha: 0.35),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.04),
+                color: Colors.purpleAccent.withValues(alpha: 0.04),
                 blurRadius: 10,
                 spreadRadius: 1,
               ),
@@ -95,7 +95,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                         children: [
                           Icon(
                             Icons.bolt,
-                            color: Skeuo.inkIf(Colors.purpleAccent.shade100),
+                            color: Colors.purpleAccent.shade100,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
@@ -104,7 +104,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                             style: TextStyle(
                               fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
-                              color: Skeuo.inkIf(Colors.purpleAccent.shade100),
+                              color: Colors.purpleAccent.shade100,
                               letterSpacing: 0.8,
                             ),
                           ),
@@ -118,9 +118,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: Skeuo.inkIf(
-                                Colors.purple,
-                              ).withValues(alpha: 0.1),
+                              color: Colors.purple.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: GoopText(
@@ -128,9 +126,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.w900,
-                                color: Skeuo.inkIf(
-                                  Colors.purpleAccent.shade100,
-                                ),
+                                color: Colors.purpleAccent.shade100,
                               ),
                             ),
                           ),
@@ -168,9 +164,9 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                       color: Colors.black26,
                                       borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(
-                                        color: Skeuo.inkIf(
-                                          Colors.purpleAccent,
-                                        ).withValues(alpha: 0.15),
+                                        color: Colors.purpleAccent.withValues(
+                                          alpha: 0.15,
+                                        ),
                                       ),
                                     ),
                                     padding: const EdgeInsets.all(6),
@@ -206,9 +202,8 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                           statsDesc,
                                           style: TextStyle(
                                             fontSize: FontSizes.labelSmall,
-                                            color: Skeuo.inkIf(
-                                              Colors.purpleAccent.shade100,
-                                            ).withValues(alpha: 0.8),
+                                            color: Colors.purpleAccent.shade100
+                                                .withValues(alpha: 0.8),
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -381,42 +376,42 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
         name: 'Amoeba',
         dps: '13.5 DPS',
         bullet: 'Base round shots',
-        color: Skeuo.inkIf(Colors.tealAccent),
+        color: Colors.tealAccent,
       ),
       _EvolverStageSpec(
         id: 2,
         name: 'Sponge',
         dps: '19.1 DPS',
         bullet: 'Soaks up shots',
-        color: Skeuo.inkIf(Colors.greenAccent),
+        color: Colors.greenAccent,
       ),
       _EvolverStageSpec(
         id: 3,
         name: 'Flatworm',
         dps: '25.8 DPS',
         bullet: 'Wide flattened shots',
-        color: Skeuo.inkIf(Colors.limeAccent),
+        color: Colors.limeAccent,
       ),
       _EvolverStageSpec(
         id: 4,
         name: 'Snail',
         dps: '34.5 DPS',
         bullet: '3-spiked shell spread',
-        color: Skeuo.inkIf(Colors.amberAccent),
+        color: Colors.amberAccent,
       ),
       _EvolverStageSpec(
         id: 5,
         name: 'Frog',
         dps: '23.0 DPS/sec',
         bullet: 'Tracking tongue',
-        color: Skeuo.inkIf(Colors.orangeAccent),
+        color: Colors.orangeAccent,
       ),
       _EvolverStageSpec(
         id: 6,
         name: 'Dragon',
         dps: '93.8 DPS',
         bullet: 'Accelerating homing blue flames',
-        color: Skeuo.inkIf(Colors.redAccent),
+        color: Colors.redAccent,
       ),
     ];
 
@@ -430,12 +425,12 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
             color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.35),
+              color: Colors.greenAccent.withValues(alpha: 0.35),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.04),
+                color: Colors.greenAccent.withValues(alpha: 0.04),
                 blurRadius: 10,
                 spreadRadius: 1,
               ),
@@ -458,7 +453,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                         children: [
                           Icon(
                             Icons.bubble_chart,
-                            color: Skeuo.inkIf(Colors.greenAccent.shade100),
+                            color: Colors.greenAccent.shade100,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
@@ -467,7 +462,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                             style: TextStyle(
                               fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
-                              color: Skeuo.inkIf(Colors.greenAccent.shade100),
+                              color: Colors.greenAccent.shade100,
                               letterSpacing: 0.8,
                             ),
                           ),
@@ -481,9 +476,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: Skeuo.inkIf(
-                                Colors.green,
-                              ).withValues(alpha: 0.1),
+                              color: Colors.green.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: GoopText(

@@ -131,15 +131,6 @@ flutter:
     - family: EnterTheGungeonBig
       fonts:
         - asset: assets/fonts/EnterTheGungeonBig.ttf
-    - family: ShantellSans
-      fonts:
-        - asset: assets/fonts/ShantellSans.ttf
-    - family: ArchitectsDaughter
-      fonts:
-        - asset: assets/fonts/ArchitectsDaughter.ttf
-    - family: PatrickHand
-      fonts:
-        - asset: assets/fonts/PatrickHand.ttf
     - family: GoogleFonts.Anton
       fonts:
         - asset: assets/fonts/GoogleFonts.Anton.ttf

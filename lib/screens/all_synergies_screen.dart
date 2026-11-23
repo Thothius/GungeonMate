@@ -6,7 +6,6 @@ import '../services/app_theme.dart';
 import '../providers/run_provider.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/game_icon.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 class AllSynergiesScreen extends StatelessWidget {
   const AllSynergiesScreen({super.key});
@@ -65,17 +64,9 @@ class AllSynergiesScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               child: Row(
                 children: [
-                  _summaryChip(
-                    'ACTIVE',
-                    active.length,
-                    Skeuo.inkIf(Colors.greenAccent),
-                  ),
+                  _summaryChip('ACTIVE', active.length, Colors.greenAccent),
                   const SizedBox(width: 8),
-                  _summaryChip(
-                    'PARTIAL',
-                    partial.length,
-                    Skeuo.inkIf(Colors.amberAccent),
-                  ),
+                  _summaryChip('PARTIAL', partial.length, Colors.amberAccent),
                   const SizedBox(width: 8),
                   _summaryChip('LOCKED', locked.length, Colors.white38),
                 ],
@@ -99,13 +90,13 @@ class AllSynergiesScreen extends StatelessWidget {
                             slivers: [
                               _columnHeader(
                                 'ACQUIRED',
-                                Skeuo.inkIf(Colors.greenAccent),
+                                Colors.greenAccent,
                                 active.length + partial.length,
                               ),
                               if (active.isNotEmpty) ...[
                                 _subHeader(
                                   'Active',
-                                  Skeuo.inkIf(Colors.greenAccent),
+                                  Colors.greenAccent,
                                   active.length,
                                 ),
                                 _SynergyGrid(
@@ -118,7 +109,7 @@ class AllSynergiesScreen extends StatelessWidget {
                               if (partial.isNotEmpty) ...[
                                 _subHeader(
                                   'Partial',
-                                  Skeuo.inkIf(Colors.amberAccent),
+                                  Colors.amberAccent,
                                   partial.length,
                                 ),
                                 _SynergyGrid(
@@ -167,15 +158,11 @@ class AllSynergiesScreen extends StatelessWidget {
                     slivers: [
                       _columnHeader(
                         'ACQUIRED',
-                        Skeuo.inkIf(Colors.greenAccent),
+                        Colors.greenAccent,
                         active.length + partial.length,
                       ),
                       if (active.isNotEmpty) ...[
-                        _subHeader(
-                          'Active',
-                          Skeuo.inkIf(Colors.greenAccent),
-                          active.length,
-                        ),
+                        _subHeader('Active', Colors.greenAccent, active.length),
                         _SynergyGrid(
                           list: active,
                           owned: owned,
@@ -186,7 +173,7 @@ class AllSynergiesScreen extends StatelessWidget {
                       if (partial.isNotEmpty) ...[
                         _subHeader(
                           'Partial',
-                          Skeuo.inkIf(Colors.amberAccent),
+                          Colors.amberAccent,
                           partial.length,
                         ),
                         _SynergyGrid(
@@ -363,8 +350,8 @@ class _SynergyCard extends StatelessWidget {
             s.anyOf.any((i) => owned.contains(i.toLowerCase())));
     final cardColor =
         isActive
-            ? Skeuo.inkIf(Colors.greenAccent)
-            : (hasAny ? Skeuo.inkIf(Colors.amberAccent) : Colors.white38);
+            ? Colors.greenAccent
+            : (hasAny ? Colors.amberAccent : Colors.white38);
 
     // Compact row: synergy icon + name + required pieces share the top
     // line; the effect desc sits on the line below (per user request —
@@ -456,14 +443,12 @@ class _MiniChip extends StatelessWidget {
     final bg =
         owned
             ? (isAnyOf
-                ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.2)
-                : Skeuo.inkIf(Colors.green).withValues(alpha: 0.15))
+                ? Colors.amber.withValues(alpha: 0.2)
+                : Colors.green.withValues(alpha: 0.15))
             : Colors.white.withValues(alpha: 0.08);
     final fg =
         owned
-            ? (isAnyOf
-                ? Skeuo.inkIf(Colors.amber.shade100)
-                : Skeuo.inkIf(Colors.greenAccent.shade200))
+            ? (isAnyOf ? Colors.amber.shade100 : Colors.greenAccent.shade200)
             : Colors.white54;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),

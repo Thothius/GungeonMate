@@ -6,7 +6,6 @@ import '../../models/player.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 class JunkanDashboardSliver extends StatefulWidget {
   final PlayerSlot slot;
@@ -121,15 +120,13 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
             border: Border.all(
               color:
                   hasGoldJunk
-                      ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.4)
-                      : Skeuo.inkIf(Colors.teal).withValues(alpha: 0.35),
+                      ? Colors.amber.withValues(alpha: 0.4)
+                      : Colors.teal.withValues(alpha: 0.35),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: (hasGoldJunk
-                        ? Skeuo.inkIf(Colors.amber)
-                        : Skeuo.inkIf(Colors.tealAccent))
+                color: (hasGoldJunk ? Colors.amber : Colors.tealAccent)
                     .withValues(alpha: 0.04),
                 blurRadius: 10,
                 spreadRadius: 1,
@@ -157,8 +154,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                 : Icons.star_rounded,
                             color:
                                 hasGoldJunk
-                                    ? Skeuo.inkIf(Colors.amberAccent)
-                                    : Skeuo.inkIf(Colors.tealAccent),
+                                    ? Colors.amberAccent
+                                    : Colors.tealAccent,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
@@ -171,8 +168,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                               fontWeight: FontWeight.w900,
                               color:
                                   hasGoldJunk
-                                      ? Skeuo.inkIf(Colors.amberAccent)
-                                      : Skeuo.inkIf(Colors.tealAccent),
+                                      ? Colors.amberAccent
+                                      : Colors.tealAccent,
                               letterSpacing: 0.8,
                             ),
                           ),
@@ -188,12 +185,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                             decoration: BoxDecoration(
                               color:
                                   hasGoldJunk
-                                      ? Skeuo.inkIf(
-                                        Colors.amber,
-                                      ).withValues(alpha: 0.12)
-                                      : Skeuo.inkIf(
-                                        Colors.teal,
-                                      ).withValues(alpha: 0.1),
+                                      ? Colors.amber.withValues(alpha: 0.12)
+                                      : Colors.teal.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: GoopText(
@@ -203,8 +196,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                 fontWeight: FontWeight.w900,
                                 color:
                                     hasGoldJunk
-                                        ? Skeuo.inkIf(Colors.amberAccent)
-                                        : Skeuo.inkIf(Colors.tealAccent),
+                                        ? Colors.amberAccent
+                                        : Colors.tealAccent,
                               ),
                             ),
                           ),
@@ -244,12 +237,12 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                       border: Border.all(
                                         color:
                                             hasGoldJunk
-                                                ? Skeuo.inkIf(
-                                                  Colors.amber,
-                                                ).withValues(alpha: 0.2)
-                                                : Skeuo.inkIf(
-                                                  Colors.teal,
-                                                ).withValues(alpha: 0.15),
+                                                ? Colors.amber.withValues(
+                                                  alpha: 0.2,
+                                                )
+                                                : Colors.teal.withValues(
+                                                  alpha: 0.15,
+                                                ),
                                       ),
                                     ),
                                     padding: const EdgeInsets.all(6),
@@ -287,12 +280,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                             fontSize: FontSizes.labelSmall,
                                             color:
                                                 hasGoldJunk
-                                                    ? Skeuo.inkIf(
-                                                      Colors.amberAccent,
-                                                    ).withValues(alpha: 0.8)
-                                                    : Skeuo.inkIf(
-                                                      Colors.tealAccent,
-                                                    ).withValues(alpha: 0.8),
+                                                    ? Colors.amberAccent
+                                                        .withValues(alpha: 0.8)
+                                                    : Colors.tealAccent
+                                                        .withValues(alpha: 0.8),
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -462,11 +453,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                   decoration: BoxDecoration(
                                                     color:
                                                         hasGoldJunk
-                                                            ? Skeuo.inkIf(
-                                                              Colors.amber,
-                                                            ).withValues(
-                                                              alpha: 0.12,
-                                                            )
+                                                            ? Colors.amber
+                                                                .withValues(
+                                                                  alpha: 0.12,
+                                                                )
                                                             : Colors.white
                                                                 .withValues(
                                                                   alpha: 0.02,
@@ -478,11 +468,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                     border: Border.all(
                                                       color:
                                                           hasGoldJunk
-                                                              ? Skeuo.inkIf(
-                                                                Colors.amber,
-                                                              ).withValues(
-                                                                alpha: 0.4,
-                                                              )
+                                                              ? Colors.amber
+                                                                  .withValues(
+                                                                    alpha: 0.4,
+                                                                  )
                                                               : Colors.white
                                                                   .withValues(
                                                                     alpha: 0.04,

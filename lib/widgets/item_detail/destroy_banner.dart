@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 import '../../theme/tokens.dart';
 
 class DestroyBanner extends StatelessWidget {
@@ -13,10 +13,10 @@ class DestroyBanner extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
       child: Card(
         elevation: 0,
-        color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.06),
+        color: Colors.red.withValues(alpha: 0.06),
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.5),
+            color: Colors.redAccent.withValues(alpha: 0.5),
             width: 1,
           ),
           borderRadius: BorderRadius.circular(14),
@@ -30,7 +30,7 @@ class DestroyBanner extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.local_fire_department,
-                    color: Skeuo.inkIf(Colors.redAccent),
+                    color: Colors.redAccent,
                     size: 18,
                   ),
                   const SizedBox(width: 6),
@@ -40,7 +40,7 @@ class DestroyBanner extends StatelessWidget {
                       fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
-                      color: Skeuo.inkIf(Colors.redAccent),
+                      color: Colors.redAccent,
                     ),
                   ),
                 ],
@@ -70,7 +70,7 @@ class DestroyBanner extends StatelessWidget {
                     ),
                   ),
                   style: FilledButton.styleFrom(
-                    backgroundColor: Skeuo.inkIf(Colors.redAccent),
+                    backgroundColor: Colors.redAccent,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/player.dart';
 import '../providers/run_provider.dart';
-import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/mp_session.dart';
 import '../theme/tokens.dart';
 import '../widgets/mp_reconnect_banner.dart';
-import '../widgets/skeuo/skeuo_nav.dart';
+
 import '../widgets/mp_request_listener.dart';
 import '../widgets/state_widgets.dart';
 import 'main_menu_screen.dart';
@@ -141,46 +140,27 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: IndexedStack(index: _selectedIndex, children: screens),
-            bottomNavigationBar:
-                AppTheme.isSkeuo
-                    ? SkeuoNavBar(
-                      index: _selectedIndex,
-                      onSelect: _onNavSelect,
-                      items: const [
-                        SkeuoNavItem(
-                          Icons.inventory_2_outlined,
-                          Icons.inventory_2,
-                          'Inventory',
-                        ),
-                        SkeuoNavItem(Icons.search, Icons.search, 'Browse'),
-                        SkeuoNavItem(
-                          Icons.menu_book_outlined,
-                          Icons.menu_book,
-                          'Ammonomicon',
-                        ),
-                      ],
-                    )
-                    : NavigationBar(
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: _onNavSelect,
-                      destinations: const [
-                        NavigationDestination(
-                          icon: Icon(Icons.inventory_2_outlined),
-                          selectedIcon: Icon(Icons.inventory_2),
-                          label: 'Inventory',
-                        ),
-                        NavigationDestination(
-                          icon: Icon(Icons.search),
-                          selectedIcon: Icon(Icons.search),
-                          label: 'Browse',
-                        ),
-                        NavigationDestination(
-                          icon: Icon(Icons.menu_book_outlined),
-                          selectedIcon: Icon(Icons.menu_book),
-                          label: 'Ammonomicon',
-                        ),
-                      ],
-                    ),
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: _onNavSelect,
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.inventory_2_outlined),
+                  selectedIcon: Icon(Icons.inventory_2),
+                  label: 'Inventory',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.search),
+                  selectedIcon: Icon(Icons.search),
+                  label: 'Browse',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.menu_book_outlined),
+                  selectedIcon: Icon(Icons.menu_book),
+                  label: 'Ammonomicon',
+                ),
+              ],
+            ),
           ),
         ),
       ),

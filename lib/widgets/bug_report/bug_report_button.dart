@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/bug_report.dart';
 import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 import 'bug_report_sheet.dart';
 
 /// Bug-report affordance — a bug icon that opens [BugReportSheet] with
@@ -25,8 +25,7 @@ class BugReportButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skeuo = AppTheme.isSkeuo;
-    final color = skeuo ? Skeuo.accent : AppTheme.flair.primary;
+    final color = AppTheme.flair.primary;
     return IconButton(
       icon: Icon(Icons.bug_report_outlined, size: size, color: color),
       tooltip: 'Report a bug',

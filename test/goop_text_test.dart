@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/services/goop_talk_engine.dart';
-import 'package:gungeon_mate/widgets/skeuo/skeuo_tokens.dart';
 
 /// GoopText — plain-Text passthrough that applies the global font
-/// weight bias + letter-spacing prefs and collapses light colors to
-/// ink under Neo-Skeuo.
+/// weight bias + letter-spacing prefs.
 void main() {
   setUp(() {
     VisualPrefs.notifier.value = const VisualPrefs();
@@ -75,17 +73,5 @@ void main() {
   testWidgets('GoopAnimationManager progress is pinned at 1.0', (tester) async {
     // The scramble mechanic was removed — the manager must stay inert.
     expect(GoopAnimationManager.instance.progress.value, 1.0);
-  });
-
-  testWidgets('Neo-Skeuo collapses light text colors to ink', (tester) async {
-    if (!AppTheme.kNeoSkeuoEnabled) return;
-    final prev = AppTheme.notifier.value;
-    AppTheme.notifier.value = AppThemeMode.neoSkeuo;
-    addTearDown(() => AppTheme.notifier.value = prev);
-
-    await tester.pumpWidget(
-      wrap(const GoopText('Ghost', style: TextStyle(color: Colors.white))),
-    );
-    expect(rendered(tester).style?.color, Skeuo.ink);
   });
 }

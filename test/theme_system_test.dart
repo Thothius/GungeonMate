@@ -537,8 +537,9 @@ void main() {
       expect(AppFontLabel.isOffered(AppFont.orbitron), isFalse);
       expect(AppFontLabel.isOffered(AppFont.montserrat), isFalse);
       expect(AppFontLabel.isOffered(AppFont.fjallaOne), isTrue);
-      // Neo-Skeuo trio stays valid but skin-locked.
-      expect(AppFontLabel.isOffered(AppFont.patrickHand), isTrue);
+      // Hand-lettered trio stays bundled but unoffered — persisted
+      // picks migrate to a live font.
+      expect(AppFontLabel.isOffered(AppFont.patrickHand), isFalse);
       expect(AppFontLabel.curated, isNot(contains(AppFont.patrickHand)));
     });
 
@@ -551,11 +552,11 @@ void main() {
       // Live fonts pass through untouched.
       expect(AppFontLabel.migrate(AppFont.bungee), AppFont.bungee);
       expect(AppFontLabel.migrate(AppFont.gungeon), AppFont.gungeon);
-      expect(AppFontLabel.migrate(AppFont.patrickHand), AppFont.patrickHand);
+      expect(AppFontLabel.migrate(AppFont.patrickHand), AppFont.fjallaOne);
     });
 
     test('every offered font resolves a bundled family that exists', () {
-      for (final f in [...AppFontLabel.curated, ...AppFontLabel.skeuoOnly]) {
+      for (final f in AppFontLabel.curated) {
         final fam = f.bundledFontFamily;
         expect(fam, isNotEmpty);
         expect(fam, isNot(contains(' ')), reason: '$f family "$fam"');

@@ -11,7 +11,7 @@ import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
 import '../game_icon.dart';
 import '../stat_delta_chips.dart';
-import '../skeuo/skeuo_tokens.dart';
+
 import 'entity_synergies_view.dart';
 import 'leb_view_scope.dart';
 
@@ -476,7 +476,7 @@ class _LebHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Skeuo.inkIf(const Color(0xFFB388FF));
+    final accent = const Color(0xFFB388FF);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -575,7 +575,7 @@ void _showLebExplainer(BuildContext context) {
                     fontSize: FontSizes.labelSmall,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.4,
-                    color: Skeuo.inkIf(const Color(0xFFB388FF)),
+                    color: const Color(0xFFB388FF),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -728,7 +728,7 @@ class _GhostSynergyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final synergy = this.synergy;
-    final accent = Skeuo.inkIf(const Color(0xFFB388FF));
+    final accent = const Color(0xFFB388FF);
     final extraReq = synergyMayHaveExtraRequirement(synergy);
     final still = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     final p = context.read<RunProvider>();
@@ -827,7 +827,7 @@ class _GhostSynergyRow extends StatelessWidget {
                               fontSize: FontSizes.chipMicro,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.6,
-                              color: Skeuo.inkIf(Colors.amberAccent),
+                              color: Colors.amberAccent,
                             ),
                           ),
                         ),
@@ -876,7 +876,7 @@ class _LebPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Skeuo.inkIf(const Color(0xFFB388FF));
+    final color = const Color(0xFFB388FF);
     return Container(
       padding: ChipStyle.paddingMicro,
       decoration: BoxDecoration(

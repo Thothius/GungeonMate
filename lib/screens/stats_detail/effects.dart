@@ -28,21 +28,21 @@ class _CoolnessEffectsState extends State<_CoolnessEffects> {
         const _SectionTitle('Live effects at current coolness'),
         _EffectRow(
           icon: Icons.flash_on,
-          color: Skeuo.inkIf(Colors.lightBlueAccent),
+          color: Colors.lightBlueAccent,
           label: 'Active item cooldown reduction',
           value: '${rechargeReduction.toStringAsFixed(1)}%',
           subtitle: '5% per point (max 50%)',
         ),
         _EffectRow(
           icon: Icons.shield,
-          color: Skeuo.inkIf(Colors.lightBlueAccent),
+          color: Colors.lightBlueAccent,
           label: 'Chest fuse chance reduction',
           value: '${fuseReduction.toStringAsFixed(1)}%',
           subtitle: '2.5% per point (max 10%)',
         ),
         _EffectRow(
           icon: Icons.auto_awesome,
-          color: Skeuo.inkIf(Colors.amber),
+          color: Colors.amber,
           label: 'Base room-clear reward chance',
           value: '${baseRoomReward.toStringAsFixed(1)}%',
           subtitle: '(1 + coolness - curse)%',
@@ -122,42 +122,42 @@ class _CurseEffectsState extends State<_CurseEffects> {
         const _SectionTitle('Live effects at current curse'),
         _EffectRow(
           icon: Icons.local_fire_department,
-          color: Skeuo.inkIf(Colors.deepOrangeAccent),
+          color: Colors.deepOrangeAccent,
           label: 'Jammed enemy chance',
           value: row.jammedEnemy,
           subtitle: curse >= 10 ? 'Capped at 10+ curse' : 'Scales per point',
         ),
         _EffectRow(
           icon: Icons.emoji_events_outlined,
-          color: Skeuo.inkIf(Colors.deepOrangeAccent),
+          color: Colors.deepOrangeAccent,
           label: 'Jammed boss chance',
           value: row.jammedBoss,
           subtitle: 'Starts at curse 7',
         ),
         _EffectRow(
           icon: Icons.pest_control,
-          color: Skeuo.inkIf(Colors.redAccent),
+          color: Colors.redAccent,
           label: 'Mimic chest chance',
           value: row.mimicChance,
           subtitle: '+2.1% per curse point',
         ),
         _EffectRow(
           icon: Icons.whatshot,
-          color: Skeuo.inkIf(Colors.redAccent),
+          color: Colors.redAccent,
           label: 'Chest fuse chance',
           value: row.fuseChance,
           subtitle: '+5% per curse point',
         ),
         _EffectRow(
           icon: Icons.redeem,
-          color: Skeuo.inkIf(Colors.amber),
+          color: Colors.amber,
           label: 'Base room-clear reward chance',
           value: '${roomReward.toStringAsFixed(1)}%',
           subtitle: '(1 + coolness - curse)%',
         ),
         _EffectRow(
           icon: Icons.dataset,
-          color: Skeuo.inkIf(Colors.lightGreenAccent),
+          color: Colors.lightGreenAccent,
           label: 'Ammo drop multiplier',
           value: row.ammo,
           subtitle: 'Ammo drops increase with curse',
@@ -167,27 +167,20 @@ class _CurseEffectsState extends State<_CurseEffects> {
             margin: const EdgeInsets.symmetric(vertical: 10),
             padding: const EdgeInsets.all(Insets.md),
             decoration: BoxDecoration(
-              color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.15),
+              color: Colors.red.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Skeuo.inkIf(Colors.redAccent),
-                width: 1.5,
-              ),
+              border: Border.all(color: Colors.redAccent, width: 1.5),
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.warning_rounded,
-                  color: Skeuo.inkIf(Colors.redAccent),
-                  size: 28,
-                ),
+                Icon(Icons.warning_rounded, color: Colors.redAccent, size: 28),
                 SizedBox(width: 10),
                 Expanded(
                   child: GoopText(
                     'Lord of the Jammed has spawned. Run.',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Skeuo.inkIf(Colors.redAccent),
+                      color: Colors.redAccent,
                     ),
                   ),
                 ),
@@ -320,7 +313,7 @@ class _CurseTable extends StatelessWidget {
                 color:
                     i == highlightIdx
                         ? WidgetStatePropertyAll(
-                          Skeuo.inkIf(Colors.amber).withValues(alpha: 0.18),
+                          Colors.amber.withValues(alpha: 0.18),
                         )
                         : null,
                 cells: [
@@ -332,10 +325,7 @@ class _CurseTable extends StatelessWidget {
                             i == highlightIdx
                                 ? FontWeight.bold
                                 : FontWeight.normal,
-                        color:
-                            i == highlightIdx
-                                ? Skeuo.inkIf(Colors.amber)
-                                : null,
+                        color: i == highlightIdx ? Colors.amber : null,
                       ),
                     ),
                   ),

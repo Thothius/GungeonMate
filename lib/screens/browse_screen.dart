@@ -17,7 +17,6 @@ import '../widgets/browse/any_entry.dart';
 import '../widgets/browse/browse_pills.dart';
 import '../widgets/browse/browse_row.dart';
 import '../widgets/state_widgets.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 class BrowseScreen extends StatefulWidget {
   /// When provided, the ADD button and the snackbar route adds into the
@@ -817,7 +816,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 Icon(
                   Icons.check_circle_rounded,
                   size: 13,
-                  color: Skeuo.inkIf(Colors.greenAccent),
+                  color: Colors.greenAccent,
                 ),
                 const SizedBox(width: 6),
                 GoopText(
@@ -826,9 +825,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     fontSize: FontSizes.labelSmall,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.4,
-                    color: Skeuo.inkIf(
-                      Colors.greenAccent,
-                    ).withValues(alpha: 0.9),
+                    color: Colors.greenAccent.withValues(alpha: 0.9),
                   ),
                 ),
               ],
@@ -842,12 +839,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.05),
+                color: Colors.greenAccent.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: Skeuo.inkIf(
-                    Colors.greenAccent,
-                  ).withValues(alpha: 0.15),
+                  color: Colors.greenAccent.withValues(alpha: 0.15),
                 ),
               ),
               child: Row(
@@ -855,9 +850,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   Icon(
                     Icons.auto_awesome,
                     size: 11,
-                    color: Skeuo.inkIf(
-                      Colors.greenAccent,
-                    ).withValues(alpha: 0.5),
+                    color: Colors.greenAccent.withValues(alpha: 0.5),
                   ),
                   const SizedBox(width: 6),
                   Expanded(
@@ -876,14 +869,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: Skeuo.inkIf(
-                        Colors.greenAccent,
-                      ).withValues(alpha: 0.12),
+                      color: Colors.greenAccent.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
-                        color: Skeuo.inkIf(
-                          Colors.greenAccent,
-                        ).withValues(alpha: 0.4),
+                        color: Colors.greenAccent.withValues(alpha: 0.4),
                       ),
                     ),
                     child: GoopText(
@@ -891,7 +880,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w800,
-                        color: Skeuo.inkIf(Colors.greenAccent),
+                        color: Colors.greenAccent,
                       ),
                     ),
                   ),
@@ -955,9 +944,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     syn.owners,
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
-                      color: Skeuo.inkIf(
-                        Colors.greenAccent,
-                      ).withValues(alpha: 0.8),
+                      color: Colors.greenAccent.withValues(alpha: 0.8),
                     ),
                   ),
               ],
@@ -1022,21 +1009,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Skeuo.inkIf(
-                    Colors.greenAccent,
-                  ).withValues(alpha: 0.15),
+                  color: Colors.greenAccent.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Skeuo.inkIf(
-                      Colors.greenAccent,
-                    ).withValues(alpha: 0.6),
+                    color: Colors.greenAccent.withValues(alpha: 0.6),
                   ),
                 ),
-                child: Icon(
-                  Icons.add,
-                  size: 18,
-                  color: Skeuo.inkIf(Colors.greenAccent),
-                ),
+                child: Icon(Icons.add, size: 18, color: Colors.greenAccent),
               ),
             ),
         ],
@@ -1057,13 +1036,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
       decoration: BoxDecoration(
         color:
             owned
-                ? Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.18)
+                ? Colors.greenAccent.withValues(alpha: 0.18)
                 : Colors.transparent,
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color:
               owned
-                  ? Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.8)
+                  ? Colors.greenAccent.withValues(alpha: 0.8)
                   : Colors.white.withValues(alpha: 0.25),
           width: owned ? 1.6 : 1,
         ),
@@ -1239,8 +1218,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       : '${it.name} added'),
             ),
             duration: Duration(seconds: isRobot && isHpUp ? 3 : 1),
-            backgroundColor:
-                isRobot && isHpUp ? Skeuo.inkIf(Colors.blue.shade900) : null,
+            backgroundColor: isRobot && isHpUp ? Colors.blue.shade900 : null,
           ),
         );
       },

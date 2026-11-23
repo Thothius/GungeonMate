@@ -11,7 +11,7 @@ import '../utils/asset_paths.dart';
 import '../utils/reduce_motion.dart';
 import 'active_run/run_effects_block.dart';
 import '../utils/responsive.dart';
-import 'skeuo/skeuo_tokens.dart';
+
 part 'gungeoneer_header/header_builders.dart';
 part 'gungeoneer_header/effect_chips.dart';
 
@@ -339,12 +339,12 @@ class _RobotDmgBadge extends StatelessWidget {
         color: AppTheme.flair.scaffold,
         borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
         border: Border.all(
-          color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.4),
+          color: Colors.cyanAccent.withValues(alpha: 0.4),
           width: 0.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.1),
+            color: Colors.cyanAccent.withValues(alpha: 0.1),
             blurRadius: 4,
             spreadRadius: 0,
           ),
@@ -359,7 +359,7 @@ class _RobotDmgBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
-              color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.6),
+              color: Colors.cyanAccent.withValues(alpha: 0.6),
               letterSpacing: 1.0,
               fontFamily: 'monospace',
               height: 1.0,
@@ -372,13 +372,13 @@ class _RobotDmgBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: 13 * Responsive.factor(context),
               fontWeight: FontWeight.w900,
-              color: Skeuo.inkIf(Colors.cyanAccent),
+              color: Colors.cyanAccent,
               letterSpacing: 0.5,
               fontFamily: 'monospace',
               height: 1.0,
               shadows: [
                 Shadow(
-                  color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.5),
+                  color: Colors.cyanAccent.withValues(alpha: 0.5),
                   blurRadius: 4,
                 ),
               ],
