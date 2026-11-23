@@ -127,6 +127,33 @@ void main() {
     expect(find.text('COOL'), findsOneWidget);
   });
 
+  testWidgets('full capsule row fits a 320px viewport', (t) async {
+    t.view.physicalSize = const Size(320, 640);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+    await t.pumpWidget(
+      wrapProviders(
+        header(
+          pins: const [
+            DashCapsule.steal,
+            DashCapsule.useShrine,
+            DashCapsule.dps,
+          ],
+          onEdit: () {},
+          topGunDps: 181.8,
+        ),
+      ),
+    );
+    await t.pump();
+    expect(t.takeException(), isNull);
+    expect(find.text('COOL'), findsOneWidget);
+    expect(find.text('CURSE'), findsOneWidget);
+    expect(find.text('ADD'), findsOneWidget);
+    expect(find.text('STEAL'), findsOneWidget);
+    expect(find.text('SHRINE'), findsOneWidget);
+    expect(find.text('DPS'), findsOneWidget);
+  });
+
   // ── Picker sheet ───────────────────────────────────────────────
 
   testWidgets('picker shows ACTIONS/INFO groups and toggles pins', (t) async {
@@ -157,9 +184,9 @@ void main() {
     expect(find.text('ACTIONS'), findsOneWidget);
     expect(find.text('INFO'), findsOneWidget);
     expect(find.text('STEAL'), findsOneWidget);
-    expect(find.text('SHRINE'), findsOneWidget);
-    expect(find.text('SYN'), findsOneWidget);
-    expect(find.text('DPS'), findsOneWidget);
+    expect(find.text('USE SHRINE'), findsOneWidget);
+    expect(find.text('SYNERGIES'), findsOneWidget);
+    expect(find.text('DAMAGE BREAKDOWN'), findsOneWidget);
     expect(find.text('1/3 pinned'), findsOneWidget);
 
     // Tapping STEAL pins it (1 existing + 1 = 2 ≤ 3).
@@ -167,10 +194,9 @@ void main() {
     await t.pump();
     expect(result, [DashCapsule.syn, DashCapsule.steal]);
 
-    // Tapping already-pinned SYN unpins it — note: parent owns state,
-    // so the sheet still shows the original `pinned` list; the toggle
-    // result is what matters.
-    await t.tap(find.text('SYN'));
+    // Tapping SYNERGIES unpins it — the sheet keeps local state, so
+    // the earlier STEAL pin is preserved in the result.
+    await t.tap(find.text('SYNERGIES'));
     await t.pump();
     expect(result, [DashCapsule.steal]);
   });

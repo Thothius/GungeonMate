@@ -108,6 +108,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                               color: StatColors.cool,
                               value: _signedStat(widget.coolness),
                               label: 'COOL',
+                              tooltip: 'Coolness — tap to adjust',
                               onTap: widget.onTapCoolness,
                               onLongPress: widget.onLongPressCoolness,
                               isCool: true,
@@ -119,6 +120,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                               color: StatColors.curse,
                               value: _signedStat(widget.curse),
                               label: 'CURSE',
+                              tooltip: 'Curse — tap to adjust',
                               onTap: widget.onTapCurse,
                               onLongPress: widget.onLongPressCurse,
                               isCurse: true,
@@ -140,6 +142,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                                 value: '',
                                 label: 'ADD',
                                 icon: Icons.add,
+                                tooltip: 'Customize dash capsules',
                                 onTap: widget.onDashCapsulesEdit,
                               ),
                             ),
@@ -342,6 +345,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
       value: value,
       label: spec.label,
       icon: cap.isAction ? cap.icon : null,
+      tooltip: spec.blurb,
       onTap: () => widget.onDashCapsuleTap?.call(cap),
       isActive: isActive,
     );
@@ -352,6 +356,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
     required String value,
     required String label,
     IconData? icon,
+    String? tooltip,
     VoidCallback? onTap,
     VoidCallback? onLongPress,
     bool isActive = true,
@@ -495,18 +500,20 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
       ),
     );
 
+    final Widget result;
     if (onTap == null && onLongPress == null) {
-      return capsule;
+      result = capsule;
+    } else {
+      result = Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          onLongPress: onLongPress,
+          child: capsule,
+        ),
+      );
     }
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: onTap,
-        onLongPress: onLongPress,
-        child: capsule,
-      ),
-    );
+    return tooltip == null ? result : Tooltip(message: tooltip, child: result);
   }
 }

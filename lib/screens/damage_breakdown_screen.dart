@@ -38,6 +38,16 @@ class DamageBreakdownScreen extends StatelessWidget {
       );
     }
 
+    // Robot's junk-fueled damage boost — same formula the header badge
+    // uses, surfaced here so the overview accounts for it too.
+    final isRobot =
+        player.character?.name.toLowerCase().contains('robot') ?? false;
+    final robotBoost =
+        isRobot
+            ? (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 +
+                (p.robotGoldJunk ? 500.0 : 0.0)
+            : 0.0;
+
     // Guns sorted by live DPS, descending — top gun first.
     final guns = List<Gun>.of(player.guns)
       ..sort((a, b) => p.gunDps(b).compareTo(p.gunDps(a)));
@@ -82,7 +92,12 @@ class DamageBreakdownScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  _summary('TOP GUN', fmt(topDps), const Color(0xFF69F0AE), sf),
+                  _summary(
+                    'TOP GUN',
+                    topDps > 0 ? fmt(topDps) : '—',
+                    const Color(0xFF69F0AE),
+                    sf,
+                  ),
                   _vDivider(),
                   _summary('ARMORY DPS', fmt(totalDps), Colors.white70, sf),
                   _vDivider(),
@@ -90,6 +105,45 @@ class DamageBreakdownScreen extends StatelessWidget {
                 ],
               ),
             ),
+            if (robotBoost > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.cyanAccent.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.cyanAccent.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.smart_toy_outlined,
+                        size: 15,
+                        color: Colors.cyanAccent,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: GoopText(
+                          'ROBOT DMG BOOST  +${robotBoost.toStringAsFixed(0)}%',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.cyanAccent,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             const SizedBox(height: 14),
 
             // ── Armory ─────────────────────────────────────────────
@@ -256,11 +310,13 @@ class DamageBreakdownScreen extends StatelessWidget {
                   ],
                 ),
                 GoopText(
+                  // fire_rate/damage/range fields carry compound wiki
+                  // strings ("0.1 (pistol) 0.8 (shotgun)") — only the
+                  // clean categorical fields go in the subtitle.
                   [
                     if (g.type.isNotEmpty) g.type,
                     if (g.quality.isNotEmpty) g.quality,
-                    if (g.damage.isNotEmpty) 'DMG ${g.damage}',
-                    if (g.fireRate.isNotEmpty) '${g.fireRate}/s',
+                    if (g.gunClass.isNotEmpty) g.gunClass,
                   ].join('  ·  '),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -357,6 +413,8 @@ class DamageBreakdownScreen extends StatelessWidget {
                             ),
                         ],
                       ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 10, height: 1.3),
                     ),
                   ),

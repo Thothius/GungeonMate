@@ -41,6 +41,14 @@ extension DashCapsuleSpec on DashCapsule {
     DashCapsule.dps => const Color(0xFF69F0AE),
   };
 
+  /// Full name shown on the picker row — the capsule itself stays short.
+  String get pickerTitle => switch (this) {
+    DashCapsule.steal => 'STEAL',
+    DashCapsule.useShrine => 'USE SHRINE',
+    DashCapsule.syn => 'SYNERGIES',
+    DashCapsule.dps => 'DAMAGE BREAKDOWN',
+  };
+
   String get blurb => switch (this) {
     DashCapsule.steal => 'Log a shop steal (+1 curse)',
     DashCapsule.useShrine => 'Pick and use a shrine',
@@ -118,7 +126,9 @@ Future<void> showDashCapsulePicker({
             } else {
               if (current.length >= kMaxDashCapsules) {
                 ScaffoldMessenger.of(stContext).showSnackBar(
-                  const SnackBar(content: Text('Max 3 capsules')),
+                  const SnackBar(
+                    content: GoopText('Max 3 capsules'),
+                  ),
                 );
                 return;
               }
@@ -168,7 +178,7 @@ Future<void> showDashCapsulePicker({
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GoopText(
-                            c.label,
+                            c.pickerTitle,
                             style: TextStyle(
                               fontSize:
                                   FontSizes.bodyMedium *

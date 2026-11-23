@@ -36,9 +36,6 @@ class GungeoneerHeader extends StatefulWidget {
   /// the inline cool/curse stepper (slide-out-from-panel UX).
   final Widget? footer;
 
-  /// When false, hides the synergies chip (used for the co-op player page).
-  final bool showSynergies;
-
   /// Dungeon-wide coolness & curse totals. Shown as tappable bubbles in
   /// the name row. Each is dimmed when zero, lit when non-zero.
   final double coolness;
@@ -51,9 +48,6 @@ class GungeoneerHeader extends StatefulWidget {
   /// jumping to the full stats screen.
   final VoidCallback? onLongPressCoolness;
   final VoidCallback? onLongPressCurse;
-
-  /// Tapped to open a compact grid of all possible synergies.
-  final VoidCallback? onTapSynergies;
 
   /// Number of partial (potential) synergies — shown after a `|` in the
   /// synergy pill so users can see what's possible to complete.
@@ -94,14 +88,12 @@ class GungeoneerHeader extends StatefulWidget {
     this.onEndRun,
     this.trailing,
     this.footer,
-    this.showSynergies = true,
     this.coolness = 0,
     this.curse = 0,
     this.onTapCoolness,
     this.onTapCurse,
     this.onLongPressCoolness,
     this.onLongPressCurse,
-    this.onTapSynergies,
     this.partialSynergies = 0,
     this.effectChips = const <EffectChip>[],
     this.shrinesUsed = const <String>[],

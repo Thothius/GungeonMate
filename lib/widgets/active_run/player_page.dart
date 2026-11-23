@@ -99,15 +99,20 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   void _onDashCapsuleTap(DashCapsule cap, RunProvider p) {
-    Haptics.selection();
     switch (cap) {
       case DashCapsule.steal:
+        // Consequential mutation — matches the Cool/Curse sheet's
+        // medium haptic for STEAL rather than a light selection tick.
         p.logSteal();
+        Haptics.medium();
       case DashCapsule.useShrine:
+        Haptics.selection();
         Navigator.push(context, fastRoute(const ShrinePickerScreen()));
       case DashCapsule.syn:
+        Haptics.selection();
         Navigator.push(context, fastRoute(const AllSynergiesScreen()));
       case DashCapsule.dps:
+        Haptics.selection();
         Navigator.push(
           context,
           fastRoute(DamageBreakdownScreen(slot: _slot)),
@@ -235,7 +240,6 @@ class PlayerPageState extends State<PlayerPage> {
                           itemCount: player.items.length,
                           activeSynergies: activeSynergies,
                           partialSynergies: partialSynergies,
-                          showSynergies: isMain,
                           coolness: state.totalCoolness,
                           curse: state.totalCurse,
                           robotDamageBoost: robotDmgBoost,
@@ -262,11 +266,6 @@ class PlayerPageState extends State<PlayerPage> {
                               () => Navigator.push(
                                 context,
                                 fastRoute(const CoolCurseScreen()),
-                              ),
-                          onTapSynergies:
-                              () => Navigator.push(
-                                context,
-                                fastRoute(const AllSynergiesScreen()),
                               ),
                           trailing: const HeaderMenu(),
                           effectChips: EffectTagger.summaryChips(
