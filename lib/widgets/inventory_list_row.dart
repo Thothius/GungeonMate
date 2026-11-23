@@ -8,6 +8,7 @@ import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/reduce_motion.dart';
 
 /// Compact one-per-row representation of a gun or item for the
 /// inventory *list* view mode. Pairs a pixel-art portrait with the
@@ -44,50 +45,7 @@ class InventoryListRow extends StatefulWidget {
   State<InventoryListRow> createState() => _InventoryListRowState();
 }
 
-class _InventoryListRowState extends State<InventoryListRow>
-    with SingleTickerProviderStateMixin {
-  AnimationController? _glow;
-
-  int get _effectIndex => _name.hashCode.abs() % 10;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.synergyGlowColor != null) {
-      final idx = _effectIndex;
-      _glow = AnimationController(
-        vsync: this,
-        duration: synergyEffectDuration(idx),
-      )..repeat(reverse: synergyEffectReverse(idx));
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant InventoryListRow oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final wants = widget.synergyGlowColor != null;
-    final nameChanged =
-        oldWidget.gun?.name != widget.gun?.name ||
-        oldWidget.item?.name != widget.item?.name;
-    if (wants && (_glow == null || nameChanged)) {
-      _glow?.dispose();
-      final idx = _effectIndex;
-      _glow = AnimationController(
-        vsync: this,
-        duration: synergyEffectDuration(idx),
-      )..repeat(reverse: synergyEffectReverse(idx));
-    } else if (!wants && _glow != null) {
-      _glow!.dispose();
-      _glow = null;
-    }
-  }
-
-  @override
-  void dispose() {
-    _glow?.dispose();
-    super.dispose();
-  }
-
+class _InventoryListRowState extends State<InventoryListRow> {
   bool get _isGun => widget.gun != null;
 
   String get _name => _isGun ? widget.gun!.name : widget.item!.name;
@@ -156,7 +114,6 @@ class _InventoryListRowState extends State<InventoryListRow>
     final tag = _typeTag;
     final els = _elements;
     final gc = widget.synergyGlowColor;
-    final glowCtrl = _glow;
 
     Widget row = Material(
       color: Colors.transparent,
@@ -262,7 +219,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                     ],
                   ],
                 );
-                if (widget.isTopDps) {
+                if (widget.isTopDps && !ReduceMotion.of(context)) {
                   return dpsRow
                       .animate(
                         onPlay:
@@ -293,8 +250,8 @@ class _InventoryListRowState extends State<InventoryListRow>
     final qColor = isS ? const Color(0xFFFFD700) : rawQColor;
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
-    // Wrap in animated synergy glow overlay when active.
-    if (gc == null || glowCtrl == null) {
+    // Synergy-active rows get the uniform badge marker.
+    if (gc == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: Insets.xs),
         child: DecoratedBox(

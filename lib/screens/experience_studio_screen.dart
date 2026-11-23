@@ -4740,6 +4740,20 @@ class _PullHandleState extends State<_PullHandle>
   // the drag affordance without a manual, then falls back to the bob.
   AnimationController? _demo;
   bool _demoing = false;
+  bool _still = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = MediaQuery.disableAnimationsOf(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat(reverse: true);
+    }
+  }
 
   @override
   void initState() {

@@ -8,6 +8,7 @@ import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../utils/reduce_motion.dart';
 
 import '../bug_report/bug_report_sheet.dart';
 import '../../models/bug_report.dart';
@@ -154,18 +155,18 @@ class DiceRollDialogState extends State<DiceRollDialog>
                                 color: Colors.white38,
                                 size: 20,
                               ),
-                          onPressed: () {
-                            // Any mid-flow close notifies the peer so
-                            // their dialog resolves instead of hanging.
-                            if (_status == DiceStatus.challenging ||
-                                _status == DiceStatus.rollingScreen ||
-                                _status == DiceStatus.rolling) {
-                              _mp.sendDiceCancel();
-                            }
-                            Navigator.pop(context);
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
+                              onPressed: () {
+                                // Any mid-flow close notifies the peer so
+                                // their dialog resolves instead of hanging.
+                                if (_status == DiceStatus.challenging ||
+                                    _status == DiceStatus.rollingScreen ||
+                                    _status == DiceStatus.rolling) {
+                                  _mp.sendDiceCancel();
+                                }
+                                Navigator.pop(context);
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
                             ),
                           ],
                         ),

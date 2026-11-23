@@ -6,6 +6,8 @@ part of '../dice_roll.dart';
 mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
   late final AnimationController _infiniteController;
 
+  bool _still = false;
+
   late final MpSession _mp;
 
   DiceStatus _status = DiceStatus.idle;
@@ -125,6 +127,21 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
     _mp.addListener(_onSessionChanged);
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    for (final c in [_infiniteController, _particleController]) {
+      if (still) {
+        c.stop();
+      } else if (!c.isAnimating) {
+        c.repeat();
+      }
+    }
+  }
+
   void _onSessionChanged() {
     if (!mounted) return;
     // If the peer disconnects during a challenge or while waiting for
@@ -177,6 +194,9 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
   }
 
   void _spawnSparkles(double x, double y, Color color) {
+    // Reduced-motion: no particle bursts — the stopped
+    // _particleController would leave them frozen mid-air.
+    if (ReduceMotion.of(context)) return;
     final rand = math.Random();
     for (int i = 0; i < 12; i++) {
       final angle = rand.nextDouble() * 2 * math.pi;

@@ -8,6 +8,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../services/mp_session.dart';
 import '../../theme/tokens.dart';
+import '../../utils/reduce_motion.dart';
 import '../../utils/responsive.dart';
 import 'emote_sprite_catalog.dart';
 import 'surprise_presets.dart';
@@ -202,6 +203,7 @@ class _SurpriseFxState extends State<_SurpriseFx>
     vsync: this,
     duration: const Duration(milliseconds: 3200),
   )..repeat();
+  bool _still = false;
   final _rng = math.Random();
   late final List<Offset> _seeds = List.generate(
     24,
@@ -219,6 +221,19 @@ class _SurpriseFxState extends State<_SurpriseFx>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _ctrl.stop();
+    } else if (!_ctrl.isAnimating) {
+      _ctrl.repeat();
+    }
+  }
+
+  @override
   void dispose() {
     _ctrl.dispose();
     super.dispose();
@@ -226,6 +241,9 @@ class _SurpriseFxState extends State<_SurpriseFx>
 
   @override
   Widget build(BuildContext context) {
+    // Reduced-motion: the celebration fx is purely decorative — show
+    // the surprise content without the overlay effects.
+    if (ReduceMotion.of(context)) return widget.child;
     return AnimatedBuilder(
       animation: _ctrl,
       builder:

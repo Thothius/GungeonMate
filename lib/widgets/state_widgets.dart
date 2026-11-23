@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/tokens.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/reduce_motion.dart';
 
 /// A shimmer-style skeleton placeholder for loading content.
 ///
@@ -40,6 +41,7 @@ class SkeletonLoader extends StatefulWidget {
 class _SkeletonLoaderState extends State<SkeletonLoader>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
+  bool _still = false;
 
   @override
   void initState() {
@@ -48,6 +50,19 @@ class _SkeletonLoaderState extends State<SkeletonLoader>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat(reverse: true);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat(reverse: true);
+    }
   }
 
   @override

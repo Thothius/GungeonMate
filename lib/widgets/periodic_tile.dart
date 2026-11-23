@@ -12,7 +12,7 @@ import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
-import 'synergy_glow.dart' hide SynergyGlowOverlay;
+import 'synergy_glow.dart';
 import '../utils/reduce_motion.dart';
 import '../utils/responsive.dart';
 

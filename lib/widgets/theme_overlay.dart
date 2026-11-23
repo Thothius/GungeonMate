@@ -460,7 +460,9 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     ),
 
                   // 4. Special Top-Edge Drip Overlay (Curseblaster / Oubliette themes)
-                  if (!menuVisible && mode == AppThemeMode.lordJammed)
+                  if (!reduceMotion &&
+                      !menuVisible &&
+                      mode == AppThemeMode.lordJammed)
                     const Positioned(
                       top: 0,
                       left: 0,

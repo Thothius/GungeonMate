@@ -47,6 +47,7 @@ class QualityBadge extends StatefulWidget {
 class _QualityBadgeState extends State<QualityBadge>
     with SingleTickerProviderStateMixin {
   AnimationController? _glow;
+  bool _still = false;
 
   @override
   void initState() {
@@ -60,6 +61,21 @@ class _QualityBadgeState extends State<QualityBadge>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    final g = _glow;
+    if (g == null) return;
+    if (still) {
+      g.stop();
+    } else if (!g.isAnimating) {
+      g.repeat(reverse: true);
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant QualityBadge old) {
     super.didUpdateWidget(old);
     final wantsGlow = QualityBadge._isS(widget.quality);
@@ -67,7 +83,8 @@ class _QualityBadgeState extends State<QualityBadge>
       _glow = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 1800),
-      )..repeat(reverse: true);
+      );
+      if (!_still) _glow!.repeat(reverse: true);
     } else if (!wantsGlow && _glow != null) {
       _glow!.dispose();
       _glow = null;

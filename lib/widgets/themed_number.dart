@@ -158,6 +158,7 @@ class _ShimmerOverlay extends StatefulWidget {
 class _ShimmerOverlayState extends State<_ShimmerOverlay>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
+  bool _still = false;
 
   @override
   void initState() {
@@ -168,6 +169,19 @@ class _ShimmerOverlayState extends State<_ShimmerOverlay>
       // last ~25%. Tuned so the eye registers it as a rare glimmer.
       duration: const Duration(seconds: 8),
     )..repeat();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
   }
 
   @override
@@ -240,6 +254,7 @@ class _SparkleOverlay extends StatefulWidget {
 class _SparkleOverlayState extends State<_SparkleOverlay>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
+  bool _still = false;
 
   @override
   void initState() {
@@ -248,6 +263,19 @@ class _SparkleOverlayState extends State<_SparkleOverlay>
       vsync: this,
       duration: const Duration(milliseconds: 2200),
     )..repeat();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
   }
 
   @override
@@ -329,6 +357,7 @@ class ThemedBullet extends StatefulWidget {
 class _ThemedBulletState extends State<ThemedBullet>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
+  bool _still = false;
 
   @override
   void initState() {
@@ -337,6 +366,19 @@ class _ThemedBulletState extends State<ThemedBullet>
       vsync: this,
       duration: const Duration(milliseconds: 2600),
     )..repeat(reverse: true);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat(reverse: true);
+    }
   }
 
   @override

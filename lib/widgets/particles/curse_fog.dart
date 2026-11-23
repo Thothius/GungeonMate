@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
+import '../../utils/reduce_motion.dart';
+
 class CurseFog extends StatefulWidget {
   const CurseFog({super.key});
   @override
@@ -10,12 +12,26 @@ class CurseFog extends StatefulWidget {
 class _CurseFogState extends State<CurseFog>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
+  bool _still = false;
 
   @override
   void initState() {
     super.initState();
     _c = AnimationController(vsync: this, duration: const Duration(seconds: 15))
       ..repeat();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
   }
 
   @override

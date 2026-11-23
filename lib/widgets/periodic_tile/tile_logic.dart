@@ -411,7 +411,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
         ),
       ),
     );
-    if (widget.isTopDps) {
+    if (widget.isTopDps && !ReduceMotion.of(context)) {
       return badge
           .animate(onPlay: (controller) => controller.repeat(reverse: true))
           .scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)

@@ -110,6 +110,7 @@ class _AuraLayer extends StatefulWidget {
 class _AuraLayerState extends State<_AuraLayer>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
+  bool _still = false;
 
   @override
   void initState() {
@@ -121,13 +122,30 @@ class _AuraLayerState extends State<_AuraLayer>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    if (still) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant _AuraLayer old) {
     super.didUpdateWidget(old);
     if (old.speedScale != widget.speedScale) {
       _c.duration = Duration(milliseconds: (4000 * widget.speedScale).round());
-      _c
-        ..reset()
-        ..repeat();
+      if (_still) {
+        _c.reset();
+      } else {
+        _c
+          ..reset()
+          ..repeat();
+      }
     }
   }
 

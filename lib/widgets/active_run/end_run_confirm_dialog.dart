@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../utils/reduce_motion.dart';
 import '../particles/curse_fog.dart';
 
 /// Gungeon-styled "End Run" confirmation — fullscreen takeover
@@ -51,6 +52,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
     with TickerProviderStateMixin {
   late final AnimationController _floatCtrl;
   late final AnimationController _glowCtrl;
+  bool _still = false;
 
   static const _lordAsset = 'assets/images/end_run/Lord_of_the_Jammed.webp';
   // Fallback: the existing enemy sprite (already in pubspec).
@@ -67,6 +69,21 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
       vsync: this,
       duration: const Duration(milliseconds: 2200),
     )..repeat(reverse: true);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final still = ReduceMotion.of(context);
+    if (still == _still) return;
+    _still = still;
+    for (final c in [_floatCtrl, _glowCtrl]) {
+      if (still) {
+        c.stop();
+      } else if (!c.isAnimating) {
+        c.repeat(reverse: true);
+      }
+    }
   }
 
   @override
