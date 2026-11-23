@@ -154,24 +154,57 @@ class _AmmonomiconCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
-              child: GoopText(
-                entry.name,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: FontSizes.labelSmall,
-                  fontWeight: FontWeight.w700,
-                  color: onSurface.withValues(alpha: 0.85),
-                  height: 1.1,
-                ),
+              padding: const EdgeInsets.fromLTRB(3, 0, 3, 2),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GoopText(
+                    entry.name,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: FontSizes.labelSmall,
+                      fontWeight: FontWeight.w700,
+                      color: onSurface.withValues(alpha: 0.85),
+                      height: 1.1,
+                    ),
+                  ),
+                  if (_metaLine(entry).isNotEmpty)
+                    GoopText(
+                      _metaLine(entry),
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 8.5,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.3,
+                        color: flair.primary.withValues(alpha: 0.65),
+                      ),
+                    ),
+                ],
               ),
             ),
+            const SizedBox(height: 2),
           ],
         ),
       ),
     ).animate().fadeIn(duration: 200.ms, delay: 50.ms);
+  }
+
+  /// Compact meta line under the card name — HP for enemies/bosses,
+  /// floor/secret-hub for chapters, location for anything that has
+  /// one. Empty string → no line rendered (layout stays identical).
+  static String _metaLine(AmmonomiconEntry e) {
+    final parts = <String>[
+      if (e.health != null && e.health!.isNotEmpty) 'HP ${e.health}',
+      if (e.floor != null) 'F${e.floor}',
+      if (e.floor == null && e.category == 'Chapter')
+        e.secret ? 'SECRET' : 'HUB',
+      if (e.location != null && e.location!.isNotEmpty) e.location!,
+    ];
+    return parts.take(2).join(' · ');
   }
 
   IconData _iconForCategory(String category) {
