@@ -124,6 +124,10 @@ class RunProvider
 
   bool _isLoading = true;
   String? _error;
+  // Names of secondary data assets that failed to load or parse — the app
+  // degrades gracefully (empty collections) but never silently: each entry
+  // is debugPrint'd and exposed here for diagnostics/tests.
+  final List<String> _assetLoadFailures = [];
 
   RunState get runState => _runState;
   List<Gun> get allGuns => _allGuns;
@@ -168,6 +172,18 @@ class RunProvider
   BackRefs get backRefs => _backRefs;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  List<String> get assetLoadFailures => List.unmodifiable(_assetLoadFailures);
+
+  void _recordAssetFailure(String asset, Object err) {
+    _assetLoadFailures.add(asset);
+    debugPrint('GungeonMate: failed to load $asset — $err');
+  }
+
+  Future<String> _loadOptionalAsset(String path) =>
+      rootBundle.loadString(path).catchError((Object err) {
+        _recordAssetFailure(path, err);
+        return '';
+      });
 
   bool get hasCoop => _runState.coop != null;
 
@@ -233,22 +249,15 @@ class RunProvider
 
       // Load all JSON files in parallel — much faster than sequential
       // awaits on slow storage / first asset bundle read.
+      _assetLoadFailures.clear();
       final jsonResults = await Future.wait([
         rootBundle.loadString('assets/data/guns.json'),
         rootBundle.loadString('assets/data/items.json'),
-        rootBundle
-            .loadString('assets/data/synergies.json')
-            .catchError((_) => ''),
-        rootBundle.loadString('assets/data/shrines.json').catchError((_) => ''),
-        rootBundle
-            .loadString('assets/data/gungeoneers.json')
-            .catchError((_) => ''),
-        rootBundle
-            .loadString('assets/data/back_refs.json')
-            .catchError((_) => ''),
-        rootBundle
-            .loadString('assets/data/synergy_meta.json')
-            .catchError((_) => ''),
+        _loadOptionalAsset('assets/data/synergies.json'),
+        _loadOptionalAsset('assets/data/shrines.json'),
+        _loadOptionalAsset('assets/data/gungeoneers.json'),
+        _loadOptionalAsset('assets/data/back_refs.json'),
+        _loadOptionalAsset('assets/data/synergy_meta.json'),
       ]);
 
       // Parse the core data in parallel isolates.
@@ -261,7 +270,8 @@ class RunProvider
       if (jsonResults[2].isNotEmpty) {
         try {
           _allSynergies = await compute(_parseSynergies, jsonResults[2]);
-        } catch (_) {
+        } catch (e) {
+          _recordAssetFailure('assets/data/synergies.json (parse)', e);
           _allSynergies = [];
         }
       } else {
@@ -271,7 +281,8 @@ class RunProvider
       if (jsonResults[3].isNotEmpty) {
         try {
           _allShrines = await compute(_parseShrines, jsonResults[3]);
-        } catch (_) {
+        } catch (e) {
+          _recordAssetFailure('assets/data/shrines.json (parse)', e);
           _allShrines = [];
         }
       } else {
@@ -281,7 +292,8 @@ class RunProvider
       if (jsonResults[4].isNotEmpty) {
         try {
           _allGungeoneers = await compute(_parseGungeoneers, jsonResults[4]);
-        } catch (_) {
+        } catch (e) {
+          _recordAssetFailure('assets/data/gungeoneers.json (parse)', e);
           _allGungeoneers = [];
         }
       } else {
@@ -292,7 +304,8 @@ class RunProvider
       if (jsonResults[5].isNotEmpty) {
         try {
           _backRefs = BackRefs.fromJsonString(jsonResults[5]);
-        } catch (_) {
+        } catch (e) {
+          _recordAssetFailure('assets/data/back_refs.json (parse)', e);
           _backRefs = BackRefs.empty;
         }
       } else {
@@ -304,7 +317,8 @@ class RunProvider
           _parseSynergyMeta,
           jsonResults[6],
         );
-      } catch (_) {
+      } catch (e) {
+        _recordAssetFailure('assets/data/synergy_meta.json (parse)', e);
         _synergyMetaByLowerName = const {};
       }
 
