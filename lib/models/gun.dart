@@ -25,6 +25,11 @@ class Gun {
   final String gunClass;
   final String sellPrice;
   final String chestColor;
+
+  /// Robot-run relevance tier ('god' | 'armor' | 'dead') — explicit
+  /// data field; empty means unclassified. Browse badges prefer this
+  /// over name-substring matching.
+  final String robotTier;
   final double curse;
   final double coolness;
 
@@ -54,6 +59,7 @@ class Gun {
     this.gunClass = '',
     this.sellPrice = '',
     this.chestColor = '',
+    this.robotTier = '',
     this.curse = 0.0,
     this.coolness = 0.0,
     this.wiki = WikiContent.empty,
@@ -160,6 +166,7 @@ class Gun {
       gunClass: json['class'] ?? '',
       sellPrice: json['sell_price']?.toString() ?? '',
       chestColor: json['chest_color'] ?? '',
+      robotTier: json['robot_tier'] ?? '',
       curse: (json['curse'] ?? 0).toDouble(),
       coolness: (json['coolness'] ?? 0).toDouble(),
       wiki: WikiContent.fromJson(json['wiki'] as Map<String, dynamic>?),

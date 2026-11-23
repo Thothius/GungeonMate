@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,54 @@ void main() {
       if (!names.add(i.name.toLowerCase())) dupes.add('item:${i.name}');
     }
     expect(dupes, isEmpty, reason: 'duplicate names: $dupes');
+  });
+
+  // B3: gun/item `id` fields are provenance metadata (the models don't
+  // parse them yet) — pin uniqueness so a future consumer (MP refs,
+  // wiki deep-links, robot_tier joins) can't inherit a silent collision
+  // like the historical id-50 Colt 1851 / SAA clash.
+  test('gun and item ids are unique where present', () {
+    final offenders = <String>[];
+    for (final file in ['guns', 'items']) {
+      final raw =
+          (jsonDecode(
+                    File('assets/data/$file.json').readAsStringSync(),
+                  )
+                  as List)
+              .cast<Map<String, dynamic>>();
+      final seen = <dynamic, String>{};
+      for (final e in raw) {
+        final id = e['id'];
+        if (id == null) continue;
+        final prev = seen[id];
+        if (prev != null) {
+          offenders.add('$file id=$id: "$prev" vs "${e['name']}"');
+        } else {
+          seen[id] = e['name'] as String;
+        }
+      }
+    }
+    expect(offenders, isEmpty, reason: 'duplicate ids:\n${offenders.join('\n')}');
+  });
+
+  test('robot_tier values are from the known set', () {
+    const valid = {'god', 'armor', 'dead'};
+    final bad = <String>[];
+    for (final file in ['guns', 'items']) {
+      final raw =
+          (jsonDecode(
+                    File('assets/data/$file.json').readAsStringSync(),
+                  )
+                  as List)
+              .cast<Map<String, dynamic>>();
+      for (final e in raw) {
+        final t = e['robot_tier'];
+        if (t != null && !valid.contains(t)) {
+          bad.add('$file: "${e['name']}" → "$t"');
+        }
+      }
+    }
+    expect(bad, isEmpty, reason: 'invalid robot_tier values:\n${bad.join('\n')}');
   });
 
   test('every synergy piece resolves to a real gun or item', () {

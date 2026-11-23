@@ -7,7 +7,10 @@ import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/models/item.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/screens/active_run_screen.dart';
+import 'package:gungeon_mate/services/mp/mp_transport.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
+
+import '../helpers/fake_mp_link.dart';
 import 'package:gungeon_mate/widgets/game_icon.dart';
 
 /// Widget tests for the quick-add bottom sheet (`_showQuickAddBottomSheet`
@@ -16,6 +19,24 @@ import 'package:gungeon_mate/widgets/game_icon.dart';
 /// Catalog data loads once in setUpAll (real async zone) because
 /// RunProvider.loadData() uses compute() isolates whose futures never
 /// resolve inside testWidgets' FakeAsync zone.
+/// Spy session — records peer-add calls while delegating to the real
+/// facade (the injected FakeMpLink is disconnected, so the underlying
+/// send early-returns; we only need to prove the UI routed there).
+class _SpyMpSession extends MpSession {
+  _SpyMpSession(RunProvider rp, MpTransport link) : super.withLink(rp, link);
+
+  final List<String> peerAdds = [];
+
+  @override
+  Future<void> sendAddToPeer({
+    required String kind,
+    required String name,
+  }) {
+    peerAdds.add('$kind:$name');
+    return super.sendAddToPeer(kind: kind, name: name);
+  }
+}
+
 void main() {
   late RunProvider p;
 
@@ -316,4 +337,48 @@ void main() {
     );
     expect(t.takeException(), isNull);
   });
+
+  // ── MP peer-add seam (Session B) ────────────────────────────────
+
+  testWidgets(
+    'adding on the peer page routes to sendAddToPeer, not local inventory',
+    (t) async {
+      final spy = _SpyMpSession(p, FakeMpLink());
+      spy.enableDemo();
+      await t.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: p),
+            ChangeNotifierProvider<MpSession>.value(value: spy),
+          ],
+          child: const MaterialApp(home: ActiveRunScreen()),
+        ),
+      );
+      await t.pump();
+      await t.pump(const Duration(seconds: 1));
+
+      // Flip to the peer's page so the FAB targets the coop slot —
+      // mySlot (main) != widget.slot (coop) → peer-add path.
+      await t.fling(find.byType(PageView), const Offset(-400, 0), 800);
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 400));
+
+      final item = unownedItem();
+      await openSheet(t);
+      await search(t, item.name);
+      await t.tap(sheetRowText(item.name));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+
+      expect(spy.peerAdds, ['item:${item.name}']);
+      // Peer path must NOT touch the local loadout.
+      expect(
+        p.runState.coop?.items.any((i) => i.name == item.name) ?? false,
+        isFalse,
+      );
+      expect(t.takeException(), isNull);
+      spy.dispose();
+    },
+  );
 }
+

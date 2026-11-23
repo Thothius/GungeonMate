@@ -1128,6 +1128,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
       ),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
+      robotTier: g.robotTier,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
@@ -1186,6 +1187,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
       ),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
+      robotTier: it.robotTier,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(

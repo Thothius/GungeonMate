@@ -5,12 +5,11 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 
-/// Robot-run relevance keywords for browse badges (U-032).
+/// Robot-run relevance for browse badges (U-032).
 ///
-/// Single source of truth — previously three inline `contains` lists.
-/// Matching is lowercase substring on the display name; a data pass
-/// adding an explicit `robot_tier` field to items.json/guns.json would
-/// retire this entirely.
+/// Explicit `robot_tier` data ('god' | 'armor' | 'dead') wins; the
+/// lowercase substring lists remain as fallback for entries not yet
+/// tagged in JSON.
 abstract final class _RobotTier {
   static const god = [
     'armor synthesizer',
@@ -34,6 +33,21 @@ abstract final class _RobotTier {
     'blasphemy',
   ];
 
+  /// Resolve the tier for [name]: explicit [explicitTier] first
+  /// ('god'/'armor'/'dead'), else name-substring fallback.
+  static String resolve(String nameLower, String explicitTier) {
+    switch (explicitTier) {
+      case 'god':
+      case 'armor':
+      case 'dead':
+        return explicitTier;
+    }
+    if (any(nameLower, god)) return 'god';
+    if (any(nameLower, convertsToArmor)) return 'armor';
+    if (any(nameLower, deadWeight)) return 'dead';
+    return '';
+  }
+
   static bool any(String nameLower, List<String> keywords) =>
       keywords.any(nameLower.contains);
 }
@@ -46,6 +60,10 @@ class BrowseRow extends StatelessWidget {
   final Widget meta;
   final bool inRun;
   final bool isRobot;
+
+  /// Explicit `robot_tier` from the entity ('god'/'armor'/'dead').
+  /// Empty → name-substring fallback.
+  final String robotTier;
   final VoidCallback onTap;
   final VoidCallback onAdd;
 
@@ -58,6 +76,7 @@ class BrowseRow extends StatelessWidget {
     required this.meta,
     required this.inRun,
     required this.isRobot,
+    this.robotTier = '',
     required this.onTap,
     required this.onAdd,
   });
@@ -73,23 +92,19 @@ class BrowseRow extends StatelessWidget {
     Color? robotTagColor;
 
     if (isRobot) {
-      final nameLower = name.toLowerCase();
-
-      if (_RobotTier.any(nameLower, _RobotTier.god)) {
-        borderSide = const BorderSide(color: Colors.greenAccent, width: 1.5);
-        robotTag = 'GOD TIER ⚡';
-        robotTagColor = Colors.greenAccent;
-      } else if (_RobotTier.any(
-        nameLower,
-        _RobotTier.convertsToArmor,
-      )) {
-        borderSide = const BorderSide(color: Colors.blueAccent, width: 1.5);
-        robotTag = 'CONVERTS TO ARMOR 🛡️';
-        robotTagColor = Colors.blueAccent;
-      } else if (_RobotTier.any(nameLower, _RobotTier.deadWeight)) {
-        borderSide = const BorderSide(color: Colors.redAccent, width: 1.5);
-        robotTag = 'DEAD WEIGHT ⚠️';
-        robotTagColor = Colors.redAccent;
+      switch (_RobotTier.resolve(name.toLowerCase(), robotTier)) {
+        case 'god':
+          borderSide = const BorderSide(color: Colors.greenAccent, width: 1.5);
+          robotTag = 'GOD TIER ⚡';
+          robotTagColor = Colors.greenAccent;
+        case 'armor':
+          borderSide = const BorderSide(color: Colors.blueAccent, width: 1.5);
+          robotTag = 'CONVERTS TO ARMOR 🛡️';
+          robotTagColor = Colors.blueAccent;
+        case 'dead':
+          borderSide = const BorderSide(color: Colors.redAccent, width: 1.5);
+          robotTag = 'DEAD WEIGHT ⚠️';
+          robotTagColor = Colors.redAccent;
       }
     }
 

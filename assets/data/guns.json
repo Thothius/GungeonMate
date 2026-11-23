@@ -3996,6 +3996,7 @@
   },
   {
     "name": "Blasphemy",
+    "robot_tier": "dead",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/22/Blasphemy.png/revision/latest?cb=20160310050332",
     "notes": "Starting weapon of The Bullet. Swings destroy nearby bullets. At full health, swings send out a piercing sword projectile. Does not crack secret walls.",
     "quote": "To The Point",

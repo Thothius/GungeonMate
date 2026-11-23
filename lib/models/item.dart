@@ -23,6 +23,11 @@ class Item {
   final double curse;
   final double coolness;
 
+  /// Robot-run relevance tier ('god' | 'armor' | 'dead') — explicit
+  /// data field; empty means unclassified. Browse badges prefer this
+  /// over name-substring matching.
+  final String robotTier;
+
   /// Rich wiki sections (Effects/Interactions/Notes/Tips/Trivia) sourced
   /// from `parse_wiki_rich.py`. May be [WikiContent.empty] for the small
   /// number of items whose wiki page wasn't in cache.
@@ -42,6 +47,7 @@ class Item {
     this.duration = '',
     this.curse = 0.0,
     this.coolness = 0.0,
+    this.robotTier = '',
     this.wiki = WikiContent.empty,
   });
 
@@ -62,6 +68,7 @@ class Item {
       duration: json['duration'] ?? '',
       curse: (json['curse'] ?? 0).toDouble(),
       coolness: (json['coolness'] ?? 0).toDouble(),
+      robotTier: json['robot_tier'] ?? '',
       wiki: WikiContent.fromJson(json['wiki'] as Map<String, dynamic>?),
     );
   }

@@ -2193,6 +2193,7 @@
   },
   {
     "name": "Armor Synthesizer",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d3/Armor_Synthesizer.png",
     "type": "Passive",
     "quote": "Play Well, Get Armor",
@@ -24486,6 +24487,7 @@
   },
   {
     "name": "Gunknight Armor",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b1/Gunknight_Armor.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
@@ -24616,6 +24618,7 @@
   },
   {
     "name": "Gunknight Gauntlet",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/52/Gunknight_Gauntlet.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
@@ -24718,6 +24721,7 @@
   },
   {
     "name": "Gunknight Greaves",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/16/Gunknight_Greaves.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
@@ -24878,6 +24882,7 @@
   },
   {
     "name": "Gunknight Helmet",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d5/Gunknight_Helmet.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
@@ -25039,6 +25044,7 @@
   },
   {
     "name": "Heart Bottle",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/99/Heart_Bottle.png",
     "type": "Passive",
     "quote": "Liquid Life",
@@ -25156,6 +25162,7 @@
   },
   {
     "name": "Heart Holster",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/db/Heart_Holster.png",
     "type": "Passive",
     "quote": "On Your Sleeve",
@@ -25341,6 +25348,7 @@
   },
   {
     "name": "Heart Locket",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/61/Heart_Locket.png",
     "type": "Passive",
     "quote": "Memento Mori",
@@ -26057,6 +26065,7 @@
   },
   {
     "name": "Heart Purse",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ed/Heart_Purse.png",
     "type": "Passive",
     "quote": "Form Begets Function",
@@ -34461,6 +34470,7 @@
   },
   {
     "name": "Master Round I",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/0c/Master_Round_I.png/revision/latest?cb=20160310052346",
     "type": "Passive",
     "quote": "First Chamber",
@@ -34817,6 +34827,7 @@
   },
   {
     "name": "Master Round II",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1f/Master_Round_II.png/revision/latest?cb=20160310052352",
     "type": "Passive",
     "quote": "Second Chamber",
@@ -35173,6 +35184,7 @@
   },
   {
     "name": "Master Round III",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/21/Master_Round_III.png/revision/latest?cb=20160310052358",
     "type": "Passive",
     "quote": "Third Chamber",
@@ -35529,6 +35541,7 @@
   },
   {
     "name": "Master Round IV",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/13/Master_Round_IV.png/revision/latest?cb=20160310052404",
     "type": "Passive",
     "quote": "Fourth Chamber",
@@ -35885,6 +35898,7 @@
   },
   {
     "name": "Master Round V",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e2/Master_Round_V.png/revision/latest?cb=20160310052409",
     "type": "Passive",
     "quote": "Fifth Chamber",
@@ -38188,6 +38202,7 @@
   },
   {
     "name": "Nanomachines",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/de/Nanomachines.png",
     "type": "Passive",
     "quote": "Son",
@@ -42099,6 +42114,7 @@
   },
   {
     "name": "Pink Guon Stone",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/50/Pink_Guon_Stone.png",
     "type": "Passive",
     "quote": "Increased Health",
@@ -44793,6 +44809,7 @@
   },
   {
     "name": "Riddle of Lead",
+    "robot_tier": "god",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cb/Riddle_of_Lead.png",
     "type": "Passive",
     "quote": "This You Can Trust",
@@ -59616,6 +59633,7 @@
   },
   {
     "name": "Yellow Chamber",
+    "robot_tier": "armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/85/Yellow_Chamber.png",
     "type": "Passive",
     "quote": "\"the jammed thing\"",
