@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/widgets/home/home_backdrop.dart';
 import 'package:gungeon_mate/screens/character_select_screen.dart';
 import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
+import 'package:gungeon_mate/screens/mp_lobby_screen.dart';
 
 /// Widget tests for MainMenuScreen — the opening screen with the app
 /// title, subtitle, and primary action buttons (Local Run, Multiplayer,
@@ -115,5 +117,43 @@ void main() {
     ); // Complete route transition
 
     expect(find.byType(AmmonomiconScreen), findsOneWidget);
+  });
+
+  // ── MP-1 platform gate ──────────────────────────────────────────
+
+  testWidgets('Multiplayer button disabled with ANDROID ONLY off-Android', (
+    tester,
+  ) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+
+    await pumpMenu(tester, const MainMenuScreen());
+
+    expect(find.text('ANDROID ONLY'), findsOneWidget);
+
+    // Tap is inert — no lobby navigation.
+    await tester.tap(find.text('Multiplayer'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(MpLobbyScreen), findsNothing);
+
+    // Must reset inside the body — invariant check precedes tearDowns.
+    debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets('Multiplayer button enabled on Android', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
+    await pumpMenu(tester, const MainMenuScreen());
+
+    expect(find.text('ANDROID ONLY'), findsNothing);
+
+    await tester.ensureVisible(find.text('Multiplayer'));
+    await tester.pump();
+    await tester.tap(find.text('Multiplayer'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.byType(MpLobbyScreen), findsOneWidget);
+
+    debugDefaultTargetPlatformOverride = null;
   });
 }

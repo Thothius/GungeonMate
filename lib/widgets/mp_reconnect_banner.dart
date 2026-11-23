@@ -374,27 +374,35 @@ class _PersistentBanner extends StatelessWidget {
                   },
                 ),
               ),
-              // Explicit END label — the old ✕ icon read as "dismiss
-              // banner" but called session.cancel() (full teardown).
-              // Destructive actions get words, not ambiguous glyphs.
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: onCancel,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 8 * sf,
-                    vertical: 4 * sf,
-                  ),
-                  child: GoopText(
-                    'END',
-                    style: TextStyle(
-                      fontSize: FontSizes.labelSmall * sf,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.0,
-                      color: MpColors.danger,
+              // Explicit leave action — the old ✕ icon read as
+              // "dismiss banner" but called session.cancel() (full
+              // teardown). Destructive actions get words, not
+              // ambiguous glyphs. Past the escalation threshold the
+              // label strengthens to LEAVE MP: the peer has probably
+              // gone for good, so the escape hatch gets louder.
+              ValueListenableBuilder<int>(
+                valueListenable: elapsedSec,
+                builder: (context, sec, _) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: onCancel,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8 * sf,
+                        vertical: 4 * sf,
+                      ),
+                      child: GoopText(
+                        sec >= 120 ? 'LEAVE MP' : 'END',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall * sf,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0,
+                          color: MpColors.danger,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),

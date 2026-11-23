@@ -81,10 +81,14 @@ void main() {
     expect(find.text('Connection lost'), findsNothing);
     expect(find.textContaining('Reconnecting…'), findsOneWidget);
 
-    // Elapsed past 2min → escalation copy.
+    // Elapsed past 2min → escalation copy + stronger LEAVE MP label
+    // (MP-4: prolonged unreachability surfaces an explicit escape).
+    expect(find.text('END'), findsOneWidget);
     s.disconnectElapsedSec.value = 150;
     await t.pump();
     expect(find.textContaining('partner may have left'), findsOneWidget);
+    expect(find.text('LEAVE MP'), findsOneWidget);
+    expect(find.text('END'), findsNothing);
 
     await t.pump(const Duration(seconds: 3));
   });
@@ -127,6 +131,27 @@ void main() {
     await t.pump();
     await t.pump(const Duration(milliseconds: 300));
     // cancel() ran → phase leaves disconnected → banner gone.
+    expect(find.textContaining('Reconnecting…'), findsNothing);
+    await t.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('banner LEAVE MP label cancels after threshold', (t) async {
+    final (s, rp) = makeSession();
+    await t.pumpWidget(wrap(s, rp, runBar: false));
+    await t.pump();
+
+    dropPeer(s);
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 100));
+    await t.tap(find.text('DISMISS'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+
+    s.disconnectElapsedSec.value = 150;
+    await t.pump();
+    await t.tap(find.text('LEAVE MP'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
     expect(find.textContaining('Reconnecting…'), findsNothing);
     await t.pump(const Duration(seconds: 3));
   });

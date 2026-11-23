@@ -154,6 +154,23 @@ class MpSync {
   String _runTitle = '';
   int _sessionNumber = 0;
 
+  /// Per-session shared secret. Generated once per MpSync instance;
+  /// sent in our hello and echoed on every snapshot. The peer stores
+  /// it from our hello and drops snapshots that echo a different
+  /// token — injector hygiene against stray/stale senders, NOT real
+  /// authentication (Nearby Connections is plaintext).
+  final String _sessionToken = _generateSessionToken();
+  String _peerSessionToken = '';
+  int _mismatchedSnapshots = 0;
+  static const int _maxTokenMismatches = 3;
+
+  static String _generateSessionToken() {
+    final rng = math.Random.secure();
+    return List.generate(16, (_) => rng.nextInt(256))
+        .map((b) => b.toRadixString(16).padLeft(2, '0'))
+        .join();
+  }
+
   void setIdentity({
     required MpRole role,
     required String nickname,
@@ -211,6 +228,8 @@ class MpSync {
     _peerRole = null;
     _peerNickname = null;
     _peerCharacterName = null;
+    _peerSessionToken = '';
+    _mismatchedSnapshots = 0;
     _pendingRequest = null;
     _outgoingRequests.clear();
     for (final timer in _requestTimeoutTimers.values) {
@@ -446,6 +465,8 @@ class MpSync {
     _peerRole = h.role;
     _peerNickname = _cleanNickname(h.userLabel);
     _peerCharacterName = h.character;
+    _peerSessionToken = h.sessionToken;
+    _mismatchedSnapshots = 0;
     onPeerMetadata(_peerNickname!, _peerCharacterName ?? '');
     onPeerHello?.call(h);
 
@@ -473,6 +494,27 @@ class MpSync {
   void Function(String error)? onSyncError;
 
   void _onSnapshot(MpSnapshot s) {
+    // Session-token check: when the peer's hello carried a token,
+    // their snapshots must echo it. Mismatches are dropped and
+    // counted; repeated mismatches surface a sync error. Legacy
+    // peers (no token in hello) and token-less snapshots skip
+    // validation entirely — Nearby Connections is plaintext, so
+    // this is injector hygiene, not authentication.
+    if (_peerSessionToken.isNotEmpty &&
+        s.sessionToken.isNotEmpty &&
+        s.sessionToken != _peerSessionToken) {
+      _mismatchedSnapshots++;
+      if (_mismatchedSnapshots >= _maxTokenMismatches) {
+        _mismatchedSnapshots = 0;
+        _fail(
+          'Session token mismatch — a stray or stale sender is '
+          'injecting snapshots. Reconnect to reset.',
+        );
+      }
+      return;
+    }
+    _mismatchedSnapshots = 0;
+
     // Guard: if the peer sends an empty character name, the snapshot
     // is from a restarting peer whose run state hasn't been restored
     // yet. Skip the entire snapshot — don't wipe the receiver's slots
@@ -690,6 +732,7 @@ class MpSync {
       coolness: _runProvider.runState.coolness,
       curse: _runProvider.runState.curse,
       shrinesUsed: _runProvider.runState.shrinesUsed,
+      sessionToken: _sessionToken,
     );
     try {
       await _link.sendMessage(snap);
@@ -714,6 +757,7 @@ class MpSync {
           avatarId: _avatarId,
           runTitle: _runTitle,
           sessionNumber: _sessionNumber,
+          sessionToken: _sessionToken,
         ),
       );
     } catch (_) {}

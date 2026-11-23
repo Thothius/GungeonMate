@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
+import '../services/mp/mp_link.dart' show isMpSupported;
 import '../services/run_lifecycle.dart';
 import 'character_select_screen.dart';
 import 'mp_lobby_screen.dart';
@@ -269,16 +270,25 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                   icon:
                                                       Icons.bluetooth_searching,
                                                   label: 'Multiplayer',
+                                                  // MP-1: transport is Android-only —
+                                                  // disabled + hint elsewhere.
+                                                  subtitle:
+                                                      isMpSupported
+                                                          ? null
+                                                          : 'ANDROID ONLY',
                                                   sf: sf,
-                                                  onTap: () {
-                                                    Haptics.selection();
-                                                    Navigator.push(
-                                                      context,
-                                                      fastRoute(
-                                                        const MpLobbyScreen(),
-                                                      ),
-                                                    );
-                                                  },
+                                                  onTap:
+                                                      isMpSupported
+                                                          ? () {
+                                                            Haptics.selection();
+                                                            Navigator.push(
+                                                              context,
+                                                              fastRoute(
+                                                                const MpLobbyScreen(),
+                                                              ),
+                                                            );
+                                                          }
+                                                          : null,
                                                 )
                                                 .animate(delay: 160.ms)
                                                 .fadeIn(duration: 350.ms)
@@ -548,66 +558,86 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   Widget _menuButton({
     required IconData icon,
     required String label,
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
     required double sf,
     bool solid = false,
+    String? subtitle,
   }) {
     final fg = solid ? _onAccent : Colors.white;
     final borderWidth = solid ? 1.6 : 1.8;
     final borderAlpha = solid ? 0.9 : 0.55;
-    return ScaleButton(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 62 * sf,
-        decoration: BoxDecoration(
-          // Ghost = faint accent wash; hero = solid accent fill.
-          // (DESIGN.md §components — palette-driven menu spec.)
-          color: solid ? _accent : null,
-          gradient:
-              solid
-                  ? null
-                  : LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      _accent.withValues(alpha: 0.16),
-                      _accent.withValues(alpha: 0.05),
-                    ],
-                  ),
-          borderRadius: const BorderRadius.all(Radii.lg),
-          border: Border.all(
-            color: _accent.withValues(alpha: borderAlpha),
-            width: borderWidth,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: _accent.withValues(alpha: solid ? 0.35 : 0.18),
-              blurRadius: solid ? 18 : 12,
-              offset: const Offset(0, 3),
+    final enabled = onTap != null;
+    return Opacity(
+      opacity: enabled ? 1.0 : 0.45,
+      child: ScaleButton(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          height: 62 * sf,
+          decoration: BoxDecoration(
+            // Ghost = faint accent wash; hero = solid accent fill.
+            // (DESIGN.md §components — palette-driven menu spec.)
+            color: solid ? _accent : null,
+            gradient:
+                solid
+                    ? null
+                    : LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        _accent.withValues(alpha: 0.16),
+                        _accent.withValues(alpha: 0.05),
+                      ],
+                    ),
+            borderRadius: const BorderRadius.all(Radii.lg),
+            border: Border.all(
+              color: _accent.withValues(alpha: borderAlpha),
+              width: borderWidth,
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 24 * sf, color: solid ? fg : _accent),
-            const SizedBox(width: 10),
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: GoopText(
-                  label,
-                  style: TextStyle(
-                    fontSize: 16 * sf,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
-                    color: fg,
+            boxShadow: [
+              BoxShadow(
+                color: _accent.withValues(alpha: solid ? 0.35 : 0.18),
+                blurRadius: solid ? 18 : 12,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 24 * sf, color: solid ? fg : _accent),
+              const SizedBox(width: 10),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GoopText(
+                        label,
+                        style: TextStyle(
+                          fontSize: 16 * sf,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: fg,
+                        ),
+                      ),
+                      if (subtitle != null)
+                        GoopText(
+                          subtitle,
+                          style: TextStyle(
+                            fontSize: 8.5 * sf,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.6,
+                            color: fg.withValues(alpha: 0.75),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

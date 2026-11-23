@@ -11,6 +11,12 @@ import 'mp_transport.dart';
 export 'mp_transport.dart'
     show MpEndpoint, AutoConnectMode, AutoConnectModeNone, AutoConnectModeAny;
 
+/// MP transport is Android-only — Nearby Connections has no desktop or
+/// web backend. UI entry points gate on this so non-Android builds
+/// never reach a dead-end lobby flow (MP hardening MP-1).
+bool get isMpSupported =>
+    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
 /// Transport layer — thin, event-driven wrapper over `nearby_connections`.
 ///
 /// Owns one peer-to-peer Nearby Connections connection. Handles advertising

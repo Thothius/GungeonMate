@@ -140,6 +140,7 @@ final class MpHello extends MpMessage {
   final String avatarId; // cosmetic avatar id ('' = none)
   final String runTitle; // Paradox RNG run name ('' = not generated)
   final int sessionNumber; // Paradox session counter (0-based)
+  final String sessionToken; // per-session secret ('' = legacy peer)
 
   const MpHello({
     required this.role,
@@ -150,6 +151,7 @@ final class MpHello extends MpMessage {
     this.avatarId = '',
     this.runTitle = '',
     this.sessionNumber = 0,
+    this.sessionToken = '',
   });
 
   // v4: the VS-splash handshake makes the Sidekick hard-depend on
@@ -170,6 +172,7 @@ final class MpHello extends MpMessage {
     if (avatarId.isNotEmpty) 'avatarId': avatarId,
     if (runTitle.isNotEmpty) 'runTitle': runTitle,
     if (sessionNumber != 0) 'sessionNumber': sessionNumber,
+    if (sessionToken.isNotEmpty) 'sessionToken': sessionToken,
   };
 
   factory MpHello.fromJson(Map<String, dynamic> j) => MpHello(
@@ -181,6 +184,7 @@ final class MpHello extends MpMessage {
     avatarId: j['avatarId'] as String? ?? '',
     runTitle: j['runTitle'] as String? ?? '',
     sessionNumber: (j['sessionNumber'] as num?)?.toInt() ?? 0,
+    sessionToken: j['sessionToken'] as String? ?? '',
   );
 }
 
@@ -200,6 +204,7 @@ final class MpSnapshot extends MpMessage {
   final double coolness;
   final double curse;
   final List<String> shrinesUsed;
+  final String sessionToken; // echoes sender's hello token ('' = legacy)
 
   const MpSnapshot({
     required this.character,
@@ -208,6 +213,7 @@ final class MpSnapshot extends MpMessage {
     required this.coolness,
     required this.curse,
     required this.shrinesUsed,
+    this.sessionToken = '',
   });
 
   @override
@@ -221,6 +227,7 @@ final class MpSnapshot extends MpMessage {
     'coolness': coolness,
     'curse': curse,
     'shrinesUsed': shrinesUsed,
+    if (sessionToken.isNotEmpty) 'sessionToken': sessionToken,
   };
 
   factory MpSnapshot.fromJson(Map<String, dynamic> j) => MpSnapshot(
@@ -230,6 +237,7 @@ final class MpSnapshot extends MpMessage {
     coolness: (j['coolness'] as num?)?.toDouble() ?? 0,
     curse: (j['curse'] as num?)?.toDouble() ?? 0,
     shrinesUsed: (j['shrinesUsed'] as List?)?.cast<String>() ?? const [],
+    sessionToken: j['sessionToken'] as String? ?? '',
   );
 }
 

@@ -530,9 +530,6 @@ class MpSession extends ChangeNotifier
 
   // ── Peer inventory editing (co-op trust) ───────────────────────
 
-  Future<void> sendPeerRemove({required String kind, required String name}) =>
-      _sync.sendPeerEdit(MpPeerEdit(op: 'remove', kind: kind, name: name));
-
   Future<void> sendPeerClear() =>
       _sync.sendPeerEdit(const MpPeerEdit(op: 'clear'));
 
