@@ -991,7 +991,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             child: ScaleButton(
               onTap: _applyAndReturn,
               child: Container(
-                height: 44,
+                height: 48,
                 decoration: BoxDecoration(
                   color: flair.primary,
                   borderRadius: BorderRadius.all(Radii.md),
@@ -1031,8 +1031,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     return ScaleButton(
       onTap: onTap,
       child: Container(
-        height: 44,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.all(Radii.md),
@@ -1069,55 +1069,73 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         Insets.lg,
         Insets.sm,
       ),
-      child: Row(
-        children: List.generate(_hubTabs.length, (i) {
-          final active = _hubTab == i;
-          return Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                setState(() => _hubTab = i);
-                Haptics.selection();
-                SharedPreferences.getInstance().then(
-                  (p) => p.setInt('studio.lastTab', i),
-                );
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                padding: const EdgeInsets.symmetric(vertical: 9),
-                decoration: BoxDecoration(
-                  color:
-                      active
-                          ? flair.primary.withValues(alpha: 0.18)
-                          : Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color:
-                        active
-                            ? flair.primary.withValues(alpha: 0.7)
-                            : Colors.white.withValues(alpha: 0.12),
-                    width: active ? 1.5 : 1.0,
-                  ),
-                ),
-                child: Center(
-                  child: GoopText(
-                    _hubTabs[i],
-                    style: TextStyle(
-                      fontSize: 8.5,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.7,
-                      color:
-                          active
-                              ? flair.primary
-                              : Colors.white.withValues(alpha: 0.45),
+      // Two rows of three — six tabs never fit one row at readable
+      // size on a phone ('COLORS & BG' wrapped and made its pill
+      // taller than the rest). 44px min height keeps taps comfy.
+      child: Column(
+        children: [
+          for (var r = 0; r * 3 < _hubTabs.length; r++)
+            Padding(
+              padding: EdgeInsets.only(top: r > 0 ? 6 : 0),
+              child: Row(
+                children: List.generate(3, (c) {
+                  final i = r * 3 + c;
+                  if (i >= _hubTabs.length) {
+                    return const Expanded(child: SizedBox());
+                  }
+                  final active = _hubTab == i;
+                  return Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        setState(() => _hubTab = i);
+                        Haptics.selection();
+                        SharedPreferences.getInstance().then(
+                          (p) => p.setInt('studio.lastTab', i),
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 160),
+                        constraints: const BoxConstraints(minHeight: 44),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color:
+                              active
+                                  ? flair.primary.withValues(alpha: 0.18)
+                                  : Colors.white.withValues(alpha: 0.04),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color:
+                                active
+                                    ? flair.primary.withValues(alpha: 0.7)
+                                    : Colors.white.withValues(alpha: 0.12),
+                            width: active ? 1.5 : 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: GoopText(
+                            _hubTabs[i],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.6,
+                              color:
+                                  active
+                                      ? flair.primary
+                                      : Colors.white.withValues(alpha: 0.45),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ),
             ),
-          );
-        }),
+        ],
       ),
     );
   }
@@ -1961,29 +1979,42 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                     },
                   ),
         ),
-        // Page dots — card view only.
+        // Page indicator — dots while the count fits one row, a
+        // counter past that (30 saved presets used to overflow the
+        // centered dot Row on narrow screens).
         if (!_galleryListView)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < entries.length; i++)
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 160),
-                    margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                    width: i == idx ? 16 : 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color:
-                          i == idx
-                              ? flair.primary
-                              : Colors.white.withValues(alpha: 0.25),
-                      borderRadius: BorderRadius.circular(3),
+            child:
+                entries.length <= 14
+                    ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var i = 0; i < entries.length; i++)
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 160),
+                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                            width: i == idx ? 16 : 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color:
+                                  i == idx
+                                      ? flair.primary
+                                      : Colors.white.withValues(alpha: 0.25),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          ),
+                      ],
+                    )
+                    : GoopText(
+                      '${idx + 1} / ${entries.length}',
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.0,
+                        color: Colors.white.withValues(alpha: 0.45),
+                      ),
                     ),
-                  ),
-              ],
-            ),
           ),
         // Bottom pick bar
         Padding(
@@ -2077,8 +2108,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           }
         },
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          padding: const EdgeInsets.all(7),
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
             color:
                 on
@@ -2092,10 +2123,12 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       : Colors.white.withValues(alpha: 0.12),
             ),
           ),
-          child: Icon(
-            icon,
-            size: 15,
-            color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
+          child: Center(
+            child: Icon(
+              icon,
+              size: 17,
+              color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
+            ),
           ),
         ),
       );
@@ -2105,6 +2138,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       mainAxisSize: MainAxisSize.min,
       children: [
         btn(true, Icons.view_list_rounded),
+        const SizedBox(width: 6),
         btn(false, Icons.grid_view_rounded),
       ],
     );
@@ -2247,10 +2281,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _onEditPreset(e.saved!),
                       child: Padding(
-                        padding: const EdgeInsets.all(6),
+                        padding: const EdgeInsets.all(13),
                         child: Icon(
                           Icons.edit_outlined,
-                          size: 17,
+                          size: 18,
                           color: Colors.white.withValues(alpha: 0.4),
                         ),
                       ),
@@ -2260,10 +2294,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _confirmDeletePreset(e.saved!),
                       child: Padding(
-                        padding: const EdgeInsets.all(6),
+                        padding: const EdgeInsets.all(13),
                         child: Icon(
                           Icons.delete_outline_rounded,
-                          size: 17,
+                          size: 18,
                           color: Colors.white.withValues(alpha: 0.4),
                         ),
                       ),

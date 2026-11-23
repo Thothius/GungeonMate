@@ -262,7 +262,7 @@ class _HapticsChipsState extends State<_HapticsChips> {
                   setState(() {});
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color:
                         level == current
@@ -332,7 +332,7 @@ class _GlowStyleRow extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 140),
                 margin: const EdgeInsets.symmetric(horizontal: 2),
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 11),
                 decoration: BoxDecoration(
                   color:
                       i == currentIndex
@@ -547,7 +547,7 @@ class _AtmosphereLoadRow extends StatelessWidget {
               Haptics.selection();
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFB300).withValues(alpha: 0.14),
                 borderRadius: const BorderRadius.all(Radii.sm),
@@ -589,7 +589,7 @@ class _ShaderChip extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color:
               on

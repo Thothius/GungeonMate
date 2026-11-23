@@ -375,8 +375,8 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                         onTap: _reroll,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 8,
+                            horizontal: 12,
+                            vertical: 11,
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.07),
@@ -401,8 +401,8 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 8,
+                            horizontal: 16,
+                            vertical: 11,
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.07),
@@ -503,7 +503,7 @@ class _PreviewDock extends StatelessWidget {
             onTap();
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 9),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(12),
