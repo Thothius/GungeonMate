@@ -30,9 +30,8 @@ import 'paradox_bar.dart';
 /// Paradox per-page player panel — the compact info strip replacing
 /// [GungeoneerHeader] in Paradox sessions:
 ///
-///   [avatar]  MSG  COOL  CURSE              [chat]  [⋮ menu]
+///   [avatar]  [stats]                        COOL  CURSE  [⋮ menu]
 ///
-/// MSG opens the messages sheet (unread count shown inline).
 /// ⋮ menu: INFO — Shrines, Ammonomicon · GAME — Reset items, Diceroller ·
 /// bottom — END RUN. On the peer's page "Reset items" sends an
 /// [MpPeerEdit] clear (co-op trust model).
