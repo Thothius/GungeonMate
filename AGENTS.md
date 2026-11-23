@@ -66,7 +66,7 @@
 - Docs/skills: `.devin/skills/{beautify-flutter,flutter-animations,
   motion-design}`, `.devin/workflows/{pre-session,post-session,
   release-build,verify-data}` (verify-data for guns/items/synergies.json
-  edits: `python gungeon_mate/tools/data_integrity.py`).
+  edits: `cd gungeon_mate && C:/src/flutter/bin/flutter.bat test test/data_integrity_test.dart`).
 
 ## App overview
 - Flutter companion for *Enter the Gungeon* — v3.2.0+160 (Oct 2026).

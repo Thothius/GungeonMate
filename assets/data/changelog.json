@@ -4,6 +4,7 @@
     "date": "2026-11",
     "sections": {
       "Features": [
+        "In-app bug reporting — report a bug or suggest a feature from any screen via the bug icon; reports bundle device/app context and can be exported or sent.",
         "Lich's Eye Bullets auto-view — the simulated LEB synergy view now switches itself on the moment LEB actually enters a run: The Gunslinger's starter item, a mid-run pickup, a co-op join, or a run reset. It latches once per acquisition, so manually toggling it back off stays off until LEB is genuinely re-acquired — unrelated pickups and peer snapshots won't fight the toggle. The LEB toggle itself remains in the detail view for full manual control.",
         "Theme splash art complete — the 12 theme modes that silently fell back to gradients (The Cultist, The Gunslinger, The Convict, The Hunter, The Pilot, The Rat, The Breach, Lead Lord's Keep, The Oubliette, Black Powder Mine, Bullet Hell, R&G Department) now have dedicated 1200×1200 sigil splashes: palette-matched emblem + motif per theme, name set in its curated font. Generator kept at tools/gen_sigil_splashes.py; integrity tests assert every splashSlug resolves to a file.",
         "Ambience load guard — new ATMOSPHERE LOAD meter counts heavy backdrop layers (scene + liquid + shader + particles). At BUSY/MUDDLED a THIN STACK chip kills the shader + scene while keeping identity picks, and the overlay drops the disposable foreground dust field at max load.",
@@ -15,6 +16,7 @@
         "Synergy metadata complete — all 395 synergies now carry classification data (was 110): CO-OP scope chips, fx tags, and stat hints resolve for the full catalog"
       ],
       "Fixed": [
+        "Polish sweep (hole-report L-series): cool/curse screens now share one wiki-verified math module, secondary data-asset and corrupt-save failures are logged instead of silent, synergy queries are memoized, the spice tracker's totals are labeled approximate, and dead assets/screens were culled (~3.4MB).",
         "Data hygiene — fixed a duplicate gun id in guns.json (Colt 1851 and SAA both claimed id 50): Colt 1851 now carries its real game-dump id 62, SAA is marked null since it has no dump counterpart. A new integrity test enforces id uniqueness going forward.",
         "Synergy query memoization — active/partial/per-slot synergy lists and owned-name sets are now cached and only recomputed when the inventory actually changes (previously every rebuild re-lowercased every owned name and re-scanned all ~400 synergies per call).",
         "Save-corruption honesty — if your saved run is unreadable AND the backup copy is also dead, the app now flags it (`saveWasCorrupt`) and logs it instead of silently starting a fresh run. Corrupt-primary-with-good-backup recovery still works silently as before.",
