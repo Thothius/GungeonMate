@@ -16,6 +16,7 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **Neo-Skeuo removed** — the alternate cream-paper skin is fully excised; persisted picks migrate to live fonts via `AppFontLabel.migrate`.
 - **Studio UX** — honest font-size steps, touch targets, tab strip, gallery dots; active saved preset always editable.
 - **Settings rework** — control-deck layout: orientation status strip (version/theme/run state), RUN DISPLAY panels with live summaries (synergy readout, dice style + live preview, special panels), STUDIO shortcut, DEV TOOLS shown only during a run, and a tokenized DANGER ZONE. Run-tools sheet rows gained subtitles and honest RUN / RESET / APP / DANGER grouping; special-items grid is responsive.
+- **MP social layer disabled** — emotes (kiss/slap) and surprises (6 presets + custom) are off behind `kMpSocialEnabled = false`: send UI hidden, incoming messages dropped at dispatch. Dice challenges unaffected. Flip the const to re-enable.
 
 ### Fixed
 - **RESET ALL DATA (U-026)** — now tears down MP, resets every in-memory store to factory defaults, clears prefs, rehydrates, and lands on the main menu instead of stranding on character select with stale state.
