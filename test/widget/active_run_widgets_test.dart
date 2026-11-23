@@ -152,4 +152,26 @@ void main() {
     expect(t.takeException(), isNull);
     expect(find.byType(HeaderMenu), findsOneWidget);
   });
+
+  testWidgets('tools sheet Ammonomicon action pushes the codex screen', (
+    t,
+  ) async {
+    await t.pumpWidget(wrap(const HeaderMenu()));
+    await t.pump();
+
+    await t.tap(find.byIcon(Icons.tune_rounded));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 500));
+
+    // Sheet groups + Ammonomicon action visible.
+    expect(find.text('RUN'), findsWidgets);
+    expect(find.text('Ammonomicon'), findsOneWidget);
+    expect(find.text('Shrines'), findsOneWidget);
+
+    await t.tap(find.text('Ammonomicon'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 600));
+    await t.pump(const Duration(seconds: 2));
+    expect(t.takeException(), isNull);
+  });
 }

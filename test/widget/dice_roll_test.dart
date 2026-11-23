@@ -62,6 +62,33 @@ void main() {
   });
 
   group('solo', () {
+    testWidgets('die shows ? before first roll, cycles faces while spinning', (
+      t,
+    ) async {
+      await openDialog(t, rolls: [4]);
+
+      // Pre-roll face is a placeholder, not a number.
+      expect(find.text('?'), findsOneWidget);
+
+      await tapRoll(t, 'ROLL THE DIE!');
+      await t.pump();
+      // Mid-spin (~300ms in): face cycles through digits.
+      await t.pump(const Duration(milliseconds: 300));
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Text && RegExp(r'^[1-6]$').hasMatch(w.data ?? ''),
+        ),
+        findsWidgets,
+      );
+      // Body swap animates — the idle '?' die lingers briefly as the
+      // outgoing child, so let the transition finish before asserting.
+      await t.pump(const Duration(milliseconds: 500));
+      expect(find.text('?'), findsNothing);
+
+      await t.pump(const Duration(milliseconds: 1000));
+      expect(t.takeException(), isNull);
+    });
+
     testWidgets('roll lands a 1-6 face and offers ROLL AGAIN', (t) async {
       await openDialog(t, rolls: [4]);
 

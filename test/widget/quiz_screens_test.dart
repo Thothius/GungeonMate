@@ -7,6 +7,7 @@ import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/services/quiz_engine.dart';
 import 'package:gungeon_mate/screens/quiz/quiz_home_screen.dart';
 import 'package:gungeon_mate/screens/quiz/quiz_session_screen.dart';
+import 'package:gungeon_mate/widgets/quiz/quiz_answers.dart';
 import 'package:gungeon_mate/widgets/quiz/quiz_chest.dart';
 
 void main() {
@@ -101,6 +102,109 @@ void main() {
       await t.pump(const Duration(seconds: 3));
       expect(t.takeException(), isNull);
     }
+  });
+
+  // ── QuizSessionScreen depth ─────────────────────────────────────
+
+  /// Tap the chest and pump through the opening animation to the
+  /// question phase (answer grid on screen).
+  Future<void> reachQuestion(WidgetTester t) async {
+    await t.tap(find.byType(QuizChest));
+    for (var i = 0; i < 20; i++) {
+      await t.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.byType(QuizAnswerGrid), findsOneWidget);
+  }
+
+  QuizAnswerGrid answerGrid(WidgetTester t) =>
+      t.widget<QuizAnswerGrid>(find.byType(QuizAnswerGrid));
+
+  /// Answer the current question correctly and advance to the next
+  /// closed chest (or game over if the pool ran out).
+  Future<void> answerCorrectAndAdvance(WidgetTester t) async {
+    final grid = answerGrid(t);
+    await t.tap(find.text(grid.options[grid.correctIndex]));
+    await t.pump();
+    // Reveal holds ~650ms then _advance rolls the next chest.
+    await t.pump(const Duration(milliseconds: 900));
+  }
+
+  testWidgets('correct pick reveals CORRECT then advances to next chest', (
+    t,
+  ) async {
+    await t.pumpWidget(
+      wrap(QuizSessionScreen(tier: kQuizChestTiers.first)),
+    );
+    await settle(t);
+    await reachQuestion(t);
+
+    final grid = answerGrid(t);
+    await t.tap(find.text(grid.options[grid.correctIndex]));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.text('CORRECT!'), findsOneWidget);
+
+    // Auto-advance → next loot's closed chest (pool is large, never
+    // game-over on question 1).
+    await t.pump(const Duration(milliseconds: 800));
+    expect(find.byType(QuizChest), findsOneWidget);
+    expect(find.text('TAP TO OPEN'), findsOneWidget);
+    await t.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('wrong pick reveals answer, tap-through ends run', (t) async {
+    await t.pumpWidget(
+      wrap(QuizSessionScreen(tier: kQuizChestTiers.first)),
+    );
+    await settle(t);
+    await reachQuestion(t);
+
+    final grid = answerGrid(t);
+    final wrong = (grid.correctIndex + 1) % grid.options.length;
+    await t.tap(find.text(grid.options[wrong]));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+
+    // Wrong reveal: names the loot + waits for tap-through (no auto-end).
+    expect(find.textContaining('IT WAS:'), findsOneWidget);
+    expect(find.text('TAP TO CONTINUE'), findsOneWidget);
+    await t.pump(const Duration(seconds: 2));
+    // Still on the reveal — run does NOT auto-advance on a miss.
+    expect(find.text('TAP TO CONTINUE'), findsOneWidget);
+
+    // Tap anywhere on the question body → game over screen.
+    await t.tapAt(const Offset(400, 300));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 600));
+    expect(find.text('RUN OVER'), findsOneWidget);
+    expect(find.text('OPEN ANOTHER'), findsOneWidget);
+    expect(find.text('BACK TO CHESTS'), findsOneWidget);
+    await t.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('AMMONOMICON HINT reveals flavor card once per run', (t) async {
+    await t.pumpWidget(
+      wrap(QuizSessionScreen(tier: kQuizChestTiers.first)),
+    );
+    await settle(t);
+
+    // Walk chests (answering correctly) until a loot with hint text
+    // shows the hint button — loot hint presence varies per drop.
+    var found = false;
+    for (var chest = 0; chest < 6 && !found; chest++) {
+      await reachQuestion(t);
+      final hintBtn = find.byKey(const ValueKey('hintbtn'));
+      if (hintBtn.evaluate().isNotEmpty) {
+        await t.tap(hintBtn);
+        await t.pump(const Duration(milliseconds: 300));
+        expect(find.byKey(const ValueKey('hintcard')), findsOneWidget);
+        found = true;
+        break;
+      }
+      await answerCorrectAndAdvance(t);
+    }
+    expect(found, isTrue, reason: 'no hinted loot in first 6 chests');
+    await t.pump(const Duration(seconds: 3));
   });
 
   // ── QuizChest standalone ────────────────────────────────────────

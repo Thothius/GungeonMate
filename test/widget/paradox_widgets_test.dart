@@ -3,10 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
+import 'package:gungeon_mate/screens/cool_curse_screen.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/models/player.dart';
 import 'package:gungeon_mate/utils/asset_paths.dart';
+import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/widgets/paradox/avatar_frame.dart';
 import 'package:gungeon_mate/widgets/paradox/paradox_bar.dart';
 import 'package:gungeon_mate/widgets/paradox/paradox_player_panel.dart';
@@ -130,5 +132,136 @@ void main() {
     expect(hasAvatarImage, isTrue);
 
     await tester.pump(const Duration(seconds: 3));
+  });
+
+  group('ParadoxPlayerPanel interactions', () {
+    Future<(MpSession, RunProvider)> pumpPanel(WidgetTester tester) async {
+      final (session, rp) = makeSession();
+      await session.startAsMain(
+        nickname: 'T',
+        character:
+            rp.gungeoneerByName('The Paradox') ??
+            Gungeoneer(name: 'The Paradox'),
+        avatarId: 'the_paradox',
+        runTitle: 'Test Run',
+      );
+      await tester.pumpWidget(
+        wrap(session, rp, const ParadoxPlayerPanel(slot: PlayerSlot.main)),
+      );
+      await tester.pump();
+      return (session, rp);
+    }
+
+    testWidgets('renders COOL / CURSE / SYN stat chips', (tester) async {
+      await pumpPanel(tester);
+      expect(find.text('COOL'), findsOneWidget);
+      expect(find.text('CURSE'), findsOneWidget);
+      expect(find.text('SYN'), findsOneWidget);
+      expect(find.text('YOU'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 3));
+    });
+
+    testWidgets('tap COOL opens quick sheet, long-press opens explainer', (
+      tester,
+    ) async {
+      await pumpPanel(tester);
+
+      await tester.tap(find.text('COOL'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      // Quick-manage sheet opened (coolness title).
+      expect(find.text('COOLNESS'), findsWidgets);
+      // Dismiss the sheet by tapping the barrier above it.
+      await tester.tapAt(const Offset(400, 40));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await tester.longPress(find.text('CURSE'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+      // Full explainer screen pushed.
+      expect(find.byType(CoolCurseScreen), findsOneWidget);
+      await tester.pageBack();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await tester.pump(const Duration(seconds: 3));
+    });
+
+    testWidgets('run menu pause toggles session, panels toggle flips pref', (
+      tester,
+    ) async {
+      final (session, _) = await pumpPanel(tester);
+      final dashboardsBefore = VisualPrefs.notifier.value.showDashboards;
+
+      await tester.tap(find.byIcon(Icons.more_vert_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('Pause Run'), findsOneWidget);
+      expect(find.text('Diceroller'), findsOneWidget);
+
+      await tester.tap(find.text('Pause Run'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(session.isPaused, isTrue);
+
+      // Reopen — now offers Resume.
+      await tester.tap(find.byIcon(Icons.more_vert_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('Resume Run'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(session.isPaused, isFalse);
+
+      // DISPLAY > Panels toggle flips the global pref.
+      await tester.tap(find.byIcon(Icons.more_vert_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('Panels'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(
+        VisualPrefs.notifier.value.showDashboards,
+        isNot(dashboardsBefore),
+      );
+
+      await tester.pump(const Duration(seconds: 3));
+    });
+
+    testWidgets('reset P1 menu item confirms then clears own inventory', (
+      tester,
+    ) async {
+      final (session, rp) = await pumpPanel(tester);
+      // Asset JSON loads on the real event loop — runAsync required
+      // inside testWidgets or the future never completes.
+      await tester.runAsync(() => rp.loadData());
+      String? addedName;
+      if (rp.allItems.isNotEmpty) {
+        addedName = rp.allItems.first.name;
+        rp.addItem(rp.allItems.first, force: true);
+      }
+      expect(rp.runState.main.items.any((i) => i.name == addedName), isTrue);
+
+      await tester.tap(find.byIcon(Icons.more_vert_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('Reset P1 Items'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('Reset your items?'), findsOneWidget);
+      await tester.tap(find.text('RESET'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Inventory cleared for the main slot — player object rebuilt
+      // fresh (character kept, gear gone).
+      expect(
+        rp.runState.main.items.any((i) => i.name == addedName),
+        isFalse,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pump(const Duration(seconds: 3));
+    });
   });
 }
