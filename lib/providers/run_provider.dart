@@ -128,6 +128,10 @@ class RunProvider
   // degrades gracefully (empty collections) but never silently: each entry
   // is debugPrint'd and exposed here for diagnostics/tests.
   final List<String> _assetLoadFailures = [];
+  // True when a persisted run save existed but BOTH the primary and the
+  // backup copy failed to parse — the app started fresh and the player's
+  // run is gone. Surfaced for diagnostics/UI notice (L6-2).
+  bool _saveWasCorrupt = false;
 
   RunState get runState => _runState;
   List<Gun> get allGuns => _allGuns;
@@ -173,6 +177,7 @@ class RunProvider
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<String> get assetLoadFailures => List.unmodifiable(_assetLoadFailures);
+  bool get saveWasCorrupt => _saveWasCorrupt;
 
   void _recordAssetFailure(String asset, Object err) {
     _assetLoadFailures.add(asset);
@@ -353,10 +358,13 @@ class RunProvider
   // --- Persistence --------------------------------------------------------
 
   Future<void> _loadSavedRun() async {
+    _saveWasCorrupt = false;
     try {
       final prefs = await SharedPreferences.getInstance();
       String? savedRun = prefs.getString('current_run');
+      var hadPrimarySave = false;
       if (savedRun != null) {
+        hadPrimarySave = true;
         try {
           final runJson = json.decode(savedRun);
           final loaded = RunState.fromJson(runJson);
@@ -367,12 +375,32 @@ class RunProvider
           savedRun = prefs.getString('current_run_backup');
         }
       }
-      if (savedRun == null) return;
-      final runJson = json.decode(savedRun);
-      final loaded = RunState.fromJson(runJson);
-      _runState = _refreshAgainstData(loaded);
+      if (savedRun == null) {
+        // A primary save existed but was unreadable and there was no
+        // usable backup — the run is gone. Say so instead of silently
+        // starting fresh (L6-2).
+        if (hadPrimarySave) {
+          _saveWasCorrupt = true;
+          debugPrint(
+            'GungeonMate: current_run save corrupt and no usable backup — '
+            'starting a fresh run',
+          );
+        }
+        return;
+      }
+      try {
+        final runJson = json.decode(savedRun);
+        final loaded = RunState.fromJson(runJson);
+        _runState = _refreshAgainstData(loaded);
+      } catch (e) {
+        _saveWasCorrupt = true;
+        debugPrint(
+          'GungeonMate: current_run + backup both corrupt — '
+          'starting a fresh run ($e)',
+        );
+      }
     } catch (e) {
-      // Removed debugPrint for production
+      debugPrint('GungeonMate: _loadSavedRun failed — $e');
     }
   }
 
