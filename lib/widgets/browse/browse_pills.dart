@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../models/gun.dart';
 import '../../models/item.dart';
-import '../quality_badge.dart';
+import '../../services/elemental_tagger.dart';
 import '../../services/goop_talk_engine.dart';
-import '../../theme/tokens.dart';
 
 Widget metaPill(String text, Color color, {IconData? icon}) {
   return Container(
@@ -43,149 +42,6 @@ Widget metaPill(String text, Color color, {IconData? icon}) {
   );
 }
 
-Widget qualityPill(String quality) {
-  if (quality.isEmpty) return const SizedBox.shrink();
-  final rawColor = QualityBadge.colorFor(quality);
-  final letter = quality.toUpperCase();
-  final isS = letter == 'S';
-  // S-tier uses near-black for the filled badge circle (white text on black),
-  // but near-black chrome (border/text/bg tint) is invisible on dark panels.
-  // Use gold as the pill accent for S-tier so it reads on any background.
-  final accent = isS ? const Color(0xFFFFD700) : rawColor;
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-    decoration: BoxDecoration(
-      color: accent.withValues(alpha: 0.14),
-      borderRadius: BorderRadius.circular(6),
-      border: Border.all(color: accent.withValues(alpha: 0.7), width: 0.8),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 15,
-          height: 15,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: rawColor,
-            shape: BoxShape.circle,
-            border:
-                isS
-                    ? Border.all(color: const Color(0xFFE0E0E0), width: 1.0)
-                    : null,
-          ),
-          child: GoopText(
-            letter,
-            style: const TextStyle(
-              fontSize: FontSizes.labelSmall,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-              height: 1,
-            ),
-          ),
-        ),
-        const SizedBox(width: 4),
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: GoopText(
-            '$letter-tier',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: accent,
-              letterSpacing: 0.2,
-              height: 1.1,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget coinPill(String price) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-    decoration: BoxDecoration(
-      color: const Color(0xFFFFC857).withValues(alpha: 0.12),
-      borderRadius: BorderRadius.circular(6),
-      border: Border.all(
-        color: const Color(0xFFE5A823).withValues(alpha: 0.65),
-        width: 0.8,
-      ),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 15,
-          height: 15,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const RadialGradient(
-              center: Alignment(-0.3, -0.3),
-              radius: 0.9,
-              colors: [Color(0xFFFFE082), Color(0xFFFFC107), Color(0xFFB8860B)],
-              stops: [0.0, 0.55, 1.0],
-            ),
-            border: Border.all(color: const Color(0xFF8B6508), width: 0.6),
-          ),
-          alignment: Alignment.center,
-          child: const GoopText(
-            '\$',
-            style: TextStyle(
-              fontSize: FontSizes.labelSmall,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFF7A4E00),
-              height: 1,
-            ),
-          ),
-        ),
-        const SizedBox(width: 4),
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: GoopText(
-            price,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFFFD166),
-              letterSpacing: 0.3,
-              height: 1.1,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget synergyPill(int count) {
-  if (count == 0) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: GoopText(
-        'no synergy',
-        style: TextStyle(
-          fontSize: FontSizes.labelSmall,
-          color: Colors.white.withValues(alpha: 0.35),
-          fontStyle: FontStyle.italic,
-          height: 1.1,
-        ),
-      ),
-    );
-  }
-  return metaPill(
-    '$count ${count == 1 ? 'synergy' : 'synergies'}',
-    Colors.blueAccent,
-    icon: Icons.hub,
-  );
-}
-
 /// Synergy Predictor pill — gold/amber badge shown on browse rows when
 /// acquiring this item/gun would complete a partial synergy. Shows the
 /// synergy name for a single completion, or a count for multiple.
@@ -201,6 +57,41 @@ Widget completesPill(List<String> synergyNames, {String? ownerLabel}) {
           ? 'COMPLETES: $short$owner'
           : 'COMPLETES ${synergyNames.length}$owner';
   return metaPill(label, const Color(0xFFFFD700), icon: Icons.link);
+}
+
+/// Compact element dot — same visual language as the active-run
+/// inventory row: a small filled circle in the element's signature
+/// color. Tooltip carries the label for accessibility.
+class ElementDot extends StatelessWidget {
+  final ElementKind element;
+  final double size;
+  const ElementDot({super.key, required this.element, this.size = 8});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: element.label,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(color: element.color, shape: BoxShape.circle),
+      ),
+    );
+  }
+}
+
+/// Wrap of element dots for [elements], in canonical ElementKind order.
+Widget elementDots(Set<ElementKind> elements) {
+  if (elements.isEmpty) return const SizedBox.shrink();
+  return Wrap(
+    spacing: 4,
+    runSpacing: 2,
+    crossAxisAlignment: WrapCrossAlignment.center,
+    children: [
+      for (final e in ElementKind.values)
+        if (elements.contains(e)) ElementDot(element: e),
+    ],
+  );
 }
 
 class GunMeta extends StatelessWidget {
@@ -223,33 +114,19 @@ class GunMeta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Slim row meta (v3): quality + gun class + DPS + price only.
-    // The busy tag soup (gun type, synergy count, recharge) is gone —
-    // "COMPLETES" only surfaces when the caller passes completions
-    // (the SYNERGIES browse view).
+    // Slim row meta: element dots + contextual badges only. Class,
+    // DPS, and price moved to the detail screen — at browse time the
+    // scan signal is "what does it DO" (elements) and "does it complete
+    // something" (COMPLETES), not the stat sheet.
+    final elements = ElementalTagger.elementsOfGun(gun);
     final bits = <Widget>[
-      if (gun.gunClass.isNotEmpty && gun.gunClass.toUpperCase() != 'NONE')
-        metaPill(_titleCase(gun.gunClass), Colors.orangeAccent),
-      if (gun.dps.isNotEmpty)
-        metaPill(
-          'DPS ${gun.dpsValue.toStringAsFixed(0)}',
-          Colors.deepOrangeAccent,
-          icon: Icons.flash_on,
-        ),
-      if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
-        coinPill(gun.sellPrice),
+      elementDots(elements),
       if (lebBadge)
         metaPill('LEB', const Color(0xFFB388FF), icon: Icons.auto_awesome),
       if (completesSynergies.isNotEmpty)
         completesPill(completesSynergies, ownerLabel: ownerLabel),
     ];
     return Wrap(spacing: 5, runSpacing: 4, children: bits);
-  }
-
-  String _titleCase(String s) {
-    if (s.isEmpty) return s;
-    final l = s.toLowerCase();
-    return l[0].toUpperCase() + l.substring(1);
   }
 }
 
@@ -268,21 +145,20 @@ class ItemMeta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Slim row meta (v3): quality + role tag + price only.
-    final bits = <Widget>[];
-    if (item.isCompanion) {
-      bits.add(metaPill('Companion', Colors.purpleAccent));
-    } else if (item.isActive) {
-      bits.add(metaPill('Active', Colors.lightBlueAccent));
-    } else if (item.isPassive) {
-      bits.add(metaPill('Passive', Colors.lightGreenAccent));
-    }
-    if (item.sellPrice.isNotEmpty && item.sellPrice != 'N/A') {
-      bits.add(coinPill(item.sellPrice));
-    }
-    if (completesSynergies.isNotEmpty) {
-      bits.add(completesPill(completesSynergies, ownerLabel: ownerLabel));
-    }
+    // Slim row meta: type tag (ACTIVE/PASSIVE/COMPANION) + element
+    // dots + contextual badges. Price moved to the detail screen.
+    final elements = ElementalTagger.elementsOfItem(item);
+    final bits = <Widget>[
+      if (item.isCompanion)
+        metaPill('Companion', Colors.purpleAccent)
+      else if (item.isActive)
+        metaPill('Active', Colors.lightBlueAccent)
+      else if (item.isPassive)
+        metaPill('Passive', Colors.lightGreenAccent),
+      elementDots(elements),
+      if (completesSynergies.isNotEmpty)
+        completesPill(completesSynergies, ownerLabel: ownerLabel),
+    ];
     return Wrap(spacing: 5, runSpacing: 4, children: bits);
   }
 }
