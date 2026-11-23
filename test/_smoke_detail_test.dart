@@ -47,26 +47,26 @@ void main() {
     expect(size.width, greaterThan(100));
   });
 
-  // ── Gun flat rework — stats, then collapsible SYN/NOTES/REFS tabs,
-  // all closed by default ──
-  testWidgets('gun detail shows SYN/NOTES/REFS tabs, all closed', (t) async {
+  // ── Detail rework — stats/body, then collapsible SYNERGIES/NOTES
+  // tabs, all closed by default ──
+  testWidgets('gun detail shows SYNERGIES/NOTES tabs, all closed', (t) async {
     await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
     await t.pump();
     expect(t.takeException(), isNull);
     // Tab headers sit below the stats block — scroll them into view.
     await t.scrollUntilVisible(
-      find.text('REFS'),
+      find.text('NOTES'),
       300,
       scrollable: find.byType(Scrollable).first,
       maxScrolls: 30,
     );
     await t.pump();
     // Tab headers are visible; the old always-open sections are not.
-    for (final label in ['SYN', 'NOTES', 'REFS']) {
+    for (final label in ['SYNERGIES', 'NOTES']) {
       expect(find.text(label), findsWidgets, reason: 'missing $label');
     }
+    expect(find.text('REFS'), findsNothing);
     expect(find.text('STATS'), findsNothing);
-    expect(find.text('SYNERGIES'), findsNothing);
     // Closed by default — no synergy content rendered yet.
     expect(find.textContaining('LICH'), findsNothing);
   });
@@ -122,7 +122,7 @@ void main() {
   testWidgets('synergies render inside the SYN tab', (t) async {
     await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
     await t.pump();
-    await openDetailTab(t, 'SYN');
+    await openDetailTab(t, 'SYNERGIES');
     // LEB mode is the default — every gun lists all its synergies as
     // simulated rows. '38 Special' has 4 synergies in the catalog.
     await t.scrollUntilVisible(
@@ -149,7 +149,7 @@ void main() {
     addTearDown(() => VisualPrefs.setShowLichEyeBulletsSynergies(true));
     await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
     await t.pump();
-    await openDetailTab(t, 'SYN');
+    await openDetailTab(t, 'SYNERGIES');
     // Empty run state → every synergy is LOCKED, but still listed.
     await t.scrollUntilVisible(
       find.text('LOCKED'),

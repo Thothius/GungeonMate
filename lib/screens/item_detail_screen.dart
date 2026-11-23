@@ -61,15 +61,9 @@ class ItemDetailScreen extends StatefulWidget {
 }
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
-  // GlobalKeys on each major section so the TOC chips can scroll to
-  // them via `Scrollable.ensureVisible`. Keyed by section identity,
-  // not by position, so reordering the slivers doesn't rewire them.
-  final _statsKey = GlobalKey();
-  final _wikiKey = GlobalKey();
-  final _synergyKey = GlobalKey();
   final _scrollCtrl = ScrollController();
-  // Gun detail bottom tabs — -1 = all closed (default), else index
-  // into the SYN/NOTES/REFS spec list. Single-open accordion.
+  // Detail bottom tabs — -1 = all closed (default), else index
+  // into the SYNERGIES/NOTES spec list. Single-open accordion.
   int _detailTab = -1;
 
   @override
@@ -146,7 +140,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
     final wiki = gun?.wiki ?? item!.wiki;
     final ammonomiconEntry = gun?.ammonomiconEntry ?? item!.ammonomiconEntry;
-    final referrers = runProvider.backRefs.referrersFor(name);
     final wikiUrlEncoded = Uri.encodeComponent(name.replaceAll(' ', '_'));
     final wikiUrlString =
         'https://enterthegungeon.wiki.gg/wiki/$wikiUrlEncoded';
@@ -240,12 +233,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                             ),
                                   ),
                                   if (gun == null)
-                                    KeyedSubtree(
-                                      key: _statsKey,
-                                      child: ItemBody(
-                                        item: item!,
-                                        ownerSlot: ownerSlot,
-                                      ),
+                                    ItemBody(
+                                      item: item!,
+                                      ownerSlot: ownerSlot,
                                     )
                                   else
                                     _ElementTagRow(
@@ -262,16 +252,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           // item path keeps its existing flat body + synergy section.
                           if (gun != null)
                             SliverToBoxAdapter(
-                              child: KeyedSubtree(
-                                key: _statsKey,
-                                child: GunStats(gun: gun),
-                              ),
+                              child: GunStats(gun: gun),
                             ),
                           // Collapsible detail tabs — all closed by default so
                           // the page stays compact; tapping a header expands
-                          // that section (tap again to close). SYN carries the
-                          // LEB pager, NOTES carries notes + ammonomicon +
-                          // wiki sections, REFS carries the back-reference card.
+                          // that section (tap again to close). SYNERGIES
+                          // carries the synergy list (LEB pager for guns),
+                          // NOTES carries notes + ammonomicon + wiki sections.
                           if (gun != null)
                             SliverToBoxAdapter(
                               child: _DetailTabs(
@@ -283,7 +270,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                     ),
                                 tabs: [
                                   _DetailTabSpec(
-                                    label: 'SYN',
+                                    label: 'SYNERGIES',
                                     count:
                                         runProvider
                                             .getSynergiesFor(name)
@@ -324,82 +311,69 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                       ],
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          // Items get the same two-tab treatment as guns
+                          // (no pager, no LEB simulation — LEB only affects
+                          // guns in-game). SYNERGIES lists the grouped
+                          // COMPLETE/PARTIAL/LOCKED rows; NOTES carries the
+                          // Ammonomicon flavour entry + wiki sections.
+                          if (item != null)
+                            SliverToBoxAdapter(
+                              child: _DetailTabs(
+                                openIndex: _detailTab,
+                                onToggle:
+                                    (i) => setState(
+                                      () =>
+                                          _detailTab = _detailTab == i ? -1 : i,
+                                    ),
+                                tabs: [
                                   _DetailTabSpec(
-                                    label: 'REFS',
-                                    count: referrers.length,
+                                    label: 'SYNERGIES',
+                                    count: synergyStatuses.length,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: EntitySynergiesView(
+                                        statuses: synergyStatuses,
+                                        currentName: name,
+                                        ownedLower: owned,
+                                      ),
+                                    ),
+                                  ),
+                                  _DetailTabSpec(
+                                    label: 'NOTES',
                                     child:
-                                        referrers.isNotEmpty
-                                            ? ReferencedBySection(
-                                              referrers: referrers,
+                                        ammonomiconEntry.isEmpty &&
+                                                !wiki.hasAny
+                                            ? const _EmptyTabNote(
+                                              'No notes for this entry yet.',
                                             )
-                                            : const _EmptyTabNote(
-                                              'Nothing references this gun yet.',
+                                            : Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                if (ammonomiconEntry
+                                                    .isNotEmpty)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets
+                                                            .fromLTRB(
+                                                          16,
+                                                          12,
+                                                          16,
+                                                          4,
+                                                        ),
+                                                    child: AmmonomiconCard(
+                                                      text: ammonomiconEntry,
+                                                    ),
+                                                  ),
+                                                ...buildWikiSections(wiki),
+                                              ],
                                             ),
                                   ),
                                 ],
                               ),
-                            ),
-                          // Items get the same grouped all-list as guns
-                          // (COMPLETE/PARTIAL/LOCKED) — no pager, no LEB
-                          // simulation (LEB only affects guns in-game).
-                          if (item != null)
-                            SliverToBoxAdapter(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    key: _synergyKey,
-                                    padding: const EdgeInsets.fromLTRB(
-                                      16,
-                                      12,
-                                      16,
-                                      4,
-                                    ),
-                                    child: GoopText(
-                                      'SYNERGIES',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: 1.2,
-                                        color: Colors.white.withValues(
-                                          alpha: 0.7,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  EntitySynergiesView(
-                                    statuses: synergyStatuses,
-                                    currentName: name,
-                                    ownedLower: owned,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          // ---- Ammonomicon flavour entry + wiki rich content
-                          // (Effects, Interactions, Notes, Tips) + back-refs.
-                          // Items only — guns get these inside the NOTES/REFS
-                          // collapsible tabs above.
-                          if (item != null && ammonomiconEntry.isNotEmpty)
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  12,
-                                  16,
-                                  4,
-                                ),
-                                child: AmmonomiconCard(text: ammonomiconEntry),
-                              ),
-                            ),
-                          if (item != null && wiki.hasAny) ...[
-                            SliverToBoxAdapter(
-                              child: SizedBox(key: _wikiKey, height: 0),
-                            ),
-                            ...buildWikiSlivers(wiki),
-                          ],
-                          if (item != null && referrers.isNotEmpty)
-                            SliverToBoxAdapter(
-                              child: ReferencedBySection(referrers: referrers),
                             ),
                           if (item != null && item.isDestroyedOnUse && isInRun)
                             SliverToBoxAdapter(
@@ -618,7 +592,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 }
 
 // ---------------------------------------------------------------------------
-// Collapsible detail tabs (gun detail bottom: SYN / NOTES / REFS)
+// Collapsible detail tabs (SYNERGIES / NOTES)
 // ---------------------------------------------------------------------------
 
 class _DetailTabSpec {

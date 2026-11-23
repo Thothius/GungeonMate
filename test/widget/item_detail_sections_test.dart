@@ -106,8 +106,18 @@ void main() {
     // Effect line lives in ItemBody at the top of the detail view —
     // assert it before scrolling (off-screen slivers unbuild).
     expect(find.textContaining(item.effect), findsWidgets);
-    // AmmonomiconCard sits in a lazy SliverToBoxAdapter below the fold —
-    // scroll the detail view until it builds.
+    // AmmonomiconCard sits inside the collapsed NOTES tab — open it
+    // first, then scroll the detail view until the card builds.
+    await t.scrollUntilVisible(
+      find.text('NOTES'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+      maxScrolls: 30,
+    );
+    await t.pump();
+    await t.tap(find.text('NOTES'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
     await t.dragUntilVisible(
       find.byType(AmmonomiconCard),
       find.byType(Scrollable).last,

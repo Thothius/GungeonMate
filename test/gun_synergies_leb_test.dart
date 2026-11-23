@@ -79,17 +79,17 @@ void main() {
   // NB: the detail pager adds a horizontal PageView Scrollable, so
   // scrollUntilVisible calls must pass `scrollable:
   // find.byType(Scrollable).first` (the outer vertical one) explicitly.
-  /// Gun detail bottom tabs are closed by default — expand SYN
+  /// Detail bottom tabs are closed by default — expand SYNERGIES
   /// before asserting on synergy content.
   Future<void> openSynTab(WidgetTester t) async {
     await t.scrollUntilVisible(
-      find.text('SYN'),
+      find.text('SYNERGIES'),
       300,
       scrollable: find.byType(Scrollable).first,
       maxScrolls: 30,
     );
     await t.pump();
-    await t.tap(find.text('SYN'));
+    await t.tap(find.text('SYNERGIES'));
     await t.pump();
     await t.pump(const Duration(milliseconds: 300));
   }
@@ -337,6 +337,8 @@ void main() {
       final item = p.allItems.firstWhere((i) => i.name == f.item);
       await t.pumpWidget(wrap(ItemDetailScreen(item: item)));
       await t.pump();
+      // Item synergies live inside the collapsed SYNERGIES tab now.
+      await openSynTab(t);
       await t.scrollUntilVisible(
         find.text('PARTIAL'),
         400,
