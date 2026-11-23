@@ -1,11 +1,10 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
+import '../../utils/cool_curse_math.dart';
 import '../../utils/responsive.dart';
 
 /// Super-compact cool/curse effects strip — 5 derived stats in one
@@ -22,12 +21,12 @@ class RunEffectsBlock extends StatelessWidget {
     final cool = p.runState.totalCoolness;
     final curse = p.runState.totalCurse;
 
-    // Same formulas the COOL & CURSE screen uses.
-    final fuseSkip = math.min(cool * 2.5, 10);
-    final cdSpeed = math.min(cool * 5, 50);
-    final reward = math.max(0.0, 1 + cool - curse);
-    final jam = curse >= 10 ? 100.0 : curse * 4;
-    final bossJam = curse >= 10 ? 100.0 : curse * 2;
+    // Same wiki-verified math the COOL & CURSE screen + quick sheet use.
+    final fuseSkip = fuseChanceReduction(cool);
+    final cdSpeed = cooldownReduction(cool);
+    final reward = roomRewardChance(cool, curse);
+    final jam = jammedEnemyChance(curse);
+    final bossJam = jammedBossChance(curse);
 
     const coolCol = StatColors.cool;
     const curseCol = StatColors.curse;

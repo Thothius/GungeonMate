@@ -22,8 +22,8 @@ import 'run_effects_block.dart';
 import '../dashboards/dashboard_swiper.dart';
 
 import '../../screens/cool_curse_screen.dart';
+import 'cool_curse_sheet.dart';
 import '../../screens/item_detail_screen.dart';
-import '../../utils/format.dart';
 import 'sort_picker.dart';
 import 'starter_hint.dart';
 import '../../screens/all_synergies_screen.dart';
@@ -62,10 +62,6 @@ class PlayerPageState extends State<PlayerPage> {
   /// Per-slot inventory view mode. Defaults to `grid` (the historical
   /// look). Hydrated alongside the sort prefs and persisted on toggle.
   InvView _invView = InvView.grid;
-
-  /// Which cool/curse stepper is open inside the top panel —
-  /// 'cool', 'curse', or null (closed). Tapping the capsule toggles it.
-  String? _editStat;
 
   /// True once the user has explicitly picked a sort *or* the prefs
   /// hydration has resolved — whichever came first. Prevents a slow
@@ -205,16 +201,14 @@ class PlayerPageState extends State<PlayerPage> {
                           curse: state.totalCurse,
                           robotDamageBoost: robotDmgBoost,
                           onTapCoolness:
-                              () => setState(
-                                () =>
-                                    _editStat =
-                                        _editStat == 'cool' ? null : 'cool',
+                              () => CoolCurseSheet.show(
+                                context,
+                                isCool: true,
                               ),
                           onTapCurse:
-                              () => setState(
-                                () =>
-                                    _editStat =
-                                        _editStat == 'curse' ? null : 'curse',
+                              () => CoolCurseSheet.show(
+                                context,
+                                isCool: false,
                               ),
                           // Long-press opens the full Cool & Curse
                           // explainer — the same screen MP players get
@@ -246,17 +240,6 @@ class PlayerPageState extends State<PlayerPage> {
                           // then the special-item tracker pills.
                           footer: Column(
                             children: [
-                              AnimatedSize(
-                                duration: const Duration(milliseconds: 220),
-                                curve: Curves.easeOutCubic,
-                                child:
-                                    _editStat == null
-                                        ? const SizedBox.shrink()
-                                        : _InlineStatStepper(
-                                          key: ValueKey(_editStat),
-                                          isCool: _editStat == 'cool',
-                                        ),
-                              ),
                               // Listenable so the PANELS settings toggle
                               // shows/hides trackers without a rebuild.
                               ValueListenableBuilder<VisualPrefs>(
@@ -725,101 +708,3 @@ class PlayerPageState extends State<PlayerPage> {
 /// effect text, and big item pills with graphics. Owned items are full-color
 /// with a glow; unowned items are greyed but still visible.
 // ignore: unused_element
-
-/// Inline cool/curse stepper — slides out inside the header panel when
-/// a capsule is tapped. Centered live number + ±1/±0.5 buttons, nothing
-/// else (per user request — no bloat). Replaces the bottom sheet.
-class _InlineStatStepper extends StatelessWidget {
-  final bool isCool;
-  const _InlineStatStepper({super.key, required this.isCool});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final value = isCool ? p.runState.coolness : p.runState.curse;
-    final accent = isCool ? StatColors.cool : StatColors.curse;
-
-    void apply(double delta) {
-      if (isCool) {
-        p.adjustCoolness(delta);
-      } else {
-        p.adjustCurse(delta);
-      }
-      Haptics.light();
-    }
-
-    Widget step(double delta) {
-      final positive = delta > 0;
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3),
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => apply(delta),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 9),
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: positive ? 0.14 : 0.06),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: accent.withValues(alpha: positive ? 0.5 : 0.25),
-                ),
-              ),
-              child: Center(
-                child: GoopText(
-                  '${positive ? '+' : '−'}${delta.abs() == 1.0 ? '1' : '0.5'}',
-                  style: TextStyle(
-                    fontSize: FontSizes.bodyMedium,
-                    fontWeight: FontWeight.w900,
-                    color:
-                        positive ? accent : Colors.white.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-      child: Column(
-        children: [
-          Container(
-            height: 1,
-            color: Colors.white.withValues(alpha: 0.06),
-            margin: const EdgeInsets.only(bottom: 8),
-          ),
-          Row(
-            children: [
-              step(-1),
-              step(-0.5),
-              // Centered number — the single focus of the control.
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 150),
-                    child: GoopText(
-                      key: ValueKey(value),
-                      formatStat(value),
-                      style: TextStyle(
-                        fontSize: FontSizes.titleLarge,
-                        fontWeight: FontWeight.w900,
-                        color: accent,
-                        height: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              step(0.5),
-              step(1),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}

@@ -7,7 +7,7 @@ import '../../models/multiplayer_messages.dart';
 import '../../models/player.dart' show PlayerSlot;
 import '../../providers/run_provider.dart';
 import '../../screens/ammonomicon_screen.dart';
-import '../../screens/cool_curse_screen.dart';
+import '../active_run/cool_curse_sheet.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
@@ -148,10 +148,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                       color: StatColors.cool,
                       sf: sf,
                       onTap:
-                          () => Navigator.push(
-                            context,
-                            fastRoute(const CoolCurseScreen()),
-                          ),
+                          () => CoolCurseSheet.show(context, isCool: true),
                     ),
                     // CURSE
                     _PanelStat(
@@ -160,10 +157,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                       color: StatColors.curse,
                       sf: sf,
                       onTap:
-                          () => Navigator.push(
-                            context,
-                            fastRoute(const CoolCurseScreen()),
-                          ),
+                          () => CoolCurseSheet.show(context, isCool: false),
                     ),
                     // SYN — active synergy count (combined)
                     _PanelStat(
