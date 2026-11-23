@@ -94,6 +94,11 @@ class Haptics {
     }
   }
 
+  /// Restore the factory default in memory without writing prefs —
+  /// used by the app-data reset after `SharedPreferences.clear()` so the
+  /// haptics gate matches the wiped disk state.
+  static void reset() => intensity = HapticsIntensity.full;
+
   static Future<void> light() {
     if (intensity == HapticsIntensity.off) return Future.value();
     return HapticFeedback.lightImpact();

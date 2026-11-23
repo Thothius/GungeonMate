@@ -1,15 +1,17 @@
 import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/run_provider.dart';
 import '../../services/run_lifecycle.dart';
-import '../../services/haptics.dart';
+import '../../services/app_data_reset.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
-import '../../screens/character_select_screen.dart';
+import '../../services/haptics.dart';
+import '../../services/mp_session.dart';
 import '../../screens/experience_studio_screen.dart';
+import '../../utils/asset_paths.dart' show kAppVersion;
 import '../../utils/fast_route.dart';
+import '../../utils/responsive.dart' show ScreenProfile;
 import 'debug_tab.dart';
 import '../active_run/dice_roll.dart';
 import 'swipe_picker.dart';
@@ -56,7 +58,8 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               '• Theme & visual preferences\n'
               '• Special weapon upgrades\n'
               '• Multiplayer session data\n\n'
-              'The app will restart. This cannot be undone.',
+              'You will return to the main menu with default settings. '
+              'This cannot be undone.',
             ),
             actions: [
               TextButton(
@@ -68,24 +71,22 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   backgroundColor: Colors.deepOrange,
                 ),
                 onPressed: () => Navigator.pop(c, true),
-                child: const GoopText('RESET EVERYTHING'),
+                child: const GoopText('RESET ALL DATA'),
               ),
             ],
           ),
     );
     if (confirmed != true) return;
     if (!context.mounted) return;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
-    } catch (e) {
-      debugPrint('[SettingsTab] prefs clear error: $e');
-    }
+
+    final p = context.read<RunProvider>();
+    final session = context.read<MpSession>();
+    await resetAllAppData(runProvider: p, session: session);
     if (!context.mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      fastRoute(const CharacterSelectScreen()),
-      (_) => false,
-    );
+
+    // Land on the existing Home/MainMenu route — never strand the user
+    // on character select (U-026).
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   // ── Build ──────────────────────────────────────────────────────────
@@ -100,315 +101,145 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
       listenable: VisualPrefs.notifier,
       builder: (context, _) {
         final prefs = VisualPrefs.notifier.value;
-        final screenWidth = MediaQuery.sizeOf(context).width;
-        final isWide = screenWidth >= 600;
+        final profile = ScreenProfile.of(context);
+        final isWide = !profile.isCompactWidth;
 
-        // Build all section widgets — prefs-only; run-scoped actions
-        // live in the active-run tools sheet (shrines, co-op, save,
-        // MP leave, per-player resets).
-        final List<Widget> sections = [
-          _SettingsSection(
-            label: 'GAMEPLAY',
+        final synergyCount =
+            (prefs.showLichEyeBulletsSynergies ? 1 : 0) +
+            (prefs.showSynergyCoopTags ? 1 : 0);
+
+        final runPanels = <Widget>[
+          _SettingsPanel(
+            title: 'SYNERGY READOUT',
+            icon: Icons.hub_outlined,
             flair: flair,
+            summary: synergyCount == 0 ? 'OFF' : '$synergyCount ON',
             child: Column(
               children: [
-                _CollapsibleCard(
-                  title: 'SYNERGIES',
-                  icon: Icons.hub_outlined,
+                _SettingsToggleRow(
+                  title: "Lich's Eye Bullets",
+                  subtitle: 'Show simulated synergies for all guns',
+                  value: prefs.showLichEyeBulletsSynergies,
                   flair: flair,
-                  initiallyExpanded: false,
-                  child: Column(
-                    children: [
-                      _SynergyToggleRow(
-                        title: "Lich's Eye Bullets",
-                        subtitle: 'Show simulated synergies for all guns',
-                        value: prefs.showLichEyeBulletsSynergies,
-                        flair: flair,
-                        onChanged: VisualPrefs.setShowLichEyeBulletsSynergies,
-                      ),
-                      const SizedBox(height: 10),
-                      _SynergyToggleRow(
-                        title: 'Co-op scope tags',
-                        subtitle: 'Tag synergies as CO-OP / TEAM / ONE PLAYER',
-                        value: prefs.showSynergyCoopTags,
-                        flair: flair,
-                        onChanged: VisualPrefs.setShowSynergyCoopTags,
-                      ),
-                    ],
-                  ),
+                  onChanged: VisualPrefs.setShowLichEyeBulletsSynergies,
                 ),
-                const SizedBox(height: 12),
-                _CollapsibleCard(
-                  title: 'DICE',
-                  icon: Icons.casino_rounded,
+                const SizedBox(height: Insets.md),
+                _SettingsToggleRow(
+                  title: 'Co-op scope tags',
+                  subtitle: 'Tag synergies as CO-OP / TEAM / ONE PLAYER',
+                  value: prefs.showSynergyCoopTags,
                   flair: flair,
-                  initiallyExpanded: false,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _CompactActionTile(
-                          data: _TileData(
-                            icon: Icons.casino_outlined,
-                            label: 'Dice Roll',
-                            color: const Color(0xFFFFD54F),
-                            onTap: () => showDiceRollDialog(context),
-                          ),
-                        ),
-                      ),
-                      _buildDicePanel(flair, prefs),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _CollapsibleCard(
-                  title: 'PANELS',
-                  icon: Icons.dashboard_customize_outlined,
-                  flair: flair,
-                  initiallyExpanded: false,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GoopText(
-                              'Special item panels',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            GoopText(
-                              'Gunderfury, Ser Junkan, Evolver & co. trackers',
-                              style: TextStyle(
-                                fontSize: FontSizes.labelMedium,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.6),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Switch(
-                        value: prefs.showDashboards,
-                        activeThumbColor: flair.primary,
-                        onChanged: VisualPrefs.setShowDashboards,
-                      ),
-                    ],
-                  ),
+                  onChanged: VisualPrefs.setShowSynergyCoopTags,
                 ),
               ],
             ),
           ),
-          _SettingsSection(
-            label: 'STUDIO',
+          _SettingsPanel(
+            title: 'DICE STYLE',
+            icon: Icons.casino_rounded,
             flair: flair,
-            child: _CompactActionTile(
-              data: _TileData(
-                icon: Icons.palette_rounded,
-                label: 'Customization',
-                color: Colors.pinkAccent,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    fastRoute(const ExperienceStudioScreen()),
-                  );
-                },
-              ),
+            summary: prefs.customDiceType.label,
+            child: _buildDicePanel(flair, prefs),
+          ),
+          _SettingsPanel(
+            title: 'SPECIAL PANELS',
+            icon: Icons.dashboard_customize_outlined,
+            flair: flair,
+            summary: prefs.showDashboards ? 'On' : 'Off',
+            child: _SettingsToggleRow(
+              title: 'Special item panels',
+              subtitle: 'Gunderfury, Ser Junkan, Evolver & co. trackers',
+              value: prefs.showDashboards,
+              flair: flair,
+              onChanged: VisualPrefs.setShowDashboards,
             ),
           ),
         ];
+
+        final Widget runDisplaySection;
+        if (isWide) {
+          final contentWidth = profile.width - 2 * Insets.lg;
+          final colWidth = (contentWidth - Insets.lg) / 2;
+          runDisplaySection = _SettingsSection(
+            label: 'RUN DISPLAY',
+            flair: flair,
+            child: Wrap(
+              spacing: Insets.lg,
+              runSpacing: Insets.lg,
+              children:
+                  runPanels
+                      .map((panel) => SizedBox(width: colWidth, child: panel))
+                      .toList(),
+            ),
+          );
+        } else {
+          runDisplaySection = _SettingsSection(
+            label: 'RUN DISPLAY',
+            flair: flair,
+            child: Column(
+              children: [
+                for (var i = 0; i < runPanels.length; i++) ...[
+                  if (i > 0) const SizedBox(height: Insets.lg),
+                  runPanels[i],
+                ],
+              ],
+            ),
+          );
+        }
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(Insets.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 2-column grid for sections (wraps on narrow)
-              if (isWide) ...[
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children:
-                      sections
-                          .map(
-                            (s) => SizedBox(
-                              width: (screenWidth - 2 * Insets.lg - 12) / 2,
-                              child: s,
-                            ),
-                          )
-                          .toList(),
-                ),
-              ] else ...[
-                // Narrow: vertical stack
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      sections
-                          .expand((s) => [s, const SizedBox(height: 12)])
-                          .toList(),
-                ),
-              ],
-
-              // DEV TOOLS — full-width, before the danger zone
-              const SizedBox(height: 12),
-              _CollapsibleCard(
-                title: 'DEV TOOLS',
-                icon: Icons.bug_report_rounded,
+              _buildStatusStrip(p, prefs),
+              const SizedBox(height: Insets.lg),
+              runDisplaySection,
+              const SizedBox(height: Insets.lg),
+              _SettingsSection(
+                label: 'STUDIO',
                 flair: flair,
-                initiallyExpanded: false,
-                child: _buildGrid([
-                  _TileData(
+                child: _SettingsActionCard(
+                  icon: Icons.palette_rounded,
+                  iconColor: Colors.pinkAccent,
+                  title: 'Customization',
+                  subtitle: 'Theme, particles, fonts & studio presets',
+                  flair: flair,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      fastRoute(const ExperienceStudioScreen()),
+                    );
+                  },
+                ),
+              ),
+              if (hasRun) ...[
+                const SizedBox(height: Insets.lg),
+                _SettingsSection(
+                  label: 'DEV TOOLS',
+                  flair: flair,
+                  child: _SettingsActionCard(
                     icon: Icons.grid_view_rounded,
-                    label: 'Dev Tools',
-                    color: Colors.amber,
+                    iconColor: Colors.amber,
+                    title: 'Special Items & Guns',
+                    subtitle: 'Spawn or remove special loadout pieces',
+                    flair: flair,
                     onTap: () {
-                      if (p.runState.main.character != null) {
-                        Haptics.selection();
-                        Navigator.push(
-                          context,
-                          fastRoute(const SpecialItemsGridScreen()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: GoopText(
-                              'Start a run first to spawn special items.',
-                            ),
-                            duration: Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
+                      Navigator.push(
+                        context,
+                        fastRoute(const SpecialItemsGridScreen()),
+                      );
                     },
                   ),
-                ]),
-              ),
-
-              // DANGER ZONE — always last, full-width. End Run only
-              // appears while a run is actually active (this screen is
-              // also reachable from the main menu with no run).
-              const SizedBox(height: 12),
-              _sectionLabel('DANGER ZONE', flair),
-              if (hasRun) ...[
-                _buildEndRunButton(context, p),
-                const SizedBox(height: 10),
+                ),
               ],
-              _buildResetDataButton(context),
-
-              const SizedBox(height: 24),
+              const SizedBox(height: Insets.lg),
+              _buildDangerZone(context, p, hasRun, flair),
+              const SizedBox(height: Insets.xl),
             ],
           ),
         );
       },
-    );
-  }
-
-  // ── Helpers ────────────────────────────────────────────────────────
-
-  @override
-  (Color, Color, Color, Color) _diceColors(
-    CustomDiceType type,
-    ThemeFlair flair,
-  ) {
-    switch (type) {
-      case CustomDiceType.classicWhite:
-        return (
-          const Color(0xFFFAFAFA),
-          const Color(0xFF90A4AE),
-          const Color(0xFF263238),
-          Colors.white24,
-        );
-      case CustomDiceType.goldGlimmer:
-        return (
-          const Color(0xFF2C2210),
-          const Color(0xFFFFD54F),
-          const Color(0xFFFFD54F),
-          const Color(0x33FFD54F),
-        );
-      case CustomDiceType.frostShard:
-        return (
-          const Color(0xFF101C2C),
-          const Color(0xFF00E5FF),
-          const Color(0xFF00E5FF),
-          const Color(0x3300E5FF),
-        );
-      case CustomDiceType.moltenAmber:
-        return (
-          const Color(0xFF2C1010),
-          const Color(0xFFFF3D00),
-          const Color(0xFFFF3D00),
-          const Color(0x33FF3D00),
-        );
-      case CustomDiceType.voidPurple:
-        return (
-          const Color(0xFF1F102C),
-          const Color(0xFFD500F9),
-          const Color(0xFFD500F9),
-          const Color(0x33D500F9),
-        );
-      case CustomDiceType.toxicOoze:
-        return (
-          const Color(0xFF102C13),
-          const Color(0xFF00E676),
-          const Color(0xFF00E676),
-          const Color(0x3300E676),
-        );
-      case CustomDiceType.themeDefault:
-        return (
-          const Color(0xFF161413),
-          flair.primary,
-          flair.primary,
-          flair.primary.withValues(alpha: 0.3),
-        );
-    }
-  }
-}
-
-/// One labelled toggle row inside the SYNERGIES settings card.
-class _SynergyToggleRow extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final bool value;
-  final ThemeFlair flair;
-  final ValueChanged<bool> onChanged;
-
-  const _SynergyToggleRow({
-    required this.title,
-    required this.subtitle,
-    required this.value,
-    required this.flair,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GoopText(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-              GoopText(
-                subtitle,
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium,
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Switch(
-          value: value,
-          activeThumbColor: flair.primary,
-          onChanged: onChanged,
-        ),
-      ],
     );
   }
 }

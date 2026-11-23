@@ -136,6 +136,13 @@ class AssetVotes extends ChangeNotifier {
     }
   }
 
+  /// Clear in-memory votes — used by the app-data reset. Votes are
+  /// per-screen state, so this only matters if the viewer is open.
+  void reset() {
+    _votes.clear();
+    notifyListeners();
+  }
+
   String? voteFor(String id) => _votes[id];
 
   int get yayCount => _votes.values.where((v) => v == 'yay').length;

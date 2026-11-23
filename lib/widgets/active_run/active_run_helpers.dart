@@ -285,7 +285,7 @@ class HeaderMenu extends StatelessWidget {
 
 /// Themed run-tools sheet — the gear menu. Fixed action set per design:
 /// Ammonomicon, Shrines, Dice Roll, Surprise (MP only), Reset items,
-/// End run. Groups: tools → reset → danger.
+/// End run. Groups: RUN → RESET → APP → DANGER.
 class _RunToolsSheet extends StatelessWidget {
   /// Context from ABOVE the sheet route — sheet ctx is dead after pop.
   final BuildContext parentContext;
@@ -295,10 +295,12 @@ class _RunToolsSheet extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String label,
+    required String subtitle,
     required Color iconColor,
     required VoidCallback onTap,
   }) {
     final flair = AppTheme.flair;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return InkWell(
       borderRadius: BorderRadius.all(Radii.sm),
       onTap: () {
@@ -309,19 +311,41 @@ class _RunToolsSheet extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: Insets.md,
-          vertical: 13,
+          vertical: Insets.sm + 2,
         ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: iconColor),
-            const SizedBox(width: 12),
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: iconColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(flair.chipRadius),
+                border: Border.all(color: iconColor.withValues(alpha: 0.25)),
+              ),
+              child: Icon(icon, size: 18, color: iconColor),
+            ),
+            const SizedBox(width: Insets.md),
             Expanded(
-              child: GoopText(
-                label,
-                style: const TextStyle(
-                  fontSize: FontSizes.bodyMedium,
-                  fontWeight: FontWeight.w700,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GoopText(
+                    label,
+                    style: const TextStyle(
+                      fontSize: FontSizes.bodyMedium,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  GoopText(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TypeScale.bodySmall.copyWith(
+                      color: onSurface.withValues(alpha: 0.55),
+                    ),
+                  ),
+                ],
               ),
             ),
             Icon(
@@ -382,11 +406,12 @@ class _RunToolsSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              _label('RUN TOOLS', flair),
+              _label('RUN', flair),
               _action(
                 sheetCtx,
                 icon: Icons.menu_book_rounded,
                 label: 'Ammonomicon',
+                subtitle: 'Guns, items, synergies & more',
                 iconColor: const Color(0xFF4DD0E1),
                 onTap: () {
                   if (sheetCtx.mounted) {
@@ -401,6 +426,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.temple_buddhist,
                 label: 'Shrines',
+                subtitle: 'Spend keys on blessings',
                 iconColor: Colors.amberAccent,
                 onTap: () {
                   if (sheetCtx.mounted) {
@@ -418,6 +444,10 @@ class _RunToolsSheet extends StatelessWidget {
                         ? Icons.remove_circle_outline
                         : Icons.person_add_alt_1,
                 label: hasCoop ? 'Remove Co-op' : 'Add Co-op',
+                subtitle:
+                    hasCoop
+                        ? 'Remove the co-op player'
+                        : 'Add a second gungeoneer',
                 iconColor: hasCoop ? Colors.redAccent : Colors.pinkAccent,
                 onTap: () {
                   if (hasCoop) {
@@ -465,6 +495,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.save_outlined,
                 label: 'Save Run',
+                subtitle: 'Persist the active run',
                 iconColor: Colors.greenAccent,
                 onTap: () {
                   p
@@ -497,6 +528,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.casino_rounded,
                 label: 'Dice Roller',
+                subtitle: 'Roll dice for run buffs',
                 iconColor: const Color(0xFFFFD54F),
                 onTap: () => showDiceRollDialog(sheetCtx),
               ),
@@ -505,6 +537,7 @@ class _RunToolsSheet extends StatelessWidget {
                   sheetCtx,
                   icon: Icons.auto_awesome_rounded,
                   label: 'Surprise',
+                  subtitle: 'Send a surprise to your partner',
                   iconColor: Colors.amberAccent,
                   onTap:
                       () => showModalBottomSheet<void>(
@@ -524,6 +557,7 @@ class _RunToolsSheet extends StatelessWidget {
                   sheetCtx,
                   icon: Icons.bluetooth_disabled,
                   label: 'Leave MP',
+                  subtitle: 'Disconnect and restore your run',
                   iconColor: Colors.lightBlueAccent,
                   onTap: () {
                     showDialog(
@@ -572,6 +606,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.restart_alt_rounded,
                 label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
+                subtitle: 'Clear guns & items to starter loadout',
                 iconColor: Colors.cyanAccent,
                 onTap:
                     () => confirmClearInventoryDialog(
@@ -585,6 +620,7 @@ class _RunToolsSheet extends StatelessWidget {
                   sheetCtx,
                   icon: Icons.restart_alt_rounded,
                   label: 'Reset P2 Items',
+                  subtitle: 'Clear guns & items to starter loadout',
                   iconColor: Colors.cyanAccent,
                   onTap:
                       () => confirmClearInventoryDialog(
@@ -600,10 +636,12 @@ class _RunToolsSheet extends StatelessWidget {
                 endIndent: Insets.lg,
                 color: flair.primary.withValues(alpha: 0.1),
               ),
+              _label('APP', flair),
               _action(
                 sheetCtx,
                 icon: Icons.palette_rounded,
                 label: 'Customization',
+                subtitle: 'Theme, particles & studio',
                 iconColor: const Color(0xFFB388FF),
                 onTap: () {
                   if (!sheetCtx.mounted) return;
@@ -617,6 +655,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.quiz_rounded,
                 label: 'Quiz',
+                subtitle: 'Gungeonmaster quiz',
                 iconColor: const Color(0xFF66BB6A),
                 onTap: () {
                   if (sheetCtx.mounted) {
@@ -631,6 +670,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.bug_report_outlined,
                 label: 'Report a Bug',
+                subtitle: 'Send feedback to the devs',
                 iconColor: Colors.deepOrangeAccent,
                 onTap: () {
                   if (sheetCtx.mounted) {
@@ -648,6 +688,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.settings_outlined,
                 label: 'Settings',
+                subtitle: 'Gameplay prefs & danger zone',
                 iconColor: flair.primary.withValues(alpha: 0.6),
                 onTap: () {
                   if (sheetCtx.mounted) {
@@ -662,10 +703,12 @@ class _RunToolsSheet extends StatelessWidget {
                 endIndent: Insets.lg,
                 color: flair.primary.withValues(alpha: 0.1),
               ),
+              _label('DANGER', flair),
               _action(
                 sheetCtx,
                 icon: Icons.flag_rounded,
                 label: 'End Run',
+                subtitle: 'Finish the run and return to menu',
                 iconColor: Colors.redAccent,
                 onTap: () => RunLifecycle.confirmEndRun(sheetCtx),
               ),

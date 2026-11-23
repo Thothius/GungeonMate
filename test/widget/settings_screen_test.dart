@@ -4,27 +4,22 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
+import 'package:gungeon_mate/services/app_data_reset.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/settings_screen.dart';
+import 'package:gungeon_mate/widgets/active_run/active_run_helpers.dart';
 
 /// Widget tests for SettingsScreen — the prefs-only settings screen.
 ///
-/// IA split (v3.7.x): run-scoped actions (RUN TOOLS, MULTIPLAYER status,
-/// per-player DATA resets) moved to the active-run tools sheet. What
-/// remains: GAMEPLAY prefs (SYNERGIES / DICE / PANELS), a STUDIO
-/// shortcut to the Experience Studio, DEV TOOLS, and DANGER ZONE
-/// (END RUN only while a run is active + RESET DATA always).
+/// IA split (v3.7.x): run-scoped actions (RUN TOOLS sheet, per-player
+/// DATA resets) live in the active-run tools sheet. What remains:
+/// a status strip, RUN DISPLAY panels (SYNERGY READOUT / DICE STYLE /
+/// SPECIAL PANELS), a STUDIO shortcut, DEV TOOLS (active run only),
+/// and DANGER ZONE (END RUN while a run is active + RESET ALL DATA).
 ///
-/// SettingsTab uses AnimatedCrossFade for expand/collapse and
-/// AnimatedRotation for the chevron — short one-shot animations.
-/// pumpAndSettle() is safe for the settings screen itself.
-///
-/// However, the EndRunConfirmDialog has perpetual float/glow
-/// animations, so we use pump() after opening it.
-///
-/// The settings content is scrollable. Sections below the fold
-/// (DEV TOOLS, END RUN, RESET DATA) need scrollUntilVisible
-/// to be brought on-screen before tapping.
+/// The EndRunConfirmDialog has perpetual float/glow animations, so we
+/// use pump() after opening it. Sections below the fold need
+/// scrollUntilVisible before tapping.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
@@ -40,8 +35,6 @@ void main() {
   }
 
   /// Scrolls until the given finder is visible, then taps it.
-  /// Uses pumpAndSettle() for the scroll (settings screen has no
-  /// perpetual animations) to ensure the element is fully on-screen.
   Future<void> scrollAndTap(WidgetTester tester, Finder finder) async {
     await tester.scrollUntilVisible(
       finder,
@@ -53,23 +46,26 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Renders gameplay + studio sections, no run-scoped cards', (
+  testWidgets('Renders status strip + run-display panels, no run-scoped cards', (
     tester,
   ) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // Gameplay collapsible cards
-    expect(find.text('SYNERGIES'), findsOneWidget);
-    expect(find.text('DICE'), findsOneWidget);
-    expect(find.text('PANELS'), findsOneWidget);
+    // Run-display panels with live summaries; dice preview renders
+    // inside the (collapsed-by-default) DICE STYLE panel.
+    expect(find.text('RUN DISPLAY'), findsOneWidget);
+    expect(find.text('SYNERGY READOUT'), findsOneWidget);
+    expect(find.text('DICE STYLE'), findsOneWidget);
+    expect(find.text('SPECIAL PANELS'), findsOneWidget);
+    // Live dice preview is visible without expanding anything.
+    expect(find.text('5'), findsOneWidget);
 
-    // Studio shortcut tile
+    // Studio shortcut
+    expect(find.text('STUDIO'), findsOneWidget);
     expect(find.text('Customization'), findsOneWidget);
 
-    // Run-scoped sections moved to the active-run tools sheet —
-    // none of these may render here anymore.
-    expect(find.text('RUN TOOLS'), findsNothing);
+    // Run-scoped actions live in the tools sheet — none render here.
     expect(find.text('Shrine Picker'), findsNothing);
     expect(find.text('Add Co-op'), findsNothing);
     expect(find.text('Save Run'), findsNothing);
@@ -78,55 +74,68 @@ void main() {
     expect(find.text('Reset Player 1'), findsNothing);
   });
 
-  testWidgets('DICE is collapsed by default', (tester) async {
+  testWidgets('Tapping a panel header expands it', (tester) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // DICE header exists but content (dice preview "5") is hidden
-    expect(find.text('DICE'), findsOneWidget);
-  });
-
-  testWidgets('Tapping DICE header expands it and shows Dice Roll tile', (
-    tester,
-  ) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
+    await tester.tap(find.text('DICE STYLE'));
     await tester.pumpAndSettle();
 
-    // Tap the DICE header to expand
-    await tester.tap(find.text('DICE'));
-    await tester.pumpAndSettle();
-
-    // After expansion, the Dice Roll tile and dice preview ("5") are visible
     expect(find.text('Dice Roll'), findsOneWidget);
-    expect(find.text('5'), findsOneWidget);
+    expect(find.text('Roll dice for run buffs'), findsOneWidget);
   });
 
-  testWidgets('DEV TOOLS section shows Dev Tools tile', (tester) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    // Scroll to DEV TOOLS and expand it
-    await scrollAndTap(tester, find.text('DEV TOOLS'));
-
-    expect(find.text('Dev Tools'), findsOneWidget);
-  });
-
-  testWidgets('RESET DATA is always visible; END RUN hidden with no run', (
+  testWidgets('DEV TOOLS is hidden without an active run (U-027)', (
     tester,
   ) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // Scroll to the bottom — RESET DATA is always visible; END RUN
-    // only renders while a run is active (screen is reachable from
-    // the main menu with no run).
+    // Scroll to the bottom — DEV TOOLS must not render at all rather
+    // than offering a dead-end tile.
     await tester.scrollUntilVisible(
-      find.text('RESET DATA'),
+      find.text('RESET ALL DATA'),
       100.0,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
-    expect(find.text('RESET DATA'), findsOneWidget);
+    expect(find.text('DEV TOOLS'), findsNothing);
+    expect(find.text('Special Items & Guns'), findsNothing);
+  });
+
+  testWidgets('DEV TOOLS appears while a run is active', (tester) async {
+    final p = _LoadedRunProvider();
+    p.startNewRun(Gungeoneer(name: 'Marine'));
+
+    await tester.pumpWidget(wrap(const SettingsScreen(), provider: p));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('Special Items & Guns'),
+      100.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('DEV TOOLS'), findsOneWidget);
+    expect(find.text('Special Items & Guns'), findsOneWidget);
+    // Flush the run-save debounce scheduled by startNewRun.
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('RESET ALL DATA is always visible; END RUN hidden with no run', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('RESET ALL DATA'),
+      100.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('DANGER ZONE'), findsOneWidget);
+    expect(find.text('RESET ALL DATA'), findsOneWidget);
     expect(find.text('END RUN'), findsNothing);
   });
 
@@ -148,41 +157,22 @@ void main() {
     await tester.tap(find.text('END RUN'), warnIfMissed: false);
     // Use pump() not pumpAndSettle() — the dialog has perpetual animations.
     await tester.pump(const Duration(milliseconds: 300));
-    // Pump extra frames to let flutter_animate one-shot timers complete
-    // so they don't leave pending timers during test cleanup.
     await tester.pump(const Duration(milliseconds: 100));
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(Dialog), findsOneWidget);
   });
 
-  testWidgets('Tapping Dev Tools with no active run shows snackbar', (
+  testWidgets('Tapping RESET ALL DATA opens confirmation dialog', (
     tester,
   ) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // Scroll to DEV TOOLS and expand it
-    await scrollAndTap(tester, find.text('DEV TOOLS'));
-
-    // Scroll to Dev Tools and tap it
-    await scrollAndTap(tester, find.text('Dev Tools'));
-
-    expect(
-      find.text('Start a run first to spawn special items.'),
-      findsOneWidget,
-    );
-  });
-
-  testWidgets('Tapping RESET DATA opens confirmation dialog', (tester) async {
-    await tester.pumpWidget(wrap(const SettingsScreen()));
-    await tester.pumpAndSettle();
-
-    // Scroll to RESET DATA (no DANGER ZONE collapsible anymore)
-    await scrollAndTap(tester, find.text('RESET DATA'));
+    await scrollAndTap(tester, find.text('RESET ALL DATA'));
 
     expect(find.text('Reset All App Data?'), findsOneWidget);
-    expect(find.text('RESET EVERYTHING'), findsOneWidget);
+    expect(find.text('RESET ALL DATA'), findsWidgets);
     expect(find.text('Cancel'), findsWidgets);
   });
 
@@ -190,14 +180,10 @@ void main() {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
-    // Scroll to RESET DATA and tap it
-    await scrollAndTap(tester, find.text('RESET DATA'));
-
-    // Tap Cancel
+    await scrollAndTap(tester, find.text('RESET ALL DATA'));
     await tester.tap(find.text('Cancel').last);
     await tester.pumpAndSettle();
 
-    // Dialog should be dismissed
     expect(find.text('Reset All App Data?'), findsNothing);
   });
 
@@ -206,9 +192,65 @@ void main() {
   ) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
-
-    // Just verify the scaffold exists
     expect(find.byType(Scaffold), findsWidgets);
+  });
+
+  // ── Run tools sheet grouping (U-031) ─────────────────────────────
+
+  testWidgets('Tools sheet groups actions RUN → RESET → APP → DANGER', (
+    tester,
+  ) async {
+    final p = _LoadedRunProvider();
+    p.startNewRun(Gungeoneer(name: 'Marine'));
+
+    await tester.pumpWidget(wrap(const HeaderMenu(), provider: p));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    await tester.tap(find.byType(IconButton));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    // Group labels in order.
+    expect(find.text('RUN'), findsOneWidget);
+    expect(find.text('RESET'), findsOneWidget);
+    expect(find.text('APP'), findsOneWidget);
+    expect(find.text('DANGER'), findsOneWidget);
+
+    // Representative actions with subtitles.
+    expect(find.text('Ammonomicon'), findsOneWidget);
+    expect(find.text('Guns, items, synergies & more'), findsOneWidget);
+    expect(find.text('End Run'), findsOneWidget);
+    expect(find.text('Finish the run and return to menu'), findsOneWidget);
+  });
+
+  // ── resetAllAppData service (U-026) ──────────────────────────────
+
+  test('resetAllAppData clears prefs and in-memory run state', () async {
+    SharedPreferences.setMockInitialValues({
+      'favourites_v1': ['Marine'],
+      'haptics.intensity': 0,
+      'special.gunderfury.level': 5,
+    });
+    final p = _LoadedRunProvider();
+    p.startNewRun(Gungeoneer(name: 'Marine'));
+    p.toggleFavourite('Marine');
+    // Let the fire-and-forget favourites write land before the wipe.
+    await Future<void>.delayed(Duration.zero);
+    final session = MpSession.placeholder();
+
+    await resetAllAppData(runProvider: p, session: session);
+
+    final prefs = await SharedPreferences.getInstance();
+    // In-flight fire-and-forget writes may re-persist empty defaults
+    // after clear() — assert wiped values are gone or empty.
+    final favs = prefs.getStringList('favourites_v1');
+    expect(favs == null || favs.isEmpty, isTrue);
+    expect(prefs.getInt('special.gunderfury.level'), isNull);
+    expect(prefs.getInt('haptics.intensity'), isNull);
+    expect(p.runState.main.character, isNull);
+    expect(p.favouritesCount, 0);
+    expect(p.gunderfuryLevel, 1);
   });
 }
 

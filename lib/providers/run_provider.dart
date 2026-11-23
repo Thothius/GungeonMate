@@ -737,6 +737,25 @@ class RunProvider
     notifyListeners();
   }
 
+  /// Full app-data reset for Settings' RESET ALL DATA. Clears every
+  /// in-memory run/user field WITHOUT writing to SharedPreferences —
+  /// the caller clears prefs and rehydrates. Unlike [endRun], this also
+  /// wipes favourites, last-played character, Gunderfury XP, and the
+  /// save-corruption/restored-save flags so no stale "Continue Run"
+  /// offer or pending debounced save survives the wipe.
+  void resetAllAppData() {
+    _saveDebounce?.cancel();
+    _saveDebounce = null;
+    _runState = RunState();
+    _runRestoredFromSave = false;
+    _saveWasCorrupt = false;
+    _lebViewsAutoEnabled = false;
+    _favourites.clear();
+    _lastPlayedCharName = '';
+    _resetAllSpecialTrackers();
+    notifyListeners();
+  }
+
   // --- Per-slot mutations ------------------------------------------------
 
   Player _playerFor(PlayerSlot slot) =>

@@ -244,6 +244,28 @@ class AppTheme {
     }
   }
 
+  /// Synchronously reset every cached theme value to factory defaults.
+  /// Pair with [init] after SharedPreferences has been cleared — [init]
+  /// alone does not clear the unicorn palette, remix indices, or the
+  /// cached custom-theme data.
+  static void resetCachesToDefaults() {
+    _unicornPalette = UnicornPalette.cottonCandy;
+    unicornPaletteNotifier.value = _unicornPalette;
+    _remixIndex.clear();
+    remixNotifier.value = 0;
+    _cachedCustomTheme = null;
+    _customThemeName = 'Custom';
+    previewNotifier.value = null;
+    notifier.value = kVisibleThemes.first;
+  }
+
+  /// Full theme reset used by the app-data wipe: clears caches, then
+  /// rehydrates from (already cleared) prefs via [init].
+  static Future<void> resetToDefaults() async {
+    resetCachesToDefaults();
+    await init();
+  }
+
   /// Debug-only: print WCAG contrast warnings for every visible theme.
   /// Runs once at startup. Themes that fail the large-text threshold
   /// (3:1) are flagged as FAIL; those that pass large but fail body

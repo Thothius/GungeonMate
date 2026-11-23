@@ -43,6 +43,13 @@ class ColorFavorites {
     }
   }
 
+  /// Clear all slots in memory — used by the app-data reset after
+  /// `SharedPreferences.clear()`. [_loaded] stays true so [init] won't
+  /// rerun and resurrect nothing (the key is already gone).
+  static void reset() {
+    slots.value = List<int>.filled(slotCount, 0);
+  }
+
   /// Write a slot (argb 0 clears it) and persist immediately.
   static Future<void> setSlot(int index, int argb) async {
     if (index < 0 || index >= slotCount) return;

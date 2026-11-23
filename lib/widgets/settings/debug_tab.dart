@@ -6,6 +6,7 @@ import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/asset_paths.dart';
+import '../../utils/responsive.dart' show ScreenProfile, WindowClass;
 import '../quality_badge.dart';
 
 // =============================================================================
@@ -77,9 +78,15 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
     }
 
     final allOwned = entries.every((e) => e.owned);
+    final profile = ScreenProfile.of(context);
+    final crossAxisCount = switch (profile.widthClass) {
+      WindowClass.compact => 4,
+      WindowClass.medium => 6,
+      WindowClass.expanded || WindowClass.large => 8,
+    };
 
     return Scaffold(
-      backgroundColor: AppTheme.flair.card,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
@@ -98,7 +105,11 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          TextButton.icon(
+          FilledButton.tonalIcon(
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.greenAccent.withValues(alpha: 0.14),
+              foregroundColor: Colors.greenAccent,
+            ),
             onPressed: () {
               Haptics.selection();
               if (allOwned) {
@@ -136,54 +147,55 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
             icon: Icon(
               allOwned ? Icons.remove_circle : Icons.add_circle,
               size: 18,
-              color: Colors.greenAccent,
             ),
             label: GoopText(
               allOwned ? 'Remove All' : 'Add All',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.bold,
-                color: Colors.greenAccent,
               ),
             ),
           ),
         ],
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(12),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 0.82,
+      body: SafeArea(
+        top: false,
+        child: GridView.builder(
+          padding: const EdgeInsets.all(Insets.lg),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: Insets.sm,
+            mainAxisSpacing: Insets.sm,
+            childAspectRatio: 0.82,
+          ),
+          itemCount: entries.length,
+          itemBuilder: (context, index) {
+            final e = entries[index];
+            return _SpecialGridTile(
+              entry: e,
+              onTap: () {
+                Haptics.light();
+                if (e.owned) {
+                  if (e.isGun) {
+                    final gun = p.gunByName(e.name);
+                    if (gun != null) p.removeGun(gun, force: true);
+                  } else {
+                    final item = p.itemByName(e.name);
+                    if (item != null) p.removeItem(item, force: true);
+                  }
+                } else {
+                  if (e.isGun) {
+                    final gun = p.gunByName(e.name);
+                    if (gun != null) p.addGun(gun, force: true);
+                  } else {
+                    final item = p.itemByName(e.name);
+                    if (item != null) p.addItem(item, force: true);
+                  }
+                }
+              },
+            );
+          },
         ),
-        itemCount: entries.length,
-        itemBuilder: (context, index) {
-          final e = entries[index];
-          return _SpecialGridTile(
-            entry: e,
-            onTap: () {
-              Haptics.light();
-              if (e.owned) {
-                if (e.isGun) {
-                  final gun = p.gunByName(e.name);
-                  if (gun != null) p.removeGun(gun, force: true);
-                } else {
-                  final item = p.itemByName(e.name);
-                  if (item != null) p.removeItem(item, force: true);
-                }
-              } else {
-                if (e.isGun) {
-                  final gun = p.gunByName(e.name);
-                  if (gun != null) p.addGun(gun, force: true);
-                } else {
-                  final item = p.itemByName(e.name);
-                  if (item != null) p.addItem(item, force: true);
-                }
-              }
-            },
-          );
-        },
       ),
     );
   }
@@ -212,22 +224,25 @@ class _SpecialGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = QualityBadge.colorFor(entry.quality);
+    final flair = AppTheme.flair;
+    final still = MediaQuery.disableAnimationsOf(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: still ? Duration.zero : Motion.fast,
         decoration: BoxDecoration(
           color:
               entry.owned
-                  ? accent.withValues(alpha: 0.08)
-                  : Colors.white.withValues(alpha: 0.02),
-          borderRadius: BorderRadius.circular(10),
+                  ? accent.withValues(alpha: 0.1)
+                  : flair.card.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(flair.cardRadius),
           border: Border.all(
             color:
                 entry.owned
-                    ? accent.withValues(alpha: 0.6)
-                    : Colors.white.withValues(alpha: 0.08),
+                    ? accent.withValues(alpha: 0.65)
+                    : (flair.cardBorderColor ??
+                        Colors.white.withValues(alpha: 0.1)),
             width: entry.owned ? 1.5 : 1,
           ),
         ),
@@ -241,7 +256,7 @@ class _SpecialGridTile extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: Colors.black26,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(flair.chipRadius),
                   ),
                   padding: const EdgeInsets.all(4),
                   child: Image.asset(

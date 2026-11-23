@@ -114,6 +114,41 @@ mixin _SpecialTrackers on ChangeNotifier {
 
   int get cigarettesUses => _cigarettesUses;
 
+  /// Factory defaults for every special tracker. Used only by
+  /// [RunProvider.resetAllAppData] — unlike the per-run reset this also
+  /// clears Gunderfury XP and performs no SharedPreferences writes.
+  void _resetAllSpecialTrackers() {
+    _gunderfuryLevel = 1;
+    _tripleGunForm = 1;
+    _evolverForm = 1;
+    _evolverKills = 0;
+    _spiceUsageCount = 0;
+    _shellegunMode = 1;
+    _chamberGunFloor = 0;
+    _platinumBulletsSeconds = 0;
+    _ironCoinUses = 3;
+    _polarisKills = 0;
+    _polarisDamageHits = 0;
+    _guntherFriendship = 0;
+    _gunSoulActivated = false;
+    _sprunTriggerIndex = -1;
+    _windgunnerTimer?.cancel();
+    _windgunnerTimer = null;
+    _windgunnerCountdown = 0;
+    _robotArmor = 6;
+    _robotJunk = 0;
+    _robotGoldJunk = false;
+    _robotLies = false;
+    _fireplaceExtinguished = false;
+    _batteryBulletsSynergy = false;
+    _fuseDisarmer = false;
+    _huntressRoomClears = 0;
+    _huntressInjured = false;
+    _metronomeKills = 0;
+    _boxingGloveStars = 0;
+    _cigarettesUses = 0;
+  }
+
   Future<void> _loadSpecialUpgrades() async {
     try {
       final prefs = await SharedPreferences.getInstance();

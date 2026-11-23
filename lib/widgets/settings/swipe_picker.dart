@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/haptics.dart';
+import '../../theme/tokens.dart';
 
 class SwipePicker<T> extends StatefulWidget {
   final List<T> items;
@@ -43,7 +44,10 @@ class _SwipePickerState<T> extends State<SwipePicker<T>> {
         if (_pc.hasClients) {
           _pc.animateToPage(
             newIdx,
-            duration: const Duration(milliseconds: 200),
+            duration:
+                MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : Motion.base,
             curve: Curves.easeOut,
           );
         }
@@ -74,7 +78,10 @@ class _SwipePickerState<T> extends State<SwipePicker<T>> {
           final isSelected = item == widget.value;
           final isFocused = i == _index;
           return AnimatedScale(
-            duration: const Duration(milliseconds: 200),
+            duration:
+                MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : Motion.base,
             scale: isFocused ? 1.0 : 0.92,
             curve: Curves.easeOut,
             child: Padding(

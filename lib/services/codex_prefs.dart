@@ -23,12 +23,18 @@ class CodexPrefs {
 
   static Future<void>? _initFuture;
 
-  @visibleForTesting
-  static void debugReset() {
+  /// Clear in-memory favorites/recents and force a reload on the next
+  /// [ensureLoaded]. Used by the app-data reset after
+  /// `SharedPreferences.clear()` — [ensureLoaded] alone would not rerun
+  /// because its future already completed.
+  static void reset() {
     _initFuture = null;
     favorites.value = <String>{};
     recents.value = <String>[];
   }
+
+  @visibleForTesting
+  static void debugReset() => reset();
 
   /// Idempotent load — call once from the codex screen's initState.
   static Future<void> ensureLoaded() {

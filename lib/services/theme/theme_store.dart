@@ -66,6 +66,11 @@ class CustomThemeStore {
 
   static List<SavedCustomTheme> get themes => notifier.value;
 
+  /// Clear the in-memory gallery — used by the app-data reset after
+  /// `SharedPreferences.clear()`. [load] alone would not empty the
+  /// notifier when the key is absent.
+  static void reset() => notifier.value = <SavedCustomTheme>[];
+
   static Future<void> load() async {
     try {
       final prefs = await SharedPreferences.getInstance();
