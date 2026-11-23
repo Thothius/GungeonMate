@@ -1,5 +1,14 @@
 part of 'item_body.dart';
 
+/// Theme-tied panel accent: keeps each special panel's signature hue
+/// (amber Junkan, cyan Sprun…) but borrows lightness/saturation from
+/// the active palette's primary — panels re-skin per theme instead of
+/// staying raw Material accents (U-055 tail).
+Color _panelAccent(BuildContext context, double hue) {
+  final hsl = HSLColor.fromColor(AppTheme.flair.primary);
+  return hsl.withHue(hue).toColor();
+}
+
 // Special-item info sections extracted from ItemBody (Phase 5d) —
 // same library, abstract field requirements satisfied by ItemBody.
 
@@ -120,15 +129,15 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.amber.withValues(alpha: 0.08),
+        color: _panelAccent(context, 45.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Colors.amber.withValues(alpha: 0.35),
+          color: _panelAccent(context, 45.0).withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.amber.withValues(alpha: 0.04),
+            color: _panelAccent(context, 45.0).withValues(alpha: 0.04),
             blurRadius: 8,
             spreadRadius: 1,
           ),
@@ -139,7 +148,7 @@ mixin _ItemBodySections on StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.stars, color: Colors.amber.shade300, size: 20),
+              Icon(Icons.stars, color: Color.lerp(_panelAccent(context, 45.0), Colors.white, 0.55), size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: GoopText(
@@ -147,7 +156,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
-                    color: Colors.amber.shade300,
+                    color: Color.lerp(_panelAccent(context, 45.0), Colors.white, 0.55),
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -201,7 +210,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Colors.amber,
+                        color: _panelAccent(context, 45.0),
                       ),
                     ),
                   ),
@@ -230,7 +239,7 @@ mixin _ItemBodySections on StatelessWidget {
                 children: [
                   Icon(
                     Icons.precision_manufacturing_outlined,
-                    color: Colors.amber.shade200,
+                    color: Color.lerp(_panelAccent(context, 45.0), Colors.white, 0.4),
                     size: 16,
                   ),
                   const SizedBox(width: 6),
@@ -242,7 +251,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
               Switch(
                 value: hasGoldJunk,
-                activeThumbColor: Colors.amber,
+                activeThumbColor: _panelAccent(context, 45.0),
                 onChanged: (val) {
                   if (goldJunkItem == null) return;
                   if (val) {
@@ -266,7 +275,7 @@ mixin _ItemBodySections on StatelessWidget {
                   color: Colors.black38,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: Colors.amber.withValues(alpha: 0.35),
+                    color: _panelAccent(context, 45.0).withValues(alpha: 0.35),
                     width: 1.2,
                   ),
                 ),
@@ -280,7 +289,7 @@ mixin _ItemBodySections on StatelessWidget {
                     cacheHeight: 144,
                     errorBuilder:
                         (_, _, _) =>
-                            Icon(Icons.shield, color: Colors.amber, size: 32),
+                            Icon(Icons.shield, color: _panelAccent(context, 45.0), size: 32),
                   ),
                 ),
               ),
@@ -294,7 +303,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
-                        color: Colors.amberAccent,
+                        color: _panelAccent(context, 45.0),
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -370,16 +379,16 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.08),
+        color: _panelAccent(context, 0.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 0.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.spa, color: Colors.redAccent.shade100, size: 20),
+              Icon(Icons.spa, color: Color.lerp(_panelAccent(context, 0.0), Colors.white, 0.25), size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: GoopText(
@@ -387,7 +396,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.redAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 0.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -465,7 +474,7 @@ mixin _ItemBodySections on StatelessWidget {
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontStyle: FontStyle.italic,
-              color: Colors.redAccent.shade100.withValues(alpha: 0.8),
+              color: Color.lerp(_panelAccent(context, 0.0), Colors.white, 0.25)!.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -494,10 +503,10 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.cyan.withValues(alpha: 0.08),
+        color: _panelAccent(context, 187.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Colors.cyanAccent.withValues(alpha: 0.35),
+          color: _panelAccent(context, 187.0).withValues(alpha: 0.35),
           width: 1.2,
         ),
       ),
@@ -508,7 +517,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.radar_outlined,
-                color: Colors.cyanAccent.shade200,
+                color: Color.lerp(_panelAccent(context, 187.0), Colors.white, 0.4),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -518,7 +527,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w900,
-                    color: Colors.cyanAccent.shade200,
+                    color: Color.lerp(_panelAccent(context, 187.0), Colors.white, 0.4),
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -533,7 +542,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Colors.black26,
                 borderRadius: BorderRadius.all(Radii.sm),
                 border: Border.all(
-                  color: Colors.cyanAccent.withValues(alpha: 0.15),
+                  color: _panelAccent(context, 187.0).withValues(alpha: 0.15),
                 ),
               ),
               child: Column(
@@ -541,7 +550,7 @@ mixin _ItemBodySections on StatelessWidget {
                   Icon(
                     Icons.blur_circular_outlined,
                     size: 36,
-                    color: Colors.cyanAccent,
+                    color: _panelAccent(context, 187.0),
                   ),
                   const SizedBox(height: 8),
                   GoopText(
@@ -569,7 +578,7 @@ mixin _ItemBodySections on StatelessWidget {
                     height: 38,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.cyan.shade900,
+                        backgroundColor: Color.lerp(_panelAccent(context, 187.0), Colors.black, 0.4),
                         foregroundColor: Theme.of(context).colorScheme.onSurface,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radii.sm),
@@ -601,7 +610,7 @@ mixin _ItemBodySections on StatelessWidget {
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
-                color: Colors.cyanAccent,
+                color: _panelAccent(context, 187.0),
                 letterSpacing: 0.5,
               ),
             ),
@@ -618,13 +627,13 @@ mixin _ItemBodySections on StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         isMatch
-                            ? Colors.cyan.withValues(alpha: 0.18)
+                            ? _panelAccent(context, 187.0).withValues(alpha: 0.18)
                             : Colors.black12,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color:
                           isMatch
-                              ? Colors.cyanAccent.withValues(alpha: 0.5)
+                              ? _panelAccent(context, 187.0).withValues(alpha: 0.5)
                               : Colors.white.withValues(alpha: 0.04),
                     ),
                   ),
@@ -633,7 +642,7 @@ mixin _ItemBodySections on StatelessWidget {
                       Icon(
                         isMatch ? Icons.check_circle : Icons.circle_outlined,
                         size: 14,
-                        color: isMatch ? Colors.cyanAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
+                        color: isMatch ? _panelAccent(context, 187.0) : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -662,7 +671,7 @@ mixin _ItemBodySections on StatelessWidget {
                   'Mystery seed decoded successfully.',
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
-                    color: Colors.cyanAccent.withValues(alpha: 0.5),
+                    color: _panelAccent(context, 187.0).withValues(alpha: 0.5),
                   ),
                 ),
                 InkWell(
@@ -677,7 +686,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.bold,
-                        color: Colors.cyanAccent.shade100,
+                        color: Color.lerp(_panelAccent(context, 187.0), Colors.white, 0.25),
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -692,13 +701,13 @@ mixin _ItemBodySections on StatelessWidget {
             decoration: BoxDecoration(
               color:
                   isWindgunnerActive
-                      ? Colors.cyan.withValues(alpha: 0.12)
+                      ? _panelAccent(context, 187.0).withValues(alpha: 0.12)
                       : Colors.black12,
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
                 color:
                     isWindgunnerActive
-                        ? Colors.cyanAccent.withValues(alpha: 0.3)
+                        ? _panelAccent(context, 187.0).withValues(alpha: 0.3)
                         : Colors.transparent,
               ),
             ),
@@ -717,7 +726,7 @@ mixin _ItemBodySections on StatelessWidget {
                           fontWeight: FontWeight.w900,
                           color:
                               isWindgunnerActive
-                                  ? Colors.cyanAccent
+                                  ? _panelAccent(context, 187.0)
                                   : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                           letterSpacing: 0.3,
                         ),
@@ -739,8 +748,8 @@ mixin _ItemBodySections on StatelessWidget {
                   ),
                 ),
                 Switch(
-                  activeThumbColor: Colors.cyanAccent,
-                  activeTrackColor: Colors.cyan.shade900,
+                  activeThumbColor: _panelAccent(context, 187.0),
+                  activeTrackColor: Color.lerp(_panelAccent(context, 187.0), Colors.black, 0.4),
                   value: isWindgunnerActive,
                   onChanged: (val) {
                     if (val) {
@@ -796,10 +805,10 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.blueAccent.withValues(alpha: 0.08),
+        color: _panelAccent(context, 210.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Colors.blueAccent.withValues(alpha: 0.35),
+          color: _panelAccent(context, 210.0).withValues(alpha: 0.35),
           width: 1.2,
         ),
       ),
@@ -810,7 +819,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.groups_outlined,
-                color: Colors.blueAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 210.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -823,7 +832,7 @@ mixin _ItemBodySections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w900,
-                        color: Colors.blueAccent,
+                        color: _panelAccent(context, 210.0),
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -847,7 +856,7 @@ mixin _ItemBodySections on StatelessWidget {
                   color: Colors.black45,
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: Colors.blueAccent.withValues(alpha: 0.3),
+                    color: _panelAccent(context, 210.0).withValues(alpha: 0.3),
                   ),
                 ),
                 child: GoopText(
@@ -856,7 +865,7 @@ mixin _ItemBodySections on StatelessWidget {
                     fontSize: 11,
                     fontFamily: 'ArcadeClassic',
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent,
+                    color: _panelAccent(context, 210.0),
                   ),
                 ),
               ),
@@ -907,7 +916,7 @@ mixin _ItemBodySections on StatelessWidget {
               color: Colors.black38,
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
-                color: Colors.blueAccent.withValues(alpha: 0.15),
+                color: _panelAccent(context, 210.0).withValues(alpha: 0.15),
               ),
             ),
             child: Column(
@@ -918,7 +927,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
                     fontWeight: FontWeight.w900,
-                    color: Colors.blueAccent,
+                    color: _panelAccent(context, 210.0),
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -947,7 +956,7 @@ mixin _ItemBodySections on StatelessWidget {
                     'Dallas + Wolf Active: Added blank defense. Deletes projectiles.',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Colors.cyanAccent,
+                      color: _panelAccent(context, 187.0),
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                     ),
@@ -957,7 +966,7 @@ mixin _ItemBodySections on StatelessWidget {
                     'Dallas + Wolf + Chains Active: FULL HEIST CREW ASSEMBLED! Automated shotgun scaling active. Infinite heister capabilities!',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Colors.greenAccent,
+                      color: _panelAccent(context, 120.0),
                       fontWeight: FontWeight.w900,
                       height: 1.2,
                     ),
@@ -998,13 +1007,13 @@ mixin _ItemBodySections on StatelessWidget {
               decoration: BoxDecoration(
                 color:
                     active
-                        ? Colors.blueAccent.withValues(alpha: 0.18)
+                        ? _panelAccent(context, 210.0).withValues(alpha: 0.18)
                         : Colors.black26,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color:
                       active
-                          ? Colors.blueAccent
+                          ? _panelAccent(context, 210.0)
                           : Colors.white.withValues(alpha: 0.05),
                   width: active ? 1.5 : 1.0,
                 ),
@@ -1015,7 +1024,7 @@ mixin _ItemBodySections on StatelessWidget {
                   Icon(
                     avatar,
                     size: 24,
-                    color: active ? Colors.blueAccent.shade100 : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
+                    color: active ? Color.lerp(_panelAccent(context, 210.0), Colors.white, 0.25) : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                   ),
                   const SizedBox(height: 4),
                   GoopText(
@@ -1035,7 +1044,7 @@ mixin _ItemBodySections on StatelessWidget {
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
                       fontWeight: FontWeight.bold,
-                      color: active ? Colors.greenAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
+                      color: active ? _panelAccent(context, 120.0) : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -1059,9 +1068,9 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.indigo.withValues(alpha: 0.08),
+        color: _panelAccent(context, 240.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.indigoAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 240.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1070,7 +1079,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.trending_up,
-                color: Colors.indigoAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 240.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -1080,7 +1089,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.indigoAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 240.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -1151,9 +1160,9 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.amber.withValues(alpha: 0.08),
+        color: _panelAccent(context, 45.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 45.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1162,7 +1171,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.monetization_on,
-                color: Colors.amberAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 45.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -1172,7 +1181,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.amberAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 45.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -1214,7 +1223,7 @@ mixin _ItemBodySections on StatelessWidget {
                 child: Icon(
                   spent ? Icons.radio_button_unchecked : Icons.check_circle,
                   size: 18,
-                  color: spent ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24) : Colors.amberAccent,
+                  color: spent ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24) : _panelAccent(context, 45.0),
                 ),
               );
             }),
@@ -1248,9 +1257,9 @@ mixin _ItemBodySections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.purple.withValues(alpha: 0.08),
+        color: _panelAccent(context, 280.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 280.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1259,7 +1268,7 @@ mixin _ItemBodySections on StatelessWidget {
             children: [
               Icon(
                 Icons.brightness_3,
-                color: Colors.purpleAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 280.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -1269,7 +1278,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.purpleAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 280.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -1288,7 +1297,7 @@ mixin _ItemBodySections on StatelessWidget {
                       Icon(
                         has ? Icons.check_circle : Icons.circle_outlined,
                         size: 14,
-                        color: has ? Colors.purpleAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
+                        color: has ? _panelAccent(context, 280.0) : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                       ),
                       const SizedBox(width: 4),
                       GoopText(
@@ -1299,7 +1308,7 @@ mixin _ItemBodySections on StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: has ? FontWeight.bold : FontWeight.normal,
-                          color: has ? Colors.purpleAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
+                          color: has ? _panelAccent(context, 280.0) : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
                         ),
                       ),
                     ],

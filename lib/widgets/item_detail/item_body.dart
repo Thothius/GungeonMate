@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/item.dart';
 import '../../models/player.dart';
 import '../../providers/run_provider.dart';
+import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import 'description_blocks.dart';

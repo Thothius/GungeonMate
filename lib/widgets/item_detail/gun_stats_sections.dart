@@ -1,5 +1,14 @@
 part of 'gun_stats.dart';
 
+/// Theme-tied panel accent: keeps each special panel's signature hue
+/// (amber Junkan, cyan Sprun…) but borrows lightness/saturation from
+/// the active palette's primary — panels re-skin per theme instead of
+/// staying raw Material accents (U-055 tail).
+Color _panelAccent(BuildContext context, double hue) {
+  final hsl = HSLColor.fromColor(AppTheme.flair.primary);
+  return hsl.withHue(hue).toColor();
+}
+
 // Special-gun info sections extracted from GunStats (Phase 5d) —
 // same library, abstract field requirement satisfied by GunStats.
 
@@ -57,15 +66,15 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: Insets.md),
       decoration: BoxDecoration(
-        color: Colors.purple.withValues(alpha: 0.08),
+        color: _panelAccent(context, 280.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: Colors.purpleAccent.withValues(alpha: 0.35),
+          color: _panelAccent(context, 280.0).withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.purpleAccent.withValues(alpha: 0.04),
+            color: _panelAccent(context, 280.0).withValues(alpha: 0.04),
             blurRadius: 8,
             spreadRadius: 1,
           ),
@@ -76,7 +85,7 @@ mixin _GunStatsSections on StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.bolt, color: Colors.purpleAccent.shade100, size: 20),
+              Icon(Icons.bolt, color: Color.lerp(_panelAccent(context, 280.0), Colors.white, 0.25), size: 20),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -84,7 +93,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
-                    color: Colors.purpleAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 280.0), Colors.white, 0.25),
                     letterSpacing: 0.8,
                   ),
                 ),
@@ -116,7 +125,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Colors.purpleAccent,
+                        color: _panelAccent(context, 280.0),
                       ),
                     ),
                   ),
@@ -138,11 +147,11 @@ mixin _GunStatsSections on StatelessWidget {
           const SizedBox(height: 10),
           SliderTheme(
             data: SliderThemeData(
-              activeTrackColor: Colors.purpleAccent,
-              inactiveTrackColor: Colors.purple.withValues(alpha: 0.2),
-              thumbColor: Colors.purpleAccent,
-              overlayColor: Colors.purpleAccent.withValues(alpha: 0.2),
-              valueIndicatorColor: Colors.purple,
+              activeTrackColor: _panelAccent(context, 280.0),
+              inactiveTrackColor: _panelAccent(context, 280.0).withValues(alpha: 0.2),
+              thumbColor: _panelAccent(context, 280.0),
+              overlayColor: _panelAccent(context, 280.0).withValues(alpha: 0.2),
+              valueIndicatorColor: _panelAccent(context, 280.0),
               trackHeight: 4,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
               overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
@@ -182,8 +191,8 @@ mixin _GunStatsSections on StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color:
                       lvl == 60
-                          ? Colors.amberAccent
-                          : Colors.purpleAccent.shade100,
+                          ? _panelAccent(context, 45.0)
+                          : Color.lerp(_panelAccent(context, 280.0), Colors.white, 0.25),
                 ),
               ),
             ],
@@ -194,9 +203,9 @@ mixin _GunStatsSections on StatelessWidget {
             child: LinearProgressIndicator(
               value: xpProgress,
               minHeight: 6,
-              backgroundColor: Colors.purple.withValues(alpha: 0.15),
+              backgroundColor: _panelAccent(context, 280.0).withValues(alpha: 0.15),
               valueColor: AlwaysStoppedAnimation<Color>(
-                lvl == 60 ? Colors.amber : Colors.purpleAccent,
+                lvl == 60 ? _panelAccent(context, 45.0) : _panelAccent(context, 280.0),
               ),
             ),
           ),
@@ -249,7 +258,7 @@ mixin _GunStatsSections on StatelessWidget {
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(
-                    color: Colors.purpleAccent.withValues(alpha: 0.3),
+                    color: _panelAccent(context, 280.0).withValues(alpha: 0.3),
                     width: 1.2,
                   ),
                 ),
@@ -271,7 +280,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.5,
                         fontWeight: FontWeight.w900,
-                        color: Colors.purpleAccent,
+                        color: _panelAccent(context, 280.0),
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -323,9 +332,9 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.blue.withValues(alpha: 0.08),
+        color: _panelAccent(context, 210.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 210.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,7 +343,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.alt_route,
-                color: Colors.blueAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 210.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: Insets.sm),
@@ -344,7 +353,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 210.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -405,7 +414,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '13.5 DPS',
         bullet: 'Base round shots',
         icon: Icons.bubble_chart_outlined,
-        color: Colors.tealAccent,
+        color: _panelAccent(context, 175.0),
       ),
       EvolverStageSpec(
         id: 2,
@@ -413,7 +422,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '19.1 DPS',
         bullet: 'Soaks up shots',
         icon: Icons.layers_outlined,
-        color: Colors.greenAccent,
+        color: _panelAccent(context, 120.0),
       ),
       EvolverStageSpec(
         id: 3,
@@ -421,7 +430,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '25.8 DPS',
         bullet: 'Wide flattened shots',
         icon: Icons.gesture_outlined,
-        color: Colors.limeAccent,
+        color: _panelAccent(context, 80.0),
       ),
       EvolverStageSpec(
         id: 4,
@@ -429,7 +438,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '34.5 DPS',
         bullet: '3-spiked shell spread',
         icon: Icons.gps_fixed_outlined,
-        color: Colors.amberAccent,
+        color: _panelAccent(context, 45.0),
       ),
       EvolverStageSpec(
         id: 5,
@@ -437,7 +446,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '23.0 DPS',
         bullet: 'Continuous tracking tongue',
         icon: Icons.pets_outlined,
-        color: Colors.orangeAccent,
+        color: _panelAccent(context, 30.0),
       ),
       EvolverStageSpec(
         id: 6,
@@ -445,7 +454,7 @@ mixin _GunStatsSections on StatelessWidget {
         dps: '93.8 DPS',
         bullet: 'Accelerating homing blue flames',
         icon: Icons.fireplace_outlined,
-        color: Colors.redAccent,
+        color: _panelAccent(context, 0.0),
       ),
     ];
 
@@ -454,15 +463,15 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.green.withValues(alpha: 0.08),
+        color: _panelAccent(context, 120.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Colors.greenAccent.withValues(alpha: 0.35),
+          color: _panelAccent(context, 120.0).withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.withValues(alpha: 0.03),
+            color: _panelAccent(context, 120.0).withValues(alpha: 0.03),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -475,7 +484,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.science_outlined,
-                color: Colors.greenAccent.shade200,
+                color: Color.lerp(_panelAccent(context, 120.0), Colors.white, 0.4),
                 size: 22,
               ),
               const SizedBox(width: Insets.sm),
@@ -488,7 +497,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w900,
-                        color: Colors.greenAccent.shade200,
+                        color: Color.lerp(_panelAccent(context, 120.0), Colors.white, 0.4),
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -496,7 +505,7 @@ mixin _GunStatsSections on StatelessWidget {
                       'Biological Adaptations Slay Counter',
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
-                        color: Colors.greenAccent.withValues(alpha: 0.6),
+                        color: _panelAccent(context, 120.0).withValues(alpha: 0.6),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -508,7 +517,7 @@ mixin _GunStatsSections on StatelessWidget {
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(
-                    color: Colors.greenAccent.withValues(alpha: 0.25),
+                    color: _panelAccent(context, 120.0).withValues(alpha: 0.25),
                   ),
                 ),
                 child: Row(
@@ -520,7 +529,7 @@ mixin _GunStatsSections on StatelessWidget {
                       icon: Icon(
                         Icons.remove,
                         size: 16,
-                        color: Colors.greenAccent,
+                        color: _panelAccent(context, 120.0),
                       ),
                       onPressed:
                           totalKills > 0
@@ -537,7 +546,7 @@ mixin _GunStatsSections on StatelessWidget {
                           fontSize: 13,
                           fontFamily: 'ArcadeClassic',
                           fontWeight: FontWeight.bold,
-                          color: Colors.greenAccent,
+                          color: _panelAccent(context, 120.0),
                         ),
                       ),
                     ),
@@ -547,7 +556,7 @@ mixin _GunStatsSections on StatelessWidget {
                       icon: Icon(
                         Icons.add,
                         size: 16,
-                        color: Colors.greenAccent,
+                        color: _panelAccent(context, 120.0),
                       ),
                       onPressed:
                           totalKills < 25
@@ -571,7 +580,7 @@ mixin _GunStatsSections on StatelessWidget {
                 final color =
                     isActive
                         ? spec.color
-                        : (isUnlocked ? Colors.green.shade700 : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12));
+                        : (isUnlocked ? Color.lerp(_panelAccent(context, 120.0), Colors.black, 0.2)! : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12));
 
                 return Expanded(
                   child: Stack(
@@ -586,7 +595,7 @@ mixin _GunStatsSections on StatelessWidget {
                             height: 2.5,
                             color:
                                 isUnlocked && activeStage > spec.id
-                                    ? Colors.green.withValues(alpha: 0.5)
+                                    ? _panelAccent(context, 120.0).withValues(alpha: 0.5)
                                     : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.10),
                           ),
                         ),
@@ -658,7 +667,7 @@ mixin _GunStatsSections on StatelessWidget {
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
-              color: Colors.greenAccent,
+              color: _panelAccent(context, 120.0),
               letterSpacing: 0.5,
             ),
           ),
@@ -686,16 +695,16 @@ mixin _GunStatsSections on StatelessWidget {
                     color:
                         isChecked
                             ? (isThresholdNode
-                                ? Colors.green.shade800
-                                : Colors.green.withValues(alpha: 0.35))
+                                ? Color.lerp(_panelAccent(context, 120.0), Colors.black, 0.3)
+                                : _panelAccent(context, 120.0).withValues(alpha: 0.35))
                             : Colors.black38,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color:
                           isChecked
-                              ? Colors.greenAccent
+                              ? _panelAccent(context, 120.0)
                               : (isThresholdNode
-                                  ? Colors.greenAccent.withValues(alpha: 0.3)
+                                  ? _panelAccent(context, 120.0).withValues(alpha: 0.3)
                                   : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12)),
                       width: isThresholdNode ? 1.5 : 1.0,
                     ),
@@ -706,7 +715,7 @@ mixin _GunStatsSections on StatelessWidget {
                             ? Icon(
                               isThresholdNode ? Icons.star : Icons.check,
                               size: 13,
-                              color: Colors.greenAccent,
+                              color: _panelAccent(context, 120.0),
                             )
                             : GoopText(
                               '$killNum',
@@ -715,7 +724,7 @@ mixin _GunStatsSections on StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color:
                                     isThresholdNode
-                                        ? Colors.greenAccent.withValues(
+                                        ? _panelAccent(context, 120.0).withValues(
                                           alpha: 0.4,
                                         )
                                         : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
@@ -811,16 +820,16 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.teal.withValues(alpha: 0.08),
+        color: _panelAccent(context, 175.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 175.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.tune, color: Colors.tealAccent.shade100, size: 20),
+              Icon(Icons.tune, color: Color.lerp(_panelAccent(context, 175.0), Colors.white, 0.25), size: 20),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -828,7 +837,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.tealAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 175.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -908,10 +917,10 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.deepOrange.withValues(alpha: 0.08),
+        color: _panelAccent(context, 20.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Colors.deepOrangeAccent.withValues(alpha: 0.3),
+          color: _panelAccent(context, 20.0).withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -921,7 +930,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.layers,
-                color: Colors.deepOrangeAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 20.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: Insets.sm),
@@ -931,7 +940,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepOrangeAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 20.0), Colors.white, 0.25),
                   ),
                 ),
               ),
@@ -976,9 +985,9 @@ mixin _GunStatsSections on StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.lime.withValues(alpha: 0.08),
+        color: _panelAccent(context, 80.0).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.limeAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: _panelAccent(context, 80.0).withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -987,7 +996,7 @@ mixin _GunStatsSections on StatelessWidget {
             children: [
               Icon(
                 Icons.sports_baseball,
-                color: Colors.limeAccent.shade100,
+                color: Color.lerp(_panelAccent(context, 80.0), Colors.white, 0.25),
                 size: 20,
               ),
               const SizedBox(width: Insets.sm),
@@ -997,7 +1006,7 @@ mixin _GunStatsSections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
-                    color: Colors.limeAccent.shade100,
+                    color: Color.lerp(_panelAccent(context, 80.0), Colors.white, 0.25),
                   ),
                 ),
               ),
