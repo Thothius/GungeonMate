@@ -8,6 +8,7 @@ import '../../services/haptics.dart';
 import '../game_icon.dart';
 import '../quality_badge.dart';
 import '../bug_report/bug_report_sheet.dart';
+import '../element_badge.dart';
 import '../../models/bug_report.dart';
 import '../../services/codex_prefs.dart';
 import '../../utils/responsive.dart';
@@ -68,8 +69,7 @@ class ItemDetailHeader extends StatelessWidget {
 
     final tags = <Widget>[
       if (!isGun) _TagChip(icon: typeIcon, label: typeLabel, color: typeColor),
-      for (final e in elements)
-        _TagChip(icon: e.icon, label: e.label, color: e.color),
+      for (final e in elements) ElementBadge(element: e, size: 22),
       if (chestColor.isNotEmpty) _ChestChip(chestColor: chestColor),
       MetadataChip(
         icon: Icons.hub_outlined,
@@ -123,13 +123,23 @@ class ItemDetailHeader extends StatelessWidget {
                           const SizedBox(width: 8),
                           _SellBadge(price: sellPrice),
                         ],
-                        // Element tag beside tier+sell — always top-left.
+                        // Fire-mode chip (Semi/Auto/Charge…) — was
+                        // invisible everywhere (U-048).
+                        if (subtitle.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          _TagChip(
+                            icon: Icons.bolt_outlined,
+                            label: subtitle,
+                            color: Colors.deepOrangeAccent,
+                          ),
+                        ],
+                        // Element badges beside tier+sell — always top-left.
                         if (elements.isNotEmpty) ...[
                           const SizedBox(width: 8),
                           for (final e in elements)
                             Padding(
                               padding: const EdgeInsets.only(right: 4),
-                              child: _ElementDot(kind: e),
+                              child: ElementBadge(element: e),
                             ),
                         ],
                       ],
@@ -158,12 +168,13 @@ class ItemDetailHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            // Gun graphic
+            // Gun graphic — same 80px footprint as items (U-009 icon
+            // unification; guns read fine at item scale).
             GameIcon(
               assetPath: iconPath,
               fallback: Icons.gps_fixed,
               quality: quality,
-              size: 96,
+              size: 80,
               showRing: false,
             ),
             const SizedBox(height: 12),
@@ -429,32 +440,6 @@ class _SellBadge extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Elemental status dot — icon-only tinted circle (fire/electric/etc).
-class _ElementDot extends StatelessWidget {
-  final ElementKind kind;
-  const _ElementDot({required this.kind});
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: kind.label,
-      child: Container(
-        width: 28,
-        height: 28,
-        decoration: BoxDecoration(
-          color: kind.color.withValues(alpha: 0.14),
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: kind.color.withValues(alpha: 0.45),
-            width: 1.0,
-          ),
-        ),
-        child: Icon(kind.icon, size: ChipStyle.icon, color: kind.color),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../models/gun.dart';
 import '../models/item.dart';
 import '../services/elemental_tagger.dart';
+import 'element_badge.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
@@ -162,7 +163,7 @@ class _InventoryListRowState extends State<InventoryListRow> {
                         if (els.isNotEmpty) ...[
                           for (final e in ElementKind.values)
                             if (els.contains(e))
-                              _ElementDot(element: e, size: 8),
+                              ElementBadge(element: e, size: 14),
                         ],
                       ],
                     ),
@@ -347,18 +348,4 @@ class _TypePill extends StatelessWidget {
   }
 }
 
-class _ElementDot extends StatelessWidget {
-  final ElementKind element;
-  final double size;
 
-  const _ElementDot({required this.element, required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(color: element.color, shape: BoxShape.circle),
-    );
-  }
-}

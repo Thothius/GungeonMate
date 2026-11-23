@@ -238,22 +238,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                       ownerSlot: ownerSlot,
                                     )
                                   else
-                                    _ElementTagRow(
-                                      elements: ElementalTagger.elementsOfGun(
-                                        gun,
-                                      ),
-                                    ),
+                                    GunStats(gun: gun),
                                 ],
                               ),
                             ),
                           ),
-                          // ---- Flat single-scroll layout (no tabs): STATS →
-                          // SYNERGIES → NOTES/wiki last. Gun path renders everything;
-                          // item path keeps its existing flat body + synergy section.
-                          if (gun != null)
-                            SliverToBoxAdapter(
-                              child: GunStats(gun: gun),
-                            ),
+                          // ---- Flat single-scroll layout (no tabs): SYNERGIES
+                          // → NOTES/wiki last. Both entity types render their
+                          // body inside the header card (U-051) — items get
+                          // ItemBody, guns get GunStats + special panels.
                           // Collapsible detail tabs — all closed by default so
                           // the page stays compact; tapping a header expands
                           // that section (tap again to close). SYNERGIES
@@ -723,44 +716,6 @@ class _EmptyTabNote extends StatelessWidget {
           fontStyle: FontStyle.italic,
           color: Colors.white.withValues(alpha: 0.45),
         ),
-      ),
-    );
-  }
-}
-
-/// Element tags rendered inline under the header card — flat rework
-class _ElementTagRow extends StatelessWidget {
-  final Set<ElementKind> elements;
-  const _ElementTagRow({required this.elements});
-
-  @override
-  Widget build(BuildContext context) {
-    if (elements.isEmpty) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
-      child: Wrap(
-        spacing: 6,
-        runSpacing: 6,
-        children: [
-          for (final e in elements)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: e.color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: e.color.withValues(alpha: 0.5)),
-              ),
-              child: GoopText(
-                e.label.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.8,
-                  color: e.color,
-                ),
-              ),
-            ),
-        ],
       ),
     );
   }

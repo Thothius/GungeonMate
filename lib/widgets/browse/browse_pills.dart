@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/gun.dart';
 import '../../models/item.dart';
 import '../../services/elemental_tagger.dart';
+import '../element_badge.dart';
 import '../../services/goop_talk_engine.dart';
 
 Widget metaPill(String text, Color color, {IconData? icon}) {
@@ -59,28 +60,9 @@ Widget completesPill(List<String> synergyNames, {String? ownerLabel}) {
   return metaPill(label, const Color(0xFFFFD700), icon: Icons.link);
 }
 
-/// Compact element dot — same visual language as the active-run
-/// inventory row: a small filled circle in the element's signature
-/// color. Tooltip carries the label for accessibility.
-class ElementDot extends StatelessWidget {
-  final ElementKind element;
-  final double size;
-  const ElementDot({super.key, required this.element, this.size = 8});
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: element.label,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(color: element.color, shape: BoxShape.circle),
-      ),
-    );
-  }
-}
-
-/// Wrap of element dots for [elements], in canonical ElementKind order.
+/// Element badges for [elements], in canonical ElementKind order —
+/// delegates to the shared [ElementBadge] (icon-in-circle) at list
+/// density.
 Widget elementDots(Set<ElementKind> elements) {
   if (elements.isEmpty) return const SizedBox.shrink();
   return Wrap(
@@ -89,7 +71,7 @@ Widget elementDots(Set<ElementKind> elements) {
     crossAxisAlignment: WrapCrossAlignment.center,
     children: [
       for (final e in ElementKind.values)
-        if (elements.contains(e)) ElementDot(element: e),
+        if (elements.contains(e)) ElementBadge(element: e, size: 14),
     ],
   );
 }
