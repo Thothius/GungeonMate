@@ -3,6 +3,7 @@
 Changes landed after the v3.7.0+167 build; no version bump yet.
 
 ### Features
+- **33 new avatars** — avatar-base drop folder indexed; `custom_12`–`custom_44` portraits added to the Paradox avatar picker (CUSTOM category), center-cropped to 320×320 webp like the original set.
 - **Continue Run** — launch-restored saves park behind a main-menu offer instead of auto-resuming.
 - **Character select rework** — uniform per-character page with tappable loadout (was lopsided per-mode layouts).
 - **Cool/Curse quick-manage sheet** — tapping the COOL or CURSE capsule (solo header or MP panel) now opens a bottom sheet: big live number flanked by −1/−0.5 and +0.5/+1 steppers, per-meter stat readout, a SHRINES lookup shortcut, and on the curse sheet STEAL (+1 curse) / CURSULA BUY (+2.5 curse) actions. Long-press still opens the full Cool & Curse explainer.
