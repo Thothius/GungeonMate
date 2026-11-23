@@ -207,6 +207,22 @@ void main() {
       expect(decoded.dice, isEmpty);
     });
 
+    test('MpDiceResult — round survives round-trip, defaults to 1', () {
+      const original = MpDiceResult(score: 4, dice: [4], round: 3);
+      final bytes = original.encode();
+      final decoded = MpMessage.decode(bytes) as MpDiceResult;
+
+      expect(decoded.round, 3);
+
+      // Legacy payload without 'round' decodes as round 1.
+      final legacy = MpMessage.decode(
+        utf8.encode(
+          '{"type":"diceResult","score":2,"dice":[2]}',
+        ),
+      ) as MpDiceResult;
+      expect(legacy.round, 1);
+    });
+
     test('MpEmote — kiss round-trip', () {
       const original = MpEmote(from: 'PartnerPlayer', action: 'kiss');
       final bytes = original.encode();

@@ -2,6 +2,12 @@ part of '../dice_roll.dart';
 
 // Dice-roll game logic extracted from DiceRollDialogState (Phase 5f) —
 // same library; on-clause gives setState/context/widget/mounted/vsync.
+//
+// Single-die duel (reworked): one d6 per round. Ties auto-reroll —
+// both sides detect the tie from the same two round-N results and
+// independently schedule round N+1, so no extra wire message is
+// needed. `MpDiceResult.round` keeps stale-round results from
+// comparing against the live round.
 
 mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
   late final AnimationController _infiniteController;
@@ -12,24 +18,35 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
 
   DiceStatus _status = DiceStatus.idle;
 
-  final List<int> _actualDice = [1, 1, 1];
+  /// Current duel round — 1 for the opening roll, +1 per tie reroll.
+  int _round = 1;
 
-  final List<int> _myDice = [1, 1, 1];
+  /// My die face for the current round (0 = not rolled yet).
+  int _myValue = 0;
 
-  final List<bool> _diceStopped = [false, false, false];
+  /// Peer's die face for [_round] — stored with its round so a stale
+  /// result can't satisfy the comparison.
+  int? _peerValue;
+  int _peerRound = 0;
 
-  final GlobalKey _diceRowKey = GlobalKey();
+  /// Die is mid-spin (auto-stops on a timer — no tap-to-stop).
+  bool _rolling = false;
+  Timer? _rollTimer;
 
-  final List<GlobalKey> _dieKeys = List.generate(3, (_) => GlobalKey());
+  /// True when a connected player chose "or roll solo" — the result
+  /// must NOT be sent to the peer as a duel roll.
+  bool _soloRoll = false;
+
+  /// Scheduled auto-reroll after a tie — cancelled if the user rolls
+  /// manually inside the window or the dialog closes.
+  Timer? _rerollTimer;
+
+  /// Test-only deterministic rolls (see [DiceRollDialog.debugRollValues]).
+  late final List<int> _debugRolls = List.of(
+    widget.debugRollValues ?? const [],
+  );
 
   final GlobalKey _particleKey = GlobalKey();
-
-  int _myScore = 0;
-
-  bool _hasRolled = false;
-
-  List<int>? _peerDice;
-  int? _peerScore;
 
   String _announcement = '';
 
@@ -45,7 +62,7 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
 
   void Function()? _prevCancel;
 
-  void Function(int peerScore, List<int> peerDice)? _prevResult;
+  void Function(int peerScore, List<int> peerDice, int round)? _prevResult;
 
   @override
   void initState() {
@@ -94,18 +111,19 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
     _mp.onDiceCancel = () {
       if (!mounted) return;
       setState(() {
-        if (_status == DiceStatus.rollingScreen && !_hasRolled) {
-          // Challenged but hadn't started rolling — go back to idle.
+        if (_status == DiceStatus.rollingScreen && _myValue == 0) {
+          // Duel active but this round not rolled — back to idle.
           _status = DiceStatus.idle;
           _announcement = 'Challenge cancelled.';
-        } else if (_status == DiceStatus.challenging) {
-          // Shouldn't happen (challenger cancels their own challenge),
-          // but handle gracefully — return to idle.
+        } else if (_status == DiceStatus.challenging ||
+            _status == DiceStatus.rolling) {
           _status = DiceStatus.idle;
           _announcement = 'Challenge cancelled.';
-        } else if (_status == DiceStatus.rollingScreen && _hasRolled) {
+        } else if (_status == DiceStatus.rollingScreen &&
+            _myValue != 0 &&
+            _peerValue == null) {
           // Already rolled and waiting for peer result — treat as
-          // finished with our score only.
+          // finished with our roll only.
           _status = DiceStatus.finished;
           _announcement = 'Partner cancelled the duel.';
         }
@@ -113,14 +131,13 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
       });
     };
 
-    _mp.onDiceResult = (peerScore, peerDice) {
-      if (mounted) {
-        setState(() {
-          _peerScore = peerScore;
-          _peerDice = peerDice;
-          _checkWinner();
-        });
-      }
+    _mp.onDiceResult = (peerScore, peerDice, round) {
+      if (!mounted || round != _round) return;
+      setState(() {
+        _peerValue = peerScore;
+        _peerRound = round;
+      });
+      _evaluateRound();
     };
 
     // Listen for disconnects so we don't sit waiting forever.
@@ -153,8 +170,8 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
           _status = DiceStatus.idle;
           _announcement = 'Partner disconnected.';
         } else if (_status == DiceStatus.rollingScreen &&
-            _hasRolled &&
-            _peerScore == null) {
+            _myValue != 0 &&
+            _peerValue == null) {
           _status = DiceStatus.finished;
           _announcement =
               'Partner disconnected. GUNFORTUNA DECLARES YOU VICTORIOUS BY DEFAULT!';
@@ -165,6 +182,8 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
 
   @override
   void dispose() {
+    _rollTimer?.cancel();
+    _rerollTimer?.cancel();
     _mp.removeListener(_onSessionChanged);
     _infiniteController.dispose();
     _particleController.removeListener(_updateParticles);
@@ -214,6 +233,7 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
   }
 
   void _sendChallenge() {
+    _soloRoll = false;
     setState(() {
       _status = DiceStatus.challenging;
     });
@@ -225,103 +245,104 @@ mixin _DiceRollLogic on TickerProviderStateMixin<DiceRollDialog> {
     if (mounted) Navigator.of(context).pop();
   }
 
-  void _startRolling() {
-    if (_hasRolled) return;
-    final rand = math.Random();
-    _actualDice[0] = rand.nextInt(6) + 1;
-    _actualDice[1] = rand.nextInt(6) + 1;
-    _actualDice[2] = rand.nextInt(6) + 1;
+  /// "Or roll solo" from the connected idle state — marks the roll
+  /// so the result stays local instead of going to the peer.
+  void _rollSolo() {
+    _soloRoll = true;
+    _startRolling();
+  }
 
+  /// Roll the single die. Auto-stops after the spin — no tap needed.
+  /// Allowed from idle (solo) and rollingScreen (duel, once per round).
+  void _startRolling() {
+    if (_rolling || _myValue != 0) return;
+    if (_status != DiceStatus.idle && _status != DiceStatus.rollingScreen) {
+      return;
+    }
     setState(() {
       _status = DiceStatus.rolling;
-      _hasRolled = true;
-      _diceStopped[0] = false;
-      _diceStopped[1] = false;
-      _diceStopped[2] = false;
-      _myDice[0] = 1;
-      _myDice[1] = 1;
-      _myDice[2] = 1;
-      _myScore = 0;
+      _rolling = true;
+      _myValue = 0;
     });
+    _rollTimer?.cancel();
+    _rollTimer = Timer(const Duration(milliseconds: 1100), _landDie);
   }
 
-  void _stopDie(int index, Color particleColor) {
-    if (_status != DiceStatus.rolling || _diceStopped[index]) return;
+  void _landDie() {
+    if (!mounted) return;
+    final v = _debugRolls.isNotEmpty
+        ? _debugRolls.removeAt(0)
+        : math.Random().nextInt(6) + 1;
+    final duel = _mp.isActive && _mp.isConnected && !_soloRoll;
+    setState(() {
+      _myValue = v;
+      _rolling = false;
+      if (duel) {
+        _status = DiceStatus.rollingScreen;
+        _mp.sendDiceResult(v, [v], round: _round);
+      } else {
+        _status = DiceStatus.finished;
+        _announcement = 'GUNFORTUNA HAS DECIDED YOUR FATE!';
+      }
+    });
+    // Sparkles at the dialog's center on landing.
+    final particleBox =
+        _particleKey.currentContext?.findRenderObject() as RenderBox?;
+    if (particleBox != null) {
+      _spawnSparkles(
+        particleBox.size.width / 2,
+        particleBox.size.height / 2,
+        AppTheme.flair.primary,
+      );
+    }
+    Haptics.heavy();
+    _evaluateRound();
+  }
+
+  /// Compare both round-N results. Tie → schedule the auto-reroll;
+  /// different → declare the winner.
+  void _evaluateRound() {
+    if (_status == DiceStatus.finished) return;
+    if (!(_mp.isActive && _mp.isConnected)) return;
+    if (_myValue == 0 || _peerValue == null || _peerRound != _round) return;
+
+    if (_myValue == _peerValue) {
+      // TIE — both sides see the same two results and independently
+      // schedule round N+1, so the duel always produces a winner.
+      setState(() {
+        _round++;
+        _myValue = 0;
+        _peerValue = null;
+        _peerRound = 0;
+        _announcement = 'TIE! ROUND $_round — Gunfortuna rerolls…';
+      });
+      _rerollTimer?.cancel();
+      _rerollTimer = Timer(
+        const Duration(milliseconds: 1000),
+        _startRolling,
+      );
+      return;
+    }
 
     setState(() {
-      _diceStopped[index] = true;
-      _myDice[index] = _actualDice[index];
-
-      // Update running sum in real-time
-      int sum = 0;
-      for (int i = 0; i < 3; i++) {
-        if (_diceStopped[i]) {
-          sum += _myDice[i];
-        }
-      }
-      _myScore = sum;
-
-      // Spawn satisfying sparkles at the exact die position.
-      final particleBox =
-          _particleKey.currentContext?.findRenderObject() as RenderBox?;
-      final dieBox =
-          _dieKeys[index].currentContext?.findRenderObject() as RenderBox?;
-      if (particleBox != null && dieBox != null) {
-        final globalCenter = dieBox.localToGlobal(
-          dieBox.size.center(Offset.zero),
-        );
-        final local = particleBox.globalToLocal(globalCenter);
-        _spawnSparkles(local.dx, local.dy, particleColor);
-      }
-      Haptics.heavy();
-
-      // Check if all dice have stopped
-      if (_diceStopped.every((stopped) => stopped)) {
-        // Wait 1.2s then flip to final results
-        Future.delayed(const Duration(milliseconds: 1200), () {
-          if (!mounted) return;
-          setState(() {
-            if (_mp.isActive && _mp.isConnected) {
-              _status =
-                  DiceStatus.rollingScreen; // stay on roll screen but rolled
-              _mp.sendDiceResult(_myScore, List<int>.from(_myDice));
-            } else {
-              _status = DiceStatus.finished;
-              _announcement = 'GUNFORTUNA HAS DECLARED YOUR FATE!';
-            }
-            _checkWinner();
-          });
-        });
-      }
+      _status = DiceStatus.finished;
+      _announcement =
+          _myValue > _peerValue!
+              ? 'GUNFORTUNA DECLARES YOU VICTORIOUS!'
+              : 'GUNFORTUNA DECLARES ${_mp.peerNickname?.toUpperCase() ?? "PEER"} VICTORIOUS!';
     });
-  }
-
-  void _checkWinner() {
-    if (_myScore > 0 && _peerScore != null) {
-      setState(() {
-        _status = DiceStatus.finished;
-        if (_myScore > _peerScore!) {
-          _announcement = 'GUNFORTUNA DECLARES YOU VICTORIOUS!';
-        } else if (_myScore < _peerScore!) {
-          _announcement =
-              'GUNFORTUNA DECLARES ${_mp.peerNickname?.toUpperCase() ?? "PEER"} VICTORIOUS!';
-        } else {
-          _announcement = "IT'S A DRAW! THE FATES ARE IN PERFECT BALANCE!";
-        }
-      });
-    }
   }
 
   void _resetSolo() {
+    _rollTimer?.cancel();
+    _rerollTimer?.cancel();
+    _soloRoll = false;
     setState(() {
-      _myDice[0] = 1;
-      _myDice[1] = 1;
-      _myDice[2] = 1;
-      _diceStopped[0] = false;
-      _diceStopped[1] = false;
-      _diceStopped[2] = false;
-      _myScore = 0;
-      _hasRolled = false;
+      _round = 1;
+      _myValue = 0;
+      _peerValue = null;
+      _peerRound = 0;
+      _rolling = false;
       _status = DiceStatus.idle;
       _announcement = '';
       _particles.clear();

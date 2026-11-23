@@ -285,8 +285,8 @@ class MpSession extends ChangeNotifier
   set onDiceDecline(void Function()? fn) => _sync.onDiceDecline = fn;
   void Function()? get onDiceCancel => _sync.onDiceCancel;
   set onDiceCancel(void Function()? fn) => _sync.onDiceCancel = fn;
-  void Function(int, List<int>)? get onDiceResult => _sync.onDiceResult;
-  set onDiceResult(void Function(int, List<int>)? fn) =>
+  void Function(int, List<int>, int)? get onDiceResult => _sync.onDiceResult;
+  set onDiceResult(void Function(int, List<int>, int)? fn) =>
       _sync.onDiceResult = fn;
   void Function(String, String)? get onEmote => _sync.onEmote;
   set onEmote(void Function(String, String)? fn) => _sync.onEmote = fn;
@@ -741,8 +741,11 @@ class MpSession extends ChangeNotifier
   Future<void> sendDiceAccept() => _sync.sendDiceAccept();
   Future<void> sendDiceDecline() => _sync.sendDiceDecline();
   Future<void> sendDiceCancel() => _sync.sendDiceCancel();
-  Future<void> sendDiceResult(int score, List<int> dice) =>
-      _sync.sendDiceResult(score, dice);
+  Future<void> sendDiceResult(
+    int score,
+    List<int> dice, {
+    int round = 1,
+  }) => _sync.sendDiceResult(score, dice, round: round);
   Future<void> sendEmote(String action) async {
     logEvent(
       MpEvent.event(kind: 'emote', from: _myNickname, text: action, mine: true),

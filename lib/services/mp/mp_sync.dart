@@ -127,7 +127,8 @@ class MpSync {
   void Function()? onDiceAccept;
   void Function()? onDiceDecline;
   void Function()? onDiceCancel;
-  void Function(int peerScore, List<int> peerDice)? onDiceResult;
+  void Function(int peerScore, List<int> peerDice, int round)?
+  onDiceResult;
   void Function(String from, String action)? onEmote;
 
   /// Called when a gift is received from the peer — UI uses this
@@ -357,7 +358,7 @@ class MpSync {
       case MpDiceCancel():
         onDiceCancel?.call();
       case MpDiceResult():
-        onDiceResult?.call(msg.score, msg.dice);
+        onDiceResult?.call(msg.score, msg.dice, msg.round);
       case MpEmote():
         if (kMpSocialEnabled) onEmote?.call(msg.from, msg.action);
       case MpSharedStateDelta():
@@ -891,9 +892,15 @@ class MpSync {
     if (_link.isConnected) await _link.sendMessage(const MpDiceCancel());
   }
 
-  Future<void> sendDiceResult(int score, List<int> dice) async {
+  Future<void> sendDiceResult(
+    int score,
+    List<int> dice, {
+    int round = 1,
+  }) async {
     if (_link.isConnected) {
-      await _link.sendMessage(MpDiceResult(score: score, dice: dice));
+      await _link.sendMessage(
+        MpDiceResult(score: score, dice: dice, round: round),
+      );
     }
   }
 

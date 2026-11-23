@@ -38,7 +38,7 @@ void main() {
     MpDiceAccept: <String>{},
     MpDiceDecline: <String>{},
     MpDiceCancel: <String>{},
-    MpDiceResult: {'score', 'dice'},
+    MpDiceResult: {'score', 'dice', 'round'},
     MpEmote: {'from', 'action'},
     MpSharedStateDelta: {'coolnessDelta', 'curseDelta', 'shrineName'},
     MpStartRun: <String>{},

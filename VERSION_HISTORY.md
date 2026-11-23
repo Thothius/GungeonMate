@@ -7,6 +7,7 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **Continue Run** — launch-restored saves park behind a main-menu offer instead of auto-resuming.
 - **Character select rework** — uniform per-character page with tappable loadout (was lopsided per-mode layouts).
 - **Cool/Curse quick-manage sheet** — tapping the COOL or CURSE capsule (solo header or MP panel) now opens a bottom sheet: big live number flanked by −1/−0.5 and +0.5/+1 steppers, per-meter stat readout, a SHRINES lookup shortcut, and on the curse sheet STEAL (+1 curse) / CURSULA BUY (+2.5 curse) actions. Long-press still opens the full Cool & Curse explainer.
+- **Dice system rework — one die, auto-reroll ties** — the 3-dice tap-to-stop duel is gone. One d6 per round: tap ROLL, the die spins ~1s and lands on its own. Solo shows the fate roll instantly; co-op challenges compare single rolls with an obvious YOU/PARTNER victory banner, and ties automatically reroll (round counter on the wire keeps stale results from comparing) until a winner emerges — draws are impossible.
 
 ### Multiplayer hardening (S4)
 - **Mis-pair race fix** — `MpHandshakeGate` extracted + 14 decision tests; concurrent initiations rejected.
@@ -23,6 +24,7 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 
 ### Fixed
 - **Preset gallery decluttered** — the fullscreen swipe card view and its LIST/CARDS toggle are gone; the preset gallery is now always the scannable OFFICIAL/YOURS list (it never scaled past a handful of presets anyway).
+- **Dice dialog merge artifact (U-042)** — triple stacked `@override` and orphaned comments removed as part of the dice rework; dialog body is now scroll-safe so the two-die result row can't overflow short screens.
 - **Effects strip stat drift** — the compact FUSE/CD/REWARD/JAM/BOSS row under the run header now reads the shared wiki-verified `cool_curse_math` tables instead of stale inline formulas (it showed 100% jam at 10 curse vs the real 50% cap, and a wrong linear boss curve).
 - **Item-detail header declutter (U-033)** — the three-icon action cluster (codex bookmark + bug report + favourite heart) collapsed into one overflow menu with explicit labels; the two favourite systems are now self-describing.
 - **Item-detail header order unified (U-034)** — item variant now reads badge row → name → icon → tags, matching the gun variant.

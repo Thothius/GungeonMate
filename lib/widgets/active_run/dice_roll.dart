@@ -34,7 +34,17 @@ enum DiceStatus { idle, challenging, rollingScreen, rolling, finished }
 
 class DiceRollDialog extends StatefulWidget {
   final bool isChallenged;
-  const DiceRollDialog({super.key, required this.isChallenged});
+
+  /// Test hook — when non-empty, each entry replaces one random roll
+  /// (consumed in order, ties rerolls included). Never set in prod.
+  @visibleForTesting
+  final List<int>? debugRollValues;
+
+  const DiceRollDialog({
+    super.key,
+    required this.isChallenged,
+    this.debugRollValues,
+  });
 
   @override
   State<DiceRollDialog> createState() => DiceRollDialogState();
@@ -42,14 +52,6 @@ class DiceRollDialog extends StatefulWidget {
 
 class DiceRollDialogState extends State<DiceRollDialog>
     with TickerProviderStateMixin, _DiceRollLogic {
-  // Actual secret results rolled at the start of rolling
-
-  // Particles inside the dialog
-
-  // To restore callbacks on dispose
-
-  @override
-  @override
   @override
   Widget build(BuildContext context) {
     final connected = _mp.isActive && _mp.isConnected;
@@ -86,12 +88,13 @@ class DiceRollDialogState extends State<DiceRollDialog>
           constraints: const BoxConstraints(maxWidth: 440),
           child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 24,
-                ),
-                child: Column(
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 24,
+                  ),
+                  child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -218,7 +221,8 @@ class DiceRollDialogState extends State<DiceRollDialog>
                       },
                       child: _buildCurrentBody(connected, myDiceStyle, f),
                     ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               // Particle Layer Paint
@@ -240,75 +244,158 @@ class DiceRollDialogState extends State<DiceRollDialog>
     );
   }
 
+  Widget _die(DiceStyle style, {required int value, required bool rolling}) {
+    return DiceWidget(
+      value: value,
+      isRolling: rolling,
+      infiniteController: _infiniteController,
+      style: style,
+      size: 104,
+    );
+  }
+
+  Widget _rollButton(ThemeFlair f, {String label = 'ROLL'}) {
+    return ScaleButton(
+      onTap: _startRolling,
+      child: IgnorePointer(
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () {},
+            icon: const Icon(Icons.casino_outlined, size: 18),
+            label: GoopText(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.0,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: f.primary,
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radii.sm),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _announcementText() {
+    if (_announcement.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 14),
+      child: GoopText(
+        _announcement,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          color: Colors.amberAccent,
+          letterSpacing: 0.5,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   Widget _buildCurrentBody(bool connected, DiceStyle diceStyle, ThemeFlair f) {
-    if (_status == DiceStatus.idle && connected) {
+    // ── Idle: solo entry or connected pre-choice ──────────────────
+    if (_status == DiceStatus.idle) {
+      if (connected) {
+        return Column(
+          key: const ValueKey('idle_connected'),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const GoopText(
+              'Challenge your partner to a duel of fate — one sacred die decides who walks away with Gunfortuna\'s favor. Ties reroll automatically!',
+              style: TextStyle(
+                fontSize: 12.5,
+                color: Colors.white70,
+                height: 1.4,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ScaleButton(
+              onTap: _sendChallenge,
+              child: IgnorePointer(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.casino_outlined, size: 18),
+                    label: const GoopText(
+                      'CHALLENGE PARTNER',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: f.primary,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radii.sm),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: ScaleButton(
+                onTap: _rollSolo,
+                child: IgnorePointer(
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white54,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Insets.sm,
+                      ),
+                    ),
+                    child: const GoopText(
+                      'or roll solo',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }
+      // Solo idle
       return Column(
-        key: const ValueKey('idle_connected'),
+        key: const ValueKey('solo_initial'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Center(child: _die(diceStyle, value: 0, rolling: false)),
+          const SizedBox(height: 18),
           const GoopText(
-            'Challenge your sidekick or main partner to a high-stakes dice duel! 3x dice will decide who gets Gunfortuna\'s favor!',
+            'Throw Gunfortuna\'s sacred die to determine your fortune in Gungeon — one roll, fate revealed.',
             style: TextStyle(
               fontSize: 12.5,
               color: Colors.white70,
-              height: 1.4,
+              height: 1.45,
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          ScaleButton(
-            onTap: _sendChallenge,
-            child: IgnorePointer(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.casino_outlined, size: 18),
-                  label: const GoopText(
-                    'CHALLENGE PARTNER',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: f.primary,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radii.sm),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: ScaleButton(
-              onTap: _startRolling,
-              child: IgnorePointer(
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white54,
-                    padding: const EdgeInsets.symmetric(vertical: Insets.sm),
-                  ),
-                  child: const GoopText(
-                    'or roll solo',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _rollButton(f, label: 'ROLL THE DIE!'),
         ],
       );
     }
 
+    // ── Challenge in flight ───────────────────────────────────────
     if (_status == DiceStatus.challenging) {
       return Column(
         key: const ValueKey('challenging'),
@@ -336,12 +423,15 @@ class DiceRollDialogState extends State<DiceRollDialog>
       );
     }
 
-    if (_status == DiceStatus.rolling) {
+    // ── Die spinning (auto-stops — no tap needed) ─────────────────
+    if (_status == DiceStatus.rolling || _rolling) {
       return Column(
         key: const ValueKey('rolling_active'),
         children: [
+          Center(child: _die(diceStyle, value: 0, rolling: true)),
+          const SizedBox(height: 20),
           const GoopText(
-            'THE CYLINDERS ARE SPINNING!',
+            'THE DIE IS SPINNING!',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w900,
@@ -351,70 +441,26 @@ class DiceRollDialogState extends State<DiceRollDialog>
           ),
           const SizedBox(height: 4),
           GoopText(
-            'Tap each die individually to stop its spin!',
+            _round > 1 ? 'Round $_round — fate rerolls!' : 'Fate decides…',
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               color: Colors.amberAccent,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 18),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              key: _diceRowKey,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(3, (index) {
-                final isStopped = _diceStopped[index];
-                return RepaintBoundary(
-                  child: DiceWidget(
-                    dieKey: _dieKeys[index],
-                    value: _myDice[index],
-                    isRolling: !isStopped,
-                    infiniteController: _infiniteController,
-                    index: index,
-                    style: diceStyle,
-                    onTap: () => _stopDie(index, diceStyle.border),
-                  ),
-                );
-              }),
-            ),
-          ),
-          const SizedBox(height: 20),
-          GoopText(
-            'Current Sum: $_myScore',
-            style: const TextStyle(
-              fontSize: FontSizes.titleSmall,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-            ),
-          ),
         ],
       );
     }
 
-    if (_status == DiceStatus.rollingScreen && _hasRolled) {
+    // ── Duel screen: rolled and waiting for the peer ──────────────
+    if (_status == DiceStatus.rollingScreen &&
+        _myValue != 0 &&
+        _peerValue == null) {
       return Column(
         key: const ValueKey('rolled_waiting'),
         children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(3, (index) {
-                return DiceWidget(
-                  dieKey: _dieKeys[index],
-                  value: _myDice[index],
-                  isRolling: false,
-                  infiniteController: _infiniteController,
-                  index: index,
-                  style: diceStyle,
-                  onTap: null,
-                );
-              }),
-            ),
-          ),
-          const SizedBox(height: 24),
+          Center(child: _die(diceStyle, value: _myValue, rolling: false)),
+          const SizedBox(height: 20),
           const GoopText(
             'ROLLED!',
             style: TextStyle(
@@ -425,7 +471,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           ),
           const SizedBox(height: 6),
           GoopText(
-            'Your Score: $_myScore',
+            'Your roll: $_myValue',
             style: const TextStyle(
               fontSize: FontSizes.bodyMedium,
               fontWeight: FontWeight.w900,
@@ -433,41 +479,69 @@ class DiceRollDialogState extends State<DiceRollDialog>
             ),
           ),
           const SizedBox(height: 8),
-          if (_peerScore == null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.cyanAccent,
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 14,
+                height: 14,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.cyanAccent,
                 ),
-                SizedBox(width: 10),
-                GoopText(
-                  'Waiting for partner to finish rolling...',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.cyanAccent,
-                  ),
+              ),
+              const SizedBox(width: 10),
+              GoopText(
+                'Waiting for partner…',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.cyanAccent,
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          _announcementText(),
         ],
       );
     }
 
+    // ── Duel screen: your roll — ready to roll (or tie-reroll) ────
+    if (_status == DiceStatus.rollingScreen) {
+      return Column(
+        key: const ValueKey('rolling_screen'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(child: _die(diceStyle, value: _myValue, rolling: false)),
+          if (_round > 1) ...[
+            const SizedBox(height: 10),
+            GoopText(
+              'ROUND $_round',
+              style: const TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w900,
+                color: Colors.white38,
+                letterSpacing: 2.0,
+              ),
+            ),
+          ],
+          const SizedBox(height: 18),
+          _rollButton(f),
+          _announcementText(),
+        ],
+      );
+    }
+
+    // ── Finished: winner decided (or solo fate) ───────────────────
     if (_status == DiceStatus.finished) {
-      final isMyVictory = _peerScore != null && _myScore > _peerScore!;
-      final isDraw = _peerScore != null && _myScore == _peerScore!;
-      final isSolo = _peerScore == null;
+      final isMyVictory = _peerValue != null && _myValue > _peerValue!;
+      final isPeerOnly = _peerValue != null && _myValue == 0;
+      final isDraw = _peerValue != null && _myValue == _peerValue;
+      final isSolo = _peerValue == null;
 
       final Color bannerColor =
-          isSolo
-              ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
+          isSolo || isPeerOnly
+              ? const Color(0xFFFFD54F) // Majestic Gold for solo fate
               : (isDraw
                   ? Colors.white54
                   : (isMyVictory ? Colors.greenAccent : Colors.redAccent));
@@ -507,7 +581,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           ),
           const SizedBox(height: 20),
 
-          // Side-by-side comparison with character details
+          // Side-by-side die comparison
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -528,32 +602,20 @@ class DiceRollDialogState extends State<DiceRollDialog>
                       ),
                     ),
                     const SizedBox(height: 8),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: GoopText(
-                        '$_myScore',
-                        style: const TextStyle(
-                          fontSize: 38,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          height: 1.0,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
+                    _die(diceStyle, value: _myValue, rolling: false),
+                    const SizedBox(height: 6),
                     GoopText(
-                      '(${_myDice.join("-")})',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      '$_myValue',
                       style: const TextStyle(
-                        fontSize: 11,
-                        color: Colors.white38,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
                       ),
                     ),
                   ],
                 ),
               ),
-              if (_peerScore != null) ...[
+              if (_peerValue != null) ...[
                 const GoopText(
                   'VS',
                   style: TextStyle(
@@ -583,26 +645,14 @@ class DiceRollDialogState extends State<DiceRollDialog>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: GoopText(
-                          '$_peerScore',
-                          style: const TextStyle(
-                            fontSize: 38,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            height: 1.0,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
+                      _die(diceStyle, value: _peerValue!, rolling: false),
+                      const SizedBox(height: 6),
                       GoopText(
-                        '(${_peerDice?.join("-") ?? ""})',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        '$_peerValue',
                         style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.white38,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -611,6 +661,18 @@ class DiceRollDialogState extends State<DiceRollDialog>
               ],
             ],
           ),
+          if (_round > 1)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: GoopText(
+                'Decided on round $_round',
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Colors.white38,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           const SizedBox(height: 24),
 
           // Action buttons

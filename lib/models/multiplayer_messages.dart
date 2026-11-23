@@ -381,17 +381,30 @@ final class MpDiceCancel extends MpMessage {
 }
 
 /// Dice Roll Result: Sent when the player rolls their dice.
+/// `round` numbers duel rounds — ties auto-reroll, so round 2+
+/// results must not be compared against stale round-1 values.
+/// Defaults to 1 so pre-round peers decode harmlessly.
 final class MpDiceResult extends MpMessage {
   final int score;
   final List<int> dice;
-  const MpDiceResult({required this.score, required this.dice});
+  final int round;
+  const MpDiceResult({
+    required this.score,
+    required this.dice,
+    this.round = 1,
+  });
   @override
   String get type => 'diceResult';
   @override
-  Map<String, dynamic> toJson() => {'score': score, 'dice': dice};
+  Map<String, dynamic> toJson() => {
+    'score': score,
+    'dice': dice,
+    'round': round,
+  };
   factory MpDiceResult.fromJson(Map<String, dynamic> j) => MpDiceResult(
     score: j['score'] as int? ?? 0,
     dice: (j['dice'] as List?)?.cast<int>() ?? const [],
+    round: j['round'] as int? ?? 1,
   );
 }
 

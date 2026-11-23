@@ -4,20 +4,16 @@ class DiceWidget extends StatefulWidget {
   final int value;
   final bool isRolling;
   final AnimationController infiniteController;
-  final int index;
   final DiceStyle style;
-  final VoidCallback? onTap;
-  final GlobalKey? dieKey;
+  final double size;
 
   const DiceWidget({
     super.key,
     required this.value,
     required this.isRolling,
     required this.infiniteController,
-    required this.index,
     required this.style,
-    required this.onTap,
-    this.dieKey,
+    this.size = 72,
   });
 
   @override
@@ -54,89 +50,79 @@ class DiceWidgetState extends State<DiceWidget>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      key: widget.dieKey,
-      onTap: widget.onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        color: Colors.transparent,
-        child: AnimatedBuilder(
-          animation: Listenable.merge([
-            widget.infiniteController,
-            _impactController,
-          ]),
-          builder: (context, child) {
-            final t = widget.infiniteController.value;
-            final impact = _impactController.value;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      color: Colors.transparent,
+      child: AnimatedBuilder(
+        animation: Listenable.merge([
+          widget.infiniteController,
+          _impactController,
+        ]),
+        builder: (context, child) {
+          final t = widget.infiniteController.value;
+          final impact = _impactController.value;
 
-            // Compute 3D rotation tumbling
-            final rotX =
-                widget.isRolling ? (t * (4 + widget.index * 2) * math.pi) : 0.0;
-            final rotY =
-                widget.isRolling ? (t * (3 + widget.index * 3) * math.pi) : 0.0;
-            final rotZ =
-                widget.isRolling ? (t * (2 + widget.index * 4) * math.pi) : 0.0;
+          // Compute 3D rotation tumbling
+          final rotX = widget.isRolling ? t * 4 * math.pi : 0.0;
+          final rotY = widget.isRolling ? t * 3 * math.pi : 0.0;
+          final rotZ = widget.isRolling ? t * 2 * math.pi : 0.0;
 
-            // Vertical floating/bobbing during roll to look organic
-            final double bobY =
-                widget.isRolling
-                    ? (math.sin(t * 2 * math.pi + widget.index * 1.5) * 8.0)
-                    : 0.0;
+          // Vertical floating/bobbing during roll to look organic
+          final double bobY = widget.isRolling
+              ? math.sin(t * 2 * math.pi) * 8.0
+              : 0.0;
 
-            // Rapid cycling face value while rolling
-            final faceVal =
-                widget.isRolling
-                    ? ((widget.index + (t * 40).round()) % 6 + 1)
-                    : widget.value;
+          // Rapid cycling face value while rolling; '?' before the
+          // first roll of a round.
+          final faceText = widget.isRolling
+              ? '${((t * 40).round() % 6) + 1}'
+              : (widget.value > 0 ? '${widget.value}' : '?');
 
-            // Impact pop scale (up to 1.35x and bounces back quickly)
-            final double scale =
-                widget.isRolling
-                    ? 1.0
-                    : 1.0 + math.sin(impact * math.pi) * 0.35;
+          // Impact pop scale (up to 1.35x and bounces back quickly)
+          final double scale = widget.isRolling
+              ? 1.0
+              : 1.0 + math.sin(impact * math.pi) * 0.35;
 
-            return Transform(
-              transform:
-                  Matrix4.identity()
-                    ..setEntry(3, 2, 0.0018) // 3D projection
-                    ..translateByDouble(0.0, bobY, 0.0, 1.0)
-                    ..scaleByDouble(scale, scale, scale, 1.0)
-                    ..rotateX(rotX)
-                    ..rotateY(rotY)
-                    ..rotateZ(rotZ),
+          return Transform(
+            transform:
+                Matrix4.identity()
+                  ..setEntry(3, 2, 0.0018) // 3D projection
+                  ..translateByDouble(0.0, bobY, 0.0, 1.0)
+                  ..scaleByDouble(scale, scale, scale, 1.0)
+                  ..rotateX(rotX)
+                  ..rotateY(rotY)
+                  ..rotateZ(rotZ),
+            alignment: Alignment.center,
+            child: Container(
+              width: widget.size,
+              height: widget.size,
               alignment: Alignment.center,
-              child: Container(
-                width: 72,
-                height: 72,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: widget.style.bg,
-                  borderRadius: BorderRadius.all(Radii.lg),
-                  border: Border.all(
-                    color: widget.style.border,
-                    width: widget.isRolling ? 2.0 : 3.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: widget.style.glow,
-                      blurRadius: widget.isRolling ? 6 : 12,
-                      spreadRadius: widget.isRolling ? 1 : 3,
-                    ),
-                  ],
+              decoration: BoxDecoration(
+                color: widget.style.bg,
+                borderRadius: BorderRadius.all(Radii.lg),
+                border: Border.all(
+                  color: widget.style.border,
+                  width: widget.isRolling ? 2.0 : 3.0,
                 ),
-                child: GoopText(
-                  '$faceVal',
-                  style: TextStyle(
-                    fontSize: 34,
-                    fontWeight: FontWeight.w900,
-                    color: widget.style.text,
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.style.glow,
+                    blurRadius: widget.isRolling ? 6 : 12,
+                    spreadRadius: widget.isRolling ? 1 : 3,
                   ),
+                ],
+              ),
+              child: GoopText(
+                faceText,
+                style: TextStyle(
+                  fontSize: widget.size * 0.47,
+                  fontWeight: FontWeight.w900,
+                  color: widget.style.text,
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
