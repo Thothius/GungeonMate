@@ -207,7 +207,7 @@ class CoolCurseSheet extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: _StatsCard(rows: _rows(cool, curse, color))),
+                    Expanded(child: _StatsCard(rows: _rows(cool, curse))),
                     if (!isCool) ...[
                       SizedBox(width: 10 * sf),
                       _CurseActions(
@@ -232,7 +232,7 @@ class CoolCurseSheet extends StatelessWidget {
     );
   }
 
-  List<_StatRowData> _rows(double cool, double curse, Color color) {
+  List<_StatRowData> _rows(double cool, double curse) {
     if (isCool) {
       return [
         _StatRowData(
