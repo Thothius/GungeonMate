@@ -1,6 +1,9 @@
 import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
+import '../providers/run_provider.dart';
+import '../services/run_lifecycle.dart';
 import 'character_select_screen.dart';
 import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
@@ -30,7 +33,11 @@ import '../models/bug_report.dart';
 /// [MainMenuBackdrop] follows the same palette for its gradient,
 /// embers, and glow.
 class MainMenuScreen extends StatefulWidget {
-  const MainMenuScreen({super.key});
+  /// Non-null when a launch-restored run is parked and the menu should
+  /// offer Continue — HomeScreen passes the flip-to-run-tabs callback.
+  final VoidCallback? onContinueRun;
+
+  const MainMenuScreen({super.key, this.onContinueRun});
 
   @override
   State<MainMenuScreen> createState() => _MainMenuScreenState();
@@ -98,6 +105,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
     final sideInset = MediaQuery.sizeOf(context).width * 0.06;
+    // Continue Run offer — only when HomeScreen parked a restored run.
+    final p = context.watch<RunProvider>();
+    final showContinue =
+        widget.onContinueRun != null &&
+        p.runRestoredFromSave &&
+        p.runState.selectedCharacter != null;
 
     return AnimatedBuilder(
       animation: AppTheme.notifier,
@@ -211,12 +224,28 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                         ),
                                         child: Column(
                                           children: [
-                                            // Local Run — solid hero button.
+                                            // Continue Run — parked
+                                            // launch-restored save.
+                                            if (showContinue)
+                                              _continueCard(p, sf)
+                                                  .animate(delay: 40.ms)
+                                                  .fadeIn(duration: 350.ms)
+                                                  .slideY(
+                                                    begin: 0.15,
+                                                    duration: 350.ms,
+                                                    curve: Curves.easeOut,
+                                                  ),
+                                            if (showContinue)
+                                              const SizedBox(height: 10),
+                                            // Local Run — solid hero
+                                            // button (ghost while a
+                                            // Continue offer is up so
+                                            // only one hero shows).
                                             _menuButton(
                                                   icon:
                                                       Icons.play_arrow_rounded,
                                                   label: 'Local Run',
-                                                  solid: true,
+                                                  solid: !showContinue,
                                                   sf: sf,
                                                   onTap: () {
                                                     Haptics.selection();
@@ -441,6 +470,76 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
           child: Icon(Icons.photo_library_rounded, size: 22, color: _accent),
         ),
       ),
+    );
+  }
+
+  /// Continue Run card — shown when a launch-restored save is parked.
+  /// Hero CONTINUE resumes the run; a quiet END RUN routes through the
+  /// same Lord-of-the-Jammed confirm as everywhere else.
+  Widget _continueCard(RunProvider p, double sf) {
+    final run = p.runState;
+    final char = run.selectedCharacter!;
+    final guns = run.main.guns.length;
+    final items = run.main.items.length;
+    final summary =
+        '${char.name} — $guns gun${guns == 1 ? '' : 's'} · '
+        '$items item${items == 1 ? '' : 's'}'
+        '${run.hasCoop ? ' · CO-OP' : ''}';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GoopText(
+          'SAVED RUN',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: FontSizes.labelSmall,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2.0,
+            color: _accent.withValues(alpha: 0.8),
+          ),
+        ),
+        const SizedBox(height: 4),
+        GoopText(
+          summary,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: FontSizes.labelMedium,
+            fontWeight: FontWeight.w700,
+            color: Colors.white.withValues(alpha: 0.65),
+          ),
+        ),
+        const SizedBox(height: 10),
+        _menuButton(
+          icon: Icons.play_circle_rounded,
+          label: 'Continue Run',
+          solid: true,
+          sf: sf,
+          onTap: () {
+            Haptics.success();
+            widget.onContinueRun!();
+          },
+        ),
+        const SizedBox(height: 6),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              Haptics.selection();
+              RunLifecycle.confirmEndRun(context);
+            },
+            child: GoopText(
+              'END SAVED RUN',
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.2,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

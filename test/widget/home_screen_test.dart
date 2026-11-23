@@ -194,4 +194,83 @@ void main() {
       expect(navBar.destinations.length, 3);
     });
   });
+
+  group('Continue Run offer (launch-restored save)', () {
+    /// Provider parked in the restored-run state: a live run whose
+    /// runRestoredFromSave flag is set (what _loadSavedRun produces).
+    _LoadedRunProvider parkedProvider() {
+      final rp = _LoadedRunProvider();
+      rp.startNewRun(Gungeoneer(name: 'The Marine'));
+      rp.debugSetRunRestoredFromSave(true);
+      return rp;
+    }
+
+    testWidgets('Restored run parks on menu with Continue offer, not tabs', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: parkedProvider()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.byType(MainMenuScreen), findsOneWidget);
+      expect(find.text('SAVED RUN'), findsOneWidget);
+      expect(find.text('Continue Run'), findsOneWidget);
+      expect(find.text('END SAVED RUN'), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+    });
+
+    testWidgets('Tapping Continue Run enters the active-run tabs', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: parkedProvider()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+
+      await tester.tap(find.text('Continue Run'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.byType(MainMenuScreen), findsNothing);
+    });
+
+    testWidgets('Tapping END SAVED RUN → confirm → menu without offer', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: parkedProvider()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+
+      await tester.tap(find.text('END SAVED RUN'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Lord-of-the-Jammed confirm dialog.
+      expect(find.text('END RUN?'), findsOneWidget);
+      await tester.tap(find.text('END RUN').last);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      // Flush the run-save debounce timer.
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // Back on the plain menu — no Continue offer, run is gone.
+      expect(find.byType(MainMenuScreen), findsOneWidget);
+      expect(find.text('Continue Run'), findsNothing);
+      expect(find.byType(NavigationBar), findsNothing);
+    });
+
+    testWidgets('Non-restored active run goes straight to tabs (no offer)', (
+      tester,
+    ) async {
+      // startNewRun path — flag stays false, menu never shows.
+      final rp = _LoadedRunProvider();
+      rp.startNewRun(Gungeoneer(name: 'The Marine'));
+
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
+      await tester.pump();
+
+      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.text('Continue Run'), findsNothing);
+    });
+  });
 }

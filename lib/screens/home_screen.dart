@@ -26,6 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
   PlayerSlot _currentPlayerSlot = PlayerSlot.main;
   bool _mpRestoreAttempted = false;
 
+  /// Set once the user taps Continue Run (or starts a new run) — a
+  /// launch-restored run parks on the menu behind the Continue offer
+  /// until this flips.
+  bool _continued = false;
+
   /// Tracks which tabs have been visited at least once.
   /// Tabs not yet visited are built as a zero-size placeholder,
   /// deferring their initState (and any expensive loading — e.g.
@@ -84,13 +89,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final hasActiveRun = runProvider.runState.selectedCharacter != null;
 
+    // A run restored from the launch-time save parks on the main menu
+    // behind a Continue offer instead of auto-entering — the player
+    // chooses Continue / New Run / End Run. An active MP session wins
+    // (peer rejoin is time-sensitive); select<> rebuilds only when
+    // isActive flips.
+    final mpActive = context.select<MpSession, bool>((s) => s.isActive);
+    final offerContinue =
+        hasActiveRun &&
+        runProvider.runRestoredFromSave &&
+        !_continued &&
+        !mpActive;
+
     // ThemeOverlay now reads RunProvider directly to determine
     // isHomeScreen, so the galaxy background swaps in the same frame
     // as the run state change — no 1-frame flicker.
 
-    if (!hasActiveRun) {
+    if (!hasActiveRun || offerContinue) {
       // Home screen (MainMenu) — Galaxy animated bg plays here
-      return const MainMenuScreen();
+      return MainMenuScreen(
+        onContinueRun: offerContinue ? () => setState(() => _continued = true) : null,
+      );
     }
 
     // Inventory/Browse — no Galaxy, respect user wallpaper settings

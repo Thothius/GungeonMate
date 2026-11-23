@@ -133,6 +133,13 @@ class RunProvider
   // run is gone. Surfaced for diagnostics/UI notice (L6-2).
   bool _saveWasCorrupt = false;
 
+  // True when the launch-time save contained a resumable run (a
+  // selected character). Drives the main menu's Continue Run offer —
+  // the run stays parked in memory while the user chooses Continue /
+  // New Run / End Run instead of being auto-entered (Continue Run
+  // feature). Reset by startNewRun/endRun.
+  bool _runRestoredFromSave = false;
+
   RunState get runState => _runState;
   List<Gun> get allGuns => _allGuns;
   List<Item> get allItems => _allItems;
@@ -178,6 +185,14 @@ class RunProvider
   String? get error => _error;
   List<String> get assetLoadFailures => List.unmodifiable(_assetLoadFailures);
   bool get saveWasCorrupt => _saveWasCorrupt;
+  bool get runRestoredFromSave => _runRestoredFromSave;
+
+  /// Widget-test hook — simulates the launch-restore flag without
+  /// round-tripping SharedPreferences (loadData's compute() doesn't
+  /// run under the widget-test fake-async zone).
+  @visibleForTesting
+  void debugSetRunRestoredFromSave(bool value) =>
+      _runRestoredFromSave = value;
 
   void _recordAssetFailure(String asset, Object err) {
     _assetLoadFailures.add(asset);
@@ -359,6 +374,7 @@ class RunProvider
 
   Future<void> _loadSavedRun() async {
     _saveWasCorrupt = false;
+    _runRestoredFromSave = false;
     try {
       final prefs = await SharedPreferences.getInstance();
       String? savedRun = prefs.getString('current_run');
@@ -369,6 +385,7 @@ class RunProvider
           final runJson = json.decode(savedRun);
           final loaded = RunState.fromJson(runJson);
           _runState = _refreshAgainstData(loaded);
+          _runRestoredFromSave = _runState.selectedCharacter != null;
           return;
         } catch (_) {
           // Double-buffered recovery: fall back to current_run_backup on corruption
@@ -392,6 +409,7 @@ class RunProvider
         final runJson = json.decode(savedRun);
         final loaded = RunState.fromJson(runJson);
         _runState = _refreshAgainstData(loaded);
+        _runRestoredFromSave = _runState.selectedCharacter != null;
       } catch (e) {
         _saveWasCorrupt = true;
         debugPrint(
@@ -535,6 +553,7 @@ class RunProvider
 
   void startNewRun(Gungeoneer character) {
     _runState = RunState(main: _buildPlayerFor(character));
+    _runRestoredFromSave = false;
     _lebViewsAutoEnabled = false;
     _saveLastPlayedChar(character.name);
     _autoEnableLebViewsIfHeld();
@@ -711,6 +730,7 @@ class RunProvider
 
   void endRun() {
     _runState = RunState();
+    _runRestoredFromSave = false;
     _lebViewsAutoEnabled = false;
     _resetRunScopedSpecials();
     _scheduleSave();
