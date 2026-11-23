@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/ammonomicon_entry.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
+import '../services/codex_prefs.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
@@ -76,9 +77,9 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   /// Synergies tab: show only synergies completable by owned items.
   bool _matchedOnly = false;
 
-  // Currently selected category index (0-based). 0-5 are special pages,
-  // 6-10 are data categories.
-  int _selected = 0; // tab index — top strip IS the nav (no picker grid)
+  // Currently selected category index (-1 = overview landing, 0-11 =
+  // categories). The overview is the codex home: shelves + category grid.
+  int _selected = -1;
 
   // Whether the bookmark tab strip is collapsed (hidden) to give the
   // content area the full screen width.
@@ -187,6 +188,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   void initState() {
     super.initState();
     _searchCtrl.addListener(_onSearchChanged);
+    CodexPrefs.ensureLoaded();
     if (!AmmonomiconScreen.debugStartLoaded) _loadData();
   }
 
@@ -622,6 +624,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   /// Shared tap routing — guns/items go to their detail screens,
   /// synergies to the synergy graph, everything else to ammonomicon detail.
   void _openEntry(AmmonomiconEntry entry, AmmonomiconSection section) {
+    CodexPrefs.recordRecent(CodexPrefs.keyFor(section.name, entry.name));
     final p = context.read<RunProvider>();
     final gun =
         entry.game == 'gun'
@@ -840,7 +843,222 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               )
               : _expanded >= 0
               ? _buildExpandedPanel(flair)
-              : _buildPickedCategory(flair),
+              : _selected >= 0
+              ? _buildPickedCategory(flair)
+              : _buildOverview(flair),
+    );
+  }
+
+  // ── Level 1: overview landing — shelves + category grid ────────────
+  static const _taglines = [
+    'The vault-born heroes',
+    'Folks with something to say',
+    'What wants you dead',
+    'Floor-toppers and worse',
+    'Grab it before it despawns',
+    'Barrels, chests and traps',
+    '239 ways to make a point',
+    'Passives and actives',
+    'Two items, one problem solved',
+    'Blessings with a price',
+    'Six floors of trouble',
+    'Modifiers and challenges',
+  ];
+
+  Color _accentFor(AmmonomiconSection s) {
+    switch (s) {
+      case AmmonomiconSection.npcs:
+        return AmmonomiconColors.npcs;
+      case AmmonomiconSection.enemies:
+        return AmmonomiconColors.enemies;
+      case AmmonomiconSection.bosses:
+        return AmmonomiconColors.bosses;
+      case AmmonomiconSection.pickups:
+        return AmmonomiconColors.pickups;
+      case AmmonomiconSection.shrines:
+        return const Color(0xFFFFB74D);
+      case AmmonomiconSection.synergies:
+        return const Color(0xFFB388FF);
+      case AmmonomiconSection.chapters:
+        return const Color(0xFF4FC3F7);
+      case AmmonomiconSection.gameModes:
+        return const Color(0xFFAED581);
+      case AmmonomiconSection.guns:
+      case AmmonomiconSection.objects:
+        return AmmonomiconColors.objects;
+      case AmmonomiconSection.items:
+        return AmmonomiconColors.pickups;
+    }
+  }
+
+  /// Resolve a persisted `'section|name'` key back to a live entry.
+  /// Returns null for stale keys (renamed/removed content).
+  (AmmonomiconEntry, AmmonomiconSection)? _resolveKey(String key) {
+    final (secName, name) = CodexPrefs.parseKey(key);
+    if (name.isEmpty) return null;
+    for (var i = 1; i < _categories.length; i++) {
+      final section = ammonomiconSectionForIndex(i);
+      if (section.name != secName) continue;
+      for (final e in _entriesFor(i)) {
+        if (e.name == name) return (e, section);
+      }
+      return null;
+    }
+    return null;
+  }
+
+  List<CodexShelfEntry> _shelfItems(Iterable<String> keys) {
+    final items = <CodexShelfEntry>[];
+    for (final key in keys) {
+      final resolved = _resolveKey(key);
+      if (resolved == null) continue;
+      final (entry, section) = resolved;
+      var iconPath = ammonomiconAssetPath(section, entry.icon);
+      if (section == AmmonomiconSection.npcs) {
+        final gif = npcIdleGifPath(entry.name);
+        if (gif.isNotEmpty) iconPath = gif;
+      }
+      items.add((
+        name: entry.name,
+        iconPath: iconPath,
+        accent: _accentFor(section),
+        onTap: () => _openEntry(entry, section),
+      ));
+    }
+    return items;
+  }
+
+  Widget _buildOverview(ThemeFlair flair) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    return SafeArea(
+      top: !widget.showBackButton,
+      bottom: false,
+      child: CustomScrollView(
+        slivers: [
+          // Header — title + optional route back.
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoopText(
+                          'BROWSE THE CODEX',
+                          style: TextStyle(
+                            fontSize: FontSizes.titleMedium,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.4,
+                            color: flair.primary,
+                          ),
+                        ),
+                        GoopText(
+                          'Everything the Gungeon has to offer',
+                          style: TextStyle(
+                            fontSize: FontSizes.labelSmall,
+                            color: onSurface.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Show whenever this screen was pushed as a route —
+                  // covers showBackButton=false pushes (paradox panel,
+                  // run tools) where the overview would otherwise be a
+                  // dead end with no visible way out.
+                  if (Navigator.canPop(context))
+                    IconButton(
+                      tooltip: 'Back',
+                      icon: const Icon(Icons.arrow_back, size: 22),
+                      color: flair.primary,
+                      onPressed: () {
+                        Haptics.selection();
+                        Navigator.maybePop(context);
+                      },
+                    ),
+                ],
+              ),
+            ),
+          ),
+          // Shelves — live-updating via the prefs notifiers.
+          SliverToBoxAdapter(
+            child: ValueListenableBuilder<List<String>>(
+              valueListenable: CodexPrefs.recents,
+              builder:
+                  (_, recents, _) => _CodexShelf(
+                    title: 'RECENTLY VIEWED',
+                    icon: Icons.history,
+                    accent: flair.primary,
+                    items: _shelfItems(recents),
+                  ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: ValueListenableBuilder<Set<String>>(
+              valueListenable: CodexPrefs.favorites,
+              builder:
+                  (_, favs, _) => _CodexShelf(
+                    title: 'FAVORITES',
+                    icon: Icons.favorite_rounded,
+                    accent: const Color(0xFFFF6E8A),
+                    items: _shelfItems(favs),
+                  ),
+            ),
+          ),
+          // Browse grid.
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 14, 14, 6),
+              child: GoopText(
+                'CATEGORIES',
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.1,
+                  color: onSurface.withValues(alpha: 0.55),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, Insets.xxl),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: Insets.sm,
+                crossAxisSpacing: Insets.sm,
+                childAspectRatio: 1.5,
+              ),
+              delegate: SliverChildBuilderDelegate((context, i) {
+                final c = _categories[i];
+                final count =
+                    i == 0
+                        ? context.read<RunProvider>().allGungeoneers.length
+                        : _entriesFor(i).length;
+                return _CategoryCard(
+                  cat: c,
+                  count: count,
+                  tagline: _taglines[i],
+                  onTap: () {
+                    _searchCtrl.clear();
+                    _query = '';
+                    setState(() {
+                      if (c.expandable) {
+                        _expanded = i;
+                      } else {
+                        _expanded = -1;
+                        _selected = i;
+                      }
+                    });
+                  },
+                );
+              }, childCount: _categories.length),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -863,7 +1081,14 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                   color: cat.color,
                   onPressed: () {
                     Haptics.selection();
-                    Navigator.maybePop(context);
+                    // Level 2 → level 1: return to the codex overview
+                    // landing rather than popping the whole screen.
+                    setState(() {
+                      _selected = -1;
+                      _expanded = -1;
+                      _searchCtrl.clear();
+                      _query = '';
+                    });
                   },
                 ),
                 Icon(cat.icon ?? Icons.bookmark, size: 20, color: cat.color),

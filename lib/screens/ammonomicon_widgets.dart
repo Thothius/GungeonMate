@@ -630,3 +630,262 @@ AmmonomiconSection ammonomiconSectionForIndex(int index) {
       return AmmonomiconSection.objects;
   }
 }
+
+// =============================================================================
+// Codex overview — landing shelves (recents/favorites) + category cards
+// =============================================================================
+
+/// One tile in a codex shelf (recents / favorites).
+typedef CodexShelfEntry = ({
+  String name,
+  String iconPath,
+  Color accent,
+  VoidCallback onTap,
+});
+
+/// Horizontal shelf with a title — hidden entirely when empty so the
+/// overview stays clean for first-time users.
+class _CodexShelf extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Color accent;
+  final List<CodexShelfEntry> items;
+
+  const _CodexShelf({
+    required this.title,
+    required this.icon,
+    required this.accent,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 6),
+          child: Row(
+            children: [
+              Icon(icon, size: 15, color: accent),
+              const SizedBox(width: 6),
+              GoopText(
+                title,
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.1,
+                  color: accent,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 96,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            itemCount: items.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (_, i) {
+              final e = items[i];
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Haptics.selection();
+                  e.onTap();
+                },
+                child: SizedBox(
+                  width: 74,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              e.accent.withValues(alpha: 0.18),
+                              e.accent.withValues(alpha: 0.05),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: e.accent.withValues(alpha: 0.4),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child:
+                              e.iconPath.isNotEmpty
+                                  ? Image.asset(
+                                    e.iconPath,
+                                    fit: BoxFit.contain,
+                                    filterQuality: FilterQuality.none,
+                                    cacheWidth: 96,
+                                    cacheHeight: 96,
+                                    errorBuilder:
+                                        (_, _, _) => Icon(
+                                          Icons.widgets,
+                                          size: 20,
+                                          color: e.accent.withValues(
+                                            alpha: 0.6,
+                                          ),
+                                        ),
+                                  )
+                                  : Icon(
+                                    Icons.widgets,
+                                    size: 20,
+                                    color: e.accent.withValues(alpha: 0.6),
+                                  ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      GoopText(
+                        e.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          fontWeight: FontWeight.w600,
+                          height: 1.1,
+                          color: onSurface.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Landing-grid card for one codex category — accent-tinted, shows the
+/// entry count and a one-line "what lives here" tagline.
+class _CategoryCard extends StatelessWidget {
+  final AmmonomiconTab cat;
+  final int count;
+  final String tagline;
+  final VoidCallback onTap;
+
+  const _CategoryCard({
+    required this.cat,
+    required this.count,
+    required this.tagline,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Haptics.selection();
+        onTap();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              cat.color.withValues(alpha: 0.16),
+              Color.lerp(flair.card, Colors.black, 0.15) ?? flair.card,
+            ],
+          ),
+          borderRadius: const BorderRadius.all(Radii.md),
+          border: Border.all(
+            color: cat.color.withValues(alpha: 0.35),
+            width: 1,
+          ),
+        ),
+        padding: const EdgeInsets.all(Insets.sm),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: cat.color.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: cat.color.withValues(alpha: 0.45),
+                  width: 1,
+                ),
+              ),
+              child:
+                  cat.assetIcon != null
+                      ? Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: Image.asset(
+                          AmmonomiconTabStrip.tabAssetPath(cat.assetIcon!),
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.none,
+                          errorBuilder:
+                              (_, _, _) => Icon(
+                                cat.icon ?? Icons.bookmark,
+                                size: 16,
+                                color: cat.color,
+                              ),
+                        ),
+                      )
+                      : Icon(
+                        cat.icon ?? Icons.bookmark,
+                        size: 18,
+                        color: cat.color,
+                      ),
+            ),
+            const Spacer(),
+            GoopText(
+              cat.label.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.8,
+                color: cat.color,
+              ),
+            ),
+            const SizedBox(height: 2),
+            GoopText(
+              '$count ENTRIES',
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.6,
+                color: onSurface.withValues(alpha: 0.55),
+              ),
+            ),
+            const SizedBox(height: 4),
+            GoopText(
+              tagline,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                height: 1.25,
+                color: onSurface.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

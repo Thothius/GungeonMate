@@ -39,8 +39,18 @@ void main() {
       if (find.byType(SkeletonLoader).evaluate().isEmpty) break;
     }
 
-    expect(find.text('ENEMIES'), findsWidgets);
-    expect(find.text('BOSSES'), findsWidgets);
+    // Overview landing: first card row visible immediately, lower
+    // rows need a scroll (grid is lazily built).
+    expect(find.text('GUNGEONEERS'), findsWidgets);
+    expect(find.text('NPCS'), findsWidgets);
+    for (final label in ['ENEMIES', 'BOSSES']) {
+      await t.scrollUntilVisible(
+        find.text(label),
+        150,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(label), findsWidgets);
+    }
     expect(t.takeException(), isNull);
   });
 }
