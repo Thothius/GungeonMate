@@ -136,6 +136,70 @@ void main() {
     });
   }
 
+  testWidgets('AmmonomiconDetailScreen surfaces shrine + combat stats', (
+    t,
+  ) async {
+    final shrine = AmmonomiconEntry(
+      name: 'Ammo Shrine',
+      category: 'Shrines',
+      description: 'A shriny description.',
+      icon: '',
+      wikiUrl: '',
+      tips: const ['Refills ammo, but increases curse.'],
+      shrineMessage: 'Deal with the Devil',
+      shrineEffect: 'Refills the ammo of all weapons.',
+      shrineCurse: 3.5,
+      shrineCoolness: 0,
+    );
+    await t.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: p),
+          ChangeNotifierProvider.value(value: mp),
+        ],
+        child: MaterialApp(
+          home: AmmonomiconDetailScreen(
+            entry: shrine,
+            section: AmmonomiconSection.shrines,
+          ),
+        ),
+      ),
+    );
+    await t.pump();
+    await t.pump(const Duration(seconds: 1));
+    expect(t.takeException(), isNull);
+    expect(find.text('SHRINE'), findsOneWidget);
+    expect(find.textContaining('CURSE +3.5'), findsOneWidget);
+    expect(find.textContaining('Deal with the Devil'), findsOneWidget);
+
+    final enemy = AmmonomiconEntry(
+      name: 'Test Enemy',
+      category: 'Enemy',
+      description: 'desc',
+      icon: '',
+      wikiUrl: '',
+      collisionDamage: 0.5,
+    );
+    await t.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: p),
+          ChangeNotifierProvider.value(value: mp),
+        ],
+        child: MaterialApp(
+          home: AmmonomiconDetailScreen(
+            entry: enemy,
+            section: AmmonomiconSection.enemies,
+          ),
+        ),
+      ),
+    );
+    await t.pump();
+    await t.pump(const Duration(seconds: 1));
+    expect(t.takeException(), isNull);
+    expect(find.textContaining('BODY DMG: 0.5'), findsOneWidget);
+  });
+
   // ── NeoSkeuoLabScreen (dev sandbox — smoke only per H-L9) ───────
 
   testWidgets('NeoSkeuoLabScreen smoke renders', (t) async {

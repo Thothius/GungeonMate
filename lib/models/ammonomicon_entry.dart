@@ -20,6 +20,14 @@ class AmmonomiconEntry {
   final String? bundle;
   final String? music;
   final List<String> gameClasses;
+  // Enemy/boss combat stats — dropped by the old model.
+  final double? collisionDamage;
+  final double? gameHealth;
+  // Shrine fields (shrines.json shape differs from the shared schema).
+  final String? shrineMessage;
+  final String? shrineEffect;
+  final double? shrineCurse;
+  final double? shrineCoolness;
 
   AmmonomiconEntry({
     required this.name,
@@ -37,6 +45,12 @@ class AmmonomiconEntry {
     this.bundle,
     this.music,
     this.gameClasses = const [],
+    this.collisionDamage,
+    this.gameHealth,
+    this.shrineMessage,
+    this.shrineEffect,
+    this.shrineCurse,
+    this.shrineCoolness,
   });
 
   factory AmmonomiconEntry.fromJson(Map<String, dynamic> j) {
@@ -62,6 +76,12 @@ class AmmonomiconEntry {
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      collisionDamage: (j['collision_damage'] as num?)?.toDouble(),
+      gameHealth: (j['game_health'] as num?)?.toDouble(),
+      shrineMessage: j['message'] as String?,
+      shrineEffect: j['effect'] as String?,
+      shrineCurse: (j['curse'] as num?)?.toDouble(),
+      shrineCoolness: (j['coolness'] as num?)?.toDouble(),
     );
   }
 

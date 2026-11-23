@@ -159,6 +159,14 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                                 accent: AmmonomiconColors.health,
                                 icon: Icons.favorite_outline,
                               ),
+                            if (entry.collisionDamage != null &&
+                                entry.collisionDamage! > 0)
+                              _badge(
+                                flair,
+                                'BODY DMG: ${_fmtStat(entry.collisionDamage!)}',
+                                accent: AmmonomiconColors.health,
+                                icon: Icons.bolt_outlined,
+                              ),
                             if (entry.location != null &&
                                 entry.location!.isNotEmpty)
                               _badge(
@@ -262,6 +270,67 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                           fontStyle: FontStyle.italic,
                           color: Colors.white.withValues(alpha: 0.8),
                         ),
+                      ),
+                    ),
+                  ],
+
+                  // Shrine mechanics — effect/curse/coolness/message
+                  // from shrines.json (the swipe page only shows icons).
+                  if (entry.shrineEffect != null ||
+                      entry.shrineMessage != null) ...[
+                    const SizedBox(height: 14),
+                    _sectionLabel(
+                      flair,
+                      'SHRINE',
+                      icon: Icons.auto_awesome_rounded,
+                    ),
+                    const SizedBox(height: 6),
+                    _infoCard(
+                      flair,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Effect text already renders verbatim as the
+                          // first TIPS line — section carries cost badges
+                          // + flavor message instead.
+                          if (entry.shrineCurse != null ||
+                              entry.shrineCoolness != null) ...[
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: [
+                                if (entry.shrineCurse != null)
+                                  _badge(
+                                    flair,
+                                    'CURSE +${_fmtStat(entry.shrineCurse!)}',
+                                    accent: const Color(0xFFB388FF),
+                                    icon: Icons.whatshot_outlined,
+                                  ),
+                                if (entry.shrineCoolness != null)
+                                  _badge(
+                                    flair,
+                                    'COOLNESS ${_fmtStat(entry.shrineCoolness!)}',
+                                    accent: AmmonomiconColors.game,
+                                    icon: Icons.ac_unit,
+                                  ),
+                              ],
+                            ),
+                          ],
+                          if (entry.shrineMessage != null &&
+                              entry.shrineMessage!.isNotEmpty) ...[
+                            const SizedBox(height: 8),
+                            GoopText(
+                              '“${entry.shrineMessage}”',
+                              style: TextStyle(
+                                fontSize: FontSizes.labelMedium,
+                                height: 1.35,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.white.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                   ],
@@ -409,6 +478,10 @@ class AmmonomiconDetailScreen extends StatelessWidget {
     );
     return s.trim();
   }
+
+  /// `0.5` → `0.5`, `3.0` → `3` — compact stat formatting.
+  static String _fmtStat(double v) =>
+      v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
 
   Widget _badge(
     ThemeFlair flair,

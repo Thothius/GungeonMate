@@ -253,6 +253,10 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
                 if ((j['coolness'] ?? 0) > 0) 'Costs ${j['coolness']} coolness',
               ],
+              shrineMessage: j['message'] as String?,
+              shrineEffect: j['effect'] as String?,
+              shrineCurse: (j['curse'] as num?)?.toDouble(),
+              shrineCoolness: (j['coolness'] as num?)?.toDouble(),
               wikiUrl:
                   'https://enterthegungeon.wiki.gg/wiki/${(j['name'] as String).replaceAll(' ', '_')}_Shrine',
             );
