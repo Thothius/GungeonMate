@@ -8,11 +8,50 @@ mixin _SynergyQueries on ChangeNotifier {
   RunState get _runState;
   List<Synergy> get _allSynergies;
 
+  // ── Owned-name memoization (L7) ──────────────────────────────
+  // `allItemNames → lowercase set` was rebuilt on every query call and
+  // every rebuild of every listener. Cache per slot, self-invalidating
+  // on the joined-names signature — same pattern as _completesSig.
+  final Map<PlayerSlot, ({String sig, Set<String> owned})> _ownedCache = {};
+
+  Set<String> _ownedLowerFor(PlayerSlot slot) {
+    final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
+    if (player == null) return const {};
+    final names = player.allItemNames;
+    final sig = names.join('');
+    final cached = _ownedCache[slot];
+    if (cached != null && cached.sig == sig) return cached.owned;
+    final owned = names.map((n) => n.toLowerCase()).toSet();
+    _ownedCache[slot] = (sig: sig, owned: owned);
+    return owned;
+  }
+
+  // Result-list caches keyed on the owned-set INSTANCE — the set object
+  // is stable until the inventory signature changes, so identical() is a
+  // correct invalidation check. _listFor guards against _allSynergies
+  // reloads (same pattern as _pieceIndexFor).
+  List<Synergy>? _activeCache;
+  Set<String>? _activeCacheOwned;
+  List<Synergy>? _activeCacheFor;
+  List<Synergy>? _partialCache;
+  Set<String>? _partialCacheOwned;
+  List<Synergy>? _partialCacheFor;
+  final Map<
+    PlayerSlot,
+    ({Set<String> owned, List<Synergy>? for_, List<Synergy> list})
+  >
+  _slotActiveCache = {};
+
   List<Synergy> getActiveSynergies() {
-    final owned = _runState.main.allItemNames
-        .map((n) => n.toLowerCase())
-        .toSet();
-    return _allSynergies
+    final owned = _ownedLowerFor(PlayerSlot.main);
+    if (_activeCache != null &&
+        identical(_activeCacheOwned, owned) &&
+        identical(_activeCacheFor, _allSynergies)) {
+      return _activeCache!;
+    }
+    _activeCacheOwned = owned;
+    _activeCacheFor = _allSynergies;
+    return _activeCache = _allSynergies
         .where((s) => !s.isGameInactive && s.matchesOwnedSet(owned))
         .toList();
   }
@@ -21,10 +60,15 @@ mixin _SynergyQueries on ChangeNotifier {
   /// but the synergy is NOT fully active. These are "potential" synergies
   /// the user could complete by acquiring the remaining items.
   List<Synergy> getPartialSynergies() {
-    final owned = _runState.main.allItemNames
-        .map((n) => n.toLowerCase())
-        .toSet();
-    return _allSynergies.where((s) {
+    final owned = _ownedLowerFor(PlayerSlot.main);
+    if (_partialCache != null &&
+        identical(_partialCacheOwned, owned) &&
+        identical(_partialCacheFor, _allSynergies)) {
+      return _partialCache!;
+    }
+    _partialCacheOwned = owned;
+    _partialCacheFor = _allSynergies;
+    return _partialCache = _allSynergies.where((s) {
       if (s.isGameInactive) return false;
       if (s.matchesOwnedSet(owned)) return false; // active, not partial
       return s.items.any((i) => owned.contains(i.toLowerCase())) ||
@@ -39,11 +83,19 @@ mixin _SynergyQueries on ChangeNotifier {
   /// Active synergies for a specific player slot (main or coop).
   List<Synergy> getActiveSynergiesForSlot(PlayerSlot slot) {
     final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
-    if (player == null) return [];
-    final owned = player.allItemNames.map((n) => n.toLowerCase()).toSet();
-    return _allSynergies
+    if (player == null) return const [];
+    final owned = _ownedLowerFor(slot);
+    final entry = _slotActiveCache[slot];
+    if (entry != null &&
+        identical(entry.owned, owned) &&
+        identical(entry.for_, _allSynergies)) {
+      return entry.list;
+    }
+    final list = _allSynergies
         .where((s) => !s.isGameInactive && s.matchesOwnedSet(owned))
         .toList();
+    _slotActiveCache[slot] = (owned: owned, for_: _allSynergies, list: list);
+    return list;
   }
 
   /// piece-name (lowercased) → synergies containing it in items, anyOf,
@@ -87,11 +139,10 @@ mixin _SynergyQueries on ChangeNotifier {
   /// the rest stay muted so it's obvious which option is satisfying the
   /// "one of" branch.
   Set<String> get currentOwnedLower =>
-      _runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
+      Set.unmodifiable(_ownedLowerFor(PlayerSlot.main));
 
   List<ItemSynergies> getSynergiesByInventory() {
-    final names = _runState.main.allItemNames;
-    final lowerNames = names.map((n) => n.toLowerCase()).toSet();
+    final lowerNames = _ownedLowerFor(PlayerSlot.main);
     final result = <ItemSynergies>[];
     for (final gun in _runState.main.guns) {
       result.add(_collectFor(gun.name, true, lowerNames));
@@ -126,15 +177,15 @@ mixin _SynergyQueries on ChangeNotifier {
   /// per-player (no cross-player union), so a synergy split across P1+P2
   /// is NOT active. Memoized on the combined inventory signature.
   List<Synergy> getActiveSynergiesCombined() {
-    final mainNames = _runState.main.allItemNames;
-    final coopNames = _runState.coop?.allItemNames ?? const <String>[];
-    final sig = '${mainNames.join('\n')}|${coopNames.join('\n')}';
+    final mainOwned = _ownedLowerFor(PlayerSlot.main);
+    final coopOwned = _ownedLowerFor(PlayerSlot.coop);
+    final sig = '${mainOwned.join('')}|${coopOwned.join('')}';
     if (sig != _activeCombinedSig) {
       _activeCombinedSig = sig;
       _activeCombinedCache = _allSynergies.where((s) {
         if (s.isGameInactive) return false;
-        if (s.matchesItems(mainNames)) return true;
-        return coopNames.isNotEmpty && s.matchesItems(coopNames);
+        if (s.matchesOwnedSet(mainOwned)) return true;
+        return coopOwned.isNotEmpty && s.matchesOwnedSet(coopOwned);
       }).toList();
     }
     return _activeCombinedCache!;
