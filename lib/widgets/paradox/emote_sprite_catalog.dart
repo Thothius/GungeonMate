@@ -94,6 +94,20 @@ class EmoteSpriteCatalog {
     }
   }
 
+  /// Pull the first `:key:` emote token out of [text].
+  ///
+  /// Returns `(strippedText, spriteKey)` — `spriteKey` is empty when no
+  /// *known* token is present (unknown keys stay literal in the text).
+  /// Callers should have run [ensureLoaded] first or every lookup
+  /// misses. Used by the surprise composer (S4.5).
+  static (String, String) extractSpriteToken(String text) {
+    final m = RegExp(r':([a-z0-9_]+):').firstMatch(text);
+    if (m == null) return (text, '');
+    final key = m.group(1)!;
+    if (byKey(key) == null) return (text, '');
+    return (text.replaceFirst(m.group(0)!, '').trim(), key);
+  }
+
   /// Search helper for picker + `:autocomplete` — case-insensitive
   /// substring on label and key, capped for perf.
   static List<EmoteSprite> search(

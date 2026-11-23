@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,8 @@ import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
 import '../scale_button.dart';
+import 'emote_sprite_catalog.dart';
+import 'surprise_presets.dart';
 
 import '../../theme/tokens.dart';
 
@@ -43,15 +47,6 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
     _textCtrl.dispose();
     super.dispose();
   }
-
-  static const _presets = <(String, String, IconData)>[
-    ('love', 'LOVE', Icons.favorite_rounded),
-    ('slap', 'SLAP', Icons.back_hand_rounded),
-    ('blank', 'BLANK', Icons.brightness_7_rounded),
-    ('mimic', 'MIMIC', Icons.warning_amber_rounded),
-    ('heal', 'HEAL', Icons.healing_rounded),
-    ('gungeon', 'GUNGEON', Icons.gps_fixed_rounded),
-  ];
 
   static const _fxOptions = <(String, String, IconData)>[
     ('', 'NONE', Icons.block_rounded),
@@ -115,15 +110,15 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
           runSpacing: 10 * sf,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < _presets.length; i++)
+            for (var i = 0; i < surprisePresets.length; i++)
               _PresetTile(
-                    preset: _presets[i].$1,
-                    label: _presets[i].$2,
-                    icon: _presets[i].$3,
+                    preset: surprisePresets[i].key,
+                    label: surprisePresets[i].pickerLabel,
+                    icon: surprisePresets[i].icon,
                     sf: sf,
                     onTap: () {
                       Haptics.medium();
-                      session.sendSurprise(preset: _presets[i].$1);
+                      session.sendSurprise(preset: surprisePresets[i].key);
                       Navigator.of(context).pop();
                     },
                   )
@@ -134,7 +129,12 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
         ),
         SizedBox(height: 14 * sf),
         ScaleButton(
-          onTap: () => setState(() => _custom = true),
+          onTap: () {
+            // Catalog must be warm before :key: lookup — it's a
+            // rootBundle parse, cheap after first load.
+            unawaited(EmoteSpriteCatalog.ensureLoaded());
+            setState(() => _custom = true);
+          },
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: 16 * sf,
@@ -270,7 +270,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
           maxLength: 30,
           style: const TextStyle(color: Colors.white, fontSize: 13),
           decoration: InputDecoration(
-            hintText: 'Optional message (≤30 chars)',
+            hintText: 'Optional message (≤30) — :key: adds a sprite',
             hintStyle: TextStyle(
               color: Colors.white.withValues(alpha: 0.35),
               fontSize: FontSizes.labelMedium,
@@ -302,10 +302,20 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
         SizedBox(height: 8 * sf),
         ScaleButton(
           onTap: () {
-            final text = _textCtrl.text.trim();
-            if (_fx.isEmpty && text.isEmpty) return;
+            var text = _textCtrl.text.trim();
+            // `:key:` emote token → card sprite (S4.5 — gives the
+            // wire's spriteKey field a real sender).
+            final (stripped, spriteKey) = EmoteSpriteCatalog
+                .extractSpriteToken(text);
+            text = stripped;
+            if (_fx.isEmpty && text.isEmpty && spriteKey.isEmpty) return;
             Haptics.medium();
-            session.sendSurprise(preset: 'custom', text: text, fx: _fx);
+            session.sendSurprise(
+              preset: 'custom',
+              text: text,
+              spriteKey: spriteKey,
+              fx: _fx,
+            );
             Navigator.of(context).pop();
           },
           child: Container(

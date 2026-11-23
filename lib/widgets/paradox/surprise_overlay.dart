@@ -10,6 +10,7 @@ import '../../services/mp_session.dart';
 import '../../theme/tokens.dart';
 import '../../utils/responsive.dart';
 import 'emote_sprite_catalog.dart';
+import 'surprise_presets.dart';
 import 'dart:math' as math;
 
 /// Receiving side of the Surprise interaction — a floating card that
@@ -78,25 +79,11 @@ class _SurpriseCard extends StatelessWidget {
   final MpSurprise surprise;
   const _SurpriseCard({super.key, required this.surprise});
 
-  /// Curated 6 — each has a fullscreen effect (fx).
-  /// fx: hearts · shake · flash · jumpscare · pulse · scatter
-  static const _presetContent = <String, (String, IconData, Color, String)>{
-    'love': ('I LOVE YOU', Icons.favorite_rounded, Color(0xFFFF6B81), 'hearts'),
-    'slap': ('*SLAP*', Icons.back_hand_rounded, Color(0xFFFF7043), 'shake'),
-    'blank': ('BLANK!', Icons.brightness_7_rounded, Color(0xFFFFFFFF), 'flash'),
-    'mimic': (
-      'MIMIC!',
-      Icons.warning_amber_rounded,
-      Color(0xFF8D6E63),
-      'jumpscare',
-    ),
-    'heal': ('GET WELL', Icons.healing_rounded, Color(0xFF66BB6A), 'pulse'),
-    'gungeon': (
-      'GUNGEON!',
-      Icons.gps_fixed_rounded,
-      Color(0xFFB388FF),
-      'scatter',
-    ),
+  /// Card content derives from the shared preset list — the sender
+  /// sheet reads the same source, so picker and card can't drift.
+  static final _presetContent = <String, (String, IconData, Color, String)>{
+    for (final p in surprisePresets)
+      p.key: (p.cardTitle, p.icon, p.color, p.fx),
   };
 
   @override
