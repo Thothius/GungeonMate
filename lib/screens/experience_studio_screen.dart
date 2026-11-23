@@ -221,6 +221,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   /// rebuild, then pop post-frame (covers both pop semantics).
   void _closeAfterCommit() {
     AppTheme.previewNotifier.value = null;
+    if (!mounted) return;
     setState(() => _allowPop = true);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && Navigator.of(context).canPop()) {
@@ -2669,6 +2670,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       // its identity; copying it shouldn't inherit the old font.
       final themeFont = e.mode!.flair.font;
       if (themeFont != null) await VisualPrefs.setFont(themeFont);
+      if (!mounted) return;
       setState(() {
         _draft = _customDataFromFlair(
           AppTheme.flairFor(e.mode!),
@@ -2690,6 +2692,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       await VisualPrefs.replaceAndPersist(
         VisualPrefs.preserveAppLevel(s.prefs),
       );
+      if (!mounted) return;
       setState(() {
         _draft =
             s.customData ??
@@ -4093,6 +4096,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               onTap: () async {
                 Haptics.selection();
                 await AppTheme.setUnicornPalette(p);
+                if (!mounted) return;
                 setState(() {});
               },
               child: ValueListenableBuilder<UnicornPalette>(
