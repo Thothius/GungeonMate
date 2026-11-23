@@ -1,3 +1,24 @@
+## Unreleased — post-v3.7.0 hardening (S3–S5)
+
+Changes landed after the v3.7.0+167 build; no version bump yet.
+
+### Features
+- **Continue Run** — launch-restored saves park behind a main-menu offer instead of auto-resuming.
+- **Character select rework** — uniform per-character page with tappable loadout (was lopsided per-mode layouts).
+
+### Multiplayer hardening (S4)
+- **Mis-pair race fix** — `MpHandshakeGate` extracted + 14 decision tests; concurrent initiations rejected.
+- **Wire compatibility** — `MpSurprise` dual-writes `sprite` + `spriteKey`; shared surprise preset source; `:key:` sprite sender.
+- **Host-gone recovery** — elapsed-feed hint + latch; reconnect UX banner/dialog state tests.
+
+### Polish & a11y
+- **Reduced-motion sweep** — `ThemedNumber` shimmer/sparkle/bullets, inventory top-DPS ticker, and remaining decorative tickers now honor `disableAnimations`; dead `SynergyGlowOverlay` controller machinery removed.
+- **Neo-Skeuo removed** — the alternate cream-paper skin is fully excised; persisted picks migrate to live fonts via `AppFontLabel.migrate`.
+- **Studio UX** — honest font-size steps, touch targets, tab strip, gallery dots; active saved preset always editable.
+
+### Internal
+- Dead data/assets culled (`floors.json`, `chests.json`, `changelog.json`, old font files); Gradle wrapper 9.3.1→9.8.0; test coverage 48%→~63%+.
+
 ## v3.7.0 — Theme-Reactive Menu + Living Backdrop + Typography Overhaul (November 2026)
 
 **Build:** 167
