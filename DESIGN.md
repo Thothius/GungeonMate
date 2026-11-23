@@ -195,6 +195,13 @@ SERVE_LAB.bat   →   http://localhost:8619/design-lab/
 - 2026-10-31 — Neo-Skeuo added (§9): alternate skin toggle on home,
   spec-sheet demo at `neo_skeuo_lab_screen.dart`, customization locked
   while active, ambiance suppressed per-mode.
+- 2026-11-25 — Settings anatomy: status strip (version / theme / run
+  chips) → named sections with eyebrow labels + accent rule → panels
+  with icon chip, title, live summary, chevron. Sections: RUN DISPLAY,
+  STUDIO, DEV TOOLS (active run only — never a dead-end tile),
+  DANGER ZONE. Run-tools sheet groups RUN → RESET → APP → DANGER with
+  subtitle rows. Full app-data reset lives in `AppDataReset`
+  (MP teardown → in-memory defaults → `prefs.clear()` → rehydrate).
 - 2026-11-20 — Main menu un-locked from the fixed ember palette: every
   color now derives from `AppTheme.flair` (all themes, Unicorn
   palettes, remixes, custom presets). `MainMenuBackdrop` tints its

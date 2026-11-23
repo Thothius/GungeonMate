@@ -15,6 +15,12 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **Reduced-motion sweep** — `ThemedNumber` shimmer/sparkle/bullets, inventory top-DPS ticker, and remaining decorative tickers now honor `disableAnimations`; dead `SynergyGlowOverlay` controller machinery removed.
 - **Neo-Skeuo removed** — the alternate cream-paper skin is fully excised; persisted picks migrate to live fonts via `AppFontLabel.migrate`.
 - **Studio UX** — honest font-size steps, touch targets, tab strip, gallery dots; active saved preset always editable.
+- **Settings rework** — control-deck layout: orientation status strip (version/theme/run state), RUN DISPLAY panels with live summaries (synergy readout, dice style + live preview, special panels), STUDIO shortcut, DEV TOOLS shown only during a run, and a tokenized DANGER ZONE. Run-tools sheet rows gained subtitles and honest RUN / RESET / APP / DANGER grouping; special-items grid is responsive.
+
+### Fixed
+- **RESET ALL DATA (U-026)** — now tears down MP, resets every in-memory store to factory defaults, clears prefs, rehydrates, and lands on the main menu instead of stranding on character select with stale state.
+- **Dev Tools dead end (U-027)** — the DEV TOOLS section only renders while a run is active, so the special-items grid can never open without a run to modify.
+- **Tools-sheet grab-bag (U-031)** — Customization/Quiz/Bug/Settings now sit under an APP label and End Run under DANGER.
 
 ### Internal
 - Dead data/assets culled (`floors.json`, `chests.json`, `changelog.json`, old font files); Gradle wrapper 9.3.1→9.8.0; test coverage 48%→~63%+.
