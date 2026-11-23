@@ -36,7 +36,7 @@ void main() {
     for (final label in ['-1.0', '-0.5', '+0.5', '+1.0']) {
       expect(find.text(label), findsOneWidget, reason: 'missing $label');
     }
-    expect(find.textContaining('Active Cooldown Speedup'), findsOneWidget);
+    expect(find.textContaining('Cooldown reduction'), findsOneWidget);
     expect(find.byType(GungeonMeter), findsOneWidget);
     expect(tester.takeException(), isNull);
 
@@ -66,7 +66,7 @@ void main() {
 
     expect(find.text('Curse'), findsWidgets);
     expect(find.text('-2.0'), findsWidgets);
-    expect(find.textContaining('Bullet Hell Threat Level'), findsOneWidget);
+    expect(find.textContaining('Jammed enemy chance:'), findsOneWidget);
     expect(find.textContaining('Base'), findsWidgets);
 
     await tester.pump(const Duration(seconds: 4));

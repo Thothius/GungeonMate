@@ -122,11 +122,8 @@ void main() {
       await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
       await tester.pump();
 
-      expect(
-        find.textContaining('4% per point vs normal enemies'),
-        findsOneWidget,
-      );
-      expect(find.textContaining('roughly 4%/2%'), findsNothing);
+      expect(find.textContaining('cap at 50%'), findsWidgets);
+      expect(find.textContaining('4% per point'), findsNothing);
 
       await tester.pump(const Duration(seconds: 4));
     });

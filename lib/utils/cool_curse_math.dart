@@ -6,6 +6,8 @@
 /// re-derive formulas inline.
 library;
 
+import 'dart:math' as math;
+
 /// One row of the per-point Curse effect table (integer curse 0–10).
 class CurseRow {
   final int curse;
@@ -56,14 +58,17 @@ double jammedBossChance(double curse) {
 }
 
 /// Mimic chest chance, percent — 2.25% base + 2.1% per curse point.
-double mimicChance(double curse) => 2.25 + curse * 2.1;
+/// Floored at 0: negative curse (manual stat adjustment) can't reduce
+/// the base mimic rate below zero.
+double mimicChance(double curse) => math.max(0.0, 2.25 + curse * 2.1);
 
 /// Fused-chest chance increase from curse, percent — +5% per point,
-/// continues linearly past 10 (only jam chances cap).
-double curseFuseBonus(double curse) => curse * 5;
+/// continues linearly past 10 (only jam chances cap). Floored at 0.
+double curseFuseBonus(double curse) => math.max(0.0, curse * 5);
 
-/// Ammo drop multiplier — x1.05 per curse point.
-double ammoDropMultiplier(double curse) => 1 + curse * 0.05;
+/// Ammo drop multiplier — x1.05 per curse point, floored at x1.0.
+double ammoDropMultiplier(double curse) =>
+    math.max(1.0, 1 + curse * 0.05);
 
 /// Active-item cooldown reduction from coolness, percent — 5%/pt, cap 50%.
 double cooldownReduction(double coolness) =>
