@@ -642,6 +642,8 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
       quickAddController.dispose();
       addedToastTimer?.cancel();
       addedToast.dispose();
+      // Fresh random view on every open — a stale query would hide it.
+      _quickQuery = '';
     });
   }
 
