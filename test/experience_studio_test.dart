@@ -998,6 +998,94 @@ void main() {
     });
   });
 
+  group('Active preset editing', () {
+    SavedCustomTheme activePreset() => SavedCustomTheme(
+      id: 'active1',
+      name: 'Test Look',
+      splashSlug: 'custom',
+      baseMode: AppThemeMode.custom,
+      prefs: const VisualPrefs(),
+      customData: CustomThemeData.defaultTheme.copyWith(name: 'Test Look'),
+    );
+
+    /// Fresh-open on the dashboard the way a returning user lands:
+    /// the saved preset is already the live custom theme app-wide,
+    /// then deep-link into the editor and step back to the dashboard.
+    /// No gallery pick this session — _presetName/_editingPresetId
+    /// start empty, so detection must fall back to the live theme.
+    Future<void> openDashboardOnActivePreset(WidgetTester tester) async {
+      CustomThemeStore.notifier.value = [activePreset()];
+      AppTheme.setCustomThemeData(
+        CustomThemeData.defaultTheme.copyWith(name: 'Test Look'),
+      );
+      await AppTheme.setMode(AppThemeMode.custom);
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen(initialTab: 1)),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded).first);
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    testWidgets('active saved preset shows EDIT PRESET on fresh open', (
+      tester,
+    ) async {
+      final before = AppTheme.mode;
+      addTearDown(() => AppTheme.setMode(before));
+
+      await openDashboardOnActivePreset(tester);
+
+      expect(find.text('EDIT PRESET'), findsOneWidget);
+      expect(find.text('update "Test Look" in your gallery'), findsOneWidget);
+      expect(find.text('SAVED PRESET'), findsWidgets);
+      expect(find.text('TEST LOOK'), findsWidgets);
+    });
+
+    testWidgets('EDIT OPTIONS → SAVE updates the active preset in place', (
+      tester,
+    ) async {
+      final before = AppTheme.mode;
+      addTearDown(() => AppTheme.setMode(before));
+
+      await openDashboardOnActivePreset(tester);
+      await tester.tap(find.text('EDIT OPTIONS'));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('SAVE'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // The staged look IS the saved preset — SAVE must offer an
+      // update, not a new preset.
+      expect(find.text('UPDATE PRESET'), findsOneWidget);
+      expect(find.text('"Test Look" will be updated in your gallery'),
+          findsOneWidget);
+
+      await tester.tap(find.text('UPDATE & APPLY'));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // Overwritten in place — no duplicate, same id.
+      expect(CustomThemeStore.themes, hasLength(1));
+      expect(CustomThemeStore.themes.single.id, 'active1');
+      expect(CustomThemeStore.themes.single.name, 'Test Look');
+    });
+
+    testWidgets('EDIT PRESET pencil still enters edit mode', (tester) async {
+      final before = AppTheme.mode;
+      addTearDown(() => AppTheme.setMode(before));
+
+      await openDashboardOnActivePreset(tester);
+      await tester.tap(find.text('EDIT PRESET'));
+      // Infinite hero-pulse animation — settle never returns; fixed
+      // pumps cover the stage transition instead. Deep link left
+      // _hubTab on COLORS & BG — DETAILS carries the EDITING header.
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.tap(find.text('DETAILS'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('EDITING: Test Look'), findsOneWidget);
+    });
+  });
+
   group('Flow - QUICK SLOTS', () {
     Future<void> openChoose(WidgetTester tester) async {
       await tester.pumpWidget(
