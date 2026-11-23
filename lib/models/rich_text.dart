@@ -8,8 +8,6 @@
 /// app only needs to *render* — no runtime parsing.
 library;
 
-import 'dart:convert';
-
 /// What an internal `/wiki/X` link resolved to.
 ///
 /// `unresolved` links render as plain text (we don't have a destination).
@@ -241,57 +239,4 @@ List<RichToken> parseSynergyEffectTokens(dynamic raw) {
       .whereType<Map<String, dynamic>>()
       .map((t) => RichToken.fromJson(t))
       .toList(growable: false);
-}
-
-// =============================================================================
-// Back-refs index (loaded once at startup from back_refs.json)
-// =============================================================================
-
-class BackRefs {
-  /// Map from entity name → list of entities (items+guns) whose wiki
-  /// notes/trivia/etc reference it. Sorted alphabetically by the
-  /// extractor; we preserve that order.
-  final Map<String, List<String>> itemToReferrers;
-
-  /// Map from synergy name → list of items+guns that mention it.
-  final Map<String, List<String>> synergyToReferrers;
-
-  const BackRefs({
-    this.itemToReferrers = const {},
-    this.synergyToReferrers = const {},
-  });
-
-  static const empty = BackRefs();
-
-  /// Get the back-ref list for [name] (case-insensitive lookup against the
-  /// canonical key). Returns an empty list if no entries.
-  List<String> referrersFor(String name) {
-    final exact = itemToReferrers[name];
-    if (exact != null) return exact;
-    // Fall back to a case-insensitive scan (rare path)
-    final lower = name.toLowerCase();
-    for (final entry in itemToReferrers.entries) {
-      if (entry.key.toLowerCase() == lower) return entry.value;
-    }
-    return const [];
-  }
-
-  factory BackRefs.fromJsonString(String src) {
-    final m = json.decode(src) as Map<String, dynamic>;
-    Map<String, List<String>> bucket(String key) {
-      final raw = m[key];
-      if (raw is! Map) return const {};
-      return raw.map(
-        (k, v) => MapEntry(
-          k.toString(),
-          (v as List).map((e) => e.toString()).toList(growable: false),
-        ),
-      );
-    }
-
-    return BackRefs(
-      itemToReferrers: bucket('item_to_referrers'),
-      synergyToReferrers: bucket('synergy_to_referrers'),
-    );
-  }
 }

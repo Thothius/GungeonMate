@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/gun.dart';
 import '../models/item.dart';
-import '../models/rich_text.dart';
 import '../models/synergy.dart';
 import '../services/synergy_stats.dart';
 import '../models/shrine.dart';
@@ -71,11 +70,6 @@ class RunProvider
   List<Synergy> _allSynergies = [];
   List<Shrine> _allShrines = [];
   List<Gungeoneer> _allGungeoneers = [];
-
-  /// Reverse index of "what entities reference X". Built once at scrape
-  /// time, loaded lazily here. Drives the "Referenced by" panel on each
-  /// item detail screen.
-  BackRefs _backRefs = BackRefs.empty;
 
   /// Case-insensitive name → entity lookup maps, rebuilt inside
   /// [loadData] after each master list hydrates. Replace the O(n)
@@ -180,7 +174,6 @@ class RunProvider
       _lastPlayedCharName.isEmpty
           ? null
           : gungeoneerByName(_lastPlayedCharName);
-  BackRefs get backRefs => _backRefs;
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<String> get assetLoadFailures => List.unmodifiable(_assetLoadFailures);
@@ -276,7 +269,6 @@ class RunProvider
         _loadOptionalAsset('assets/data/synergies.json'),
         _loadOptionalAsset('assets/data/shrines.json'),
         _loadOptionalAsset('assets/data/gungeoneers.json'),
-        _loadOptionalAsset('assets/data/back_refs.json'),
         _loadOptionalAsset('assets/data/synergy_meta.json'),
       ]);
 
@@ -320,22 +312,10 @@ class RunProvider
         _allGungeoneers = [];
       }
 
-      // Back-refs parsed on main thread (small JSON, fast).
-      if (jsonResults[5].isNotEmpty) {
-        try {
-          _backRefs = BackRefs.fromJsonString(jsonResults[5]);
-        } catch (e) {
-          _recordAssetFailure('assets/data/back_refs.json (parse)', e);
-          _backRefs = BackRefs.empty;
-        }
-      } else {
-        _backRefs = BackRefs.empty;
-      }
-
       try {
         _synergyMetaByLowerName = await compute(
           _parseSynergyMeta,
-          jsonResults[6],
+          jsonResults[5],
         );
       } catch (e) {
         _recordAssetFailure('assets/data/synergy_meta.json (parse)', e);

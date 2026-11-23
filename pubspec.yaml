@@ -96,7 +96,6 @@ flutter:
     - assets/data/synergy_meta.json
     - assets/data/shrines.json
     - assets/data/gungeoneers.json
-    - assets/data/back_refs.json
     - assets/data/objects.json
     - assets/data/pickups.json
     - assets/data/npcs.json
