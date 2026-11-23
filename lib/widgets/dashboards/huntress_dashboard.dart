@@ -108,7 +108,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                                     : Colors.white38,
                           ),
                           const SizedBox(width: 3),
-                          Text(
+                          GoopText(
                             _healthMode ? 'HP' : 'ALL',
                             style: TextStyle(
                               fontSize: FontSizes.labelSmall,

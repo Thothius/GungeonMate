@@ -222,7 +222,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                     minHeight: 48,
                                   ),
                                 ),
-                                Text(
+                                GoopText(
                                   '$friendship',
                                   style: const TextStyle(
                                     fontSize: FontSizes.titleSmall,

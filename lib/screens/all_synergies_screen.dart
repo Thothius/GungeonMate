@@ -281,7 +281,7 @@ class AllSynergiesScreen extends StatelessWidget {
                   color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text(
+                child: GoopText(
                   '$count',
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
@@ -472,7 +472,7 @@ class _MiniChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: fg.withValues(alpha: 0.4), width: 0.6),
       ),
-      child: Text(
+      child: GoopText(
         name,
         style: TextStyle(
           fontSize: FontSizes.labelSmall,

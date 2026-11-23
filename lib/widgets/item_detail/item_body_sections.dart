@@ -200,7 +200,7 @@ mixin _ItemBodySections on StatelessWidget {
                       color: Colors.black26,
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Text(
+                    child: GoopText(
                       '$junkCount',
                       style: TextStyle(
                         fontSize: 15,
@@ -427,7 +427,7 @@ mixin _ItemBodySections on StatelessWidget {
                         }
                         : null,
               ),
-              Text(
+              GoopText(
                 '$count',
                 style: const TextStyle(
                   fontSize: 15,

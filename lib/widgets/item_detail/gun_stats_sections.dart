@@ -115,7 +115,7 @@ mixin _GunStatsSections on StatelessWidget {
                       color: Colors.black26,
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Text(
+                    child: GoopText(
                       '$lvl',
                       style: TextStyle(
                         fontSize: 15,
@@ -738,7 +738,7 @@ mixin _GunStatsSections on StatelessWidget {
                               size: 13,
                               color: Skeuo.inkIf(Colors.greenAccent),
                             )
-                            : Text(
+                            : GoopText(
                               '$killNum',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,

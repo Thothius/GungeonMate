@@ -125,7 +125,7 @@ class DiceWidgetState extends State<DiceWidget>
                     ),
                   ],
                 ),
-                child: Text(
+                child: GoopText(
                   '$faceVal',
                   style: TextStyle(
                     fontSize: 34,

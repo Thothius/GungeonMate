@@ -502,7 +502,7 @@ Widget _genericEffectBody({required String effect}) {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              GoopText(
                 '•  ',
                 style: TextStyle(
                   color: Skeuo.inkIf(Colors.amber),
@@ -511,7 +511,7 @@ Widget _genericEffectBody({required String effect}) {
                 ),
               ),
               Expanded(
-                child: Text(
+                child: GoopText(
                   s,
                   style: const TextStyle(fontSize: 13, height: 1.35),
                 ),
@@ -598,7 +598,7 @@ Widget _diceEffectBody({required String effect}) {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                GoopText(
                   '•  ',
                   style: TextStyle(
                     color: Skeuo.inkIf(Colors.amber),
@@ -607,7 +607,7 @@ Widget _diceEffectBody({required String effect}) {
                   ),
                 ),
                 Expanded(
-                  child: Text(
+                  child: GoopText(
                     n,
                     style: const TextStyle(fontSize: 13, height: 1.35),
                   ),
@@ -647,7 +647,7 @@ class _DiceEffectCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoopText(
             name,
             style: TextStyle(
               fontSize: 13,
@@ -657,7 +657,7 @@ class _DiceEffectCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(body, style: const TextStyle(fontSize: 13, height: 1.35)),
+          GoopText(body, style: const TextStyle(fontSize: 13, height: 1.35)),
         ],
       ),
     );

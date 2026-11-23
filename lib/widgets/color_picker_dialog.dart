@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/tokens.dart';
 import '../services/haptics.dart';
+import '../services/goop_talk_engine.dart';
 
 /// A compact HSV color picker dialog for custom theme palette editing.
 ///
@@ -94,7 +95,7 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
     return AlertDialog(
       backgroundColor: flair.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radii.lg)),
-      title: Text(
+      title: GoopText(
         widget.title,
         style: TextStyle(
           fontSize: FontSizes.titleSmall,
@@ -203,7 +204,7 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        GoopText(
                           'HEX',
                           style: TextStyle(
                             fontSize: FontSizes.labelSmall,
@@ -260,7 +261,7 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(
+          child: GoopText(
             'CANCEL',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
@@ -281,7 +282,7 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
             Haptics.selection();
             Navigator.of(context).pop(_currentColor);
           },
-          child: const Text(
+          child: const GoopText(
             'DONE',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,

@@ -380,7 +380,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                               const EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
-                                                          child: Text(
+                                                          child: GoopText(
                                                             '$junkCount',
                                                             style: const TextStyle(
                                                               fontSize:

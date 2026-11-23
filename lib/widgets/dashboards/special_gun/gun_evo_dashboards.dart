@@ -291,7 +291,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                               const EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
-                                                          child: Text(
+                                                          child: GoopText(
                                                             '$lvl',
                                                             style: const TextStyle(
                                                               fontSize:
@@ -652,7 +652,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                               const EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
-                                                          child: Text(
+                                                          child: GoopText(
                                                             '$activeStage',
                                                             style: const TextStyle(
                                                               fontSize:
@@ -997,7 +997,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                                               const EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
-                                                          child: Text(
+                                                          child: GoopText(
                                                             '$form',
                                                             style: const TextStyle(
                                                               fontSize:

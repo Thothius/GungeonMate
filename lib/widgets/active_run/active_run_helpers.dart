@@ -144,7 +144,7 @@ class EffectsTileState extends State<EffectsTile> {
                                 ).withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text(
+                      child: GoopText(
                         '$totalTags',
                         style: TextStyle(
                           fontSize: 11,
@@ -791,7 +791,7 @@ class SectionHeaderSliver extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
+              child: GoopText(
                 '$count',
                 style: const TextStyle(
                   fontSize: 12,

@@ -225,7 +225,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: Insets.md,
                                         ),
-                                        child: Text(
+                                        child: GoopText(
                                           '$robotJunk',
                                           style: const TextStyle(
                                             fontSize: FontSizes.headlineMedium,
@@ -329,7 +329,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: Insets.md,
                                         ),
-                                        child: Text(
+                                        child: GoopText(
                                           '$robotArmor',
                                           style: const TextStyle(
                                             fontSize: FontSizes.headlineMedium,

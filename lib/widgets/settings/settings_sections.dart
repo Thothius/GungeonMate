@@ -121,7 +121,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
           BoxShadow(color: colors.$4, blurRadius: 12, spreadRadius: 3),
         ],
       ),
-      child: Text(
+      child: GoopText(
         '$value',
         style: TextStyle(
           fontSize: 56,

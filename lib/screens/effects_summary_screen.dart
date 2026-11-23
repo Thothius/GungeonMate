@@ -203,7 +203,7 @@ class _CategorySection extends StatelessWidget {
                   color: category.color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
+                child: GoopText(
                   '${tags.length}',
                   style: TextStyle(
                     fontSize: FontSizes.labelMedium,

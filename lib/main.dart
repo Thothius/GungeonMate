@@ -13,6 +13,7 @@ import 'services/mp/mp_foreground_service.dart';
 import 'services/mp_session.dart';
 import 'utils/asset_paths.dart' show kAppVersion;
 import 'widgets/theme_overlay.dart';
+import 'services/goop_talk_engine.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -156,7 +157,7 @@ class _GungeonMateAppState extends State<GungeonMateApp>
                                                 color: Colors.redAccent,
                                               ),
                                               const SizedBox(height: 16),
-                                              Text(
+                                              GoopText(
                                                 'UI Error: ${details.exception}',
                                                 style: const TextStyle(
                                                   color: Colors.white70,

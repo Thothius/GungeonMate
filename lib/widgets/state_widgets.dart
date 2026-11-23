@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/tokens.dart';
+import '../services/goop_talk_engine.dart';
 
 /// A shimmer-style skeleton placeholder for loading content.
 ///
@@ -137,7 +138,7 @@ class EmptyState extends StatelessWidget {
               ),
             ),
             const SizedBox(height: Insets.lg),
-            Text(
+            GoopText(
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -146,7 +147,7 @@ class EmptyState extends StatelessWidget {
             ),
             if (flavor != null) ...[
               const SizedBox(height: 6),
-              Text(
+              GoopText(
                 flavor!,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -157,7 +158,7 @@ class EmptyState extends StatelessWidget {
             ],
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: Insets.xl),
-              FilledButton(onPressed: onAction, child: Text(actionLabel!)),
+              FilledButton(onPressed: onAction, child: GoopText(actionLabel!)),
             ],
           ],
         ),
@@ -195,7 +196,7 @@ class ErrorState extends StatelessWidget {
           children: [
             Icon(icon, size: 48, color: flair.error.withValues(alpha: 0.6)),
             const SizedBox(height: Insets.lg),
-            Text(
+            GoopText(
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -206,7 +207,7 @@ class ErrorState extends StatelessWidget {
             FilledButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: Text(retryLabel),
+              label: GoopText(retryLabel),
             ),
           ],
         ),

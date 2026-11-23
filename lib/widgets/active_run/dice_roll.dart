@@ -535,7 +535,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                     const SizedBox(height: 8),
                     FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text(
+                      child: GoopText(
                         '$_myScore',
                         style: const TextStyle(
                           fontSize: 38,
@@ -590,7 +590,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                       const SizedBox(height: 8),
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: GoopText(
                           '$_peerScore',
                           style: const TextStyle(
                             fontSize: 38,

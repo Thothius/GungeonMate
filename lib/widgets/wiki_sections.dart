@@ -171,7 +171,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                         color: Colors.white.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
+                      child: GoopText(
                         '${widget.referrers.length}',
                         style: TextStyle(
                           fontSize: 10,

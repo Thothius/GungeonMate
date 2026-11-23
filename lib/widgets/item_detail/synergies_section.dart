@@ -70,7 +70,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                         color: Colors.white.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
+                      child: GoopText(
                         '${widget.statuses.length}',
                         style: TextStyle(
                           fontSize: 10,

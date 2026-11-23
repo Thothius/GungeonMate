@@ -365,7 +365,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                     minHeight: 48,
                                   ),
                                 ),
-                                Text(
+                                GoopText(
                                   '$stars',
                                   style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
@@ -535,7 +535,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                     minHeight: 48,
                                   ),
                                 ),
-                                Text(
+                                GoopText(
                                   '$uses',
                                   style: TextStyle(
                                     fontSize: FontSizes.titleSmall,

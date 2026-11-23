@@ -608,7 +608,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                     minHeight: 48,
                                   ),
                                 ),
-                                Text(
+                                GoopText(
                                   '$count',
                                   style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
@@ -831,7 +831,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                     minHeight: 48,
                                   ),
                                 ),
-                                Text(
+                                GoopText(
                                   '$kills',
                                   style: TextStyle(
                                     fontSize: FontSizes.titleSmall,

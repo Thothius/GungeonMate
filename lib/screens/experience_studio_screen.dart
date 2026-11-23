@@ -906,14 +906,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     final saved = await CustomThemeStore.save(theme);
     if (!saved && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not save preset — storage error')),
+        const SnackBar(content: GoopText('Could not save preset — storage error')),
       );
       return;
     }
     if (mounted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Saved "$name" to your presets')));
+      ).showSnackBar(SnackBar(content: GoopText('Saved "$name" to your presets')));
       setState(() {});
     }
   }
@@ -2543,7 +2543,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     if (!deleted && mounted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Could not delete preset')));
+      ).showSnackBar(const SnackBar(content: GoopText('Could not delete preset')));
       return;
     }
     if (mounted) {
@@ -3050,7 +3050,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             : await CustomThemeStore.save(theme);
     if (!saved && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not save preset — storage error')),
+        const SnackBar(content: GoopText('Could not save preset — storage error')),
       );
       return;
     }
@@ -4652,16 +4652,16 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(ctx).pop('cancel'),
-                    child: const Text('CANCEL'),
+                    child: const GoopText('CANCEL'),
                   ),
                   if (filled)
                     TextButton(
                       onPressed: () => Navigator.of(ctx).pop('clear'),
-                      child: const Text('CLEAR'),
+                      child: const GoopText('CLEAR'),
                     ),
                   FilledButton(
                     onPressed: () => Navigator.of(ctx).pop('change'),
-                    child: const Text('CHANGE'),
+                    child: const GoopText('CHANGE'),
                   ),
                 ],
               ),

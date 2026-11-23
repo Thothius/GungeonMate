@@ -222,7 +222,7 @@ class _ValueCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      GoopText(
                         '0.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
@@ -230,14 +230,14 @@ class _ValueCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
+                      GoopText(
                         '5.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
                           color: Skeuo.collapse(Colors.white30),
                         ),
                       ),
-                      Text(
+                      GoopText(
                         '10.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,

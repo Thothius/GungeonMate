@@ -411,7 +411,7 @@ class _AssetTile extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: FittedBox(
           fit: BoxFit.scaleDown,
-          child: Text(
+          child: GoopText(
             'Ag',
             style: TextStyle(
               fontFamily: entry.fontFamily,

@@ -32,7 +32,7 @@ class GunNotesTab extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GoopText(
                       '•',
                       style: TextStyle(
                         fontSize: 13.5,

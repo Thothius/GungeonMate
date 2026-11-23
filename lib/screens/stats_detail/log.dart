@@ -53,7 +53,7 @@ class _EventLogState extends State<_EventLog> {
                       color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.all(Radii.sm),
                     ),
-                    child: Text(
+                    child: GoopText(
                       '${entries.length}',
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
