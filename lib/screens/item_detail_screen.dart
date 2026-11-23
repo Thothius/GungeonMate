@@ -24,6 +24,7 @@ import '../widgets/item_detail/gun_synergies_tab.dart';
 import '../widgets/item_detail/entity_synergies_view.dart';
 import '../widgets/item_detail/leb_view_scope.dart';
 import '../widgets/item_detail/destroy_banner.dart';
+import '../widgets/scale_button.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final Gun? gun;
@@ -92,7 +93,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final name = gun?.name ?? item!.name;
     final quality = gun?.quality ?? item!.quality;
     final subtitle = gun != null ? gun.type : item!.type;
-    final quote = gun?.quote ?? item!.quote;
 
     final owned = runProvider.ownedNamesLowerCombined;
     // Synergies evaluate per-player in co-op — a piece split across
@@ -208,7 +208,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                     name: name,
                                     subtitle: subtitle,
                                     quality: quality,
-                                    quote: quote,
                                     // Guns show notes; items show their mechanical
                                     // effect line (was empty — all 270 items have
                                     // one and it was parsed but never rendered).
@@ -648,8 +647,8 @@ class _DetailTabHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return ScaleButton(
+      enableHaptics: false,
       onTap: () {
         Haptics.selection();
         onTap();

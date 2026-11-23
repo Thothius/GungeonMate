@@ -327,13 +327,6 @@ class GunStats extends StatelessWidget with _GunStatsSections {
     final caseyInfo =
         gun.name.toLowerCase() == 'casey' ? _buildCaseyInfo(context) : null;
 
-    final String typeLower = gun.type.toLowerCase();
-    if (typeLower.contains('charged') || typeLower.contains('charge')) {
-    } else if (typeLower.contains('beam')) {
-    } else if (typeLower.contains('burst')) {
-    } else if (typeLower.contains('automatic') || typeLower.contains('auto')) {
-    } else {}
-
     // All form-stateful guns get their dynamic DPS — same params
     // _avgDpsFor uses, so the header stat matches run averages.
     final String dpsValue = () {

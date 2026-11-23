@@ -11,6 +11,7 @@ import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
 import '../../utils/reduce_motion.dart';
 import '../game_icon.dart';
+import '../scale_button.dart';
 import '../stat_delta_chips.dart';
 
 import 'entity_synergies_view.dart';
@@ -251,8 +252,8 @@ class _PageChips extends StatelessWidget {
         leb
             ? const Color(0xFFB388FF)
             : (active ? Colors.white : Colors.white54);
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return ScaleButton(
+      enableHaptics: false,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
@@ -1020,8 +1021,8 @@ class _LebTogglePill extends StatelessWidget {
           on
               ? "Lich's Eye Bullets simulation is ON — tap to disable"
               : "Lich's Eye Bullets simulation is OFF — tap to enable",
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: ScaleButton(
+        enableHaptics: false,
         onTap: () {
           Haptics.selection();
           if (source == LebPrefSource.browse) {

@@ -16,7 +16,6 @@ class ItemDetailHeader extends StatelessWidget {
   final String name;
   final String subtitle;
   final String quality;
-  final String quote;
   final String effect;
   final bool isGun;
   final bool isActive;
@@ -32,7 +31,6 @@ class ItemDetailHeader extends StatelessWidget {
     required this.name,
     required this.subtitle,
     required this.quality,
-    required this.quote,
     this.effect = '',
     required this.isGun,
     required this.isActive,
@@ -79,13 +77,6 @@ class ItemDetailHeader extends StatelessWidget {
         value: '$synergyCount',
         color: Colors.cyanAccent,
       ),
-      if (sellPrice.isNotEmpty)
-        MetadataChip(
-          icon: Icons.payments_outlined,
-          label: 'Sell',
-          value: sellPrice,
-          color: Colors.yellowAccent,
-        ),
       if (curse > 0)
         MetadataChip(
           icon: Icons.mood_bad_outlined,
@@ -443,7 +434,7 @@ class _SellBadge extends StatelessWidget {
   }
 }
 
-/// Elemental status dot â€” icon-only tinted circle (fire/electric/etc).
+/// Elemental status dot — icon-only tinted circle (fire/electric/etc).
 class _ElementDot extends StatelessWidget {
   final ElementKind kind;
   const _ElementDot({required this.kind});
