@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/gun.dart';
 import 'package:gungeon_mate/models/item.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
+import 'package:gungeon_mate/screens/item_detail_screen.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
+import 'package:gungeon_mate/widgets/item_detail/description_blocks.dart';
 import 'package:gungeon_mate/widgets/item_detail/item_body.dart';
 import 'package:gungeon_mate/widgets/item_detail/gun_stats.dart';
 
@@ -74,6 +76,46 @@ void main() {
     await t.pumpWidget(wrap(ItemBody(item: withEffect)));
     await t.pump();
     expect(t.takeException(), isNull);
+  });
+
+  // ── ItemDetailScreen field surfacing (S3.4) ─────────────────────
+  // Feedback item 5: item `effect` + `ammonomicon_entry` were parsed
+  // but never rendered. Both now surface — header effect line and the
+  // AmmonomiconCard block. Pin it so a layout refactor can't silently
+  // drop them again.
+
+  testWidgets('ItemDetailScreen surfaces effect line + AmmonomiconCard', (
+    t,
+  ) async {
+    final item = p.allItems.firstWhere(
+      (i) => i.effect.isNotEmpty && i.ammonomiconEntry.isNotEmpty,
+    );
+    await t.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: p),
+          ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
+        ],
+        child: MaterialApp(home: ItemDetailScreen(item: item)),
+      ),
+    );
+    await t.pump();
+    // Flush the RunProvider autosave debounce + flutter_animate delays.
+    await t.pump(const Duration(seconds: 3));
+    expect(t.takeException(), isNull);
+    // Effect line lives in ItemBody at the top of the detail view —
+    // assert it before scrolling (off-screen slivers unbuild).
+    expect(find.textContaining(item.effect), findsWidgets);
+    // AmmonomiconCard sits in a lazy SliverToBoxAdapter below the fold —
+    // scroll the detail view until it builds.
+    await t.dragUntilVisible(
+      find.byType(AmmonomiconCard),
+      find.byType(Scrollable).last,
+      const Offset(0, -400),
+    );
+    await t.pump();
+    expect(find.byType(AmmonomiconCard), findsOneWidget);
+    expect(find.textContaining(item.ammonomiconEntry), findsWidgets);
   });
 
   // ── GunStats special-info branches ──────────────────────────────
