@@ -6,6 +6,7 @@ import '../../models/player.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
+import '../scale_button.dart';
 
 part 'special_gun/gun_evo_dashboards.dart';
 

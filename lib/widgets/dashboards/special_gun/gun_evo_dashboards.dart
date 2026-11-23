@@ -249,10 +249,8 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                     ),
                                                     Row(
                                                       children: [
-                                                        GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               lvl > 1
                                                                   ? () {
@@ -300,10 +298,8 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                             ),
                                                           ),
                                                         ),
-                                                        GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               lvl < 60
                                                                   ? () {
@@ -606,10 +602,8 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                     ),
                                                     Row(
                                                       children: [
-                                                        GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               activeStage > 1
                                                                   ? () {
@@ -659,10 +653,8 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                             ),
                                                           ),
                                                         ),
-                                                        GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               activeStage < 6
                                                                   ? () {
@@ -953,7 +945,8 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                                     ),
                                                     Row(
                                                       children: [
-                                                        GestureDetector(
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               form > 1
                                                                   ? () {
@@ -963,9 +956,6 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(
@@ -1004,7 +994,8 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                                             ),
                                                           ),
                                                         ),
-                                                        GestureDetector(
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               form < 3
                                                                   ? () {
@@ -1014,9 +1005,6 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(

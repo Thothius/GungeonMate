@@ -20,6 +20,7 @@ import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/bug_report/bug_report_button.dart';
+import '../widgets/scale_button.dart';
 import '../models/bug_report.dart';
 
 part 'ammonomicon_widgets.dart';
@@ -686,8 +687,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       final on = _matchedOnly;
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 8, 14, 4),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        child: ScaleButton(
+          enableHaptics: false,
           onTap: () {
             Haptics.selection();
             setState(() => _matchedOnly = !on);
@@ -729,8 +730,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
       child: Row(
         children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
+          ScaleButton(
+            enableHaptics: false,
             onTap: () {
               Haptics.selection();
               setState(
@@ -758,8 +759,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
           for (final q in _qualities)
             Padding(
               padding: const EdgeInsets.only(right: 6),
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              child: ScaleButton(
+                enableHaptics: false,
                 onTap: () {
                   Haptics.selection();
                   setState(() {
@@ -1276,8 +1277,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
     final isSelected = i == _selected || i == _expanded;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: ScaleButton(
+        enableHaptics: false,
         onTap: () {
           Haptics.selection();
           setState(() {

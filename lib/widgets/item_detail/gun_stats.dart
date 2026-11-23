@@ -6,6 +6,7 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/themed_number.dart';
+import '../scale_button.dart';
 import 'quick_jump_button.dart';
 
 part 'gun_stats_parts.dart';

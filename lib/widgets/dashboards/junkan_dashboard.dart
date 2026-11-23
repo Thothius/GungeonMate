@@ -6,6 +6,7 @@ import '../../models/player.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
+import '../scale_button.dart';
 
 class JunkanDashboardSliver extends StatefulWidget {
   final PlayerSlot slot;
@@ -329,10 +330,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                     ),
                                                     Row(
                                                       children: [
-                                                        GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               junkCount > 0 &&
                                                                       junkItem !=
@@ -385,10 +384,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                             ),
                                                           ),
                                                         ),
-                                                        GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
+                                                        ScaleButton(
+                                                          enableHaptics: false,
                                                           onTap:
                                                               junkItem != null
                                                                   ? () {

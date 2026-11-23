@@ -106,8 +106,8 @@ class _AmmonomiconCard extends StatelessWidget {
         section == AmmonomiconSection.npcs ? npcIdleGifPath(entry.name) : '';
     final imgPath = idleGif.isNotEmpty ? idleGif : assetPath;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return ScaleButton(
+      enableHaptics: false,
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -268,8 +268,8 @@ class _GungeoneersAmmonomiconPage extends StatelessWidget {
           sliver: SliverGrid(
             delegate: SliverChildBuilderDelegate((context, index) {
               final g = gungeoneers[index];
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              return ScaleButton(
+                enableHaptics: false,
                 onTap: () {
                   Haptics.selection();
                   Navigator.push(
@@ -425,8 +425,8 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
             itemBuilder: (_, i) {
               final sel = i == _page;
               final e = widget.entries[i];
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              return ScaleButton(
+                enableHaptics: false,
                 onTap: () => _jump(i),
                 child: Center(
                   child: AnimatedContainer(
@@ -503,8 +503,8 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
           ),
           const SizedBox(height: 14),
           // Big sprite
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
+          ScaleButton(
+            enableHaptics: false,
             onTap: () {
               Haptics.selection();
               widget.onEntryTap(e, widget.section);
@@ -725,8 +725,8 @@ class _CodexShelf extends StatelessWidget {
             separatorBuilder: (_, _) => const SizedBox(width: 8),
             itemBuilder: (_, i) {
               final e = items[i];
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              return ScaleButton(
+                enableHaptics: false,
                 onTap: () {
                   Haptics.selection();
                   e.onTap();
@@ -823,8 +823,8 @@ class _CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     final onSurface = Theme.of(context).colorScheme.onSurface;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return ScaleButton(
+      enableHaptics: false,
       onTap: () {
         Haptics.selection();
         onTap();

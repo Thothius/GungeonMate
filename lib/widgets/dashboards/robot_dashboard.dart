@@ -5,6 +5,7 @@ import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
+import '../scale_button.dart';
 
 class RobotDashboardSliver extends StatelessWidget {
   const RobotDashboardSliver({super.key});
@@ -407,12 +408,12 @@ class RobotDashboardSliver extends StatelessWidget {
     required Color activeColor,
     required ValueChanged<bool> onChanged,
   }) {
-    return GestureDetector(
+    return ScaleButton(
+      enableHaptics: false,
       onTap: () {
         Haptics.light();
         onChanged(!value);
       },
-      behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

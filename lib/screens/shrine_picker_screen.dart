@@ -8,6 +8,7 @@ import 'dart:math' as math;
 
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
+import '../widgets/scale_button.dart';
 
 part 'shrine_picker/shrine_sheet.dart';
 
@@ -180,8 +181,7 @@ class _ShrineTile extends StatelessWidget {
             ? Colors.deepOrangeAccent
             : Colors.amber;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return ScaleButton(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(

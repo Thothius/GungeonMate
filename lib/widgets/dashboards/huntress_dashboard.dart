@@ -4,6 +4,7 @@ import '../../models/player.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
+import '../scale_button.dart';
 
 /// Compact Huntress HUD: dig chance + item weights. Single concise card.
 /// Toggle on left switches between full pickup weights and health-focused stats.
@@ -76,8 +77,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   ),
                   const SizedBox(width: 8),
                   // Health toggle button
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
+                  ScaleButton(
                     onTap: () => setState(() => _healthMode = !_healthMode),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),

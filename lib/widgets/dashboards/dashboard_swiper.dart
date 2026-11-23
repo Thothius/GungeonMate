@@ -10,6 +10,7 @@ import 'junkan_dashboard.dart';
 import 'special_gun_dashboards.dart';
 import 'huntress_dashboard.dart';
 import 'compact_dashboards.dart';
+import '../scale_button.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
 
@@ -373,8 +374,8 @@ class DashboardTabChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = tab.color;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return ScaleButton(
+      enableHaptics: false,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
