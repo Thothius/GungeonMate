@@ -207,19 +207,6 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
   }
 
   void _showQuickAddBottomSheet(BuildContext context, PlayerSlot slot) {
-    final p = Provider.of<RunProvider>(context, listen: false);
-    final focusNode = FocusNode();
-    final quickAddController = TextEditingController(text: _quickQuery);
-    final addedToast = ValueNotifier<String?>(null);
-    Timer? addedToastTimer;
-
-    // Empty-query view = random discovery picks, reshuffled on every
-    // open so repeat visits surface different gear. Fixed for the
-    // sheet's lifetime so rows don't reshuffle while typing/browsing.
-    final discovery = <dynamic>[...p.allGuns, ...p.allItems]
-      ..shuffle(math.Random());
-    final discoveryPicks = discovery.take(60).toList();
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -235,419 +222,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
           width: 1.5,
         ),
       ),
-      builder: (bContext) {
-        return StatefulBuilder(
-          builder: (sContext, setModalState) {
-            final query = _quickQuery.toLowerCase().trim();
-
-            // Empty query → random discovery picks; typed query →
-            // relevance-sorted full catalog.
-            final List<dynamic> results;
-            if (query.isEmpty) {
-              results = discoveryPicks;
-            } else {
-              // Smart relevance matching & sorting:
-              // 1. Starts with query (highest priority)
-              // 2. Contains query (medium priority)
-              // 3. Quality score tie-breaker
-              final matchingGuns =
-                  p.allGuns.where((g) {
-                    return g.name.toLowerCase().contains(query);
-                  }).toList();
-
-              final matchingItems =
-                  p.allItems.where((i) {
-                    return i.name.toLowerCase().contains(query);
-                  }).toList();
-
-              // Combined and prioritized
-              final combinedResults = <dynamic>[
-                ...matchingGuns,
-                ...matchingItems,
-              ];
-              combinedResults.sort((a, b) {
-                final aName = a.name.toLowerCase();
-                final bName = b.name.toLowerCase();
-                final aStarts = aName.startsWith(query);
-                final bStarts = bName.startsWith(query);
-                if (aStarts && !bStarts) return -1;
-                if (!aStarts && bStarts) return 1;
-                return aName.compareTo(bName);
-              });
-              results = combinedResults;
-            }
-
-            return AnimatedPadding(
-              duration: const Duration(milliseconds: 100),
-              padding: MediaQuery.of(sContext).viewInsets,
-              child: Container(
-                height: MediaQuery.of(sContext).size.height * 0.6,
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                child: Column(
-                  children: [
-                    // Handlebar indicator
-                    Container(
-                      width: 36,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.white24,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-
-                    // Header — drag handle + balanced top bar: centered
-                    // "Tap to add" hint between symmetric 48px edge slots
-                    // (leading spacer matches the close button's width so
-                    // the title stays optically centered at any text size).
-                    // Hairline divider separates chrome from the results.
-                    Row(
-                      children: [
-                        const SizedBox(width: 48),
-                        Expanded(
-                          child: Center(
-                            child: GoopText(
-                              'Tap to add',
-                              style: TextStyle(
-                                fontSize: FontSizes.labelMedium,
-                                fontWeight: FontWeight.w700,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.55),
-                                fontStyle: FontStyle.italic,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withValues(alpha: 0.65),
-                            size: 38,
-                          ),
-                          tooltip: 'Close',
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(
-                            minWidth: 48,
-                            minHeight: 48,
-                          ),
-                          onPressed: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            Navigator.pop(bContext);
-                          },
-                        ),
-                      ],
-                    ),
-
-                    Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.white.withValues(alpha: 0.07),
-                    ),
-                    const SizedBox(height: 4),
-
-                    // Results — one-line rows; the whole row taps to add.
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          if (results.isEmpty)
-                            const Center(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: Insets.xxl,
-                                ),
-                                child: GoopText(
-                                  'No matching guns or items found.',
-                                  style: TextStyle(
-                                    color: Colors.white60,
-                                    fontSize: FontSizes.labelMedium,
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
-                            ListView.separated(
-                              itemCount: results.length,
-                              separatorBuilder:
-                                  (_, _) => Divider(
-                                    color: Colors.white.withValues(alpha: 0.05),
-                                    height: 1,
-                                  ),
-                              itemBuilder: (lContext, index) {
-                                final item = results[index];
-                                final isGun = item is Gun;
-                                final name = item.name;
-                                final quality = item.quality;
-                                final iconPath = item.icon;
-                                final kindTag =
-                                    isGun
-                                        ? 'GUN'
-                                        : (item.isActive
-                                            ? 'ACTIVE'
-                                            : (item.isCompanion
-                                                ? 'COMPANION'
-                                                : 'PASSIVE'));
-                                final kindColor =
-                                    isGun
-                                        ? Colors.amberAccent
-                                        : (item.isActive
-                                            ? Colors.lightBlueAccent
-                                            : (item.isCompanion
-                                                ? Colors.purpleAccent
-                                                : Colors.lightGreenAccent));
-
-                                void addIt() {
-                                  Haptics.selection();
-                                  final mpSession = context.read<MpSession>();
-                                  final isMpPeerAdd =
-                                      mpSession.isActive &&
-                                      mpSession.mySlot != slot;
-                                  if (isMpPeerAdd) {
-                                    mpSession
-                                        .sendAddToPeer(
-                                          kind: isGun ? 'gun' : 'item',
-                                          name: name,
-                                        )
-                                        .then((_) {
-                                          addedToast.value = 'Added: $name';
-                                          addedToastTimer?.cancel();
-                                          addedToastTimer = Timer(
-                                            const Duration(milliseconds: 800),
-                                            () => addedToast.value = null,
-                                          );
-                                        })
-                                        .catchError((Object _) {
-                                          addedToast.value =
-                                              'Could not send - check connection';
-                                          addedToastTimer?.cancel();
-                                          addedToastTimer = Timer(
-                                            const Duration(milliseconds: 2000),
-                                            () => addedToast.value = null,
-                                          );
-                                        });
-                                  } else {
-                                    if (isGun) {
-                                      p.addGun(item, slot: slot);
-                                    } else {
-                                      p.addItem(item, slot: slot);
-                                    }
-                                    addedToast.value = 'Added: $name';
-                                    addedToastTimer?.cancel();
-                                    addedToastTimer = Timer(
-                                      const Duration(milliseconds: 800),
-                                      () => addedToast.value = null,
-                                    );
-                                  }
-                                  quickAddController.clear();
-                                  setModalState(() {
-                                    _quickQuery = '';
-                                  });
-                                }
-
-                                return AnimatedBuilder(
-                                  animation: p,
-                                  builder: (abContext, _) {
-                                    final activePlayer =
-                                        slot == PlayerSlot.coop
-                                            ? (p.runState.coop ?? Player())
-                                            : p.runState.main;
-                                    final isOwned =
-                                        isGun
-                                            ? activePlayer.guns.any(
-                                              (g) => g.name == name,
-                                            )
-                                            : (name.toLowerCase() == 'junk'
-                                                ? false
-                                                : activePlayer.items.any(
-                                                  (i) => i.name == name,
-                                                ));
-
-                                    return InkWell(
-                                      onTap: isOwned ? null : addIt,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 4,
-                                          vertical: 9,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            GameIcon(
-                                              assetPath: iconPath,
-                                              size: 30,
-                                              fallback:
-                                                  isGun
-                                                      ? Icons.gps_fixed
-                                                      : Icons.extension,
-                                              quality: quality,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: GoopText(
-                                                name,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w800,
-                                                  fontSize:
-                                                      FontSizes.titleSmall,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            GoopText(
-                                              kindTag,
-                                              style: TextStyle(
-                                                color: kindColor.withValues(
-                                                  alpha: 0.85,
-                                                ),
-                                                fontSize: FontSizes.labelSmall,
-                                                fontWeight: FontWeight.w900,
-                                                letterSpacing: 0.8,
-                                              ),
-                                            ),
-                                            if (isOwned) ...[
-                                              const SizedBox(width: 6),
-                                              GoopText(
-                                                'OWNED',
-                                                style: TextStyle(
-                                                  color: Colors.greenAccent
-                                                      .withValues(alpha: 0.85),
-                                                  fontSize:
-                                                      FontSizes.labelSmall,
-                                                  fontWeight: FontWeight.w800,
-                                                ),
-                                              ),
-                                            ],
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          // Brief "Added: [name]" toast — auto-dismisses
-                          ValueListenableBuilder<String?>(
-                            valueListenable: addedToast,
-                            builder: (_, msg, _) {
-                              if (msg == null) return const SizedBox.shrink();
-                              return Positioned(
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                child: Center(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green.withValues(
-                                        alpha: 0.9,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: GoopText(
-                                      msg,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            11 * Responsive.factor(context),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Search field — at the bottom, above keyboard
-                    TextField(
-                      controller: quickAddController,
-                      autofocus: true,
-                      focusNode: focusNode,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: FontSizes.labelMedium,
-                      ),
-                      cursorColor: Colors.amberAccent,
-                      decoration: InputDecoration(
-                        hintText: 'Search items, guns...',
-                        hintStyle: TextStyle(
-                          color: Colors.white30,
-                          fontSize: FontSizes.labelMedium,
-                        ),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.white30,
-                          size: 20,
-                        ),
-                        suffixIcon:
-                            query.isNotEmpty
-                                ? IconButton(
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: Colors.white54,
-                                    size: 18,
-                                  ),
-                                  tooltip: 'Clear search',
-                                  onPressed: () {
-                                    quickAddController.clear();
-                                    setModalState(() {
-                                      _quickQuery = '';
-                                    });
-                                  },
-                                )
-                                : null,
-                        filled: true,
-                        fillColor: AppTheme.flair.card,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radii.sm),
-                          borderSide: BorderSide(
-                            color: Colors.amberAccent,
-                            width: 1.5,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radii.sm),
-                          borderSide: const BorderSide(color: Colors.white10),
-                        ),
-                      ),
-                      onChanged: (val) {
-                        setModalState(() {
-                          _quickQuery = val;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    ).whenComplete(() {
-      focusNode.dispose();
-      quickAddController.dispose();
-      addedToastTimer?.cancel();
-      addedToast.dispose();
-      // Fresh random view on every open — a stale query would hide it.
-      _quickQuery = '';
-    });
+      builder: (_) => _QuickAddSheet(slot: slot),
+    );
   }
-
-  String _quickQuery = '';
 
   Widget _buildWindgunnerBanner(RunProvider p) {
     return Container(
@@ -692,6 +269,407 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
           const SizedBox(width: 8),
           const Icon(Icons.flash_on, color: Colors.white, size: 16),
         ],
+      ),
+    );
+  }
+}
+
+/// Quick-add sheet content. Owns its [TextEditingController], toast
+/// notifier and timer as [State] fields so the framework disposes them
+/// when the route's subtree unmounts — after the dismiss animation.
+/// (Disposing in `showModalBottomSheet().whenComplete` races the exit
+/// animation: the route future completes while the sheet is still
+/// mounted, and the next rebuild touches a disposed controller.)
+class _QuickAddSheet extends StatefulWidget {
+  final PlayerSlot slot;
+  const _QuickAddSheet({required this.slot});
+
+  @override
+  State<_QuickAddSheet> createState() => _QuickAddSheetState();
+}
+
+class _QuickAddSheetState extends State<_QuickAddSheet> {
+  late final RunProvider p;
+  late final TextEditingController _controller;
+  final ValueNotifier<String?> _addedToast = ValueNotifier<String?>(null);
+  Timer? _addedToastTimer;
+  String _query = '';
+
+  /// Empty-query view = random discovery picks, reshuffled on every
+  /// open so repeat visits surface different gear. Fixed for the
+  /// sheet's lifetime so rows don't reshuffle while typing/browsing.
+  late final List<dynamic> _discoveryPicks;
+
+  @override
+  void initState() {
+    super.initState();
+    p = Provider.of<RunProvider>(context, listen: false);
+    _controller = TextEditingController();
+    final discovery = <dynamic>[...p.allGuns, ...p.allItems]
+      ..shuffle(math.Random());
+    _discoveryPicks = discovery.take(60).toList();
+  }
+
+  @override
+  void dispose() {
+    _addedToastTimer?.cancel();
+    _controller.dispose();
+    _addedToast.dispose();
+    super.dispose();
+  }
+
+  void _showToast(String msg, {int millis = 800}) {
+    _addedToast.value = msg;
+    _addedToastTimer?.cancel();
+    _addedToastTimer = Timer(Duration(milliseconds: millis), () {
+      _addedToast.value = null;
+    });
+  }
+
+  void _addIt(dynamic item, bool isGun) {
+    final name = item.name as String;
+    Haptics.selection();
+    final mpSession = context.read<MpSession>();
+    final isMpPeerAdd = mpSession.isActive && mpSession.mySlot != widget.slot;
+    if (isMpPeerAdd) {
+      mpSession
+          .sendAddToPeer(kind: isGun ? 'gun' : 'item', name: name)
+          .then((_) => _showToast('Added: $name'))
+          .catchError((Object _) {
+            _showToast('Could not send - check connection', millis: 2000);
+          });
+    } else {
+      if (isGun) {
+        p.addGun(item, slot: widget.slot);
+      } else {
+        p.addItem(item, slot: widget.slot);
+      }
+      _showToast('Added: $name');
+    }
+    _controller.clear();
+    setState(() => _query = '');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final query = _query.toLowerCase().trim();
+
+    // Empty query → random discovery picks; typed query →
+    // relevance-sorted full catalog.
+    final List<dynamic> results;
+    if (query.isEmpty) {
+      results = _discoveryPicks;
+    } else {
+      final matchingGuns = p.allGuns.where(
+        (g) => g.name.toLowerCase().contains(query),
+      );
+      final matchingItems = p.allItems.where(
+        (i) => i.name.toLowerCase().contains(query),
+      );
+      final combinedResults = <dynamic>[...matchingGuns, ...matchingItems];
+      combinedResults.sort((a, b) {
+        final aName = a.name.toLowerCase();
+        final bName = b.name.toLowerCase();
+        final aStarts = aName.startsWith(query);
+        final bStarts = bName.startsWith(query);
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        return aName.compareTo(bName);
+      });
+      results = combinedResults;
+    }
+
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 100),
+      padding: MediaQuery.of(context).viewInsets,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.6,
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        child: Column(
+          children: [
+            // Handlebar indicator
+            Container(
+              width: 36,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 14),
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            // Header — drag handle + balanced top bar: centered
+            // "Tap to add" hint between symmetric 48px edge slots
+            // (leading spacer matches the close button's width so
+            // the title stays optically centered at any text size).
+            // Hairline divider separates chrome from the results.
+            Row(
+              children: [
+                const SizedBox(width: 48),
+                Expanded(
+                  child: Center(
+                    child: GoopText(
+                      'Tap to add',
+                      style: TextStyle(
+                        fontSize: FontSizes.labelMedium,
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.55),
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.65),
+                    size: 38,
+                  ),
+                  tooltip: 'Close',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.white.withValues(alpha: 0.07),
+            ),
+            const SizedBox(height: 4),
+
+            // Results — one-line rows; the whole row taps to add.
+            Expanded(
+              child: Stack(
+                children: [
+                  if (results.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: Insets.xxl),
+                        child: GoopText(
+                          'No matching guns or items found.',
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: FontSizes.labelMedium,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    ListView.separated(
+                      itemCount: results.length,
+                      separatorBuilder:
+                          (_, _) => Divider(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            height: 1,
+                          ),
+                      itemBuilder: (lContext, index) {
+                        final item = results[index];
+                        final isGun = item is Gun;
+                        final name = item.name;
+                        final quality = item.quality;
+                        final iconPath = item.icon;
+                        final kindTag =
+                            isGun
+                                ? 'GUN'
+                                : (item.isActive
+                                    ? 'ACTIVE'
+                                    : (item.isCompanion
+                                        ? 'COMPANION'
+                                        : 'PASSIVE'));
+                        final kindColor =
+                            isGun
+                                ? Colors.amberAccent
+                                : (item.isActive
+                                    ? Colors.lightBlueAccent
+                                    : (item.isCompanion
+                                        ? Colors.purpleAccent
+                                        : Colors.lightGreenAccent));
+
+                        return AnimatedBuilder(
+                          animation: p,
+                          builder: (abContext, _) {
+                            final activePlayer =
+                                widget.slot == PlayerSlot.coop
+                                    ? (p.runState.coop ?? Player())
+                                    : p.runState.main;
+                            final isOwned =
+                                isGun
+                                    ? activePlayer.guns.any(
+                                      (g) => g.name == name,
+                                    )
+                                    : (name.toLowerCase() == 'junk'
+                                        ? false
+                                        : activePlayer.items.any(
+                                          (i) => i.name == name,
+                                        ));
+
+                            return InkWell(
+                              onTap: isOwned ? null : () => _addIt(item, isGun),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 9,
+                                ),
+                                child: Row(
+                                  children: [
+                                    GameIcon(
+                                      assetPath: iconPath,
+                                      size: 30,
+                                      fallback:
+                                          isGun
+                                              ? Icons.gps_fixed
+                                              : Icons.extension,
+                                      quality: quality,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: GoopText(
+                                        name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: FontSizes.titleSmall,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    GoopText(
+                                      kindTag,
+                                      style: TextStyle(
+                                        color: kindColor.withValues(
+                                          alpha: 0.85,
+                                        ),
+                                        fontSize: FontSizes.labelSmall,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 0.8,
+                                      ),
+                                    ),
+                                    if (isOwned) ...[
+                                      const SizedBox(width: 6),
+                                      GoopText(
+                                        'OWNED',
+                                        style: TextStyle(
+                                          color: Colors.greenAccent.withValues(
+                                            alpha: 0.85,
+                                          ),
+                                          fontSize: FontSizes.labelSmall,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  // Brief "Added: [name]" toast — auto-dismisses
+                  ValueListenableBuilder<String?>(
+                    valueListenable: _addedToast,
+                    builder: (_, msg, _) {
+                      if (msg == null) return const SizedBox.shrink();
+                      return Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.green.withValues(alpha: 0.9),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: GoopText(
+                              msg,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11 * Responsive.factor(context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Search field — at the bottom, above keyboard
+            TextField(
+              controller: _controller,
+              autofocus: true,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: FontSizes.labelMedium,
+              ),
+              cursorColor: Colors.amberAccent,
+              decoration: InputDecoration(
+                hintText: 'Search items, guns...',
+                hintStyle: TextStyle(
+                  color: Colors.white30,
+                  fontSize: FontSizes.labelMedium,
+                ),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: Colors.white30,
+                  size: 20,
+                ),
+                suffixIcon:
+                    query.isNotEmpty
+                        ? IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white54,
+                            size: 18,
+                          ),
+                          tooltip: 'Clear search',
+                          onPressed: () {
+                            _controller.clear();
+                            setState(() => _query = '');
+                          },
+                        )
+                        : null,
+                filled: true,
+                fillColor: AppTheme.flair.card,
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radii.sm),
+                  borderSide: BorderSide(color: Colors.amberAccent, width: 1.5),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radii.sm),
+                  borderSide: const BorderSide(color: Colors.white10),
+                ),
+              ),
+              onChanged: (val) {
+                setState(() => _query = val);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
