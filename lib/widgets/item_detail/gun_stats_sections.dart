@@ -94,10 +94,10 @@ mixin _GunStatsSections on StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Decrease Gunderfury level',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.remove_circle_outline,
                       size: 22,
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                     ),
                     onPressed:
                         lvl > 1 ? () => p.setGunderfuryLevel(lvl - 1) : null,
@@ -123,10 +123,10 @@ mixin _GunStatsSections on StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Increase Gunderfury level',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.add_circle_outline,
                       size: 22,
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                     ),
                     onPressed:
                         lvl < 60 ? () => p.setGunderfuryLevel(lvl + 1) : null,
@@ -164,12 +164,12 @@ mixin _GunStatsSections on StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const GoopText(
+              GoopText(
                 'EXPERIENCE GAUGE',
                 style: TextStyle(
                   fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white54,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                   letterSpacing: 0.5,
                 ),
               ),
@@ -237,7 +237,7 @@ mixin _GunStatsSections on StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Colors.white12, height: 16),
+          Divider(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12), height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -278,10 +278,10 @@ mixin _GunStatsSections on StatelessWidget {
                     const SizedBox(height: 3),
                     GoopText(
                       statsDesc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onSurface,
                         height: 1.2,
                       ),
                     ),
@@ -571,7 +571,7 @@ mixin _GunStatsSections on StatelessWidget {
                 final color =
                     isActive
                         ? spec.color
-                        : (isUnlocked ? Colors.green.shade700 : Colors.white12);
+                        : (isUnlocked ? Colors.green.shade700 : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12));
 
                 return Expanded(
                   child: Stack(
@@ -587,7 +587,7 @@ mixin _GunStatsSections on StatelessWidget {
                             color:
                                 isUnlocked && activeStage > spec.id
                                     ? Colors.green.withValues(alpha: 0.5)
-                                    : Colors.white10,
+                                    : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.10),
                           ),
                         ),
                       ScaleButton(
@@ -640,7 +640,7 @@ mixin _GunStatsSections on StatelessWidget {
                                     isActive
                                         ? FontWeight.w900
                                         : FontWeight.bold,
-                                color: isActive ? spec.color : Colors.white60,
+                                color: isActive ? spec.color : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.60),
                               ),
                             ),
                           ],
@@ -696,7 +696,7 @@ mixin _GunStatsSections on StatelessWidget {
                               ? Colors.greenAccent
                               : (isThresholdNode
                                   ? Colors.greenAccent.withValues(alpha: 0.3)
-                                  : Colors.white12),
+                                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12)),
                       width: isThresholdNode ? 1.5 : 1.0,
                     ),
                   ),
@@ -718,7 +718,7 @@ mixin _GunStatsSections on StatelessWidget {
                                         ? Colors.greenAccent.withValues(
                                           alpha: 0.4,
                                         )
-                                        : Colors.white54,
+                                        : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                               ),
                             ),
                   ),
@@ -779,16 +779,16 @@ mixin _GunStatsSections on StatelessWidget {
                 const SizedBox(height: 6),
                 GoopText(
                   'Projectiles: ${currentSpec.bullet}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white70,
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                   ),
                 ),
                 const SizedBox(height: 3),
                 GoopText(
                   'Formula: ${activeStage == 6 ? "Ultimate Form Unlocked!" : "Requires ${(activeStage * 5) - totalKills} more unique kills to force-evolve."}',
-                  style: const TextStyle(fontSize: 10.5, color: Colors.white60),
+                  style: TextStyle(fontSize: 10.5, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.60)),
                 ),
               ],
             ),

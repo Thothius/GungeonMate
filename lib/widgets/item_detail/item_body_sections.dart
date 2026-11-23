@@ -158,11 +158,11 @@ mixin _ItemBodySections on StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
+              Row(
                 children: [
                   Icon(
                     Icons.inventory_2_outlined,
-                    color: Colors.white54,
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                     size: 16,
                   ),
                   SizedBox(width: 6),
@@ -177,10 +177,10 @@ mixin _ItemBodySections on StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Remove Junk',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.remove_circle_outline,
                       size: 22,
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                     ),
                     onPressed:
                         junkCount > 0 && junkItem != null
@@ -208,10 +208,10 @@ mixin _ItemBodySections on StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Add Junk',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.add_circle_outline,
                       size: 22,
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                     ),
                     onPressed:
                         junkItem != null
@@ -254,7 +254,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Colors.white12, height: 16),
+          Divider(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12), height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -301,10 +301,10 @@ mixin _ItemBodySections on StatelessWidget {
                     const SizedBox(height: 4),
                     GoopText(
                       stats,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onSurface,
                         height: 1.25,
                       ),
                     ),
@@ -394,10 +394,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Remove armor',
-                icon: const Icon(
+                icon: Icon(
                   Icons.remove_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                 ),
                 onPressed:
                     count > 0
@@ -424,10 +424,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Add armor',
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                 ),
                 onPressed: () {
                   final double curseToAdd = (count == 0) ? 0.5 : 1.0;
@@ -544,22 +544,22 @@ mixin _ItemBodySections on StatelessWidget {
                     color: Colors.cyanAccent,
                   ),
                   const SizedBox(height: 8),
-                  const GoopText(
+                  GoopText(
                     '🔮 ACTIVE SEED SYNERGY HIDDEN',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const GoopText(
+                  GoopText(
                     'Each run pre-determines a randomized trigger to transform Sprun into the infinite-ammo Windgunner. Tap below to run active seed analysis.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
-                      color: Colors.white54,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                       height: 1.3,
                     ),
                   ),
@@ -570,7 +570,7 @@ mixin _ItemBodySections on StatelessWidget {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.cyan.shade900,
-                        foregroundColor: Colors.white,
+                        foregroundColor: Theme.of(context).colorScheme.onSurface,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radii.sm),
                         ),
@@ -633,7 +633,7 @@ mixin _ItemBodySections on StatelessWidget {
                       Icon(
                         isMatch ? Icons.check_circle : Icons.circle_outlined,
                         size: 14,
-                        color: isMatch ? Colors.cyanAccent : Colors.white24,
+                        color: isMatch ? Colors.cyanAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -643,7 +643,7 @@ mixin _ItemBodySections on StatelessWidget {
                             fontSize: 11,
                             fontWeight:
                                 isMatch ? FontWeight.bold : FontWeight.normal,
-                            color: isMatch ? Colors.white : Colors.white30,
+                            color: isMatch ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.30),
                             decoration:
                                 isMatch ? null : TextDecoration.lineThrough,
                           ),
@@ -686,7 +686,7 @@ mixin _ItemBodySections on StatelessWidget {
               ],
             ),
           ],
-          const Divider(color: Colors.white12, height: 16),
+          Divider(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12), height: 16),
           Container(
             padding: const EdgeInsets.all(Insets.sm),
             decoration: BoxDecoration(
@@ -718,7 +718,7 @@ mixin _ItemBodySections on StatelessWidget {
                           color:
                               isWindgunnerActive
                                   ? Colors.cyanAccent
-                                  : Colors.white54,
+                                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                           letterSpacing: 0.3,
                         ),
                       ),
@@ -731,8 +731,8 @@ mixin _ItemBodySections on StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           color:
                               isWindgunnerActive
-                                  ? Colors.white70
-                                  : Colors.white38,
+                                  ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70)
+                                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
                         ),
                       ),
                     ],
@@ -831,7 +831,7 @@ mixin _ItemBodySections on StatelessWidget {
                       'Heister Count Exponential Matrix',
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
-                        color: Colors.white38,
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -866,6 +866,7 @@ mixin _ItemBodySections on StatelessWidget {
           Row(
             children: [
               _buildHeisterSlot(
+                context,
                 name: 'Dallas',
                 item: 'Clown Mask',
                 active: hasMask,
@@ -876,6 +877,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
               const SizedBox(width: 8),
               _buildHeisterSlot(
+                context,
                 name: 'Wolf',
                 item: 'Drill',
                 active: hasDrill,
@@ -886,6 +888,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
               const SizedBox(width: 8),
               _buildHeisterSlot(
+                context,
                 name: 'Chains',
                 item: 'Loot Bag',
                 active: hasBag,
@@ -921,20 +924,20 @@ mixin _ItemBodySections on StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 if (itemsCount == 0)
-                  const GoopText(
+                  GoopText(
                     'No heisters active. Hold Dallas (Clown Mask), Wolf (Drill), or Chains (Loot Bag) to activate.',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Colors.white38,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
                       height: 1.2,
                     ),
                   )
                 else if (itemsCount == 1)
-                  const GoopText(
+                  GoopText(
                     'Dallas Active: Melee charge stuns enemies.',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                     ),
@@ -967,7 +970,8 @@ mixin _ItemBodySections on StatelessWidget {
     );
   }
 
-  Widget _buildHeisterSlot({
+  Widget _buildHeisterSlot(
+    BuildContext context, {
     required String name,
     required String item,
     required bool active,
@@ -1011,7 +1015,7 @@ mixin _ItemBodySections on StatelessWidget {
                   Icon(
                     avatar,
                     size: 24,
-                    color: active ? Colors.blueAccent.shade100 : Colors.white24,
+                    color: active ? Colors.blueAccent.shade100 : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                   ),
                   const SizedBox(height: 4),
                   GoopText(
@@ -1021,7 +1025,7 @@ mixin _ItemBodySections on StatelessWidget {
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
                       fontWeight: FontWeight.w900,
-                      color: active ? Colors.white : Colors.white24,
+                      color: active ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                     ),
                   ),
                   GoopText(
@@ -1031,7 +1035,7 @@ mixin _ItemBodySections on StatelessWidget {
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
                       fontWeight: FontWeight.bold,
-                      color: active ? Colors.greenAccent : Colors.white24,
+                      color: active ? Colors.greenAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -1083,10 +1087,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Decrease Platinum Bullets time',
-                icon: const Icon(
+                icon: Icon(
                   Icons.remove_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                 ),
                 onPressed:
                     seconds > 0
@@ -1105,10 +1109,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Increase Platinum Bullets time',
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                 ),
                 onPressed:
                     () => p.setPlatinumBulletsSeconds(
@@ -1175,10 +1179,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Decrease Iron Coin uses',
-                icon: const Icon(
+                icon: Icon(
                   Icons.remove_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                 ),
                 onPressed: uses > 0 ? () => p.setIronCoinUses(uses - 1) : null,
               ),
@@ -1192,10 +1196,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Increase Iron Coin uses',
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.70),
                 ),
                 onPressed: uses < 3 ? () => p.setIronCoinUses(uses + 1) : null,
               ),
@@ -1210,7 +1214,7 @@ mixin _ItemBodySections on StatelessWidget {
                 child: Icon(
                   spent ? Icons.radio_button_unchecked : Icons.check_circle,
                   size: 18,
-                  color: spent ? Colors.white24 : Colors.amberAccent,
+                  color: spent ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24) : Colors.amberAccent,
                 ),
               );
             }),
@@ -1284,7 +1288,7 @@ mixin _ItemBodySections on StatelessWidget {
                       Icon(
                         has ? Icons.check_circle : Icons.circle_outlined,
                         size: 14,
-                        color: has ? Colors.purpleAccent : Colors.white24,
+                        color: has ? Colors.purpleAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
                       ),
                       const SizedBox(width: 4),
                       GoopText(
@@ -1295,7 +1299,7 @@ mixin _ItemBodySections on StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: has ? FontWeight.bold : FontWeight.normal,
-                          color: has ? Colors.purpleAccent : Colors.white38,
+                          color: has ? Colors.purpleAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
                         ),
                       ),
                     ],

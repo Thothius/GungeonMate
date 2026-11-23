@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/run_provider.dart';
+import '../../screens/synergy_detail_screen.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/haptics.dart';
 import '../../services/synergy_stats.dart';
 import '../../theme/tokens.dart';
+import '../../utils/fast_route.dart';
 import '../game_icon.dart';
+import '../scale_button.dart';
 import '../stat_delta_chips.dart';
 
 import '../state_widgets.dart';
@@ -297,15 +301,23 @@ class _SynergyRowState extends State<_SynergyRow> {
             ? Colors.greenAccent
             : Colors.amberAccent;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.all(Radii.md),
-        border: Border.all(color: accent.withValues(alpha: 0.25), width: 0.8),
-      ),
-      child: Row(
+    return ScaleButton(
+      onTap: () {
+        Haptics.selection();
+        Navigator.push(
+          context,
+          fastRoute(SynergyDetailScreen(synergy: status.synergy)),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: accent.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.all(Radii.md),
+          border: Border.all(color: accent.withValues(alpha: 0.25), width: 0.8),
+        ),
+        child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Tooltip(
@@ -370,6 +382,7 @@ class _SynergyRowState extends State<_SynergyRow> {
             ),
           ),
         ],
+        ),
       ),
     );
   }
