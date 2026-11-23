@@ -137,7 +137,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   // choose → gallery | source → wizard. Deep links (initialTab>0)
   // land straight in the wizard.
   _StudioStage _stage = _StudioStage.choose;
-  final PageController _galleryCtrl = PageController();
   int _galleryIndex = 0;
   bool _gallerySelect = false; // gallery doubles as copy-source picker
   bool _cameFromFlow = false; // wizard entered via NEW PRESET
@@ -145,10 +144,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   // Set when editing an existing saved preset — SAVE overwrites it
   // instead of creating a new one. Null = creating new preset.
   String? _editingPresetId;
-  // Gallery presentation — list (official/custom sections, easy scan)
-  // vs cards (fullscreen swipe). Persisted; list is the default since
-  // the swiper doesn't scale past a handful of presets.
-  bool _galleryListView = true;
+  // The fullscreen card swiper was removed — the preset list scales
+  // past a handful of presets where the PageView didn't.
 
   /// 3 quick-slot favorites above the preset doors - encoded refs
   /// `m:<AppThemeMode.name>` / `s:<SavedCustomTheme.id>`. Tap applies
@@ -180,10 +177,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     // deep links (initialTab>0) open the wizard on the real palette.
     _draft = AppTheme.cachedCustomTheme ?? CustomThemeData.defaultTheme;
     AppTheme.previewNotifier.value = _previewMode;
-    SharedPreferences.getInstance().then((p) {
-      final v = p.getBool('studio.galleryListView');
-      if (v != null && mounted) setState(() => _galleryListView = v);
-    });
     _loadQuickSlots();
   }
 
@@ -210,7 +203,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
   @override
   void dispose() {
-    _galleryCtrl.dispose();
     _heroPulse.dispose();
     AppTheme.previewNotifier.value = null;
     super.dispose();
@@ -861,11 +853,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       _quickPickSlot = -1;
       _galleryPreviewOnly = previewOnly;
       _galleryIndex = 0;
-    });
-    // PageView isn't attached until the gallery builds — jump
-    // post-frame or PageController throws.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
     });
   }
 
@@ -1654,9 +1641,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               _quickPickSlot = -1;
               _galleryIndex = 0;
             });
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
-            });
           },
         ),
         const SizedBox(height: 14),
@@ -1736,9 +1720,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       _quickPickSlot = i;
       _gallerySelect = false;
       _galleryIndex = 0;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_galleryCtrl.hasClients) _galleryCtrl.jumpToPage(0);
     });
   }
 
@@ -1869,73 +1850,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                   ),
                 ),
               ),
-              // View toggle — LIST scans official + custom sections;
-              // CARDS keeps the fullscreen swipe gallery.
-              _galleryViewToggle(flair),
             ],
           ),
         ),
         const SizedBox(height: 8),
-        Expanded(
-          child:
-              _galleryListView
-                  ? _buildPresetList(entries, idx)
-                  : PageView.builder(
-                    controller: _galleryCtrl,
-                    onPageChanged: (i) {
-                      setState(() => _galleryIndex = i);
-                      _previewGalleryEntry(entries[i]);
-                    },
-                    itemCount: entries.length,
-                    itemBuilder: (ctx, i) {
-                      final e = entries[i];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 28,
-                          vertical: 8,
-                        ),
-                        child: _presetCard(e, i == idx, i),
-                      );
-                    },
-                  ),
-        ),
-        // Page indicator — dots while the count fits one row, a
-        // counter past that (30 saved presets used to overflow the
-        // centered dot Row on narrow screens).
-        if (!_galleryListView)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child:
-                entries.length <= 14
-                    ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (var i = 0; i < entries.length; i++)
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 160),
-                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                            width: i == idx ? 16 : 6,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color:
-                                  i == idx
-                                      ? flair.primary
-                                      : Colors.white.withValues(alpha: 0.25),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                      ],
-                    )
-                    : GoopText(
-                      '${idx + 1} / ${entries.length}',
-                      style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.0,
-                        color: Colors.white.withValues(alpha: 0.45),
-                      ),
-                    ),
-          ),
+        Expanded(child: _buildPresetList(entries, idx)),
         // Bottom pick bar
         Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -2000,66 +1919,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  /// LIST/CARDS toggle for the gallery header — persisted so the
-  /// user's preferred browsing style sticks across sessions.
-  Widget _galleryViewToggle(ThemeFlair flair) {
-    Widget btn(bool list, IconData icon) {
-      final on = _galleryListView == list;
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          Haptics.selection();
-          setState(() => _galleryListView = list);
-          SharedPreferences.getInstance().then(
-            (p) => p.setBool('studio.galleryListView', list),
-          );
-          // Flipping to cards must land on the list's selected entry —
-          // the PageView keeps its own page or the highlight lies.
-          if (!list) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_galleryCtrl.hasClients) {
-                _galleryCtrl.jumpToPage(_galleryIndex);
-              }
-            });
-          }
-        },
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color:
-                on
-                    ? flair.primary.withValues(alpha: 0.18)
-                    : Colors.white.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color:
-                  on
-                      ? flair.primary.withValues(alpha: 0.7)
-                      : Colors.white.withValues(alpha: 0.12),
-            ),
-          ),
-          child: Center(
-            child: Icon(
-              icon,
-              size: 17,
-              color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        btn(true, Icons.view_list_rounded),
-        const SizedBox(width: 6),
-        btn(false, Icons.grid_view_rounded),
       ],
     );
   }
@@ -2335,127 +2194,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     );
   }
 
-  /// One gallery card — splash art when available, else a palette
-  /// gradient; name + vibe strip at the bottom.
-  Widget _presetCard(_PresetEntry e, bool isCurrent, int index) {
-    final flair = AppTheme.flairFor(_previewMode);
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        Haptics.selection();
-        _galleryCtrl.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-      },
-      // Long-press a saved preset to delete it — browse mode only;
-      // the copy-source picker shouldn't mutate the store mid-flow.
-      onLongPress:
-          e.saved != null && !_gallerySelect && _quickPickSlot < 0
-              ? () => _confirmDeletePreset(e.saved!)
-              : null,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color:
-                isCurrent
-                    ? flair.primary.withValues(alpha: 0.8)
-                    : Colors.white.withValues(alpha: 0.15),
-            width: isCurrent ? 2 : 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
-              blurRadius: 18,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              if (e.splash != null)
-                Image.asset(
-                  'assets/images/themes/splash/${e.splash}.jpg',
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => _presetCardBg(e),
-                )
-              else
-                _presetCardBg(e),
-              // Bottom info panel
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(14, 22, 14, 14),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.82),
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GoopText(
-                        e.name.toUpperCase(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: FontSizes.titleSmall,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.2,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      GoopText(
-                        e.subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: FontSizes.labelSmall,
-                          color: Colors.white.withValues(alpha: 0.65),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          for (final c in e.colors)
-                            Expanded(
-                              child: Container(
-                                height: 6,
-                                margin: const EdgeInsets.only(right: 4),
-                                decoration: BoxDecoration(
-                                  color: c,
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Long-press delete for saved presets — confirm, remove from the
-  /// store, and rebuild the gallery without it.
   Future<void> _confirmDeletePreset(SavedCustomTheme t) async {
     Haptics.selection();
     final flair = AppTheme.flairFor(_previewMode);
@@ -2525,18 +2263,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       }
       setState(() {});
     }
-  }
-
-  Widget _presetCardBg(_PresetEntry e) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [e.colors[0], e.colors[1], e.colors[2]],
-        ),
-      ),
-    );
   }
 
   /// Live-preview the gallery entry under the finger. Saved presets

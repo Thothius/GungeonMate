@@ -268,19 +268,18 @@ void main() {
       expect(find.byType(PageView), findsNothing);
     });
 
-    testWidgets('list view shows official presets; CARDS restores swiper', (
+    testWidgets('gallery is list-only — no card swiper or view toggle', (
       tester,
     ) async {
       await openGallery(tester);
       // kPickerThemes.first = unicorn — list row shows its label.
       expect(find.text('Unicorn'), findsWidgets);
-
-      // Flip to card view — fullscreen PageView + uppercase card name.
-      await tester.tap(find.byIcon(Icons.grid_view_rounded));
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(find.byType(PageView), findsOneWidget);
-      expect(find.text('UNICORN'), findsWidgets);
-      expect(find.text('OFFICIAL'), findsNothing);
+      expect(find.text('OFFICIAL'), findsOneWidget);
+      // The fullscreen swipe gallery was removed — no PageView, no
+      // LIST/CARDS toggle icons.
+      expect(find.byType(PageView), findsNothing);
+      expect(find.byIcon(Icons.grid_view_rounded), findsNothing);
+      expect(find.byIcon(Icons.view_list_rounded), findsNothing);
     });
 
     testWidgets('PICK PRESET applies and closes', (tester) async {
@@ -843,22 +842,9 @@ void main() {
       );
     }
 
-    /// Reach a gallery entry — list view lazily builds rows (drag the
-    /// list until the label mounts); card view lazily pages (fling
-    /// until it mounts).
+    /// Reach a gallery entry — the list lazily builds rows (drag the
+    /// list until the label mounts).
     Future<void> goToGalleryEntry(WidgetTester tester, String text) async {
-      if (find.byType(PageView).evaluate().isNotEmpty) {
-        for (var i = 0; i < 8; i++) {
-          if (find.text(text).evaluate().isNotEmpty) return;
-          await tester.fling(
-            find.byType(PageView).first,
-            const Offset(-3000, 0),
-            8000,
-          );
-          await tester.pump(const Duration(milliseconds: 400));
-        }
-        return;
-      }
       for (var i = 0; i < 12 && find.text(text).evaluate().isEmpty; i++) {
         await tester.drag(find.byType(ListView).first, const Offset(0, -500));
         await tester.pump(const Duration(milliseconds: 250));

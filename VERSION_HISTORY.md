@@ -22,6 +22,7 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **MP social layer disabled** — emotes (kiss/slap) and surprises (6 presets + custom) are off behind `kMpSocialEnabled = false`: send UI hidden, incoming messages dropped at dispatch. Dice challenges unaffected. Flip the const to re-enable.
 
 ### Fixed
+- **Preset gallery decluttered** — the fullscreen swipe card view and its LIST/CARDS toggle are gone; the preset gallery is now always the scannable OFFICIAL/YOURS list (it never scaled past a handful of presets anyway).
 - **Effects strip stat drift** — the compact FUSE/CD/REWARD/JAM/BOSS row under the run header now reads the shared wiki-verified `cool_curse_math` tables instead of stale inline formulas (it showed 100% jam at 10 curse vs the real 50% cap, and a wrong linear boss curve).
 - **Item-detail header declutter (U-033)** — the three-icon action cluster (codex bookmark + bug report + favourite heart) collapsed into one overflow menu with explicit labels; the two favourite systems are now self-describing.
 - **Item-detail header order unified (U-034)** — item variant now reads badge row → name → icon → tags, matching the gun variant.
