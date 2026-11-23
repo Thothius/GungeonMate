@@ -7,9 +7,9 @@ import '../../services/elemental_tagger.dart';
 import '../../services/haptics.dart';
 import '../game_icon.dart';
 import '../quality_badge.dart';
-import '../bug_report/bug_report_button.dart';
+import '../bug_report/bug_report_sheet.dart';
 import '../../models/bug_report.dart';
-import '../codex/codex_fav_button.dart';
+import '../../services/codex_prefs.dart';
 import '../../utils/responsive.dart';
 
 class ItemDetailHeader extends StatelessWidget {
@@ -103,8 +103,9 @@ class ItemDetailHeader extends StatelessWidget {
     ];
 
     // ── Gun layout — simplified per redesign: no tag chips, no quote.
-    // Left: tier badge + sell badge. Right: favourite. Then name → icon
-    // → ornamental divider → effect line → elemental icon row. ──
+    // Left: tier badge + sell badge. Right: overflow actions menu.
+    // Then name → icon → ornamental divider → effect line → elemental
+    // icon row. ──
     if (isGun) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
@@ -144,52 +145,13 @@ class ItemDetailHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CodexFavButton(section: isGun ? 'guns' : 'items', name: name),
-                    BugReportButton.iconButton(
-                      context,
-                      BugReportContext.content(
-                        screen: isGun ? 'Gun Detail' : 'Item Detail',
-                        entity: name,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        isFav
-                            ? Icons.favorite_rounded
-                            : Icons.favorite_border_rounded,
-                        color: favColor,
-                        size: 30,
-                      ),
-                      tooltip:
-                          isFav
-                              ? 'Remove from favourites'
-                              : 'Add to favourites',
-                      constraints: const BoxConstraints(
-                        minWidth: 44,
-                        minHeight: 44,
-                      ),
-                      onPressed: () {
-                        Haptics.light();
-                        final p = context.read<RunProvider>();
-                        final wasFav = p.isFavourite(name);
-                        p.toggleFavourite(name);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: GoopText(
-                              wasFav
-                                  ? '$name removed from favourites'
-                                  : '$name added to favourites',
-                            ),
-                            duration: const Duration(seconds: 1),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                // U-033: three icon buttons collapsed into one labelled
+                // overflow menu — the two fav systems are now explicit.
+                _DetailActionsMenu(
+                  name: name,
+                  isGun: isGun,
+                  isFav: isFav,
+                  favColor: favColor,
                 ),
               ],
             ),
@@ -275,56 +237,27 @@ class ItemDetailHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CodexFavButton(section: 'items', name: name),
-                  BugReportButton.iconButton(
-                    context,
-                    BugReportContext.content(
-                      screen: 'Item Detail',
-                      entity: name,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      isFav
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      color: favColor,
-                      size: 30,
-                    ),
-                    tooltip:
-                        isFav
-                            ? 'Remove from favourites'
-                            : 'Add to favourites',
-                    constraints: const BoxConstraints(
-                      minWidth: 44,
-                      minHeight: 44,
-                    ),
-                    onPressed: () {
-                      Haptics.light();
-                      final p = context.read<RunProvider>();
-                      final wasFav = p.isFavourite(name);
-                      p.toggleFavourite(name);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: GoopText(
-                            wasFav
-                                ? '$name removed from favourites'
-                                : '$name added to favourites',
-                          ),
-                          duration: const Duration(seconds: 1),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+              // U-033: collapsed action cluster — see gun variant.
+              _DetailActionsMenu(
+                name: name,
+                isGun: false,
+                isFav: isFav,
+                favColor: favColor,
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 10),
+          // U-034: name-first ordering, matching the gun variant.
+          GoopText(
+            name,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: FontSizes.headlineMedium * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(height: 10),
           // Icon — no ring, compact for tighter top area
           GameIcon(
             assetPath: iconPath,
@@ -335,17 +268,6 @@ class ItemDetailHeader extends StatelessWidget {
             quality: quality,
             size: 80,
             showRing: false,
-          ),
-          const SizedBox(height: 6),
-          // Item name
-          GoopText(
-            name,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: FontSizes.headlineMedium * sf,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
-            ),
           ),
           const SizedBox(height: 8),
           // All tags inline in one Wrap
@@ -363,6 +285,126 @@ class ItemDetailHeader extends StatelessWidget {
 
   static String _fmtStat(double v) =>
       v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
+}
+
+/// U-033: single overflow menu replacing the three-icon action cluster.
+/// Labels disambiguate the two favourite systems (codex bookmark vs
+/// run/loadout heart) and keep bug reporting one tap away.
+class _DetailActionsMenu extends StatelessWidget {
+  final String name;
+  final bool isGun;
+  final bool isFav;
+  final Color favColor;
+  const _DetailActionsMenu({
+    required this.name,
+    required this.isGun,
+    required this.isFav,
+    required this.favColor,
+  });
+
+  void _toggleFavourite(BuildContext context) {
+    Haptics.light();
+    final p = context.read<RunProvider>();
+    final wasFav = p.isFavourite(name);
+    p.toggleFavourite(name);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: GoopText(
+          wasFav ? '$name removed from favourites' : '$name added to favourites',
+        ),
+        duration: const Duration(seconds: 1),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  PopupMenuItem<String> _item(
+    String value,
+    IconData icon,
+    String label, {
+    Color? color,
+  }) {
+    return PopupMenuItem<String>(
+      value: value,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 18, color: color ?? Colors.white60),
+          const SizedBox(width: 10),
+          GoopText(
+            label,
+            style: const TextStyle(fontSize: FontSizes.labelMedium),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Set<String>>(
+      valueListenable: CodexPrefs.favorites,
+      builder: (context, codexFavs, _) {
+        final codexKey = CodexPrefs.keyFor(isGun ? 'guns' : 'items', name);
+        final codexOn = codexFavs.contains(codexKey);
+        return PopupMenuButton<String>(
+          tooltip: 'More actions',
+          iconSize: 22,
+          icon: Icon(
+            Icons.more_vert,
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          offset: const Offset(0, 36),
+          color: const Color(0xFF232326),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: Colors.white10),
+          ),
+          onSelected: (value) {
+            switch (value) {
+              case 'codex':
+                Haptics.selection();
+                CodexPrefs.toggleFavorite(codexKey);
+              case 'fav':
+                _toggleFavourite(context);
+              case 'bug':
+                Haptics.light();
+                BugReportSheet.show(
+                  context,
+                  BugReportContext.content(
+                    screen: isGun ? 'Gun Detail' : 'Item Detail',
+                    entity: name,
+                  ),
+                );
+            }
+          },
+          itemBuilder:
+              (_) => [
+                _item(
+                  'codex',
+                  codexOn
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                  codexOn ? 'Codex Favorite — Saved' : 'Save to Codex Favorites',
+                  color: codexOn ? const Color(0xFFFF6E8A) : null,
+                ),
+                _item(
+                  'fav',
+                  isFav
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
+                  isFav
+                      ? 'Remove from Favourites'
+                      : 'Add to Favourites',
+                  color: isFav ? favColor : null,
+                ),
+                const PopupMenuDivider(height: 1),
+                _item('bug', Icons.bug_report_outlined, 'Report a Bug'),
+              ],
+        );
+      },
+    );
+  }
 }
 
 /// Sell-price chip — lives beside the tier badge on gun detail.
@@ -427,7 +469,7 @@ class _ElementDot extends StatelessWidget {
   }
 }
 
-/// Elemental status dot â€” icon-only tinted circle (fire/electric/etc).
+/// Small tinted metadata chip — icon + label used in the tag Wrap.
 class _TagChip extends StatelessWidget {
   final IconData icon;
   final String label;
