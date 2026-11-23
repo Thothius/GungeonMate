@@ -98,24 +98,31 @@ class DiceRollDialogState extends State<DiceRollDialog>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.casino_rounded,
-                              color: f.primary,
-                              size: 26,
-                            ),
-                            const SizedBox(width: 10),
-                            GoopText(
-                              'GUNFORTUNA\'S DUEL',
-                              style: TextStyle(
-                                fontSize: FontSizes.titleMedium,
-                                fontWeight: FontWeight.w900,
+                        Flexible(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.casino_rounded,
                                 color: f.primary,
-                                letterSpacing: 1.5,
+                                size: 26,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 10),
+                              Flexible(
+                                child: GoopText(
+                                  'GUNFORTUNA\'S DUEL',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: FontSizes.titleMedium,
+                                    fontWeight: FontWeight.w900,
+                                    color: f.primary,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
