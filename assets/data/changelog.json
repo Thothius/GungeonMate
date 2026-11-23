@@ -15,6 +15,7 @@
         "Synergy metadata complete — all 395 synergies now carry classification data (was 110): CO-OP scope chips, fx tags, and stat hints resolve for the full catalog"
       ],
       "Fixed": [
+        "Data hygiene — fixed a duplicate gun id in guns.json (Colt 1851 and SAA both claimed id 50): Colt 1851 now carries its real game-dump id 62, SAA is marked null since it has no dump counterpart. A new integrity test enforces id uniqueness going forward.",
         "Synergy query memoization — active/partial/per-slot synergy lists and owned-name sets are now cached and only recomputed when the inventory actually changes (previously every rebuild re-lowercased every owned name and re-scanned all ~400 synergies per call).",
         "Save-corruption honesty — if your saved run is unreadable AND the backup copy is also dead, the app now flags it (`saveWasCorrupt`) and logs it instead of silently starting a fresh run. Corrupt-primary-with-good-backup recovery still works silently as before.",
         "Asset-load honesty — if a bundled data file (synergies, shrines, gungeoneers, back-refs, synergy meta) ever fails to load or parse, the app now records it in `assetLoadFailures` and logs it instead of silently booting with empty features. A new integrity test asserts zero failures against the shipped assets.",

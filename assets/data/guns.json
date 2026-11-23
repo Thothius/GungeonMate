@@ -9682,7 +9682,7 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "An ancient example of fine guncraft, the Colt 1851 has been the gun of choice for many a nameless gunslinger.\n\nSkilled wielders have been known to quickly fire multiple shots, though the technique has been mostly lost to time.",
-    "id": 50,
+    "id": 62,
     "game_range": "1000",
     "ammonomicon_pos": 22,
     "sources": [
@@ -35903,7 +35903,7 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires ricochet rounds.\n\nThe Single Action Army may take some time to reload, but you'll hear no complaints from its users. Documents reclaimed from the Order of the True Gun imply that on occasion, a cultist briefly attains gunvana while chambering its rounds.",
-    "id": 50,
+    "id": null,
     "game_fire_rate": "0.12",
     "ammonomicon_pos": 22,
     "sources": [
