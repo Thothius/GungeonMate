@@ -1,10 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
+import '../utils/cool_curse_math.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
@@ -31,12 +30,15 @@ class CoolCurseScreen extends StatelessWidget {
     final cool = p.runState.totalCoolness;
     final curse = p.runState.totalCurse;
 
-    // Live metric values — same formulas EtG uses.
-    final fuseSkipPct = math.min(cool * 2.5, 10);
-    final chestResetPct = math.min(cool * 5, 50);
-    final rewardPct = math.max(0.0, 1 + cool - curse);
-    final jamChance = curse >= 10 ? 100.0 : curse * 4;
-    final bossJamChance = curse >= 10 ? 100.0 : curse * 2;
+    // Live metric values — shared wiki-verified math (cool_curse_math.dart).
+    final fuseReduction = fuseChanceReduction(cool);
+    final cooldownReductionPct = cooldownReduction(cool);
+    final rewardPct = roomRewardChance(cool, curse);
+    final jamChance = jammedEnemyChance(curse);
+    final bossJamChance = jammedBossChance(curse);
+    final mimicChancePct = mimicChance(curse);
+    final curseFuseBonusPct = curseFuseBonus(curse);
+    final ammoMult = ammoDropMultiplier(curse);
 
     // Semantic stat colors — collapse to ink under Neo-Skeuo; title
     // follows the theme accent like every other pushed screen.
@@ -118,15 +120,15 @@ class CoolCurseScreen extends StatelessWidget {
                 sf: sf,
                 rows: [
                   _EffectRow(
-                    'Chest fuse auto-defuse',
-                    '${fuseSkipPct.toStringAsFixed(1)}%',
-                    'Chance a mimicked/unmimicked chest resets its fuse. +2.5% per Cool, caps at 10% (4 Cool).',
+                    'Chest fuse chance',
+                    '−${fuseReduction.toStringAsFixed(1)}%',
+                    'Coolness lowers the chance chests spawn with fuses. −2.5% per Cool, caps at −10% (4 Cool).',
                     coolColor,
                   ),
                   _EffectRow(
                     'Active-item cooldown',
-                    '−${chestResetPct.toStringAsFixed(0)}% time',
-                    'Coolness shortens recharge on cooldown-based items (Cigarettes etc.). +5% per Cool, caps at 50%.',
+                    '−${cooldownReductionPct.toStringAsFixed(0)}% time',
+                    'Coolness shortens recharge on cooldown-based items (Cigarettes etc.). −5% per Cool, caps at −50%.',
                     coolColor,
                   ),
                   _EffectRow(
@@ -138,13 +140,31 @@ class CoolCurseScreen extends StatelessWidget {
                   _EffectRow(
                     'Jammed enemy chance',
                     '${jamChance.toStringAsFixed(0)}%',
-                    'Curse jamms normal enemies — faster, harder, more damage. ~4% per Curse point.',
+                    'Curse can spawn jammed enemies — faster, harder, more damage. Non-linear per-point table, caps at 50% (10+ Curse).',
                     curseColor,
                   ),
                   _EffectRow(
                     'Jammed boss chance',
                     '${bossJamChance.toStringAsFixed(0)}%',
-                    'Bosses can also jam (except past bosses). ~2% per Curse point.',
+                    'Bosses can also jam from curse 7 up. Caps at 50% (10+ Curse).',
+                    curseColor,
+                  ),
+                  _EffectRow(
+                    'Fused chest chance',
+                    '+${curseFuseBonusPct.toStringAsFixed(0)}%',
+                    'Curse raises the chance chests spawn with fuses. +5% per Curse point.',
+                    curseColor,
+                  ),
+                  _EffectRow(
+                    'Mimic chest chance',
+                    '${mimicChancePct.toStringAsFixed(2)}%',
+                    'Curse raises the chance chests are mimics. +2.1% per Curse point.',
+                    curseColor,
+                  ),
+                  _EffectRow(
+                    'Ammo drop multiplier',
+                    'x${ammoMult.toStringAsFixed(2)}',
+                    'Curse increases ammo drops. x1.05 per Curse point.',
                     curseColor,
                   ),
                   if (curse >= 10)
@@ -198,8 +218,8 @@ class CoolCurseScreen extends StatelessWidget {
                         'Coolness is a hidden counter of how "cool" you are — '
                         'gained mostly by picking up items marked cool, '
                         'smoking Cigarettes, or being around charming friends.\n\n'
-                        '• Each point adds +2.5% fuse-defuse (cap 10% at 4), '
-                        '+5% active-item cooldown reduction (cap 50% at 10), '
+                        '• Each point adds −2.5% chest-fuse chance (cap −10% '
+                        'at 4), −5% active-item cooldown (cap −50% at 10), '
                         'and +1% extra room-reward chance.\n'
                         '• Coolness also raises Mimic chance — mimics are '
                         'stronger with a beefier version at 6+ Cool.\n'
@@ -218,9 +238,11 @@ class CoolCurseScreen extends StatelessWidget {
                         'certain guns.\n\n'
                         '• Raises jam chance: jammed enemies move faster, '
                         'shoot more, take less damage. Bosses can jam too.\n'
-                        '• Jam chance scales ~4% per point vs normal enemies '
-                        'and ~2% per point vs bosses — both reach 100% at '
-                        '10+ Curse.\n'
+                        '• Jammed enemies/bosses spawn on a fixed per-point '
+                        'table — jam chances cap at 50% from 10+ Curse, while '
+                        'fuse/mimic/ammo/reward effects keep scaling.\n'
+                        '• +5% fused-chest chance, +2.1% mimic chance, and '
+                        'x1.05 ammo drops per point.\n'
                         '• Reduces extra room-reward chance (−1% per point).\n'
                         '• 10+ Curse summons the LORD OF THE JAMMED — an '
                         'unkillable pursuer that ends runs. You can\'t dodge '

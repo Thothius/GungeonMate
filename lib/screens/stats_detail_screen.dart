@@ -10,6 +10,7 @@ import '../widgets/active_run/gungeon_meter.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 import '../widgets/bug_report/bug_report_button.dart';
 import '../models/bug_report.dart';
+import '../utils/cool_curse_math.dart';
 part 'stats_detail/effects.dart';
 part 'stats_detail/log.dart';
 part 'stats_detail/rows.dart';
@@ -119,11 +120,11 @@ class _ValueCard extends StatelessWidget {
     final double minSlider = 0.0;
     final double clampedVal = value.clamp(minSlider, maxSlider);
 
-    // Active item reduction percent (max 50%) or Lord of the Jammed Threat percentage
+    // Real effect values from the shared wiki-verified math module.
     final meterLabel =
         isCool
-            ? 'Active Cooldown Speedup: +${(value * 5).clamp(0, 50).toStringAsFixed(1)}%'
-            : 'Bullet Hell Threat Level: ${(value * 10).clamp(0, 100).toStringAsFixed(1)}%';
+            ? 'Cooldown reduction: −${cooldownReduction(value).toStringAsFixed(1)}%'
+            : 'Jammed enemy chance: ${jammedEnemyChance(value).toStringAsFixed(0)}%';
 
     return Card(
       elevation: 4,
