@@ -9,6 +9,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/synergy_stats.dart';
 import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
+import '../../utils/reduce_motion.dart';
 import '../game_icon.dart';
 import '../stat_delta_chips.dart';
 
@@ -390,7 +391,18 @@ class _LebPageState extends State<_LebPage>
   late final AnimationController _march = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1200),
-  )..repeat();
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // U-029: marching-ants is decorative — freeze under reduced-motion.
+    if (ReduceMotion.of(context)) {
+      _march.stop();
+    } else if (!_march.isAnimating) {
+      _march.repeat();
+    }
+  }
 
   @override
   void dispose() {

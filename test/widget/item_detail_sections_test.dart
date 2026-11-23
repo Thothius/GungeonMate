@@ -128,6 +128,33 @@ void main() {
     expect(find.textContaining(item.ammonomiconEntry), findsWidgets);
   });
 
+  // ── U-025: header top row must not overflow on narrow phones ────
+
+  testWidgets('ItemDetailScreen header fits at 360px width (U-025)', (
+    t,
+  ) async {
+    t.view.physicalSize = const Size(360, 640);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    final item = p.allItems.firstWhere(
+      (i) => i.effect.isNotEmpty,
+      orElse: () => p.allItems.first,
+    );
+    await t.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: p),
+          ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
+        ],
+        child: MaterialApp(home: ItemDetailScreen(item: item)),
+      ),
+    );
+    await t.pump();
+    await t.pump(const Duration(seconds: 1));
+    expect(t.takeException(), isNull);
+  });
+
   // ── GunStats special-info branches ──────────────────────────────
 
   for (final name in [

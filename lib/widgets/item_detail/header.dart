@@ -114,26 +114,35 @@ class ItemDetailHeader extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    if (quality.isNotEmpty)
-                      QualityBadge(quality: quality, size: 32)
-                    else
-                      const SizedBox(width: 32),
-                    if (sellPrice.isNotEmpty) ...[
-                      const SizedBox(width: 8),
-                      _SellBadge(price: sellPrice),
-                    ],
-                    // Element tag beside tier+sell — always top-left.
-                    if (elements.isNotEmpty) ...[
-                      const SizedBox(width: 8),
-                      for (final e in elements)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 4),
-                          child: _ElementDot(kind: e),
-                        ),
-                    ],
-                  ],
+                // U-025: badge cluster can exceed narrow widths —
+                // scale down instead of overflowing.
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (quality.isNotEmpty)
+                          QualityBadge(quality: quality, size: 32)
+                        else
+                          const SizedBox(width: 32),
+                        if (sellPrice.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          _SellBadge(price: sellPrice),
+                        ],
+                        // Element tag beside tier+sell — always top-left.
+                        if (elements.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          for (final e in elements)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: _ElementDot(kind: e),
+                            ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -232,28 +241,39 @@ class ItemDetailHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  if (quality.isNotEmpty)
-                    QualityBadge(quality: quality, size: 32)
-                  else
-                    const SizedBox(width: 32),
-                  if (sellPrice.isNotEmpty) ...[
-                    const SizedBox(width: 8),
-                    _SellBadge(price: sellPrice),
-                  ],
-                  const SizedBox(width: 8),
-                  // Active vs passive — always top-left for items.
-                  _TagChip(
-                    icon:
-                        isActive ? Icons.flash_on : Icons.inventory_2_outlined,
-                    label: isActive ? 'ACTIVE' : 'PASSIVE',
-                    color:
-                        isActive
-                            ? Colors.lightBlueAccent
-                            : Colors.lightGreenAccent,
+              // U-025: the badge cluster overflows ~47px on ≤390px
+              // windows — scale it down instead of clipping.
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (quality.isNotEmpty)
+                        QualityBadge(quality: quality, size: 32)
+                      else
+                        const SizedBox(width: 32),
+                      if (sellPrice.isNotEmpty) ...[
+                        const SizedBox(width: 8),
+                        _SellBadge(price: sellPrice),
+                      ],
+                      const SizedBox(width: 8),
+                      // Active vs passive — always top-left for items.
+                      _TagChip(
+                        icon:
+                            isActive
+                                ? Icons.flash_on
+                                : Icons.inventory_2_outlined,
+                        label: isActive ? 'ACTIVE' : 'PASSIVE',
+                        color:
+                            isActive
+                                ? Colors.lightBlueAccent
+                                : Colors.lightGreenAccent,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,

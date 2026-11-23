@@ -2136,10 +2136,6 @@ extension AppFontLabel on AppFont {
       AppFont.architectsDaughter ||
       AppFont.patrickHand => AppFont.fjallaOne,
       AppFont.fredoka || AppFont.carterOne => AppFont.lilitaOne,
-      // Hand-lettered trio (removed skin's fonts) → friendly grotesque.
-      AppFont.shantellSans ||
-      AppFont.architectsDaughter ||
-      AppFont.patrickHand => AppFont.fjallaOne,
       _ => AppFont.anton, // heavy display cluster
     };
   }

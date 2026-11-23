@@ -5,6 +5,39 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 
+/// Robot-run relevance keywords for browse badges (U-032).
+///
+/// Single source of truth — previously three inline `contains` lists.
+/// Matching is lowercase substring on the display name; a data pass
+/// adding an explicit `robot_tier` field to items.json/guns.json would
+/// retire this entirely.
+abstract final class _RobotTier {
+  static const god = [
+    'armor synthesizer',
+    'gunknight',
+    'riddle of lead',
+    'nanomachines',
+  ];
+  static const convertsToArmor = [
+    'master round',
+    'heart container',
+    'heart holster',
+    'heart locket',
+    'heart purse',
+    'heart bottle',
+    'yellow chamber',
+    'pink guon stone',
+  ];
+  static const deadWeight = [
+    'vampire',
+    'patches and mendy',
+    'blasphemy',
+  ];
+
+  static bool any(String nameLower, List<String> keywords) =>
+      keywords.any(nameLower.contains);
+}
+
 class BrowseRow extends StatelessWidget {
   final String name;
   final String quality;
@@ -41,37 +74,20 @@ class BrowseRow extends StatelessWidget {
 
     if (isRobot) {
       final nameLower = name.toLowerCase();
-      final isGod =
-          nameLower.contains('armor synthesizer') ||
-          nameLower.contains('gunknight') ||
-          nameLower.contains('riddle of lead') ||
-          nameLower.contains('nanomachines');
 
-      final isConverter =
-          nameLower.contains('master round') ||
-          nameLower.contains('heart container') ||
-          nameLower.contains('heart holster') ||
-          nameLower.contains('heart locket') ||
-          nameLower.contains('heart purse') ||
-          nameLower.contains('heart bottle') ||
-          nameLower.contains('yellow chamber') ||
-          nameLower.contains('pink guon stone');
-
-      final isDeadWeight =
-          nameLower.contains('vampire') ||
-          nameLower.contains('patches and mendy') ||
-          nameLower.contains('blasphemy');
-
-      if (isGod) {
-        borderSide = BorderSide(color: Colors.greenAccent, width: 1.5);
+      if (_RobotTier.any(nameLower, _RobotTier.god)) {
+        borderSide = const BorderSide(color: Colors.greenAccent, width: 1.5);
         robotTag = 'GOD TIER ⚡';
         robotTagColor = Colors.greenAccent;
-      } else if (isConverter) {
-        borderSide = BorderSide(color: Colors.blueAccent, width: 1.5);
+      } else if (_RobotTier.any(
+        nameLower,
+        _RobotTier.convertsToArmor,
+      )) {
+        borderSide = const BorderSide(color: Colors.blueAccent, width: 1.5);
         robotTag = 'CONVERTS TO ARMOR 🛡️';
         robotTagColor = Colors.blueAccent;
-      } else if (isDeadWeight) {
-        borderSide = BorderSide(color: Colors.redAccent, width: 1.5);
+      } else if (_RobotTier.any(nameLower, _RobotTier.deadWeight)) {
+        borderSide = const BorderSide(color: Colors.redAccent, width: 1.5);
         robotTag = 'DEAD WEIGHT ⚠️';
         robotTagColor = Colors.redAccent;
       }

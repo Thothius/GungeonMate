@@ -22,6 +22,11 @@ class AmmonomiconTab {
   /// of navigating to the drill-down list (Chapters, Game Modes).
   final bool expandable;
 
+  /// Optional section eyebrow (e.g. 'LIVING WORLD', 'ARMORY') used to
+  /// group categories in the overview grid and the jump strip so
+  /// world-entity cats don't visually blur into inventory cats.
+  final String? group;
+
   const AmmonomiconTab({
     required this.label,
     this.icon,
@@ -29,6 +34,7 @@ class AmmonomiconTab {
     required this.color,
     required this.isSpecial,
     this.expandable = false,
+    this.group,
   }) : assert(
          icon != null || assetIcon != null,
          'either icon or assetIcon must be provided',

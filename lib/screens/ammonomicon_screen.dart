@@ -99,12 +99,15 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   // The 5 ammonomicon tab icons map to: Guns→Objects, Items→Pickups,
   // Enemies, Bosses, Death→NPCs. The 7 special pages use themed Material
   // icons in the same bookmark visual style.
+  // `group` labels are display-only eyebrows (U-030): they separate
+  // world-entity cats from inventory cats without changing indices.
   static const _categories = [
     AmmonomiconTab(
       label: 'Gungeoneers',
       icon: Icons.person,
       color: AmmonomiconColors.gungeoneers,
       isSpecial: true,
+      group: 'LIVING WORLD',
     ),
     AmmonomiconTab(
       label: 'NPCs',
@@ -112,6 +115,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.person_outline,
       color: AmmonomiconColors.npcs,
       isSpecial: false,
+      group: 'LIVING WORLD',
     ),
     AmmonomiconTab(
       label: 'Enemies',
@@ -119,6 +123,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.dangerous_outlined,
       color: AmmonomiconColors.enemies,
       isSpecial: false,
+      group: 'LIVING WORLD',
     ),
     AmmonomiconTab(
       label: 'Bosses',
@@ -126,6 +131,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.emoji_events_outlined,
       color: AmmonomiconColors.bosses,
       isSpecial: false,
+      group: 'LIVING WORLD',
     ),
     AmmonomiconTab(
       label: 'Pickups',
@@ -133,6 +139,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.inventory_2_outlined,
       color: AmmonomiconColors.pickups,
       isSpecial: false,
+      group: 'LIVING WORLD',
     ),
     AmmonomiconTab(
       label: 'Objects',
@@ -140,6 +147,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.widgets,
       color: AmmonomiconColors.objects,
       isSpecial: false,
+      group: 'LIVING WORLD',
     ),
     // ── Ammonomicon wiki cats (fabricated from provider data) ──
     AmmonomiconTab(
@@ -148,6 +156,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.gps_fixed,
       color: AmmonomiconColors.objects,
       isSpecial: false,
+      group: 'ARMORY',
     ),
     AmmonomiconTab(
       label: 'Items',
@@ -155,18 +164,21 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       icon: Icons.inventory_2,
       color: AmmonomiconColors.pickups,
       isSpecial: false,
+      group: 'ARMORY',
     ),
     AmmonomiconTab(
       label: 'Synergies',
       icon: Icons.auto_awesome,
       color: Color(0xFFB388FF),
       isSpecial: false,
+      group: 'CODEX',
     ),
     AmmonomiconTab(
       label: 'Shrines',
       icon: Icons.church,
       color: Color(0xFFFFB74D),
       isSpecial: false,
+      group: 'CODEX',
     ),
     AmmonomiconTab(
       label: 'Chapters',
@@ -174,6 +186,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       color: Color(0xFF4FC3F7),
       isSpecial: false,
       expandable: true,
+      group: 'STRUCTURE',
     ),
     AmmonomiconTab(
       label: 'Game Modes',
@@ -181,8 +194,25 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       color: Color(0xFFAED581),
       isSpecial: false,
       expandable: true,
+      group: 'STRUCTURE',
     ),
   ];
+
+  /// Ordered (group label → category indices) preserving `_categories`
+  /// order. Groups appear at their first member's position.
+  static List<(String?, List<int>)> get _categoryGroups {
+    final groups = <(String?, List<int>)>[];
+    for (var i = 0; i < _categories.length; i++) {
+      final g = _categories[i].group;
+      final last = groups.isEmpty ? null : groups.last.$1;
+      if (groups.isEmpty || last != g) {
+        groups.add((g, [i]));
+      } else {
+        groups.last.$2.add(i);
+      }
+    }
+    return groups;
+  }
 
   @override
   void initState() {
@@ -1022,41 +1052,69 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 14, Insets.xxl),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: Insets.sm,
-                crossAxisSpacing: Insets.sm,
-                childAspectRatio: 1.5,
-              ),
-              delegate: SliverChildBuilderDelegate((context, i) {
-                final c = _categories[i];
-                final count =
-                    i == 0
-                        ? context.read<RunProvider>().allGungeoneers.length
-                        : _entriesFor(i).length;
-                return _CategoryCard(
-                  cat: c,
-                  count: count,
-                  tagline: _taglines[i],
-                  onTap: () {
-                    _searchCtrl.clear();
-                    _query = '';
-                    setState(() {
-                      if (c.expandable) {
-                        _expanded = i;
-                      } else {
-                        _expanded = -1;
-                        _selected = i;
-                      }
-                    });
-                  },
-                );
-              }, childCount: _categories.length),
-            ),
+          // Category grid grouped by eyebrow (U-030) — world-entity
+          // cats (Pickups/Objects) no longer blur into ARMORY cats.
+          SliverMainAxisGroup(
+            slivers: [
+              for (final (group, indices) in _categoryGroups) ...[
+                if (group != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 12, 14, 2),
+                      child: GoopText(
+                        group,
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2.0,
+                          color: flair.primary.withValues(alpha: 0.65),
+                        ),
+                      ),
+                    ),
+                  ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(14, 0, 14, Insets.sm),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: Insets.sm,
+                      crossAxisSpacing: Insets.sm,
+                      childAspectRatio: 1.5,
+                    ),
+                    delegate: SliverChildBuilderDelegate((context, j) {
+                      final i = indices[j];
+                      final c = _categories[i];
+                      final count =
+                          i == 0
+                              ? context
+                                  .read<RunProvider>()
+                                  .allGungeoneers
+                                  .length
+                              : _entriesFor(i).length;
+                      return _CategoryCard(
+                        cat: c,
+                        count: count,
+                        tagline: _taglines[i],
+                        onTap: () {
+                          _searchCtrl.clear();
+                          _query = '';
+                          setState(() {
+                            if (c.expandable) {
+                              _expanded = i;
+                            } else {
+                              _expanded = -1;
+                              _selected = i;
+                            }
+                          });
+                        },
+                      );
+                    }, childCount: indices.length),
+                  ),
+                ),
+              ],
+            ],
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: Insets.lg)),
         ],
       ),
     );
@@ -1115,84 +1173,26 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               vertical: 4,
             ),
             child: Row(
-              children: List.generate(_categories.length, (i) {
-                final c = _categories[i];
-                final isSelected = i == _selected || i == _expanded;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Haptics.selection();
-                      setState(() {
-                        _searchCtrl.clear();
-                        _query = '';
-                        if (c.expandable) {
-                          _expanded = i;
-                        } else {
-                          _expanded = -1;
-                          _selected = i;
-                        }
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color:
-                            isSelected
-                                ? c.color.withValues(alpha: 0.25)
-                                : c.color.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color:
-                              isSelected
-                                  ? c.color
-                                  : c.color.withValues(alpha: 0.35),
-                          width: isSelected ? 1.5 : 1,
+              children: [
+                for (final (group, indices) in _categoryGroups) ...[
+                  if (group != null)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Center(
+                        child: GoopText(
+                          group,
+                          style: TextStyle(
+                            fontSize: FontSizes.labelSmall,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.6,
+                            color: flair.primary.withValues(alpha: 0.55),
+                          ),
                         ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (c.assetIcon != null)
-                            Image.asset(
-                              AmmonomiconTabStrip.tabAssetPath(c.assetIcon!),
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.none,
-                              errorBuilder:
-                                  (_, _, _) => Icon(
-                                    c.icon ?? Icons.bookmark,
-                                    size: 14,
-                                    color: c.color,
-                                  ),
-                            )
-                          else
-                            Icon(
-                              c.icon ?? Icons.bookmark,
-                              size: 18,
-                              color: c.color,
-                            ),
-                          const SizedBox(width: 6),
-                          GoopText(
-                            c.label.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: FontSizes.labelSmall,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.4,
-                              color: c.color,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  ),
-                );
-              }),
+                  for (final i in indices) _buildCategoryChip(i),
+                ],
+              ],
             ),
           ),
           if (!cat.isSpecial)
@@ -1266,6 +1266,77 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                     ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// One jump-strip chip for category [i] in the picked-category view.
+  Widget _buildCategoryChip(int i) {
+    final c = _categories[i];
+    final isSelected = i == _selected || i == _expanded;
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Haptics.selection();
+          setState(() {
+            _searchCtrl.clear();
+            _query = '';
+            if (c.expandable) {
+              _expanded = i;
+            } else {
+              _expanded = -1;
+              _selected = i;
+            }
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color:
+                isSelected
+                    ? c.color.withValues(alpha: 0.25)
+                    : c.color.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color:
+                  isSelected ? c.color : c.color.withValues(alpha: 0.35),
+              width: isSelected ? 1.5 : 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (c.assetIcon != null)
+                Image.asset(
+                  AmmonomiconTabStrip.tabAssetPath(c.assetIcon!),
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder:
+                      (_, _, _) => Icon(
+                        c.icon ?? Icons.bookmark,
+                        size: 14,
+                        color: c.color,
+                      ),
+                )
+              else
+                Icon(c.icon ?? Icons.bookmark, size: 18, color: c.color),
+              const SizedBox(width: 6),
+              GoopText(
+                c.label.toUpperCase(),
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.4,
+                  color: c.color,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
