@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -212,6 +213,13 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
     final addedToast = ValueNotifier<String?>(null);
     Timer? addedToastTimer;
 
+    // Empty-query view = random discovery picks, reshuffled on every
+    // open so repeat visits surface different gear. Fixed for the
+    // sheet's lifetime so rows don't reshuffle while typing/browsing.
+    final discovery = <dynamic>[...p.allGuns, ...p.allItems]
+      ..shuffle(math.Random());
+    final discoveryPicks = discovery.take(60).toList();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -232,36 +240,42 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
           builder: (sContext, setModalState) {
             final query = _quickQuery.toLowerCase().trim();
 
-            // Smart relevance matching & sorting:
-            // 1. Starts with query (highest priority)
-            // 2. Contains query (medium priority)
-            // 3. Quality score tie-breaker
-            final matchingGuns =
-                p.allGuns.where((g) {
-                  return g.name.toLowerCase().contains(query);
-                }).toList();
+            // Empty query → random discovery picks; typed query →
+            // relevance-sorted full catalog.
+            final List<dynamic> results;
+            if (query.isEmpty) {
+              results = discoveryPicks;
+            } else {
+              // Smart relevance matching & sorting:
+              // 1. Starts with query (highest priority)
+              // 2. Contains query (medium priority)
+              // 3. Quality score tie-breaker
+              final matchingGuns =
+                  p.allGuns.where((g) {
+                    return g.name.toLowerCase().contains(query);
+                  }).toList();
 
-            final matchingItems =
-                p.allItems.where((i) {
-                  return i.name.toLowerCase().contains(query);
-                }).toList();
+              final matchingItems =
+                  p.allItems.where((i) {
+                    return i.name.toLowerCase().contains(query);
+                  }).toList();
 
-            // Combined and prioritized
-            final List<dynamic> combinedResults = [
-              ...matchingGuns,
-              ...matchingItems,
-            ];
-            combinedResults.sort((a, b) {
-              final aName = a.name.toLowerCase();
-              final bName = b.name.toLowerCase();
-              final aStarts = aName.startsWith(query);
-              final bStarts = bName.startsWith(query);
-              if (aStarts && !bStarts) return -1;
-              if (!aStarts && bStarts) return 1;
-              return aName.compareTo(bName);
-            });
-
-            final results = combinedResults;
+              // Combined and prioritized
+              final combinedResults = <dynamic>[
+                ...matchingGuns,
+                ...matchingItems,
+              ];
+              combinedResults.sort((a, b) {
+                final aName = a.name.toLowerCase();
+                final bName = b.name.toLowerCase();
+                final aStarts = aName.startsWith(query);
+                final bStarts = bName.startsWith(query);
+                if (aStarts && !bStarts) return -1;
+                if (!aStarts && bStarts) return 1;
+                return aName.compareTo(bName);
+              });
+              results = combinedResults;
+            }
 
             return AnimatedPadding(
               duration: const Duration(milliseconds: 100),
@@ -297,10 +311,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                               style: TextStyle(
                                 fontSize: FontSizes.labelMedium,
                                 fontWeight: FontWeight.w700,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withValues(alpha: 0.55),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.55),
                                 fontStyle: FontStyle.italic,
                                 letterSpacing: 0.5,
                               ),
@@ -310,10 +323,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                         IconButton(
                           icon: Icon(
                             Icons.close,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.65),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.65),
                             size: 38,
                           ),
                           tooltip: 'Close',
