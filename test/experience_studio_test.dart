@@ -665,6 +665,9 @@ void main() {
 
       // Schema chip — 'TOXIN' is index 3 in the global palettes.
       await tester.ensureVisible(find.text('TOXIN'));
+      // ensureVisible animates (~100ms); let the scroll settle or the
+      // tap lands mid-flight below the viewport.
+      await tester.pump(const Duration(milliseconds: 200));
       await tester.tap(find.text('TOXIN'), warnIfMissed: false);
       await tester.pump(const Duration(milliseconds: 200));
       // A palette chip wrote an index (scroll offsets may land a

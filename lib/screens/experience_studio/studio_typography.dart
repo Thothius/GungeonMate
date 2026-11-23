@@ -133,7 +133,7 @@ class _StickyFontHeader extends SliverPersistentHeaderDelegate {
           children: [
             // Font name label (always Montserrat — system chrome)
             GoopText(
-              '${font.label.toUpperCase()} · ${(prefs.fontSize * 100).toStringAsFixed(0)}%',
+              '${font.label.toUpperCase()} · ${(prefs.textScaleFactor.clamp(0.8, 1.4) * 100).round()}%',
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,

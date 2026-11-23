@@ -485,18 +485,12 @@ class VisualPrefs {
   double get textScaleFactor => fontSize / 14.0;
 
   /// Discrete font-size steps the UI presents as chips.
-  static const fontSizeSteps = [
-    6.0,
-    8.0,
-    10.0,
-    12.0,
-    14.0,
-    18.0,
-    20.0,
-    24.0,
-    28.0,
-    32.0,
-  ];
+  /// Honest range: main.dart caps textScaleFactor at 0.8–1.4, so only
+  /// fontSize 11.2–19.6 renders distinctly — every step below maps to
+  /// the same 0.8 floor and every step above 20 is dead (setFontSize
+  /// clamps to 20 anyway). These six stops each produce a unique
+  /// scale and all survive the persist/restart round-trip.
+  static const fontSizeSteps = [10.0, 12.0, 14.0, 16.0, 18.0, 20.0];
 
   /// 36 deep, curated glow colors for the ambient screen glow.
   static const glowColors = [
