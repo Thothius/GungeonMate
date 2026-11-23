@@ -224,7 +224,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
             child: GoopText(
               '${label.toUpperCase()}  ·  ${names.length}',
               style: TextStyle(
-                fontSize: 10.5,
+                fontSize: FontSizes.chip,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
                 color: Colors.white.withValues(alpha: 0.65),
@@ -300,7 +300,7 @@ class _ShowMoreChip extends StatelessWidget {
               GoopText(
                 label,
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: FontSizes.chip,
                   fontWeight: FontWeight.w600,
                   color: Skeuo.inkIf(
                     Colors.lightBlueAccent,
@@ -383,7 +383,7 @@ class BackRefChip extends StatelessWidget {
               GoopText(
                 name,
                 style: const TextStyle(
-                  fontSize: 12.5,
+                  fontSize: FontSizes.chipStrong,
                   fontWeight: FontWeight.w500,
                 ),
               ),

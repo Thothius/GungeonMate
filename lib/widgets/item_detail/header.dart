@@ -487,7 +487,7 @@ class MetadataChip extends StatelessWidget {
             GoopText(
               '$label ',
               style: TextStyle(
-                fontSize: 11,
+                fontSize: FontSizes.chip,
                 fontWeight: FontWeight.w600,
                 color: color.withValues(alpha: 0.85),
               ),
@@ -496,7 +496,7 @@ class MetadataChip extends StatelessWidget {
           GoopText(
             value,
             style: TextStyle(
-              fontSize: 12.5,
+              fontSize: FontSizes.chipStrong,
               fontWeight: FontWeight.w800,
               color: Theme.of(context).colorScheme.onSurface,
             ),
@@ -576,7 +576,7 @@ class _ChestChip extends StatelessWidget {
           GoopText(
             'Chest ',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: FontSizes.chip,
               fontWeight: FontWeight.w600,
               color: isS ? accent : color.withValues(alpha: 0.85),
             ),
@@ -598,7 +598,7 @@ class _ChestChip extends StatelessWidget {
             GoopText(
               rank,
               style: TextStyle(
-                fontSize: 12.5,
+                fontSize: FontSizes.chipStrong,
                 fontWeight: FontWeight.w800,
                 color: Theme.of(context).colorScheme.onSurface,
               ),

@@ -193,7 +193,7 @@ class ShrineActivationSheet extends StatelessWidget {
                               GoopText(
                                 '💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)',
                                 style: TextStyle(
-                                  fontSize: 10.5,
+                                  fontSize: FontSizes.chip,
                                   fontWeight: FontWeight.w900,
                                   color: Skeuo.inkIf(Colors.redAccent),
                                   letterSpacing: 0.5,
@@ -294,7 +294,7 @@ class _SectionHeader extends StatelessWidget {
         GoopText(
           title,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: FontSizes.chip,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.2,
             color: Skeuo.inkIf(Colors.amber),

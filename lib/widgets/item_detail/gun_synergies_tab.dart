@@ -274,7 +274,7 @@ class _PageChips extends StatelessWidget {
         child: GoopText(
           label,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: FontSizes.chip,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.8,
             color: color,
@@ -827,7 +827,7 @@ class _GhostSynergyRow extends StatelessWidget {
                           child: GoopText(
                             'EXTRA REQ',
                             style: TextStyle(
-                              fontSize: 9,
+                              fontSize: FontSizes.chipMicro,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.6,
                               color: Skeuo.inkIf(Colors.amberAccent),

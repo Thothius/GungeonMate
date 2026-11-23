@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/synergy_stats.dart';
+import '../theme/tokens.dart';
 
 /// Old→new stat chips under a synergy row. Tap toggles the per-stat
 /// clause breakdown so players can see the original value + source text.
@@ -53,7 +54,7 @@ class _StatDeltaChipsState extends State<StatDeltaChips> {
                         ? '${d.label} ${d.newText}'
                         : '${d.label} ${d.oldText}→${d.newText}',
                     style: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: FontSizes.chip,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.3,
                       color:
@@ -73,7 +74,7 @@ class _StatDeltaChipsState extends State<StatDeltaChips> {
                 child: GoopText(
                   '${d.label}: ${d.oldText ?? '—'} → ${d.newText}  ·  ${d.clause}',
                   style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: FontSizes.chip,
                     height: 1.3,
                     fontStyle: FontStyle.italic,
                     color: Colors.white.withValues(alpha: 0.45),
@@ -145,7 +146,7 @@ class SynergyMetaChips extends StatelessWidget {
                     child: GoopText(
                       '${synStatLabelFor(q.stat)}${_qbArrow(q.dir)}',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: FontSizes.chip,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.3,
                         color: _qbColor(q.dir),
@@ -178,7 +179,7 @@ class SynergyMetaChips extends StatelessWidget {
                   child: GoopText(
                     tag.replaceAll('_', ' '),
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: FontSizes.chipMicro,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.2,
                       color: Colors.white.withValues(alpha: 0.45),
@@ -189,7 +190,7 @@ class SynergyMetaChips extends StatelessWidget {
                 GoopText(
                   '+${m.fx.length - _maxFx}',
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: FontSizes.chipMicro,
                     color: Colors.white.withValues(alpha: 0.35),
                   ),
                 ),
@@ -234,7 +235,7 @@ class SynergyMetaChips extends StatelessWidget {
         child: GoopText(
           label,
           style: TextStyle(
-            fontSize: 9.5,
+            fontSize: FontSizes.chipMicro,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.5,
             color: color,

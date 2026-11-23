@@ -271,7 +271,7 @@ class _PeekLoadoutRow extends StatelessWidget {
               GoopText(
                 label.toUpperCase(),
                 style: TextStyle(
-                  fontSize: 10.5,
+                  fontSize: FontSizes.chip,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.2,
                   color: Colors.white.withValues(alpha: 0.65),
@@ -429,7 +429,7 @@ class _ShrineDeltaChip extends StatelessWidget {
           GoopText(
             '$label ',
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: FontSizes.chip,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
               color: Colors.white.withValues(alpha: 0.75),
@@ -438,7 +438,7 @@ class _ShrineDeltaChip extends StatelessWidget {
           GoopText(
             '$sign$txt',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: FontSizes.chipStrong,
               fontWeight: FontWeight.w800,
               color: color,
             ),

@@ -282,7 +282,7 @@ class StatPill extends StatelessWidget {
               child: GoopText(
                 chestRank,
                 style: const TextStyle(
-                  fontSize: 11,
+                  fontSize: FontSizes.chip,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.4,
                   color: Colors.white,

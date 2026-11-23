@@ -234,7 +234,7 @@ class SynergyCard extends StatelessWidget {
                     GoopText(
                       'Alternative components matched',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: FontSizes.chip,
                         fontWeight: FontWeight.w600,
                         color: Skeuo.inkIf(
                           Skeuo.inkIf(Colors.amber),
@@ -255,7 +255,7 @@ class SynergyCard extends StatelessWidget {
                     GoopText(
                       'Alternative Partners:',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: FontSizes.chip,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
                         color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.9),

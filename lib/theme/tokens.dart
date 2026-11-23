@@ -60,6 +60,12 @@ abstract final class Motion {
 /// Use these when you need just the size value, not the full TextStyle.
 /// Use [TypeScale] when you want the complete style template.
 abstract final class FontSizes {
+  // Chip / tag / badge micro-labels — the small caps labels inside pills,
+  // stat deltas, fx tags, and section eyebrows. Kept distinct from
+  // labelSmall/Medium so chip text can sit below body-label scale.
+  static const double chipMicro = 9.5;
+  static const double chip = 11;
+  static const double chipStrong = 12.5;
   static const double labelSmall = 10;
   static const double labelMedium = 12;
   static const double bodyMedium = 14;
