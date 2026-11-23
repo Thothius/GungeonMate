@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
@@ -12,6 +13,7 @@ import '../helpers/fake_mp_link.dart';
 /// reacts to the session's pausedNotifier.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() => SharedPreferences.setMockInitialValues({}));
 
   (MpSession, RunProvider) makeSession() {
     final rp = RunProvider();
@@ -39,7 +41,8 @@ void main() {
     final (session, rp) = makeSession();
     await session.startAsMain(
       nickname: 'T',
-      character: rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
+      character:
+          rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
       avatarId: 'the_paradox',
       runTitle: 'Cursed Hunter of the Deep',
     );
@@ -65,7 +68,8 @@ void main() {
     final (session, rp) = makeSession();
     await session.startAsMain(
       nickname: 'T',
-      character: rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
+      character:
+          rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
       avatarId: 'the_paradox',
       runTitle: 'Test Run',
     );

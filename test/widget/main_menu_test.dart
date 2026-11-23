@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/main_menu_screen.dart';
@@ -19,6 +20,8 @@ import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 /// Ammonomicon nav test, which pumps past SkeletonLoader's perpetual
 /// shimmer).
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
@@ -65,9 +68,7 @@ void main() {
     expect(find.byType(MainMenuBackdrop), findsOneWidget);
   });
 
-  testWidgets('Menu accent follows the active theme palette', (
-    tester,
-  ) async {
+  testWidgets('Menu accent follows the active theme palette', (tester) async {
     final original = AppTheme.mode;
     addTearDown(() => AppTheme.notifier.value = original);
 
@@ -77,9 +78,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
 
     // Unicorn cotton-candy primary — outline button icons pick it up.
-    final icon = tester.widget<Icon>(
-      find.byIcon(Icons.bluetooth_searching),
-    );
+    final icon = tester.widget<Icon>(find.byIcon(Icons.bluetooth_searching));
     expect(icon.color, const Color(0xFFFF69B4));
   });
 

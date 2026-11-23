@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/utils/asset_paths.dart';
 
@@ -10,6 +11,7 @@ void main() {
   late RunProvider p;
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
     p = RunProvider();
     await p.loadData();
   });
@@ -74,7 +76,11 @@ void main() {
         missing.add('${s.name} -> $icon');
       }
     }
-    expect(missing, isEmpty, reason: 'missing synergy icons:\n${missing.join('\n')}');
+    expect(
+      missing,
+      isEmpty,
+      reason: 'missing synergy icons:\n${missing.join('\n')}',
+    );
   });
 
   test('gun/item icon paths point at files that exist', () {

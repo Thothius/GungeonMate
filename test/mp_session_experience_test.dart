@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/multiplayer_messages.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
@@ -13,6 +14,7 @@ void main() {
   late MpSession session;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     provider = RunProvider();
     session = MpSession(provider);
   });
@@ -65,7 +67,6 @@ void main() {
       expect(e.mine, true);
     });
   });
-
 
   group('sendEmote / sendSurprise event logging', () {
     test('sendEmote logs an emote event even disconnected', () async {
@@ -134,7 +135,6 @@ void main() {
       expect(session.phase, MpPhase.connected);
       expect(notified, greaterThan(0));
     });
-
 
     test('pause/resume works in demo mode', () async {
       session.enableDemo();

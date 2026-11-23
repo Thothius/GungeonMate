@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
@@ -26,6 +27,7 @@ import 'package:gungeon_mate/screens/settings_screen.dart';
 /// to be brought on-screen before tapping.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() => SharedPreferences.setMockInitialValues({}));
 
   Widget wrap(Widget child, {RunProvider? provider}) {
     return MultiProvider(

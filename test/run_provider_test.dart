@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/gun.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/models/item.dart';
@@ -13,12 +14,14 @@ import 'package:gungeon_mate/providers/run_provider.dart';
 /// These tests verify the state transitions that happen during a
 /// multiplayer session without needing Nearby Connections.
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   late RunProvider rp;
   late Gungeoneer marine;
   late Gungeoneer cultist;
   late Gungeoneer hunter;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     rp = RunProvider();
     marine = Gungeoneer(name: 'The Marine');
     cultist = Gungeoneer(name: 'The Cultist');

@@ -322,6 +322,7 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
       await tester.pumpAndSettle();
       expect(find.text('COPIED'), findsNothing);
+      expect(clip, isNotNull);
     });
 
     testWidgets('kind chips switch the report kind end-to-end', (

@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/models/multiplayer_messages.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
@@ -17,6 +18,7 @@ import 'package:gungeon_mate/providers/run_provider.dart';
 /// on both sides, which is what HomeScreen checks to decide whether to
 /// show ActiveRunScreen vs MainMenuScreen.
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('MP flow simulation — both players see the run', () {
     late RunProvider hostRP;
     late RunProvider joinerRP;
@@ -24,6 +26,7 @@ void main() {
     late Gungeoneer joinerChar;
 
     setUp(() {
+      SharedPreferences.setMockInitialValues({});
       hostRP = RunProvider();
       joinerRP = RunProvider();
       // Create mock gungeoneers — only name is required.

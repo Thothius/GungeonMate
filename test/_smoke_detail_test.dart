@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/screens/item_detail_screen.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
@@ -10,6 +11,7 @@ import 'package:gungeon_mate/widgets/item_detail/gun_synergies_tab.dart';
 void main() {
   late RunProvider p;
   setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
     p = RunProvider();
     await p.loadData();
   });
@@ -136,10 +138,7 @@ void main() {
     final gun = p.allGuns.first;
     final rendered = p
         .getSynergiesFor(gun.name)
-        .firstWhere(
-          (s) =>
-              !isLebExcludedSynergy(s) && !lebNeedsRealPieces(s),
-        );
+        .firstWhere((s) => !isLebExcludedSynergy(s) && !lebNeedsRealPieces(s));
     expect(find.text(rendered.name), findsOneWidget);
   });
 

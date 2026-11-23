@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/player.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/screens/browse_screen.dart';
@@ -16,6 +17,7 @@ void main() {
   late RunProvider p;
 
   setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
     p = RunProvider();
     await p.loadData();
   });

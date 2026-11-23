@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/models/ammonomicon_entry.dart';
@@ -19,6 +20,8 @@ import 'package:gungeon_mate/widgets/state_widgets.dart';
 /// compute() may not complete, so we test the loading state and the
 /// AppBar (which is always rendered).
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
@@ -58,7 +61,9 @@ void main() {
   testWidgets('showBackButton true renders back button and AMMONOMICON title', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: true)));
+    await tester.pumpWidget(
+      wrap(const AmmonomiconScreen(showBackButton: true)),
+    );
     await tester.pump();
 
     // The AppBar uses IconButton with Icons.arrow_back, not BackButton
@@ -70,7 +75,9 @@ void main() {
   testWidgets('showBackButton false does not render back button', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
+    await tester.pumpWidget(
+      wrap(const AmmonomiconScreen(showBackButton: false)),
+    );
     await tester.pump();
 
     expect(find.byIcon(Icons.arrow_back), findsNothing);
@@ -98,7 +105,9 @@ void main() {
   testWidgets('showBackButton true renders AppBar with correct height', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: true)));
+    await tester.pumpWidget(
+      wrap(const AmmonomiconScreen(showBackButton: true)),
+    );
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
@@ -108,7 +117,9 @@ void main() {
   testWidgets('showBackButton false renders AppBar with zero height', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
+    await tester.pumpWidget(
+      wrap(const AmmonomiconScreen(showBackButton: false)),
+    );
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
@@ -120,7 +131,9 @@ void main() {
   testWidgets('showBackButton false includes SafeArea with top: true', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
+    await tester.pumpWidget(
+      wrap(const AmmonomiconScreen(showBackButton: false)),
+    );
     await tester.pump();
 
     // SafeArea should be present in the widget tree
