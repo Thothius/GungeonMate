@@ -6,15 +6,8 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 
-class RobotDashboardSliver extends StatefulWidget {
+class RobotDashboardSliver extends StatelessWidget {
   const RobotDashboardSliver({super.key});
-
-  @override
-  State<RobotDashboardSliver> createState() => RobotDashboardSliverState();
-}
-
-class RobotDashboardSliverState extends State<RobotDashboardSliver> {
-  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,94 +53,72 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Row with big DMG boost badge
-              InkWell(
-                onTap: () {
-                  setState(() => _collapsed = !_collapsed);
-                  Haptics.selection();
-                },
-                borderRadius: BorderRadius.all(Radii.sm),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.android_rounded,
+              // Header row — plain label + DMG badge. The swiper pill
+              // owns collapse for the whole panel (U-046); a second
+              // nested collapse here was redundant.
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: Insets.md),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.android_rounded,
+                          color: Colors.cyanAccent,
+                          size: 20,
+                        ),
+                        SizedBox(width: 8),
+                        GoopText(
+                          'THE ROBOT HUD',
+                          style: TextStyle(
+                            fontSize: FontSizes.labelMedium,
+                            fontWeight: FontWeight.w900,
                             color: Colors.cyanAccent,
-                            size: 20,
+                            letterSpacing: 0.8,
                           ),
-                          SizedBox(width: 8),
-                          GoopText(
-                            'THE ROBOT HUD',
-                            style: TextStyle(
-                              fontSize: FontSizes.labelMedium,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.cyanAccent,
-                              letterSpacing: 0.8,
-                            ),
-                          ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color:
-                                  robotGoldJunk
-                                      ? Colors.amber.withValues(alpha: 0.18)
-                                      : Colors.cyan.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.all(Radii.sm),
-                              border: Border.all(
-                                color:
-                                    robotGoldJunk
-                                        ? Colors.amber.withValues(alpha: 0.5)
-                                        : Colors.cyan.withValues(alpha: 0.4),
-                                width: 1.0,
-                              ),
-                            ),
-                            child: GoopText(
-                              '+${damageBoost.toStringAsFixed(0)}% DMG',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w900,
-                                color:
-                                    robotGoldJunk
-                                        ? Colors.amberAccent
-                                        : Colors.cyanAccent,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Icon(
-                            _collapsed ? Icons.expand_more : Icons.expand_less,
-                            size: 16,
-                            color: Colors.white54,
-                          ),
-                        ],
+                      decoration: BoxDecoration(
+                        color:
+                            robotGoldJunk
+                                ? Colors.amber.withValues(alpha: 0.18)
+                                : Colors.cyan.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.all(Radii.sm),
+                        border: Border.all(
+                          color:
+                              robotGoldJunk
+                                  ? Colors.amber.withValues(alpha: 0.5)
+                                  : Colors.cyan.withValues(alpha: 0.4),
+                          width: 1.0,
+                        ),
                       ),
-                    ],
-                  ),
+                      child: GoopText(
+                        '+${damageBoost.toStringAsFixed(0)}% DMG',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color:
+                              robotGoldJunk
+                                  ? Colors.amberAccent
+                                  : Colors.cyanAccent,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              AnimatedSize(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeOutCubic,
-                child:
-                    _collapsed
-                        ? const SizedBox.shrink()
-                        : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Divider(color: Colors.white12, height: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Divider(color: Colors.white12, height: 16),
 
                             // Junk counter — full width, no overflow
                             Container(
@@ -422,7 +393,6 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                             // toggle in settings for per-gun breakdowns.
                           ],
                         ),
-              ),
             ],
           ),
         ),

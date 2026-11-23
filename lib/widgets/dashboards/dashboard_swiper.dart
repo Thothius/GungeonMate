@@ -31,86 +31,32 @@ class DashboardTab {
   });
 }
 
-/// Checks whether the given player has any special dashboards to show.
-/// Mirrors the tab-building logic in [_DashboardSwiperState.build] so
-/// the Panels toggle can proactively warn "No panels" instead of
-/// silently toggling on an empty section.
-bool hasSpecialDashboards({
-  required Set<String> ownedGunNames,
-  required Set<String> ownedItemNames,
-  required String charName,
-}) {
-  if (charName.contains('robot')) return true;
-  if (charName.contains('hunter')) return true;
-  if (ownedItemNames.any((n) => n.contains('ser junkan'))) return true;
-  if (ownedGunNames.contains('gunderfury')) return true;
-  if (ownedGunNames.contains('triple gun')) return true;
-  if (ownedGunNames.contains('evolver')) return true;
-  if (ownedGunNames.contains('shellegun')) return true;
-  if (ownedGunNames.contains('chamber gun')) return true;
-  if (ownedItemNames.contains('platinum bullets')) return true;
-  if (ownedItemNames.contains('iron coin')) return true;
-  if (ownedItemNames.contains('spice')) return true;
-  if (ownedItemNames.contains('metronome')) return true;
-  if (ownedItemNames.contains('sprun')) return true;
-  if (ownedGunNames.contains('boxing glove')) return true;
-  if (ownedItemNames.contains('cigarettes')) return true;
-  if (ownedGunNames.contains('polaris')) return true;
-  if (ownedGunNames.contains('gunther')) return true;
-  if (ownedItemNames.contains('gun soul')) return true;
-  return false;
-}
-
-class DashboardSwiper extends StatefulWidget {
+class DashboardSwiper extends StatelessWidget {
   final PlayerSlot slot;
   const DashboardSwiper({super.key, required this.slot});
-
-  @override
-  State<DashboardSwiper> createState() => _DashboardSwiperState();
-}
-
-class _DashboardSwiperState extends State<DashboardSwiper> {
-  int _selectedIndex = 0;
-  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final player =
-        widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
+        slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
     if (player == null) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
 
-    final tabs = buildDashboardTabs(player, widget.slot);
+    final tabs = buildDashboardTabs(player, slot);
 
     if (tabs.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
-
-    // Clamp selectedIndex if dashboards changed
-    if (_selectedIndex >= tabs.length) _selectedIndex = 0;
 
     // The sliver shell unwraps to a plain box so the header panel can
     // embed the whole swiper card (pills + expanding detail) — solo run
     // shows it inside the top panel; MP keeps it in the sliver slot.
+    // Selection/collapse state lives inside DashboardSwiperCardBody so
+    // both embed paths share one implementation (U-046).
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
-        child: DashboardSwiperCardBody(
-          tabs: tabs,
-          selectedIndex: _selectedIndex,
-          collapsed: _collapsed,
-          onSelect: (i) {
-            Haptics.selection();
-            if (i == _selectedIndex) {
-              setState(() => _collapsed = !_collapsed);
-            } else {
-              setState(() {
-                _selectedIndex = i;
-                _collapsed = false;
-              });
-            }
-          },
-        ),
+        child: DashboardSwiperCardBody(tabs: tabs),
       ),
     );
   }
@@ -142,7 +88,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
         label: 'Huntress',
         iconPath: localGungeoneerIcon('The Hunter'),
         color: Colors.amberAccent,
-        widget: const HuntressDashboardSliver(),
+        widget: HuntressDashboardSliver(slot: slot),
       ),
     );
   }
@@ -311,23 +257,41 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
 }
 
 /// The swiper's rendered card — pills row + animated detail panel.
-/// Extracted so [GungeoneerHeader] can embed it as a footer (solo run
-/// puts the trackers inside the top panel instead of a separate one).
-class DashboardSwiperCardBody extends StatelessWidget {
+/// Owns selection/collapse state so every embed path (sliver or
+/// header-panel card) behaves identically. Extracted so
+/// [GungeoneerHeader] can embed it as a footer (solo run puts the
+/// trackers inside the top panel instead of a separate one).
+class DashboardSwiperCardBody extends StatefulWidget {
   final List<DashboardTab> tabs;
-  final int selectedIndex;
-  final bool collapsed;
-  final void Function(int) onSelect;
-  const DashboardSwiperCardBody({
-    super.key,
-    required this.tabs,
-    required this.selectedIndex,
-    required this.collapsed,
-    required this.onSelect,
-  });
+  const DashboardSwiperCardBody({super.key, required this.tabs});
+
+  @override
+  State<DashboardSwiperCardBody> createState() =>
+      _DashboardSwiperCardBodyState();
+}
+
+class _DashboardSwiperCardBodyState extends State<DashboardSwiperCardBody> {
+  int _selectedIndex = 0;
+  bool _collapsed = false;
+
+  void _onSelect(int i) {
+    Haptics.selection();
+    setState(() {
+      if (i == _selectedIndex) {
+        _collapsed = !_collapsed;
+      } else {
+        _selectedIndex = i;
+        _collapsed = false;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final tabs = widget.tabs;
+    // Clamp selection if the dashboard set changed under us.
+    final selected = _selectedIndex.clamp(0, tabs.length - 1);
+
     Widget extractChild(Widget sliver) {
       if (sliver is SliverToBoxAdapter && sliver.child != null) {
         return sliver.child!;
@@ -354,12 +318,12 @@ class DashboardSwiperCardBody extends StatelessWidget {
               runSpacing: 6,
               children: List.generate(tabs.length, (i) {
                 final tab = tabs[i];
-                final isActive = i == selectedIndex;
+                final isActive = i == selected;
                 return DashboardTabChip(
                   tab: tab,
                   isActive: isActive,
-                  isCollapsed: collapsed,
-                  onTap: () => onSelect(i),
+                  isCollapsed: _collapsed,
+                  onTap: () => _onSelect(i),
                 );
               }),
             ),
@@ -372,7 +336,7 @@ class DashboardSwiperCardBody extends StatelessWidget {
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOutCubic,
             child:
-                collapsed
+                _collapsed
                     ? const SizedBox.shrink()
                     : Padding(
                       padding: const EdgeInsets.fromLTRB(2, 0, 2, 2),
@@ -381,8 +345,8 @@ class DashboardSwiperCardBody extends StatelessWidget {
                         switchInCurve: Curves.easeOut,
                         switchOutCurve: Curves.easeIn,
                         child: KeyedSubtree(
-                          key: ValueKey(selectedIndex),
-                          child: extractChild(tabs[selectedIndex].widget),
+                          key: ValueKey(selected),
+                          child: extractChild(tabs[selected].widget),
                         ),
                       ),
                     ),
@@ -487,49 +451,26 @@ class DashboardTabChip extends StatelessWidget {
 }
 
 /// Self-contained embeddable swiper card — builds its own tab list from
-/// RunProvider and owns selection/collapse state. Used when the tracker
-/// pills live inside the header panel (solo run) instead of the sliver.
-class DashboardSwiperCard extends StatefulWidget {
+/// RunProvider. Used when the tracker pills live inside the header panel
+/// (solo run) instead of the sliver. Selection/collapse state lives in
+/// [DashboardSwiperCardBody], shared with the sliver path (U-046).
+class DashboardSwiperCard extends StatelessWidget {
   final PlayerSlot slot;
   const DashboardSwiperCard({super.key, required this.slot});
-
-  @override
-  State<DashboardSwiperCard> createState() => _DashboardSwiperCardState();
-}
-
-class _DashboardSwiperCardState extends State<DashboardSwiperCard> {
-  int _selectedIndex = 0;
-  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final player =
-        widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
+        slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
     if (player == null) return const SizedBox.shrink();
 
-    final tabs = buildDashboardTabs(player, widget.slot);
+    final tabs = buildDashboardTabs(player, slot);
     if (tabs.isEmpty) return const SizedBox.shrink();
-    if (_selectedIndex >= tabs.length) _selectedIndex = 0;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-      child: DashboardSwiperCardBody(
-        tabs: tabs,
-        selectedIndex: _selectedIndex,
-        collapsed: _collapsed,
-        onSelect: (i) {
-          Haptics.selection();
-          if (i == _selectedIndex) {
-            setState(() => _collapsed = !_collapsed);
-          } else {
-            setState(() {
-              _selectedIndex = i;
-              _collapsed = false;
-            });
-          }
-        },
-      ),
+      child: DashboardSwiperCardBody(tabs: tabs),
     );
   }
 }

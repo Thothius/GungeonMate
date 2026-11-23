@@ -261,25 +261,12 @@ class _SchemaChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return _SelectChip(
+      selected: active,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(
-          color:
-              active
-                  ? flair.primary.withValues(alpha: 0.16)
-                  : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color:
-                active ? flair.primary : Colors.white.withValues(alpha: 0.15),
-            width: active ? 1.6 : 1.0,
-          ),
-        ),
-        child: Column(
+      semanticsLabel: schema.name,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
@@ -315,6 +302,58 @@ class _SchemaChip extends StatelessWidget {
               ),
             ),
           ],
+        ),
+    );
+  }
+}
+
+/// Shared studio select-pill recipe (U-037) — every picker chip routes
+/// through this so fill/border/radius/animation can't drift. [child] is
+/// the chip's inner content (label, icon row, dots, etc.). Haptics fire
+/// at the call site (`Haptics.selection()` in each chip's onTap).
+class _SelectChip extends StatelessWidget {
+  final bool selected;
+  final VoidCallback onTap;
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+  final String? semanticsLabel;
+
+  const _SelectChip({
+    required this.selected,
+    required this.onTap,
+    required this.child,
+    this.padding = const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+    this.semanticsLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: semanticsLabel,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          padding: padding,
+          decoration: BoxDecoration(
+            color:
+                selected
+                    ? flair.primary.withValues(alpha: 0.16)
+                    : Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color:
+                  selected
+                      ? flair.primary
+                      : Colors.white.withValues(alpha: 0.15),
+              width: selected ? 1.5 : 1.0,
+            ),
+          ),
+          child: child,
         ),
       ),
     );

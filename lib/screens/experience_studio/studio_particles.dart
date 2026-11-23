@@ -503,31 +503,17 @@ class _GlowFxChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flair = AppTheme.flair;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return _SelectChip(
+      selected: on,
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-        decoration: BoxDecoration(
-          color:
-              on
-                  ? flair.primary.withValues(alpha: 0.16)
-                  : Colors.white.withValues(alpha: 0.04),
-          borderRadius: const BorderRadius.all(Radii.sm),
-          border: Border.all(
-            color: on ? flair.primary : Colors.white.withValues(alpha: 0.15),
-            width: on ? 1.4 : 0.8,
-          ),
-        ),
-        child: GoopText(
-          label,
-          style: TextStyle(
-            fontSize: FontSizes.labelSmall,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
-          ),
+      semanticsLabel: label,
+      child: GoopText(
+        label,
+        style: TextStyle(
+          fontSize: FontSizes.labelSmall,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1.0,
+          color: on ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5),
         ),
       ),
     );
@@ -1047,7 +1033,8 @@ class _LookTile extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 7.5,
+                // U-035: 7.5px was below the readable floor.
+                fontSize: 9,
                 fontWeight: active ? FontWeight.w900 : FontWeight.w700,
                 letterSpacing: 0.4,
                 color: c,
@@ -1058,7 +1045,7 @@ class _LookTile extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 6.5,
+                fontSize: 8,
                 color: Colors.white.withValues(alpha: 0.38),
               ),
             ),
@@ -1408,44 +1395,30 @@ class _PhysicsToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return _SelectChip(
+      selected: on,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-        decoration: BoxDecoration(
-          color:
-              on
-                  ? flair.primary.withValues(alpha: 0.16)
-                  : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: on ? flair.primary : Colors.white.withValues(alpha: 0.15),
-            width: on ? 1.6 : 1.0,
+      semanticsLabel: label,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            on ? Icons.check_circle : Icons.circle_outlined,
+            size: 13,
+            color: on ? flair.primary : Colors.white.withValues(alpha: 0.3),
           ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              on ? Icons.check_circle : Icons.circle_outlined,
-              size: 13,
-              color: on ? flair.primary : Colors.white.withValues(alpha: 0.3),
+          const SizedBox(width: 6),
+          GoopText(
+            label,
+            style: TextStyle(
+              fontSize: FontSizes.labelMedium,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.8,
+              color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
             ),
-            const SizedBox(width: 6),
-            GoopText(
-              label,
-              style: TextStyle(
-                fontSize: FontSizes.labelMedium,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.8,
-                color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1145,4 +1145,44 @@ void main() {
       expect(find.byIcon(Icons.add_rounded), findsNWidgets(3));
     });
   });
+
+  group('U-035/U-036 picker a11y', () {
+    testWidgets('glow quick dots expose labels and taller hit areas', (
+      tester,
+    ) async {
+      await openWizard(tester, 4); // AMBIANCE tab
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // U-036: bare color dots now carry a tooltip + semantics label.
+      expect(find.byTooltip('Glow color 1'), findsOneWidget);
+      expect(find.byTooltip('Glow color 12'), findsOneWidget);
+
+      // U-035: hit area grew from 26px to a 30x40 box (visual dot stays 26).
+      final gesture = find.descendant(
+        of: find.byTooltip('Glow color 1'),
+        matching: find.byType(GestureDetector),
+      );
+      expect(gesture, findsOneWidget);
+      final size = tester.getSize(gesture);
+      expect(size.height, greaterThanOrEqualTo(36));
+      expect(size.width, greaterThanOrEqualTo(30));
+    });
+
+    testWidgets('atmosphere meter dots expose on/off semantics', (
+      tester,
+    ) async {
+      await openWizard(tester, 4); // AMBIANCE tab
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // U-036: the 4-dot load meter labels each layer active/inactive.
+      final semantics = tester.widgetList<Semantics>(
+        find.byWidgetPredicate(
+          (w) =>
+              w is Semantics &&
+              (w.properties.label ?? '').startsWith('Backdrop layer'),
+        ),
+      );
+      expect(semantics.length, greaterThanOrEqualTo(4));
+    });
+  });
 }

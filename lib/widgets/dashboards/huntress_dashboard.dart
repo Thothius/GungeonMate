@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/player.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
@@ -7,7 +8,8 @@ import '../../theme/tokens.dart';
 /// Compact Huntress HUD: dig chance + item weights. Single concise card.
 /// Toggle on left switches between full pickup weights and health-focused stats.
 class HuntressDashboardSliver extends StatefulWidget {
-  const HuntressDashboardSliver({super.key});
+  final PlayerSlot slot;
+  const HuntressDashboardSliver({super.key, required this.slot});
 
   @override
   State<HuntressDashboardSliver> createState() =>
@@ -20,8 +22,14 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
+    // U-044: resolve the owning player — P2's panel must read P2's
+    // inventory, not always runState.main.
+    final player =
+        widget.slot == PlayerSlot.coop
+            ? (p.runState.coop ?? Player())
+            : p.runState.main;
     final ownedLower =
-        p.runState.main.items.map((i) => i.name.toLowerCase()).toSet();
+        player.items.map((i) => i.name.toLowerCase()).toSet();
     final hasBabyGoodMimic = ownedLower.any(
       (n) => n.contains('baby good mimic'),
     );

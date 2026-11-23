@@ -1026,7 +1026,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 9,
+                              // U-035: 9px was below the readable floor.
+                              fontSize: 10.5,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.6,
                               color:
@@ -3169,6 +3170,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       label: const ['AUTO', 'CUSTOM', 'NONE'][i],
                       on: borderMode == i,
                       onTap: () async {
+                        Haptics.selection();
                         if (i == 0) {
                           await VisualPrefs.setPanelBorderColor(0);
                         } else if (i == 2) {

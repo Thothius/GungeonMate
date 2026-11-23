@@ -255,40 +255,25 @@ class _HapticsChipsState extends State<_HapticsChips> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              child: _SelectChip(
+                selected: level == current,
+                semanticsLabel: label,
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 onTap: () {
                   Haptics.setIntensity(level);
                   setState(() {});
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color:
-                        level == current
-                            ? flair.primary.withValues(alpha: 0.16)
-                            : Colors.white.withValues(alpha: 0.04),
-                    borderRadius: const BorderRadius.all(Radii.sm),
-                    border: Border.all(
+                child: Center(
+                  child: GoopText(
+                    label,
+                    style: TextStyle(
+                      fontSize: FontSizes.labelSmall,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0,
                       color:
                           level == current
                               ? flair.primary
-                              : Colors.white.withValues(alpha: 0.15),
-                      width: level == current ? 1.4 : 0.8,
-                    ),
-                  ),
-                  child: Center(
-                    child: GoopText(
-                      label,
-                      style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
-                        color:
-                            level == current
-                                ? flair.primary
-                                : Colors.white.withValues(alpha: 0.5),
-                      ),
+                              : Colors.white.withValues(alpha: 0.5),
                     ),
                   ),
                 ),
@@ -323,41 +308,32 @@ class _GlowStyleRow extends StatelessWidget {
       children: [
         for (var i = -1; i < GlowStyle.values.length; i++)
           Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                Haptics.selection();
-                VisualPrefs.setGlowStyleIndex(i);
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 140),
-                margin: const EdgeInsets.symmetric(horizontal: 2),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: _SelectChip(
+                selected: i == currentIndex,
+                semanticsLabel: _labels[i + 1],
                 padding: const EdgeInsets.symmetric(vertical: 11),
-                decoration: BoxDecoration(
-                  color:
-                      i == currentIndex
-                          ? flair.primary.withValues(alpha: 0.18)
-                          : Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color:
-                        i == currentIndex
-                            ? flair.primary.withValues(alpha: 0.7)
-                            : Colors.white.withValues(alpha: 0.1),
-                    width: i == currentIndex ? 1.5 : 1.0,
-                  ),
-                ),
+                onTap: () {
+                  Haptics.selection();
+                  VisualPrefs.setGlowStyleIndex(i);
+                },
                 child: Center(
-                  child: GoopText(
-                    _labels[i + 1],
-                    style: TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.6,
-                      color:
-                          i == currentIndex
-                              ? flair.primary
-                              : Colors.white.withValues(alpha: 0.45),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: GoopText(
+                      _labels[i + 1],
+                      maxLines: 1,
+                      style: TextStyle(
+                        // U-035: 8px unreadable; scale-down guards narrow cells.
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.6,
+                        color:
+                            i == currentIndex
+                                ? flair.primary
+                                : Colors.white.withValues(alpha: 0.45),
+                      ),
                     ),
                   ),
                 ),
@@ -446,7 +422,9 @@ class _GlowQuickRow extends StatelessWidget {
   Widget build(BuildContext context) {
     const shown = 12;
     return SizedBox(
-      height: 26,
+      // U-035: taller row gives each dot a ~40px-tall hit area while the
+      // 26px visual stays unchanged.
+      height: 40,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: shown.clamp(0, VisualPrefs.glowColors.length),
@@ -454,34 +432,49 @@ class _GlowQuickRow extends StatelessWidget {
         itemBuilder: (context, i) {
           final c = VisualPrefs.glowColors[i];
           final isSelected = i == currentIndex;
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Haptics.selection();
-              VisualPrefs.setGlowColorIndex(i);
-            },
-            child: Container(
-              width: 26,
-              height: 26,
-              decoration: BoxDecoration(
-                color: c,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color:
-                      isSelected
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.15),
-                  width: isSelected ? 2 : 1,
+          return Tooltip(
+            // U-036: bare color dots had no accessible label.
+            message: 'Glow color ${i + 1}',
+            child: Semantics(
+              button: true,
+              selected: isSelected,
+              label: 'Glow color ${i + 1}',
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Haptics.selection();
+                  VisualPrefs.setGlowColorIndex(i);
+                },
+                child: SizedBox(
+                  width: 30,
+                  height: 40,
+                  child: Center(
+                    child: Container(
+                      width: 26,
+                      height: 26,
+                      decoration: BoxDecoration(
+                        color: c,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color:
+                              isSelected
+                                  ? Colors.white
+                                  : Colors.white.withValues(alpha: 0.15),
+                          width: isSelected ? 2 : 1,
+                        ),
+                        boxShadow:
+                            isSelected
+                                ? [
+                                  BoxShadow(
+                                    color: c.withValues(alpha: 0.7),
+                                    blurRadius: 8,
+                                  ),
+                                ]
+                                : null,
+                      ),
+                    ),
+                  ),
                 ),
-                boxShadow:
-                    isSelected
-                        ? [
-                          BoxShadow(
-                            color: c.withValues(alpha: 0.7),
-                            blurRadius: 8,
-                          ),
-                        ]
-                        : null,
               ),
             ),
           );
@@ -511,20 +504,26 @@ class _AtmosphereLoadRow extends StatelessWidget {
     return Row(
       children: [
         for (var i = 0; i < 4; i++)
-          Container(
-            width: 14,
-            height: 14,
-            margin: const EdgeInsets.only(right: 6),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color:
-                  i < load
-                      ? dotColor.withValues(alpha: 0.9)
-                      : Colors.white.withValues(alpha: 0.08),
-              border: Border.all(
+          // U-036: decorative dots get an explicit on/off label.
+          Semantics(
+            label: 'Backdrop layer ${i + 1} ${i < load ? 'active' : 'inactive'}',
+            child: Container(
+              width: 14,
+              height: 14,
+              margin: const EdgeInsets.only(right: 6),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
                 color:
-                    i < load ? dotColor : Colors.white.withValues(alpha: 0.15),
-                width: 1,
+                    i < load
+                        ? dotColor.withValues(alpha: 0.9)
+                        : Colors.white.withValues(alpha: 0.08),
+                border: Border.all(
+                  color:
+                      i < load
+                          ? dotColor
+                          : Colors.white.withValues(alpha: 0.15),
+                  width: 1,
+                ),
               ),
             ),
           ),
@@ -540,12 +539,15 @@ class _AtmosphereLoadRow extends StatelessWidget {
           ),
         ),
         if (hot)
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              VisualPrefs.calmAmbience();
-              Haptics.selection();
-            },
+          Semantics(
+            button: true,
+            label: 'THIN STACK: disable shader and scene layers',
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                VisualPrefs.calmAmbience();
+                Haptics.selection();
+              },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
               decoration: BoxDecoration(
@@ -567,6 +569,7 @@ class _AtmosphereLoadRow extends StatelessWidget {
               ),
             ),
           ),
+          ),
       ],
     );
   }
@@ -584,32 +587,20 @@ class _ShaderChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flair = AppTheme.flair;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return _SelectChip(
+      selected: on,
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color:
-              on
-                  ? flair.primary.withValues(alpha: 0.16)
-                  : Colors.white.withValues(alpha: 0.04),
-          borderRadius: const BorderRadius.all(Radii.sm),
-          border: Border.all(
-            color: on ? flair.primary : Colors.white.withValues(alpha: 0.15),
-            width: on ? 1.4 : 0.8,
-          ),
-        ),
-        child: Center(
-          child: GoopText(
-            label,
-            style: TextStyle(
-              fontSize: FontSizes.labelSmall,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.0,
-              color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
-            ),
+      semanticsLabel: label,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Center(
+        child: GoopText(
+          label,
+          style: TextStyle(
+            fontSize: FontSizes.labelSmall,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.0,
+            color:
+                on ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5),
           ),
         ),
       ),

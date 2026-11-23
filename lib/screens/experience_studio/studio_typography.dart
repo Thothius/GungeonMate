@@ -262,7 +262,8 @@ class _FontTile extends StatelessWidget {
               child: GoopText(
                 role,
                 style: TextStyle(
-                  fontSize: 8,
+                  // U-035: 8px role tag bumped to the readable floor.
+                  fontSize: 9,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.0,
                   color:
