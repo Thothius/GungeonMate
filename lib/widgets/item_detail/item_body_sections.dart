@@ -474,7 +474,7 @@ mixin _ItemBodySections on StatelessWidget {
           ),
           const SizedBox(height: 6),
           GoopText(
-            'Note: Adjusting Spice count automatically syncs Curse to your active run (+0.5 for 1st use, +1.0 for each additional use).',
+            'Note: Adjusting Spice count automatically syncs Curse to your active run (+0.5 for 1st use, +1.0 for each additional use). Effect totals are approximate.',
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontStyle: FontStyle.italic,
