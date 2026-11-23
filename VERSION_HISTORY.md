@@ -21,6 +21,10 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **RESET ALL DATA (U-026)** — now tears down MP, resets every in-memory store to factory defaults, clears prefs, rehydrates, and lands on the main menu instead of stranding on character select with stale state.
 - **Dev Tools dead end (U-027)** — the DEV TOOLS section only renders while a run is active, so the special-items grid can never open without a run to modify.
 - **Tools-sheet grab-bag (U-031)** — Customization/Quiz/Bug/Settings now sit under an APP label and End Run under DANGER.
+- **Item-detail header overflow (U-025)** — badge cluster scales down on narrow phones instead of overflowing ~47px.
+- **Ammonomicon grouping (U-030)** — categories now carry LIVING WORLD / ARMORY / CODEX / STRUCTURE eyebrows in the overview grid and jump strip.
+- **LEB marching-ants honors reduced-motion (U-029)** — the ghost-row ticker freezes when the platform asks for reduced animations.
+- **Browse Robot badges de-fragiled (U-032)** — GOD TIER / CONVERTS TO ARMOR / DEAD WEIGHT keyword lists centralized into one const source.
 
 ### Internal
 - Dead data/assets culled (`floors.json`, `chests.json`, `changelog.json`, old font files); Gradle wrapper 9.3.1→9.8.0; test coverage 48%→~63%+.
