@@ -273,21 +273,21 @@ class _EffectChip extends StatelessWidget {
     return Tooltip(
       message: chip.tag.blurb,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+        padding: ChipStyle.paddingMicro,
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.all(Radii.md),
+          borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
           border: Border.all(color: color.withValues(alpha: 0.45), width: 0.7),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(chip.tag.icon, color: color, size: 12.5),
+            Icon(chip.tag.icon, color: color, size: ChipStyle.icon),
             const SizedBox(width: 3),
             GoopText(
               chip.tag.label,
               style: TextStyle(
-                fontSize: 11.5 * Responsive.factor(context),
+                fontSize: FontSizes.chip * Responsive.factor(context),
                 fontWeight: FontWeight.w700,
                 color: color,
                 letterSpacing: 0.2,
@@ -298,7 +298,7 @@ class _EffectChip extends StatelessWidget {
               GoopText(
                 value,
                 style: TextStyle(
-                  fontSize: 11.5 * Responsive.factor(context),
+                  fontSize: FontSizes.chip * Responsive.factor(context),
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
@@ -309,7 +309,7 @@ class _EffectChip extends StatelessWidget {
               GoopText(
                 '×${chip.sourceCount}',
                 style: TextStyle(
-                  fontSize: 10.5 * Responsive.factor(context),
+                  fontSize: FontSizes.chipMicro * Responsive.factor(context),
                   fontWeight: FontWeight.w700,
                   color: Colors.white.withValues(alpha: 0.7),
                 ),
@@ -334,10 +334,10 @@ class _RobotDmgBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final pct = boost.toStringAsFixed(0);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      padding: ChipStyle.paddingMicro,
       decoration: BoxDecoration(
         color: AppTheme.flair.scaffold,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
         border: Border.all(
           color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.4),
           width: 0.8,

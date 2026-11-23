@@ -13,6 +13,7 @@ import 'compact_dashboards.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
 import '../skeuo/skeuo_tokens.dart';
+import '../../theme/tokens.dart';
 
 // Special Dashboard Tab System — swipeable panels with tappable tab chips
 // =============================================================================
@@ -461,7 +462,7 @@ class DashboardTabChip extends StatelessWidget {
             GoopText(
               tab.label,
               style: TextStyle(
-                fontSize: 12.5 * Responsive.factor(context),
+                fontSize: FontSizes.chipStrong * Responsive.factor(context),
                 fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
                 color: isActive ? color : color.withValues(alpha: 0.6),
                 letterSpacing: 0.3,

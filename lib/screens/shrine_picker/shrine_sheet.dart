@@ -289,7 +289,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 14, color: Skeuo.inkIf(Colors.amber)),
+        Icon(icon, size: ChipStyle.icon, color: Skeuo.inkIf(Colors.amber)),
         const SizedBox(width: 6),
         GoopText(
           title,

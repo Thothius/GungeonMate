@@ -33,14 +33,11 @@ class _StatDeltaChipsState extends State<StatDeltaChips> {
             children: [
               for (final d in widget.deltas)
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2.5,
-                  ),
+                  padding: ChipStyle.paddingMicro,
                   decoration: BoxDecoration(
                     color: (d.improved ? Colors.greenAccent : Colors.redAccent)
                         .withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
                     border: Border.all(
                       color: (d.improved
                               ? Colors.greenAccent
@@ -131,13 +128,10 @@ class SynergyMetaChips extends StatelessWidget {
                 Tooltip(
                   message: q.note.isEmpty ? q.stat : q.note,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2.5,
-                    ),
+                    padding: ChipStyle.paddingMicro,
                     decoration: BoxDecoration(
                       color: _qbColor(q.dir).withValues(alpha: 0.10),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
                       border: Border.all(
                         color: _qbColor(q.dir).withValues(alpha: 0.35),
                         width: 0.7,
@@ -164,13 +158,10 @@ class SynergyMetaChips extends StatelessWidget {
             children: [
               for (final tag in m.fx.take(_maxFx))
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 1.5,
-                  ),
+                  padding: ChipStyle.paddingMicro,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
                     border: Border.all(
                       color: Colors.white.withValues(alpha: 0.14),
                       width: 0.6,
@@ -226,10 +217,10 @@ class SynergyMetaChips extends StatelessWidget {
     return Tooltip(
       message: tip,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        padding: ChipStyle.paddingMicro,
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
           border: Border.all(color: color.withValues(alpha: 0.4), width: 0.7),
         ),
         child: GoopText(

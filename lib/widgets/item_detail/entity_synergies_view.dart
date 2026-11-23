@@ -390,10 +390,10 @@ class _OwnerPill extends StatelessWidget {
             ? Skeuo.inkIf(Colors.orangeAccent)
             : Skeuo.inkIf(Colors.lightGreenAccent);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: ChipStyle.paddingMicro,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: GoopText(

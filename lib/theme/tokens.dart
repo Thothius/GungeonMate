@@ -77,6 +77,34 @@ abstract final class FontSizes {
   static const double displaySmall = 32;
 }
 
+/// Chip / tag / badge geometry — shared presets so pill widgets stop
+/// hardcoding their own padding, icon sizes, and micro radii.
+///
+/// Pairing convention: `chipMicro` labels sit with `iconMicro` and
+/// `paddingMicro`; `chip`/`chipStrong` labels sit with `icon` and
+/// `padding`. Standard-size chips keep `flair.chipRadius` (theme-owned)
+/// or a deliberate pill radius — only micro tags use `radiusMicro`.
+abstract final class ChipStyle {
+  /// Tighter padding for micro tags (fx tags, owner pills, delta chips).
+  static const EdgeInsets paddingMicro = EdgeInsets.symmetric(
+    horizontal: 6,
+    vertical: 2,
+  );
+
+  /// Standard chip padding (label chips, delta values, section chips).
+  static const EdgeInsets padding = EdgeInsets.symmetric(
+    horizontal: 10,
+    vertical: 5,
+  );
+
+  /// Icon sizes paired with the chip font sizes.
+  static const double iconMicro = 12;
+  static const double icon = 14;
+
+  /// Radius for micro tags only.
+  static const double radiusMicro = 6;
+}
+
 /// Type scale — deliberate sizes, heights, and letter-spacings.
 ///
 /// These are **colorless** TextStyle templates. Color is applied at use

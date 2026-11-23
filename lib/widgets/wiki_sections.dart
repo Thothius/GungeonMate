@@ -291,7 +291,7 @@ class _ShowMoreChip extends StatelessWidget {
             children: [
               Icon(
                 collapse ? Icons.expand_less : Icons.expand_more,
-                size: 14,
+                size: ChipStyle.icon,
                 color: Skeuo.inkIf(
                   Colors.lightBlueAccent,
                 ).withValues(alpha: 0.85),

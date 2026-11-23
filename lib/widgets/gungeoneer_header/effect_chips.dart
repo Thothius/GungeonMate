@@ -73,12 +73,12 @@ class _EffectChipsWrapState extends State<_EffectChipsWrap> {
               _isExpanded = !_isExpanded;
             });
           },
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+            padding: ChipStyle.paddingMicro,
             decoration: BoxDecoration(
               color: flair.primary.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
               border: Border.all(
                 color: flair.primary.withValues(alpha: 0.45),
                 width: 1.0,
@@ -92,13 +92,13 @@ class _EffectChipsWrapState extends State<_EffectChipsWrap> {
                       ? Icons.expand_less_rounded
                       : Icons.expand_more_rounded,
                   color: flair.headlineStat,
-                  size: 13,
+                  size: ChipStyle.iconMicro,
                 ),
                 const SizedBox(width: 3),
                 GoopText(
                   _isExpanded ? 'COLLAPSE' : '+$hiddenCount MORE',
                   style: TextStyle(
-                    fontSize: 10.5 * Responsive.factor(context),
+                    fontSize: FontSizes.chip * Responsive.factor(context),
                     fontWeight: FontWeight.w900,
                     color: flair.headlineStat,
                     letterSpacing: 0.5,

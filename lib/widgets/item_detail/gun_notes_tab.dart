@@ -97,7 +97,7 @@ class _ElementChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: ChipStyle.padding,
       decoration: BoxDecoration(
         color: kind.color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.all(Radii.sm),
@@ -109,7 +109,7 @@ class _ElementChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(kind.icon, size: 14, color: kind.color),
+          Icon(kind.icon, size: ChipStyle.icon, color: kind.color),
           const SizedBox(width: 5),
           GoopText(
             kind.label,

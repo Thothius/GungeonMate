@@ -270,10 +270,10 @@ class StatPill extends StatelessWidget {
           if (chestRank != null) ...[
             const SizedBox(width: 6),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+              padding: ChipStyle.paddingMicro,
               decoration: BoxDecoration(
                 color: (chestColor ?? Colors.white24).withValues(alpha: 0.22),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
                 border: Border.all(
                   color: (chestColor ?? Colors.white24).withValues(alpha: 0.7),
                   width: 0.7,

@@ -371,10 +371,10 @@ class _TypePill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      padding: ChipStyle.paddingMicro,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
         border: Border.all(color: color.withValues(alpha: 0.55), width: 0.7),
       ),
       child: GoopText(

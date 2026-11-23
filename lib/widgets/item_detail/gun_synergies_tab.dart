@@ -813,13 +813,10 @@ class _GhostSynergyRow extends StatelessWidget {
                             'May have extra requirements under '
                             "Lich's Eye Bullets",
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
+                          padding: ChipStyle.paddingMicro,
                           decoration: BoxDecoration(
                             color: Colors.amber.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
                             border: Border.all(
                               color: Colors.amber.withValues(alpha: 0.5),
                             ),
@@ -881,10 +878,10 @@ class _LebPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Skeuo.inkIf(const Color(0xFFB388FF));
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: ChipStyle.paddingMicro,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: GoopText(

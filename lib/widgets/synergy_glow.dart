@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../theme/tokens.dart';
 
 // =============================================================================
 // Synergy glow — CustomPainter border + soft outer glow.
@@ -173,7 +174,7 @@ class SynergyBadge extends StatelessWidget {
       ),
       child: const Icon(
         Icons.keyboard_double_arrow_up_rounded,
-        size: 11,
+        size: ChipStyle.iconMicro,
         color: Color(0xFF4FC3F7),
       ),
     );

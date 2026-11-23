@@ -410,7 +410,7 @@ class _ElementDot extends StatelessWidget {
             width: 1.0,
           ),
         ),
-        child: Icon(kind.icon, size: 15, color: kind.color),
+        child: Icon(kind.icon, size: ChipStyle.icon, color: kind.color),
       ),
     );
   }
@@ -430,7 +430,7 @@ class _TagChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: ChipStyle.padding,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.all(Radii.sm),
@@ -439,7 +439,7 @@ class _TagChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: color),
+          Icon(icon, size: ChipStyle.icon, color: color),
           const SizedBox(width: 5),
           GoopText(
             label,
@@ -472,7 +472,7 @@ class MetadataChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: ChipStyle.padding,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -481,7 +481,7 @@ class MetadataChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: color),
+          Icon(icon, size: ChipStyle.icon, color: color),
           if (label.isNotEmpty) ...[
             const SizedBox(width: 5),
             GoopText(
@@ -542,7 +542,7 @@ class _ChestChip extends StatelessWidget {
     final accent = isS ? const Color(0xFFFFD700) : color;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: ChipStyle.padding,
       decoration: BoxDecoration(
         color: accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
@@ -569,7 +569,7 @@ class _ChestChip extends StatelessWidget {
         children: [
           Icon(
             Icons.inventory_2_outlined,
-            size: 14,
+            size: ChipStyle.icon,
             color: isS ? accent : color,
           ),
           const SizedBox(width: 5),

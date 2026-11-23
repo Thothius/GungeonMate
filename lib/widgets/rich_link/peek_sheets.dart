@@ -417,7 +417,7 @@ class _ShrineDeltaChip extends StatelessWidget {
             ? value.toStringAsFixed(0)
             : value.toStringAsFixed(1);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: ChipStyle.padding,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.all(Radii.sm),
