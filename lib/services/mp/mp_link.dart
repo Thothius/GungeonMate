@@ -5,6 +5,7 @@ import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../models/multiplayer_messages.dart';
+import 'mp_handshake_gate.dart';
 import 'mp_transport.dart';
 
 export 'mp_transport.dart'
@@ -75,12 +76,11 @@ class MpLink implements MpTransport {
   /// silently abort the pending connection on some Android devices.
   bool _connectionInFlight = false;
 
-  /// Endpoints currently mid-handshake (initiated but no result yet).
-  /// Guards the accept window: a second initiator arriving before the
-  /// first CONNECTED result would be natively accepted, then dropped
-  /// by the _endpointId guard in _onConnectionResult — leaving a
-  /// phantom pairing on the peer's side.
-  final Set<String> _initiatedIds = {};
+  /// Handshake-window guard — decides accept/reject/teardown for
+  /// incoming initiations and results. Pure logic lives in
+  /// [MpHandshakeGate] so it's unit-testable without the Nearby
+  /// singleton; this class performs the side effects.
+  final MpHandshakeGate _handshake = MpHandshakeGate();
 
   /// Discovered endpoints (live list for Sidekick UI).
   final Map<String, MpEndpoint> _endpoints = {};
@@ -353,7 +353,7 @@ class MpLink implements MpTransport {
     _staleCleanupTimer = null;
     _endpoints.clear();
     _connectionRequestIds.clear();
-    _initiatedIds.clear();
+    _handshake.clear();
     _connectionInFlight = false;
     onEndpointsChanged?.call(discoveredEndpoints);
     if (_advertising) {
@@ -379,7 +379,7 @@ class MpLink implements MpTransport {
     } catch (_) {}
     _endpointId = null;
     _connectionRequestIds.clear();
-    _initiatedIds.clear();
+    _handshake.clear();
     _connectionInFlight = false;
     _stopHeartbeat();
     _discoveryOffTimer?.cancel();
@@ -444,7 +444,7 @@ class MpLink implements MpTransport {
           final id = _endpointId;
           _endpointId = null;
           _connectionRequestIds.clear();
-          _initiatedIds.clear();
+          _handshake.clear();
           _connectionInFlight = false;
           _resetHealth();
           if (id != null) {
@@ -535,31 +535,27 @@ class MpLink implements MpTransport {
   }
 
   void _onConnectionInitiated(String id, ConnectionInfo info) {
-    // Guard: reject if already connected to another peer — actively,
-    // so the initiator isn't left hanging on the native side.
-    if (_endpointId != null && _endpointId != id) {
-      unawaited(_nearby.rejectConnection(id).catchError((Object _) => false));
-      return;
+    switch (_handshake.onInitiated(id, _endpointId)) {
+      case MpInitiatedVerdict.rejectOtherConnected:
+      case MpInitiatedVerdict.rejectHandshakeInFlight:
+        // Actively reject so the initiator isn't left hanging on the
+        // native side.
+        unawaited(_nearby.rejectConnection(id).catchError((Object _) => false));
+        return;
+      case MpInitiatedVerdict.accept:
+        break;
     }
-    // Guard: one handshake at a time. A second initiator arriving while
-    // the first is mid-accept would otherwise be natively connected and
-    // then dropped by the result guard below — a phantom pairing.
-    if (_initiatedIds.isNotEmpty && !_initiatedIds.contains(id)) {
-      unawaited(_nearby.rejectConnection(id).catchError((Object _) => false));
-      return;
-    }
-    _initiatedIds.add(id);
     // Handshake-stall guard — if no result ever arrives for this
     // endpoint, evict it after 20s so the accept gate un-wedges.
     Timer(const Duration(seconds: 20), () {
-      if (_endpointId != id) _initiatedIds.remove(id);
+      _handshake.evictStale(id, _endpointId);
     });
     // Auto-accept — both users already chose to play.
     unawaited(
       _nearby
           .acceptConnection(id, onPayLoadRecieved: _onPayloadReceived)
           .catchError((Object e) {
-            _initiatedIds.remove(id);
+            _handshake.onEndpointGone(id);
             onError?.call('acceptConnection failed: $e');
             return false;
           }),
@@ -568,13 +564,13 @@ class MpLink implements MpTransport {
 
   void _onConnectionResult(String id, Status status) {
     _connectionInFlight = false; // Resume discovery loop if needed.
-    _initiatedIds.remove(id);
+    _handshake.onResult(id);
     switch (status) {
       case Status.CONNECTED:
         // Guard: don't overwrite an existing active connection — tear
         // the phantom down so the peer doesn't sit "connected" with no
         // Dart-side state behind it.
-        if (_endpointId != null && _endpointId != id) {
+        if (_handshake.resultDisconnectsPhantom(id, _endpointId)) {
           unawaited(
             _nearby.disconnectFromEndpoint(id).catchError((Object _) {}),
           );
@@ -628,7 +624,7 @@ class MpLink implements MpTransport {
   void _onDisconnected(String id) {
     // Clean up pending connection state even if this wasn't the
     // active endpoint (e.g. a handshake that never completed).
-    _initiatedIds.remove(id);
+    _handshake.onEndpointGone(id);
     _connectionRequestIds.remove(id);
     if (_connectionRequestIds.isEmpty) {
       _connectionInFlight = false;
