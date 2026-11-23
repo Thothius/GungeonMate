@@ -20,6 +20,8 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **MP social layer disabled** — emotes (kiss/slap) and surprises (6 presets + custom) are off behind `kMpSocialEnabled = false`: send UI hidden, incoming messages dropped at dispatch. Dice challenges unaffected. Flip the const to re-enable.
 
 ### Fixed
+- **Item-detail header declutter (U-033)** — the three-icon action cluster (codex bookmark + bug report + favourite heart) collapsed into one overflow menu with explicit labels; the two favourite systems are now self-describing.
+- **Item-detail header order unified (U-034)** — item variant now reads badge row → name → icon → tags, matching the gun variant.
 - **RESET ALL DATA (U-026)** — now tears down MP, resets every in-memory store to factory defaults, clears prefs, rehydrates, and lands on the main menu instead of stranding on character select with stale state.
 - **Dev Tools dead end (U-027)** — the DEV TOOLS section only renders while a run is active, so the special-items grid can never open without a run to modify.
 - **Tools-sheet grab-bag (U-031)** — Customization/Quiz/Bug/Settings now sit under an APP label and End Run under DANGER.
