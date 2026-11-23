@@ -14,15 +14,14 @@ class AllSynergiesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
-    final ownedList = p.runState.allItemNames;
-    final owned = ownedList.map((n) => n.toLowerCase()).toSet();
+    final owned = p.ownedNamesLowerCombined;
     final all = p.allSynergies;
 
     final active = <Synergy>[];
     final partial = <Synergy>[];
     final locked = <Synergy>[];
     for (final s in all) {
-      if (s.matchesItems(ownedList)) {
+      if (s.matchesOwnedSet(owned)) {
         active.add(s);
       } else if (s.items.any((i) => owned.contains(i.toLowerCase())) ||
           (s.anyOf.isNotEmpty &&

@@ -74,10 +74,9 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
 
   List<SynergyStatus> _statusesFor(
     RunProvider p,
-    List<String> ownedNames, {
+    Set<String> ownedLower, {
     bool perPlayerActive = false,
   }) {
-    final ownedLower = ownedNames.map((n) => n.toLowerCase()).toSet();
     final coop = p.runState.coop;
     return p
         .getSynergiesFor(widget.currentName)
@@ -89,10 +88,10 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
             // combined-inventory "active" would mark split pieces as
             // complete when neither player actually has the synergy.
             active: perPlayerActive
-                ? (s.matchesItems(p.runState.main.allItemNames) ||
+                ? (s.matchesOwnedSet(p.ownedNamesLowerMain) ||
                       (coop != null &&
-                          s.matchesItems(coop.allItemNames)))
-                : s.matchesItems(ownedNames),
+                          s.matchesOwnedSet(p.ownedNamesLowerCoop)))
+                : s.matchesOwnedSet(ownedLower),
           ),
         )
         .toList()
@@ -117,11 +116,10 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
     Widget? flatBody;
     // Solo + no LEB → nothing to page between; render the flat list.
     if (pages.length == 1) {
-      final owned = p.runState.allItemNames;
       flatBody = EntitySynergiesView(
-        statuses: _statusesFor(p, owned),
+        statuses: _statusesFor(p, p.ownedNamesLowerCombined),
         currentName: widget.currentName,
-        ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
+        ownedLower: p.ownedNamesLowerCombined,
       );
     }
 
@@ -184,8 +182,10 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
       case 'P2':
         final owned =
             key == 'P1'
-                ? p.runState.main.allItemNames
-                : (p.runState.coop?.allItemNames ?? const <String>[]);
+                ? p.ownedNamesLowerMain
+                : (p.runState.coop == null
+                      ? const <String>{}
+                      : p.ownedNamesLowerCoop);
         if (owned.isEmpty) {
           return _EmptyPlayerNote(label: key);
         }
@@ -193,16 +193,19 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
           EntitySynergiesView(
             statuses: _statusesFor(p, owned),
             currentName: widget.currentName,
-            ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
+            ownedLower: owned,
           ),
         );
       default:
-        final owned = p.runState.allItemNames;
         return _scrollable(
           EntitySynergiesView(
-            statuses: _statusesFor(p, owned, perPlayerActive: hasCoop),
+            statuses: _statusesFor(
+              p,
+              p.ownedNamesLowerCombined,
+              perPlayerActive: hasCoop,
+            ),
             currentName: widget.currentName,
-            ownedLower: owned.map((n) => n.toLowerCase()).toSet(),
+            ownedLower: p.ownedNamesLowerCombined,
           ),
         );
     }

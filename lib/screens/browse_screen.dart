@@ -733,18 +733,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
   /// complete (or extend) a synergy given BOTH players' inventories.
   /// Sorted by completions desc, then quality, then name.
   Widget _synergyCandidatesList(RunProvider p) {
-    final combined = <String>{
-      ...p.runState.main.allItemNames.map((n) => n.toLowerCase()),
-      if (p.runState.coop != null)
-        ...p.runState.coop!.allItemNames.map((n) => n.toLowerCase()),
-    };
+    final combined = p.ownedNamesLowerCombined;
     final coop = p.runState.coop;
-    final mainNames =
-        p.runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
-    final coopNames =
-        coop == null
-            ? const <String>{}
-            : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final mainNames = p.ownedNamesLowerMain;
+    final coopNames = p.ownedNamesLowerCoop;
 
     // Candidate scan is O(guns+items × synergies) — memoize on the
     // inventory+query signature so rebuilds (notifyListeners, tab swaps)

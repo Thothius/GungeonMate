@@ -141,6 +141,34 @@ mixin _SynergyQueries on ChangeNotifier {
   Set<String> get currentOwnedLower =>
       Set.unmodifiable(_ownedLowerFor(PlayerSlot.main));
 
+  /// Cached lowercase owned-name sets (L7) — stable instances until the
+  /// inventory signature changes. Public so screens stop rebuilding
+  /// `allItemNames.map(toLowerCase).toSet()` in every build().
+  Set<String> get ownedNamesLowerMain =>
+      Set.unmodifiable(_ownedLowerFor(PlayerSlot.main));
+  Set<String> get ownedNamesLowerCoop =>
+      Set.unmodifiable(_ownedLowerFor(PlayerSlot.coop));
+
+  Set<String>? _combinedOwned;
+  Set<String>? _combinedMain;
+  Set<String>? _combinedCoop;
+
+  /// Union of both players' owned names (== main set when solo).
+  Set<String> get ownedNamesLowerCombined {
+    final m = _ownedLowerFor(PlayerSlot.main);
+    final c = _ownedLowerFor(PlayerSlot.coop);
+    if (_combinedOwned != null &&
+        identical(_combinedMain, m) &&
+        identical(_combinedCoop, c)) {
+      return _combinedOwned!;
+    }
+    final out = c.isEmpty ? m : <String>{...m, ...c};
+    _combinedOwned = out;
+    _combinedMain = m;
+    _combinedCoop = c;
+    return Set.unmodifiable(out);
+  }
+
   List<ItemSynergies> getSynergiesByInventory() {
     final lowerNames = _ownedLowerFor(PlayerSlot.main);
     final result = <ItemSynergies>[];
