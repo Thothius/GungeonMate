@@ -45,7 +45,7 @@ void main() {
     MpPause: <String>{},
     MpResume: <String>{},
     MpSessionMeta: {'runTitle', 'sessionNumber', 'paused'},
-    MpSurprise: {'preset', 'text', 'spriteKey', 'fx'},
+    MpSurprise: {'preset', 'text', 'spriteKey', 'sprite', 'fx'},
     MpPeerEdit: {'op', 'kind', 'name'},
   };
 

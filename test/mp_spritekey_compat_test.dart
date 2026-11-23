@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/models/multiplayer_messages.dart';
 
-/// L2-1 — old-peer wire compatibility fixture for MpSurprise.
+/// L2-1 + S4.4 — old-peer wire compatibility fixture for MpSurprise.
 ///
 /// History: the sprite field was renamed `sprite` → `spriteKey` and `fx`
-/// was added. New builds read BOTH keys (`spriteKey ?? sprite`), so
-/// old→new works. New→old cannot be fixed client-side (old builds only
-/// read `sprite`), but this fixture pins exactly what an old peer sees
-/// so the skew is a documented, tested behavior — not a surprise.
+/// was added. New builds dual-write BOTH keys so old peers (which only
+/// read `sprite`) still receive the sprite, and read `spriteKey ??
+/// sprite` so old→new works too. These fixtures pin both directions.
 void main() {
   Map<String, dynamic> newPeerPayload() {
     // What a current build puts on the wire (encode() injects 'type').
@@ -20,7 +19,7 @@ void main() {
     return {'type': m.type, ...m.toJson()};
   }
 
-  test('old peer (reads only `sprite`) loses spriteKey but keeps text/preset',
+  test('old peer (reads only `sprite`) still gets the sprite via dual-write',
       () {
     final j = newPeerPayload();
 
@@ -34,8 +33,9 @@ void main() {
 
     expect(oldDecoded.preset, 'custom');
     expect(oldDecoded.text, 'gm');
-    // The documented skew: custom sprite silently drops on old peers.
-    expect(oldDecoded.sprite, '');
+    // S4.4 dual-write: the sprite survives the new→old direction.
+    expect(oldDecoded.sprite, 'gun_unicorn_horn');
+    // fx remains wire-additive — old peers ignore the unknown key.
   });
 
   test('new peer reads legacy `sprite` key (old→new direction)', () {

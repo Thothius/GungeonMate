@@ -545,7 +545,13 @@ final class MpSurprise extends MpMessage {
   Map<String, dynamic> toJson() => {
     'preset': preset,
     if (text.isNotEmpty) 'text': text,
-    if (spriteKey.isNotEmpty) 'spriteKey': spriteKey,
+    if (spriteKey.isNotEmpty) ...{
+      'spriteKey': spriteKey,
+      // Dual-write the legacy key — pre-rename builds only read
+      // 'sprite', so without this a custom sprite silently drops on
+      // old peers (S4.4). New peers prefer 'spriteKey'.
+      'sprite': spriteKey,
+    },
     if (fx.isNotEmpty) 'fx': fx,
   };
 
