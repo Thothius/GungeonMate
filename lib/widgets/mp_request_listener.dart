@@ -62,50 +62,61 @@ class _MpRequestListenerState extends State<MpRequestListener> {
       context: context,
       barrierDismissible: false,
       builder:
-          (dialogCtx) => AlertDialog(
-            backgroundColor: AppTheme.flair.card,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(
-                color: AppTheme.flair.primary.withValues(alpha: 0.3),
-                width: 1.5,
+          (dialogCtx) => PopScope(
+            // barrierDismissible:false blocks taps, but Android system
+            // back still pops the route — treat that as DENY so the
+            // peer isn't left waiting on the 30s timeout (U-041).
+            canPop: true,
+            onPopInvokedWithResult: (didPop, _) {
+              if (didPop && session.pendingRequest?.reqId == req.reqId) {
+                session.respondToPendingRequest(false);
+              }
+            },
+            child: AlertDialog(
+              backgroundColor: AppTheme.flair.card,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: AppTheme.flair.primary.withValues(alpha: 0.3),
+                  width: 1.5,
+                ),
               ),
-            ),
-            icon: const Icon(Icons.swap_horiz, size: 32),
-            title: GoopText(
-              '$peerName wants ${req.name}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            content: GoopText(
-              'Send your ${req.kind == 'gun' ? 'gun' : 'item'} '
-              '"${req.name}" to $peerName?',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(dialogCtx);
-                  // Guard: only respond if this is still the current request.
-                  if (session.pendingRequest?.reqId == req.reqId) {
-                    session.respondToPendingRequest(false);
-                  }
-                },
-                child: const GoopText('Deny'),
+              icon: const Icon(Icons.swap_horiz, size: 32),
+              title: GoopText(
+                '$peerName wants ${req.name}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              FilledButton.icon(
-                icon: const Icon(Icons.check, size: 18),
-                label: const GoopText('Send'),
-                onPressed: () {
-                  Navigator.pop(dialogCtx);
-                  // Guard: only respond if this is still the current request.
-                  if (session.pendingRequest?.reqId == req.reqId) {
-                    session.respondToPendingRequest(true);
-                  }
-                },
+              content: GoopText(
+                'Send your ${req.kind == 'gun' ? 'gun' : 'item'} '
+                '"${req.name}" to $peerName?',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(dialogCtx);
+                    // Guard: only respond if this is still the current request.
+                    if (session.pendingRequest?.reqId == req.reqId) {
+                      session.respondToPendingRequest(false);
+                    }
+                  },
+                  child: const GoopText('Deny'),
+                ),
+                FilledButton.icon(
+                  icon: const Icon(Icons.check, size: 18),
+                  label: const GoopText('Send'),
+                  onPressed: () {
+                    Navigator.pop(dialogCtx);
+                    // Guard: only respond if this is still the current request.
+                    if (session.pendingRequest?.reqId == req.reqId) {
+                      session.respondToPendingRequest(true);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
     ).whenComplete(() {
       _dialogShowing = false;

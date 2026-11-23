@@ -8,6 +8,7 @@ import '../../models/player.dart' show PlayerSlot;
 import '../../providers/run_provider.dart';
 import '../../screens/ammonomicon_screen.dart';
 import '../active_run/cool_curse_sheet.dart';
+import '../../screens/cool_curse_screen.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
@@ -141,14 +142,19 @@ class ParadoxPlayerPanel extends StatelessWidget {
                 child: Row(
                   children: [
                     // Avatar tap opens the surprise composer (chat removed).
-                    // COOL
+                    // COOL — tap: quick sheet, long-press: full explainer
+                    // (parity with the solo header capsules).
                     _PanelStat(
                       label: 'COOL',
                       value: p.runState.totalCoolness.toStringAsFixed(0),
                       color: StatColors.cool,
                       sf: sf,
-                      onTap:
-                          () => CoolCurseSheet.show(context, isCool: true),
+                      onTap: () => CoolCurseSheet.show(context, isCool: true),
+                      onLongPress:
+                          () => Navigator.push(
+                            context,
+                            fastRoute(const CoolCurseScreen()),
+                          ),
                     ),
                     // CURSE
                     _PanelStat(
@@ -156,8 +162,12 @@ class ParadoxPlayerPanel extends StatelessWidget {
                       value: p.runState.totalCurse.toStringAsFixed(0),
                       color: StatColors.curse,
                       sf: sf,
-                      onTap:
-                          () => CoolCurseSheet.show(context, isCool: false),
+                      onTap: () => CoolCurseSheet.show(context, isCool: false),
+                      onLongPress:
+                          () => Navigator.push(
+                            context,
+                            fastRoute(const CoolCurseScreen()),
+                          ),
                     ),
                     // SYN — active synergy count (combined)
                     _PanelStat(
@@ -470,12 +480,14 @@ class _PanelStat extends StatelessWidget {
   final Color color;
   final double sf;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   const _PanelStat({
     required this.label,
     required this.value,
     required this.color,
     required this.sf,
     required this.onTap,
+    this.onLongPress,
   });
 
   @override
@@ -483,6 +495,7 @@ class _PanelStat extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 2 * sf),
         padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 5 * sf),

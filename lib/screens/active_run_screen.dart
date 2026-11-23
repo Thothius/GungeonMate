@@ -334,9 +334,15 @@ class _QuickAddSheetState extends State<_QuickAddSheet> {
     if (isMpPeerAdd) {
       mpSession
           .sendAddToPeer(kind: isGun ? 'gun' : 'item', name: name)
-          .then((_) => _showToast('Added: $name'))
+          .then((_) {
+            // Sheet may be dismissed before the Nearby send resolves —
+            // writing _addedToast after dispose crashes.
+            if (mounted) _showToast('Added: $name');
+          })
           .catchError((Object _) {
-            _showToast('Could not send - check connection', millis: 2000);
+            if (mounted) {
+              _showToast('Could not send - check connection', millis: 2000);
+            }
           });
     } else {
       if (isGun) {

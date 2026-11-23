@@ -109,7 +109,7 @@ void main() {
     await t.pump(const Duration(seconds: 3));
   });
 
-  testWidgets('banner X cancels the session', (t) async {
+  testWidgets('banner END label cancels the session', (t) async {
     final (s, rp) = makeSession();
     await t.pumpWidget(wrap(s, rp, runBar: false));
     await t.pump();
@@ -121,8 +121,9 @@ void main() {
     await t.pump();
     await t.pump(const Duration(milliseconds: 300));
 
-    // The banner's close icon — last IconButton-ish in the banner row.
-    await t.tap(find.byIcon(Icons.close_rounded));
+    // The banner's explicit END label — destructive, so it gets words
+    // not an ambiguous ✕ glyph (U-038).
+    await t.tap(find.text('END'));
     await t.pump();
     await t.pump(const Duration(milliseconds: 300));
     // cancel() ran → phase leaves disconnected → banner gone.

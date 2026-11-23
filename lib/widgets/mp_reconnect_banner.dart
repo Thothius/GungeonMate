@@ -18,7 +18,8 @@ import '../utils/responsive.dart';
 ///   one signal, no "two bars".
 /// - Otherwise a dismissable modal fires: "Connection lost —
 ///   reconnecting…". DISMISS → closes dialog; a small persistent
-///   banner stays at the top: "Reconnecting… (tap to cancel)".
+///   banner stays at the top: "Reconnecting…" (tap re-opens the
+///   dialog; an explicit END label tears down the session).
 /// - CANCEL RUN → tears down the session.
 /// - Auto-closes when [MpSession.reconnectSuccessNotifier] fires.
 ///
@@ -373,6 +374,9 @@ class _PersistentBanner extends StatelessWidget {
                   },
                 ),
               ),
+              // Explicit END label — the old ✕ icon read as "dismiss
+              // banner" but called session.cancel() (full teardown).
+              // Destructive actions get words, not ambiguous glyphs.
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: onCancel,
@@ -381,10 +385,14 @@ class _PersistentBanner extends StatelessWidget {
                     horizontal: 8 * sf,
                     vertical: 4 * sf,
                   ),
-                  child: Icon(
-                    Icons.close_rounded,
-                    size: 16 * sf,
-                    color: MpColors.reconnecting.withValues(alpha: 0.7),
+                  child: GoopText(
+                    'END',
+                    style: TextStyle(
+                      fontSize: FontSizes.labelSmall * sf,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0,
+                      color: MpColors.danger,
+                    ),
                   ),
                 ),
               ),
