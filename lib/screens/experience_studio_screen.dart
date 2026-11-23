@@ -669,13 +669,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               flair.secondary,
               flair.headlineStat,
             ];
+    final detected = _detectSavedPreset();
     final name =
-        _editingPresetId != null || _presetName.isNotEmpty
+        _presetName.isNotEmpty
             ? _presetName
-            : _previewMode.label;
+            : (detected?.name ?? _previewMode.label);
     final subtitle =
         isCustom
-            ? (_editingPresetId != null ? 'SAVED PRESET' : 'CUSTOM THEME')
+            ? (_editingPresetId != null || detected != null
+                ? 'SAVED PRESET'
+                : 'CUSTOM THEME')
             : '${_previewMode.vibe} · ${_previewMode.elem}';
     return Padding(
       padding: const EdgeInsets.only(top: Insets.md),
@@ -818,6 +821,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   /// Saved preset matching the current look — explicit edit target
   /// first, then a name match against the store so EDIT PRESET also
   /// appears when the look was reached without the edit-pencil.
+  /// Final fallback: the LIVE custom theme's name — a saved preset
+  /// applied app-wide persists its name inside CustomThemeData, so the
+  /// active preset stays editable even when the studio was opened
+  /// fresh (no gallery pick this session).
   SavedCustomTheme? _detectSavedPreset() {
     final themes = CustomThemeStore.themes;
     if (_editingPresetId != null) {
@@ -825,9 +832,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         if (t.id == _editingPresetId) return t;
       }
     }
-    if (_presetName.isEmpty) return null;
+    var name = _presetName;
+    if (name.isEmpty && _previewMode == AppThemeMode.custom) {
+      name = AppTheme.cachedCustomTheme?.name ?? '';
+    }
+    if (name.isEmpty) return null;
     for (final t in themes) {
-      if (t.name.toLowerCase() == _presetName.toLowerCase()) return t;
+      if (t.name.toLowerCase() == name.toLowerCase()) return t;
     }
     return null;
   }
@@ -2936,7 +2947,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   /// Shows "UPDATE PRESET" when editing an existing saved preset.
   Widget _buildSaveStep() {
     final flair = AppTheme.flairFor(_previewMode);
-    final isEditing = _editingPresetId != null;
+    // A saved preset matching the staged look counts as an edit target
+    // even without an explicit pencil pick — the active preset is
+    // always updatable.
+    final detected = _detectSavedPreset();
+    final isEditing = _editingPresetId != null || detected != null;
+    final displayName =
+        _presetName.isNotEmpty ? _presetName : (detected?.name ?? '');
     return ListView(
       padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.lg),
       children: [
@@ -2952,7 +2969,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         const SizedBox(height: 8),
         GoopText(
           isEditing
-              ? '"$_presetName" will be updated in your gallery'
+              ? '"$displayName" will be updated in your gallery'
               : (_presetName.isEmpty
                   ? 'this look will be saved under a name you pick'
                   : '"$_presetName" joins your preset gallery'),
@@ -3026,15 +3043,24 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   /// instead of creating a new one.
   Future<void> _onSavePreset() async {
     var name = _presetName;
+    // No explicit name yet — if the look matches a saved preset (e.g.
+    // the active custom theme), keep its name so SAVE updates it in
+    // place instead of prompting for a duplicate.
+    if (name.isEmpty) {
+      name = _detectSavedPreset()?.name ?? '';
+    }
     if (name.isEmpty) {
       final picked = await _promptPresetName();
       if (picked == null || !mounted) return;
       name = picked;
-      _presetName = name;
     }
+    if (!mounted) return;
+    _presetName = name;
     Haptics.success();
     final isCustom = _previewMode == AppThemeMode.custom;
-    final editingId = _editingPresetId;
+    // Re-detect with the final name — a typed name matching an existing
+    // preset updates it rather than creating a same-name duplicate.
+    final editingId = _editingPresetId ?? _detectSavedPreset()?.id;
     final theme = SavedCustomTheme(
       // Keep the original ID when editing so we overwrite in-place
       id: editingId ?? DateTime.now().millisecondsSinceEpoch.toString(),
