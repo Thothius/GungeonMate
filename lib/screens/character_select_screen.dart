@@ -10,9 +10,11 @@ import '../models/item.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
+import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/scale_button.dart';
+import 'item_detail_screen.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
 
@@ -361,8 +363,10 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
   }
 }
 
-/// One picker page — sprite, name, armor chip, starting loadout with real
-/// icons, short_desc + playstyle. Clean and compact by design.
+/// One picker page — uniform anatomy for every gungeoneer:
+/// sprite + name + armor chip, DESC on top, GUNS | ITEMS side-by-side
+/// (each tile taps through to ItemDetailScreen), then the PLAYSTYLE
+/// card covering the character's inherent traits.
 class _GungeoneerPage extends StatelessWidget {
   final Gungeoneer g;
   final ThemeFlair flair;
@@ -376,9 +380,10 @@ class _GungeoneerPage extends StatelessWidget {
     required this.provider,
   });
 
-  Widget _loadout(String label, List<String> names, bool gun) {
-    if (names.isEmpty) return const SizedBox.shrink();
+  /// One loadout column — label + vertical stack of tappable tiles.
+  Widget _loadoutColumn(String label, List<String> names, bool gun) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: Insets.sm),
@@ -392,99 +397,66 @@ class _GungeoneerPage extends StatelessWidget {
             ),
           ),
         ),
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: Insets.sm,
-          runSpacing: Insets.sm,
-          children: [
-            for (final n in names)
-              Builder(builder: (_) {
-                // Resolve through the provider so the icon + quality ring
-                // match the detail view exactly; 'Random' gets a shuffle
-                // glyph instead of a broken-image fallback.
-                if (n == 'Random') {
-                  return _loadoutChip(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.shuffle,
-                          size: 20,
-                          color: Colors.purpleAccent.withValues(alpha: 0.8),
-                        ),
-                        const SizedBox(width: 6),
-                        GoopText(
-                          n,
-                          style: const TextStyle(
-                            fontSize: FontSizes.labelMedium,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                final resolved = gun
-                    ? provider.gunByName(n)
-                    : provider.itemByName(n);
-                final assetPath =
-                    (resolved is Gun ? resolved.icon : null) ??
-                    (resolved is Item ? resolved.icon : null) ??
-                    (gun ? localGunIcon(n) : localItemIcon(n));
-                final quality =
-                    (resolved is Gun ? resolved.quality : null) ??
-                    (resolved is Item ? resolved.quality : null) ??
-                    '';
-                final exists = assetPath.isNotEmpty;
-                return Opacity(
-                  opacity: exists ? 1.0 : 0.5,
-                  child: _loadoutChip(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GameIcon(assetPath: assetPath, quality: quality, size: 30),
-                        const SizedBox(width: 6),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 180),
-                          child: GoopText(
-                            n,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: FontSizes.labelMedium,
-                              fontWeight: FontWeight.w700,
-                              decoration: exists
-                                  ? null
-                                  : TextDecoration.lineThrough,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+        if (names.isEmpty)
+          _LoadoutTile(
+            name: '—',
+            isGun: gun,
+            provider: provider,
+            flair: flair,
+            empty: true,
+          )
+        else
+          for (final n in names) ...[
+            _LoadoutTile(name: n, isGun: gun, provider: provider, flair: flair),
+            const SizedBox(height: Insets.xs),
           ],
-        ),
       ],
     );
   }
 
-  Widget _loadoutChip({required Widget child}) {
+  /// Section card — label + body text on a tinted panel.
+  Widget _infoCard({
+    required String label,
+    required IconData icon,
+    required String body,
+    required Color accent,
+  }) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Insets.sm,
-        vertical: 6,
-      ),
+      width: double.infinity,
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: flair.card,
-        borderRadius: BorderRadius.all(Radii.sm),
-        border: Border.all(
-          color: flair.primary.withValues(alpha: 0.15),
-          width: 1,
-        ),
+        borderRadius: const BorderRadius.all(Radii.md),
+        border: Border.all(color: accent.withValues(alpha: 0.18), width: 0.8),
       ),
-      child: child,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 14, color: accent.withValues(alpha: 0.8)),
+              const SizedBox(width: 6),
+              GoopText(
+                label,
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.5,
+                  color: accent.withValues(alpha: 0.75),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Insets.sm),
+          GoopText(
+            body,
+            style: const TextStyle(
+              fontSize: FontSizes.bodyMedium,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -501,100 +473,247 @@ class _GungeoneerPage extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Info LEFT, sprite RIGHT — graphic centers against the
-              // metadata block's full height (IntrinsicHeight matches
-              // the row to the taller child).
-              IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GoopText(
-                            g.name.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: FontSizes.titleLarge,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.2,
-                              color: flair.headlineStat,
-                            ),
+              // Header — sprite left, name + armor right.
+              Row(
+                children: [
+                  SizedBox(width: 92, child: Center(child: sprite)),
+                  const SizedBox(width: Insets.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoopText(
+                          g.name.toUpperCase(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: FontSizes.titleLarge,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                            color: flair.headlineStat,
                           ),
-                          if (g.startingArmor > 0)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Insets.sm,
-                                  vertical: 3,
+                        ),
+                        if (g.startingArmor > 0)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Insets.sm,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radii.sm,
                                 ),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                    Radii.sm,
-                                  ),
-                                  border: Border.all(
-                                    color: flair.primary.withValues(alpha: 0.3),
-                                  ),
+                                border: Border.all(
+                                  color: flair.primary.withValues(alpha: 0.3),
                                 ),
-                                child: GoopText(
-                                  '${g.startingArmor} ARMOR',
-                                  style: const TextStyle(
-                                    fontSize: FontSizes.labelSmall,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: 0.5,
-                                  ),
+                              ),
+                              child: GoopText(
+                                '${g.startingArmor} ARMOR',
+                                style: const TextStyle(
+                                  fontSize: FontSizes.labelSmall,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ),
-                          const SizedBox(height: Insets.md),
-                          _loadout('GUNS', g.startingGuns, true),
-                          if (g.startingGuns.isNotEmpty &&
-                              g.startingItems.isNotEmpty)
-                            const SizedBox(height: Insets.sm),
-                          _loadout('ITEMS', g.startingItems, false),
-                        ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: Insets.lg),
+              // DESC — the one-line pitch, always on top.
+              if (g.shortDesc.isNotEmpty)
+                _infoCard(
+                  label: 'DESC',
+                  icon: Icons.description_outlined,
+                  body: g.shortDesc,
+                  accent: flair.primary,
+                ),
+              const SizedBox(height: Insets.md),
+              // Loadout — GUNS and ITEMS side by side, every tile taps
+              // through to the item/gun detail screen.
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: _loadoutColumn('GUNS', g.startingGuns, true),
+                    ),
+                    const SizedBox(width: Insets.md),
+                    Expanded(
+                      child: _loadoutColumn(
+                        'ITEMS',
+                        g.startingItems,
+                        false,
                       ),
                     ),
-                    const SizedBox(width: Insets.lg),
-                    SizedBox(width: 96, child: Center(child: sprite)),
                   ],
                 ),
               ),
-              const SizedBox(height: Insets.lg),
-              Divider(
-                height: 1,
-                thickness: 0.5,
-                color: flair.primary.withValues(alpha: 0.12),
-              ),
-              const SizedBox(height: Insets.md),
-              if (g.shortDesc.isNotEmpty)
-                GoopText(
-                  g.shortDesc,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: FontSizes.bodyMedium,
-                    height: 1.45,
-                  ),
+              if (g.playstyle.isNotEmpty) ...[
+                const SizedBox(height: Insets.md),
+                _infoCard(
+                  label: 'PLAYSTYLE',
+                  icon: Icons.sports_esports_outlined,
+                  body: g.playstyle,
+                  accent: Colors.cyanAccent,
                 ),
-              if (g.playstyle.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: Insets.sm),
-                  child: GoopText(
-                    g.playstyle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: FontSizes.labelMedium,
-                      height: 1.45,
-                      color: flair.primary.withValues(alpha: 0.6),
-                    ),
-                  ),
-                ),
+              ],
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+/// One starting gun/item — icon + name, taps through to
+/// [ItemDetailScreen]. 'Random' renders a non-tappable shuffle tile;
+/// unresolved names dim + strikethrough (same honesty rule as before).
+class _LoadoutTile extends StatelessWidget {
+  final String name;
+  final bool isGun;
+  final RunProvider provider;
+  final ThemeFlair flair;
+
+  /// Renders a muted "no gear" placeholder instead of resolving a name.
+  final bool empty;
+
+  const _LoadoutTile({
+    required this.name,
+    required this.isGun,
+    required this.provider,
+    required this.flair,
+    this.empty = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (empty) {
+      return _box(
+        child: GoopText(
+          'None',
+          style: TextStyle(
+            fontSize: FontSizes.labelMedium,
+            fontWeight: FontWeight.w600,
+            color: Colors.white.withValues(alpha: 0.3),
+          ),
+        ),
+      );
+    }
+    final tile = _tile();
+    if (name == 'Random') return tile;
+
+    final gun = isGun ? provider.gunByName(name) : null;
+    final item = isGun ? null : provider.itemByName(name);
+    final exists = gun != null || item != null;
+    if (!exists) return tile;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Haptics.selection();
+        Navigator.push(
+          context,
+          fastRoute(ItemDetailScreen(gun: gun, item: item)),
+        );
+      },
+      child: tile,
+    );
+  }
+
+  Widget _tile() {
+    if (name == 'Random') {
+      return _box(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.shuffle,
+              size: 18,
+              color: Colors.purpleAccent.withValues(alpha: 0.8),
+            ),
+            const SizedBox(width: 6),
+            Flexible(
+              child: GoopText(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.purpleAccent.withValues(alpha: 0.9),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final resolved = isGun ? provider.gunByName(name) : provider.itemByName(name);
+    final assetPath =
+        (resolved is Gun ? resolved.icon : null) ??
+        (resolved is Item ? resolved.icon : null) ??
+        (isGun ? localGunIcon(name) : localItemIcon(name));
+    final quality =
+        (resolved is Gun ? resolved.quality : null) ??
+        (resolved is Item ? resolved.quality : null) ??
+        '';
+    final exists = assetPath.isNotEmpty || resolved != null;
+    return Opacity(
+      opacity: exists ? 1.0 : 0.5,
+      child: _box(
+        child: Row(
+          children: [
+            GameIcon(assetPath: assetPath, quality: quality, size: 26),
+            const SizedBox(width: 8),
+            Expanded(
+              child: GoopText(
+                name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  fontWeight: FontWeight.w700,
+                  decoration: exists ? null : TextDecoration.lineThrough,
+                ),
+              ),
+            ),
+            if (exists && name != 'Random')
+              Icon(
+                Icons.chevron_right,
+                size: 16,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _box({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.sm,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: flair.card,
+        borderRadius: const BorderRadius.all(Radii.sm),
+        border: Border.all(
+          color: flair.primary.withValues(alpha: 0.18),
+          width: 0.8,
+        ),
+      ),
+      child: child,
     );
   }
 }
