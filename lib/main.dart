@@ -28,12 +28,16 @@ void main() async {
   // Hydrate the user's persisted choices before any UI mounts so the
   // very first frame honours their prefs. Each init() swallows platform
   // failures internally — a broken plugin can't block app startup.
-  await AppTheme.init();
-  await VisualPrefs.init();
-  await ColorFavorites.init();
-  await CustomThemeStore.load();
-  await HomeCustomization.load();
-  await mp_store.MpStore.cleanupOldKeys();
+  // These are independent SharedPreferences reads — run them in
+  // parallel instead of paying N serialized round-trips at launch.
+  await Future.wait([
+    AppTheme.init(),
+    VisualPrefs.init(),
+    ColorFavorites.init(),
+    CustomThemeStore.load(),
+    HomeCustomization.load(),
+    mp_store.MpStore.cleanupOldKeys(),
+  ]);
   // Foreground-service config for persistent MP sessions (Paradox).
   // Registration only — the service starts when a session connects.
   MpForegroundService.init();

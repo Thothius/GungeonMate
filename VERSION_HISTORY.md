@@ -9,6 +9,10 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **Cool/Curse quick-manage sheet** — tapping the COOL or CURSE capsule (solo header or MP panel) now opens a bottom sheet: big live number flanked by −1/−0.5 and +0.5/+1 steppers, per-meter stat readout, a SHRINES lookup shortcut, and on the curse sheet STEAL (+1 curse) / CURSULA BUY (+2.5 curse) actions. Long-press still opens the full Cool & Curse explainer.
 - **Dice system rework — one die, auto-reroll ties** — the 3-dice tap-to-stop duel is gone. One d6 per round: tap ROLL, the die spins ~1s and lands on its own. Solo shows the fate roll instantly; co-op challenges compare single rolls with an obvious YOU/PARTNER victory banner, and ties automatically reroll (round counter on the wire keeps stale results from comparing) until a winner emerges — draws are impossible.
 
+### Performance
+- **Idle ticker fix** — the theme overlay's touch-sparkle ticker repeated at display refresh for the app's entire lifetime even though sparkles exist for under a second per tap. It now stops when the particle list empties and restarts on the next tap — zero visual change, one less permanent vsync wakeup on every screen.
+- **Faster cold start** — the six startup preference hydrations (theme, visual prefs, color favorites, custom-theme store, home customization, MP store cleanup) ran as serialized awaits; they now run in parallel via `Future.wait`. All are independent SharedPreferences reads.
+
 ### Multiplayer hardening (S4)
 - **Mis-pair race fix** — `MpHandshakeGate` extracted + 14 decision tests; concurrent initiations rejected.
 - **Wire compatibility** — `MpSurprise` dual-writes `sprite` + `spriteKey`; shared surprise preset source; `:key:` sprite sender.

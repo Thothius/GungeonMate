@@ -100,7 +100,12 @@ class _ThemeOverlayState extends State<ThemeOverlay>
   }
 
   void _onFrame() {
-    if (_touchParticles.isEmpty) return;
+    if (_touchParticles.isEmpty) {
+      // Idle-stop: the ticker repeats forever otherwise, waking every
+      // frame for the app's lifetime while sparkles live <1s per tap.
+      _touchTicker.stop();
+      return;
+    }
     setState(() {
       for (var i = _touchParticles.length - 1; i >= 0; i--) {
         final p = _touchParticles[i];
@@ -155,6 +160,8 @@ class _ThemeOverlayState extends State<ThemeOverlay>
           );
         }
       });
+      // Restart the idle-stopped ticker for the new burst.
+      if (!_touchTicker.isAnimating) _touchTicker.repeat();
     }
   }
 
