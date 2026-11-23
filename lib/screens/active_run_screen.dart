@@ -282,20 +282,25 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                       ),
                     ),
 
-                    // Header — compact: centered "Tap to add" instruction
-                    // on the same row as a 25%-larger close icon. The old
-                    // title + "ADVANCED LIBRARY" link are gone (v3 cleanup).
+                    // Header — drag handle + balanced top bar: centered
+                    // "Tap to add" hint between symmetric 48px edge slots
+                    // (leading spacer matches the close button's width so
+                    // the title stays optically centered at any text size).
+                    // Hairline divider separates chrome from the results.
                     Row(
                       children: [
-                        const SizedBox(width: 40),
-                        const Expanded(
+                        const SizedBox(width: 48),
+                        Expanded(
                           child: Center(
                             child: GoopText(
                               'Tap to add',
                               style: TextStyle(
                                 fontSize: FontSizes.labelMedium,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white54,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.55),
                                 fontStyle: FontStyle.italic,
                                 letterSpacing: 0.5,
                               ),
@@ -303,16 +308,19 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close,
-                            color: Colors.white54,
-                            size: 25,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.65),
+                            size: 38,
                           ),
                           tooltip: 'Close',
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(
-                            minWidth: 40,
-                            minHeight: 40,
+                            minWidth: 48,
+                            minHeight: 48,
                           ),
                           onPressed: () {
                             FocusManager.instance.primaryFocus?.unfocus();
@@ -322,6 +330,11 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                       ],
                     ),
 
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.white.withValues(alpha: 0.07),
+                    ),
                     const SizedBox(height: 4),
 
                     // Results — one-line rows; the whole row taps to add.
