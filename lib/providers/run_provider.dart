@@ -1245,19 +1245,26 @@ class RunProvider
     ...?_runState.coop?.items,
   ];
 
+  /// Live form-aware DPS for a single gun, resolved against the
+  /// current special-gun tracker states (Gunderfury level, Triple Gun
+  /// form, Evolver stage, Shellegun mode, Chamber Gun floor). Shared
+  /// by the header DPS capsule, the damage breakdown screen, and
+  /// [topGunAcross].
+  double gunDps(Gun g) => g.getDynamicDps(
+    gunderLevel: _gunderfuryLevel,
+    tripleForm: _tripleGunForm,
+    evolverStage: _evolverForm,
+    shellegunMode: _shellegunMode,
+    chamberGunFloor: _chamberGunFloor,
+  );
+
   /// The single highest-DPS gun across the run, and which slot owns it.
   ({Gun gun, PlayerSlot slot})? get topGunAcross {
     Gun? best;
     PlayerSlot? bestSlot;
     double bestDps = -1;
     for (final g in _runState.main.guns) {
-      final dpsVal = g.getDynamicDps(
-        gunderLevel: _gunderfuryLevel,
-        tripleForm: _tripleGunForm,
-        evolverStage: _evolverForm,
-        shellegunMode: _shellegunMode,
-        chamberGunFloor: _chamberGunFloor,
-      );
+      final dpsVal = gunDps(g);
       if (dpsVal > bestDps) {
         bestDps = dpsVal;
         best = g;
@@ -1265,13 +1272,7 @@ class RunProvider
       }
     }
     for (final g in _runState.coop?.guns ?? const <Gun>[]) {
-      final dpsVal = g.getDynamicDps(
-        gunderLevel: _gunderfuryLevel,
-        tripleForm: _tripleGunForm,
-        evolverStage: _evolverForm,
-        shellegunMode: _shellegunMode,
-        chamberGunFloor: _chamberGunFloor,
-      );
+      final dpsVal = gunDps(g);
       if (dpsVal > bestDps) {
         bestDps = dpsVal;
         best = g;

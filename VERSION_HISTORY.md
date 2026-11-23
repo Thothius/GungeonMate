@@ -3,6 +3,7 @@
 Changes landed after the v3.7.0+167 build; no version bump yet.
 
 ### Features
+- **Pinnable dash capsules on the run header** — COOL and CURSE stay fixed; a new "+" capsule opens a picker (ACTIONS: STEAL / USE SHRINE, INFO: SYN / DPS) to pin up to 3 capsules per player, persisted across sessions. STEAL logs a shop steal (+1 curse), USE SHRINE opens the shrine picker, SYN opens the synergies view, and DPS opens a new **Damage Breakdown** screen — every gun's live form-aware DPS (sorted, top gun marked) plus parsed damage modifiers grouped by source item/gun.
 - **33 new avatars** — avatar-base drop folder indexed; `custom_12`–`custom_44` portraits added to the Paradox avatar picker (CUSTOM category), center-cropped to 320×320 webp like the original set.
 - **Continue Run** — launch-restored saves park behind a main-menu offer instead of auto-resuming.
 - **Character select rework** — uniform per-character page with tappable loadout (was lopsided per-mode layouts).

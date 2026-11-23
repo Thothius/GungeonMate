@@ -27,6 +27,9 @@ import '../../screens/item_detail_screen.dart';
 import 'sort_picker.dart';
 import 'starter_hint.dart';
 import '../../screens/all_synergies_screen.dart';
+import '../../screens/damage_breakdown_screen.dart';
+import '../../screens/shrine_picker_screen.dart';
+import 'dash_capsules.dart';
 import '../scale_button.dart';
 import '../../models/multiplayer_messages.dart';
 
@@ -69,6 +72,10 @@ class PlayerPageState extends State<PlayerPage> {
   /// but cheap to defend against).
   bool _sortHydrated = false;
 
+  /// User-pinned dash capsules for this slot (max 3). Hydrated from
+  /// SharedPreferences; the "+" capsule picker mutates + persists.
+  List<DashCapsule> _capsulePins = const <DashCapsule>[];
+
   bool get isMain => widget.slot == PlayerSlot.main;
   PlayerSlot get _slot => widget.slot;
 
@@ -78,6 +85,34 @@ class PlayerPageState extends State<PlayerPage> {
   void initState() {
     super.initState();
     _loadSortPrefs();
+    _loadCapsulePins();
+  }
+
+  Future<void> _loadCapsulePins() async {
+    final pins = await loadDashCapsules(_slot);
+    if (mounted) setState(() => _capsulePins = pins);
+  }
+
+  void _saveCapsulePins(List<DashCapsule> pins) {
+    setState(() => _capsulePins = pins);
+    saveDashCapsules(_slot, pins);
+  }
+
+  void _onDashCapsuleTap(DashCapsule cap, RunProvider p) {
+    Haptics.selection();
+    switch (cap) {
+      case DashCapsule.steal:
+        p.logSteal();
+      case DashCapsule.useShrine:
+        Navigator.push(context, fastRoute(const ShrinePickerScreen()));
+      case DashCapsule.syn:
+        Navigator.push(context, fastRoute(const AllSynergiesScreen()));
+      case DashCapsule.dps:
+        Navigator.push(
+          context,
+          fastRoute(DamageBreakdownScreen(slot: _slot)),
+        );
+    }
   }
 
   Future<void> _loadSortPrefs() async {
@@ -151,12 +186,16 @@ class PlayerPageState extends State<PlayerPage> {
 
         // Identify the highest-DPS gun in this player's loadout so both
         // grid and list views can surface it subtly (gold crown tint).
-        double effectiveDps(Gun g) {
-          if (g.name.toLowerCase() == 'gunderfury') {
-            return g.getDynamicDps(gunderLevel: p.gunderfuryLevel);
-          }
-          return g.dpsValue;
-        }
+        // Live form-aware DPS via the provider — same number the DPS
+        // dash capsule and breakdown screen show.
+        double effectiveDps(Gun g) => p.gunDps(g);
+
+        final topDps =
+            player.guns.isEmpty
+                ? 0.0
+                : player.guns
+                    .map(effectiveDps)
+                    .reduce((a, b) => a > b ? a : b);
 
         final topDpsName =
             player.guns.isEmpty
@@ -235,6 +274,18 @@ class PlayerPageState extends State<PlayerPage> {
                             items: player.items,
                           ),
                           shrinesUsed: state.shrinesUsed,
+                          dashCapsules: _capsulePins,
+                          topGunDps: topDps,
+                          onDashCapsuleTap:
+                              (cap) => _onDashCapsuleTap(cap, p),
+                          onDashCapsulesEdit: () {
+                            Haptics.selection();
+                            showDashCapsulePicker(
+                              context: context,
+                              pinned: _capsulePins,
+                              onChanged: _saveCapsulePins,
+                            );
+                          },
                           // Everything below the capsule row lives INSIDE
                           // the panel: cool/curse stepper (slides out)
                           // then the special-item tracker pills.

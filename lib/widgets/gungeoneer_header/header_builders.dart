@@ -124,22 +124,26 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                               isCurse: true,
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: _buildFlatCapsule(
-                              color:
-                                  widget.activeSynergies > 0
-                                      ? const Color(0xFFFFD740)
-                                      : Colors.white38,
-                              value:
-                                  widget.partialSynergies > 0
-                                      ? '${widget.activeSynergies}|${widget.partialSynergies}'
-                                      : '${widget.activeSynergies}',
-                              label: 'SYN',
-                              onTap: widget.onTapSynergies,
-                              isActive: widget.activeSynergies > 0,
+                          // Pinned dash capsules (STEAL/SHRINE/SYN/DPS)
+                          // followed by the "+" picker capsule.
+                          for (final cap in widget.dashCapsules) ...[
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: _buildDashCapsule(cap),
                             ),
-                          ),
+                          ],
+                          if (widget.onDashCapsulesEdit != null) ...[
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: _buildFlatCapsule(
+                                color: Colors.white38,
+                                value: '',
+                                label: 'ADD',
+                                icon: Icons.add,
+                                onTap: widget.onDashCapsulesEdit,
+                              ),
+                            ),
+                          ],
                           if (trailingWidget != null) ...[
                             const SizedBox(width: 6),
                             trailingWidget,
@@ -309,10 +313,45 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
         : fallback;
   }
 
+  /// One pinned dash capsule — resolves its accent color, live value
+  /// and tap target from the [DashCapsule] kind.
+  Widget _buildDashCapsule(DashCapsule cap) {
+    final spec = cap;
+    final (color, value, isActive) = switch (cap) {
+      DashCapsule.steal => (spec.color, '', true),
+      DashCapsule.useShrine => (spec.color, '', true),
+      DashCapsule.syn => (
+        widget.activeSynergies > 0 ? spec.color : Colors.white38,
+        widget.partialSynergies > 0
+            ? '${widget.activeSynergies}|${widget.partialSynergies}'
+            : '${widget.activeSynergies}',
+        widget.activeSynergies > 0,
+      ),
+      DashCapsule.dps => (
+        widget.topGunDps > 0 ? spec.color : Colors.white38,
+        widget.topGunDps > 0
+            ? widget.topGunDps.toStringAsFixed(
+                widget.topGunDps >= 100 ? 0 : 1,
+              )
+            : '—',
+        widget.topGunDps > 0,
+      ),
+    };
+    return _buildFlatCapsule(
+      color: color,
+      value: value,
+      label: spec.label,
+      icon: cap.isAction ? cap.icon : null,
+      onTap: () => widget.onDashCapsuleTap?.call(cap),
+      isActive: isActive,
+    );
+  }
+
   Widget _buildFlatCapsule({
     required Color color,
     required String value,
     required String label,
+    IconData? icon,
     VoidCallback? onTap,
     VoidCallback? onLongPress,
     bool isActive = true,
@@ -410,6 +449,13 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
       );
     }
 
+    // Icon-led capsules (actions, "+" picker) swap the numeric value
+    // for a glyph; glow wrappers only apply to cool/curse stats.
+    final Widget lead =
+        icon != null
+            ? Icon(icon, size: 18, color: isActive ? color : Colors.white38)
+            : valueText;
+
     final capsule = Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
       decoration: BoxDecoration(
@@ -432,7 +478,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            valueText,
+            lead,
             const SizedBox(height: 2),
             GoopText(
               label,

@@ -10,6 +10,7 @@ import '../services/goop_talk_engine.dart';
 import '../utils/asset_paths.dart';
 import '../utils/reduce_motion.dart';
 import 'active_run/run_effects_block.dart';
+import 'active_run/dash_capsules.dart';
 import '../utils/responsive.dart';
 
 part 'gungeoneer_header/header_builders.dart';
@@ -68,6 +69,17 @@ class GungeoneerHeader extends StatefulWidget {
   /// compact tracker panel toggled by the shrine icon.
   final List<String> shrinesUsed;
 
+  /// User-pinned dash capsules (max [kMaxDashCapsules]) rendered after
+  /// COOL/CURSE, followed by a "+" capsule when [onDashCapsulesEdit] is
+  /// set. Each capsule's live value is resolved inside the builder.
+  final List<DashCapsule> dashCapsules;
+  final ValueChanged<DashCapsule>? onDashCapsuleTap;
+  final VoidCallback? onDashCapsulesEdit;
+
+  /// Live DPS of this player's strongest gun — shown on the DPS dash
+  /// capsule. Zero renders a dim capsule.
+  final double topGunDps;
+
   /// Robot damage boost percentage — when > 0, a cyber-styled +DMG%
   /// overlay is shown next to the avatar. Only meaningful for Robot.
   final double robotDamageBoost;
@@ -93,6 +105,10 @@ class GungeoneerHeader extends StatefulWidget {
     this.partialSynergies = 0,
     this.effectChips = const <EffectChip>[],
     this.shrinesUsed = const <String>[],
+    this.dashCapsules = const <DashCapsule>[],
+    this.onDashCapsuleTap,
+    this.onDashCapsulesEdit,
+    this.topGunDps = 0,
     this.robotDamageBoost = 0,
   });
 
