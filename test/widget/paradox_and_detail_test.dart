@@ -55,9 +55,7 @@ void main() {
     t,
   ) async {
     await t.pumpWidget(
-      wrap(
-        const SurpriseOverlayHost(child: Center(child: Text('body'))),
-      ),
+      wrap(const SurpriseOverlayHost(child: Center(child: Text('body')))),
     );
     await t.pump();
     await t.pump(const Duration(milliseconds: 100));
@@ -79,9 +77,7 @@ void main() {
   testWidgets('SurpriseOverlayHost renders custom surprise with sprite', (
     t,
   ) async {
-    await t.pumpWidget(
-      wrap(const SurpriseOverlayHost(child: SizedBox())),
-    );
+    await t.pumpWidget(wrap(const SurpriseOverlayHost(child: SizedBox())));
     await t.pump();
     await t.pump(const Duration(milliseconds: 100));
 

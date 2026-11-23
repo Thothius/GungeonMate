@@ -2062,16 +2062,13 @@ extension AppFontLabel on AppFont {
 
   /// Pubspec-declared bundled family for this font — the exact string
   /// to put in `TextStyle.fontFamily` / `TextTheme.apply`. Google
-  /// Fonts strip spaces ('DM Sans' → 'GoogleFonts.DMSans'); the
-  /// hand-lettered trio uses their plain bundled families.
+  /// Fonts strip spaces ('DM Sans' → 'GoogleFonts.DMSans').
   String get bundledFontFamily {
     return switch (this) {
       AppFont.gungeon => 'EnterTheGungeonBig',
-      AppFont.shantellSans => 'ShantellSans',
-      AppFont.architectsDaughter => 'ArchitectsDaughter',
-      AppFont.patrickHand => 'PatrickHand',
-      // Deprecated members have no bundled TTF — resolve to the
-      // signature face so a missed migrate() still renders real type.
+      // Unoffered members (incl. the hand-lettered trio) have no bundled
+      // TTF — resolve to the signature face so a missed migrate() still
+      // renders real type.
       _ when !AppFontLabel.isOffered(this) => 'EnterTheGungeonBig',
       _ => 'GoogleFonts.${label.replaceAll(' ', '')}',
     };

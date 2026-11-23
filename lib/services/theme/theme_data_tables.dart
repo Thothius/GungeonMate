@@ -815,23 +815,24 @@ List<Color> particleSchemaColors(AppThemeMode mode, int schemaIdx) {
 /// [kGlobalParticlePalettes]; [itemIcon] indexes [kItemIconParticles]
 /// (-1 = typed shapes); [spritePath] non-empty = custom sprite mode
 /// (any bundled gun/item asset) which wins over [itemIcon].
-typedef ParticleLook = ({
-  String name,
-  String blurb,
-  int typeIndex,
-  int schemaIndex,
-  int count,
-  double sizeScale,
-  double opacity,
-  ParticleSpeed speed,
-  GlowEffect glow,
-  bool lineLinks,
-  bool bounce,
-  bool chaos,
-  bool touch,
-  int itemIcon,
-  String spritePath,
-});
+typedef ParticleLook =
+    ({
+      String name,
+      String blurb,
+      int typeIndex,
+      int schemaIndex,
+      int count,
+      double sizeScale,
+      double opacity,
+      ParticleSpeed speed,
+      GlowEffect glow,
+      bool lineLinks,
+      bool bounce,
+      bool chaos,
+      bool touch,
+      int itemIcon,
+      String spritePath,
+    });
 
 /// The 12 hand-crafted looks — each one a deliberately tuned combo of
 /// shape × palette × physics × glow, covering 11 distinct particle

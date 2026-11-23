@@ -37,10 +37,7 @@ class StatsDetailScreen extends StatelessWidget {
         actions: [
           BugReportButton.iconButton(
             context,
-            BugReportContext(
-              kind: BugReportKind.bug,
-              screen: title,
-            ),
+            BugReportContext(kind: BugReportKind.bug, screen: title),
           ),
           if (base != 0)
             IconButton(

@@ -100,9 +100,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     // inventory; `missing`/grouping stay on the combined set so rows
     // still show team progress.
     final runMain = runProvider.ownedNamesLowerMain;
-    final runCoop = runProvider.runState.coop == null
-        ? null
-        : runProvider.ownedNamesLowerCoop;
+    final runCoop =
+        runProvider.runState.coop == null
+            ? null
+            : runProvider.ownedNamesLowerCoop;
     final synergyStatuses =
         runProvider
             .getSynergiesFor(name)

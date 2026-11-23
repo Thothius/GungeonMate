@@ -13,11 +13,7 @@ class CodexFavButton extends StatelessWidget {
   final String section;
   final String name;
 
-  const CodexFavButton({
-    super.key,
-    required this.section,
-    required this.name,
-  });
+  const CodexFavButton({super.key, required this.section, required this.name});
 
   @override
   Widget build(BuildContext context) {

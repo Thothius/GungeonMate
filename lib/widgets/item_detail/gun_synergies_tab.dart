@@ -88,11 +88,12 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
             // The game evaluates synergies strictly per player — a
             // combined-inventory "active" would mark split pieces as
             // complete when neither player actually has the synergy.
-            active: perPlayerActive
-                ? (s.matchesOwnedSet(p.ownedNamesLowerMain) ||
-                      (coop != null &&
-                          s.matchesOwnedSet(p.ownedNamesLowerCoop)))
-                : s.matchesOwnedSet(ownedLower),
+            active:
+                perPlayerActive
+                    ? (s.matchesOwnedSet(p.ownedNamesLowerMain) ||
+                        (coop != null &&
+                            s.matchesOwnedSet(p.ownedNamesLowerCoop)))
+                    : s.matchesOwnedSet(ownedLower),
           ),
         )
         .toList()
@@ -185,8 +186,8 @@ class _GunSynergiesTabState extends State<GunSynergiesTab> {
             key == 'P1'
                 ? p.ownedNamesLowerMain
                 : (p.runState.coop == null
-                      ? const <String>{}
-                      : p.ownedNamesLowerCoop);
+                    ? const <String>{}
+                    : p.ownedNamesLowerCoop);
         if (owned.isEmpty) {
           return _EmptyPlayerNote(label: key);
         }
@@ -333,7 +334,8 @@ const kLebExcludedSynergies = {
 /// game still grants per the official wiki.
 bool isLebExcludedSynergy(Synergy s) {
   if (kLebExcludedSynergies.contains(s.name)) return true;
-  return s.name != 'Trigger Twins' && s.effect.toLowerCase().contains('dual-wield');
+  return s.name != 'Trigger Twins' &&
+      s.effect.toLowerCase().contains('dual-wield');
 }
 
 /// Requirement slots a synergy consumes — one per AND-group, else
@@ -466,14 +468,11 @@ class _LebPageState extends State<_LebPage>
               if (needsPieces.isNotEmpty)
                 _LebNeedsPiecesNote(
                   entries: {
-                    for (final s in needsPieces)
-                      s.name: lebSlotsNeeded(s) - 1,
+                    for (final s in needsPieces) s.name: lebSlotsNeeded(s) - 1,
                   },
                 ),
               if (blocked.isNotEmpty)
-                _LebBlockedNote(
-                  names: [for (final s in blocked) s.name],
-                ),
+                _LebBlockedNote(names: [for (final s in blocked) s.name]),
             ],
           ],
         ),
@@ -698,8 +697,9 @@ class _LebNeedsPiecesNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list =
-        entries.entries.map((e) => '${e.key} (+${e.value})').join(', ');
+    final list = entries.entries
+        .map((e) => '${e.key} (+${e.value})')
+        .join(', ');
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 8),
@@ -828,7 +828,9 @@ class _GhostSynergyRow extends StatelessWidget {
                           padding: ChipStyle.paddingMicro,
                           decoration: BoxDecoration(
                             color: Colors.amber.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(ChipStyle.radiusMicro),
+                            borderRadius: BorderRadius.circular(
+                              ChipStyle.radiusMicro,
+                            ),
                             border: Border.all(
                               color: Colors.amber.withValues(alpha: 0.5),
                             ),

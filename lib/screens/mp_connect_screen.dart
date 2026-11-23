@@ -226,59 +226,59 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             _navigatedToRun
                 ? null
                 : BottomBackBar(onPressed: _handleSystemBack),
-      body: Stack(
-        children: [
-          // Atmospheric glow — same backdrop as the lobby.
-          Positioned.fill(
-            child: IgnorePointer(
-              child: AmbientGlow(
-                primary: flair.primary.withValues(alpha: 0.06),
-                secondary: flair.secondary.withValues(alpha: 0.04),
+        body: Stack(
+          children: [
+            // Atmospheric glow — same backdrop as the lobby.
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AmbientGlow(
+                  primary: flair.primary.withValues(alpha: 0.06),
+                  secondary: flair.secondary.withValues(alpha: 0.04),
+                ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                // Top bar
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16 * sf,
-                    vertical: 12 * sf,
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 48),
-                      Expanded(
-                        child: GoopText(
-                          _titleForSession(session),
-                          style: TextStyle(
-                            fontSize: FontSizes.titleSmall * sf,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1,
+            SafeArea(
+              child: Column(
+                children: [
+                  // Top bar
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16 * sf,
+                      vertical: 12 * sf,
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 48),
+                        Expanded(
+                          child: GoopText(
+                            _titleForSession(session),
+                            style: TextStyle(
+                              fontSize: FontSizes.titleSmall * sf,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      SizedBox(width: 48 * sf),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 240),
-                    child: KeyedSubtree(
-                      key: ValueKey(session.phase),
-                      child: _buildContent(session, rp, sf, flair),
+                        SizedBox(width: 48 * sf),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 240),
+                      child: KeyedSubtree(
+                        key: ValueKey(session.phase),
+                        child: _buildContent(session, rp, sf, flair),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
         ),
       ),
     );
@@ -1112,11 +1112,7 @@ class _Portrait extends StatelessWidget {
                               color: color,
                             ),
               )
-              : Icon(
-                Icons.person_rounded,
-                size: edge * 0.43,
-                color: color,
-              ),
+              : Icon(Icons.person_rounded, size: edge * 0.43, color: color),
     );
   }
 }
@@ -1176,7 +1172,11 @@ class _VsMedallion extends StatelessWidget {
   final double sf;
   final ThemeFlair flair;
 
-  const _VsMedallion({required this.ctrl, required this.sf, required this.flair});
+  const _VsMedallion({
+    required this.ctrl,
+    required this.sf,
+    required this.flair,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1193,7 +1193,10 @@ class _VsMedallion extends StatelessWidget {
             flair.secondary.withValues(alpha: 0.9),
           ],
         ),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.65), width: 1.6),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.65),
+          width: 1.6,
+        ),
         boxShadow: [
           BoxShadow(
             color: flair.primary.withValues(alpha: 0.4),
@@ -1211,7 +1214,11 @@ class _VsMedallion extends StatelessWidget {
             letterSpacing: 1,
             color: Colors.white,
             shadows: const [
-              Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1)),
+              Shadow(
+                color: Colors.black54,
+                blurRadius: 4,
+                offset: Offset(0, 1),
+              ),
             ],
           ),
         ),
@@ -1221,10 +1228,8 @@ class _VsMedallion extends StatelessWidget {
     return AnimatedBuilder(
       animation: ctrl!,
       builder:
-          (_, child) => Transform.scale(
-            scale: 0.92 + ctrl!.value * 0.12,
-            child: child,
-          ),
+          (_, child) =>
+              Transform.scale(scale: 0.92 + ctrl!.value * 0.12, child: child),
       child: badge,
     );
   }
@@ -1251,9 +1256,7 @@ class _WaitingForHost extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(3, (i) {
           final phase = (t + i / 3) % 1.0;
-          final a =
-              0.25 +
-              0.75 * (0.5 + 0.5 * math.sin(phase * math.pi * 2));
+          final a = 0.25 + 0.75 * (0.5 + 0.5 * math.sin(phase * math.pi * 2));
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 3 * sf),
             width: 6 * sf,
@@ -1305,26 +1308,30 @@ class _VsGlowPainter extends CustomPainter {
     final drift = math.sin(t * math.pi * 2) * size.width * 0.06;
     void orb(Alignment align, Color color, double radiusMul) {
       final center = align.alongSize(size);
-      final paint = Paint()
-        ..shader = RadialGradient(
-          colors: [color.withValues(alpha: 0.14), Colors.transparent],
-        ).createShader(
-          Rect.fromCircle(
-            center: center + Offset(drift * (align == Alignment.centerLeft ? 1 : -1), 0),
-            radius: size.shortestSide * radiusMul,
-          ),
-        );
+      final paint =
+          Paint()
+            ..shader = RadialGradient(
+              colors: [color.withValues(alpha: 0.14), Colors.transparent],
+            ).createShader(
+              Rect.fromCircle(
+                center:
+                    center +
+                    Offset(drift * (align == Alignment.centerLeft ? 1 : -1), 0),
+                radius: size.shortestSide * radiusMul,
+              ),
+            );
       canvas.drawRect(Offset.zero & size, paint);
     }
 
     orb(Alignment.centerLeft, left, 0.85);
     orb(Alignment.centerRight, right, 0.85);
     // Faint center vignette keeps the middle readable.
-    final vg = Paint()
-      ..shader = RadialGradient(
-        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.35)],
-        stops: const [0.55, 1.0],
-      ).createShader(Offset.zero & size);
+    final vg =
+        Paint()
+          ..shader = RadialGradient(
+            colors: [Colors.transparent, Colors.black.withValues(alpha: 0.35)],
+            stops: const [0.55, 1.0],
+          ).createShader(Offset.zero & size);
     canvas.drawRect(Offset.zero & size, vg);
   }
 

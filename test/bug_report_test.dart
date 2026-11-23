@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/bug_report.dart';
-import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/services/bug_report.dart';
 import 'package:gungeon_mate/widgets/bug_report/bug_report_button.dart';
 import 'package:gungeon_mate/widgets/bug_report/bug_report_sheet.dart';
@@ -19,14 +17,14 @@ void main() {
         entity: 'Hegemony',
       );
       final subject = BugReport.subjectFor(ctx);
-      expect(subject, 'GM-BUG v$kAppVersion|Content error|Item Detail|Hegemony');
+      expect(
+        subject,
+        'GM-BUG v$kAppVersion|Content error|Item Detail|Hegemony',
+      );
     });
 
     test('entity omitted from subject when null or empty', () {
-      const ctx = BugReportContext(
-        kind: BugReportKind.bug,
-        screen: 'Settings',
-      );
+      const ctx = BugReportContext(kind: BugReportKind.bug, screen: 'Settings');
       expect(BugReport.subjectFor(ctx), 'GM-BUG v$kAppVersion|Bug|Settings');
     });
 
@@ -70,10 +68,7 @@ void main() {
     test('every kind label lands in the subject verbatim', () {
       for (final k in BugReportKind.values) {
         final ctx = BugReportContext(kind: k, screen: 'X');
-        expect(
-          BugReport.subjectFor(ctx),
-          'GM-BUG v$kAppVersion|${k.label}|X',
-        );
+        expect(BugReport.subjectFor(ctx), 'GM-BUG v$kAppVersion|${k.label}|X');
       }
     });
 
@@ -85,10 +80,7 @@ void main() {
     });
 
     test('entity is trimmed in subject and body', () {
-      const ctx = BugReportContext.content(
-        screen: 'S',
-        entity: '  Hegemony  ',
-      );
+      const ctx = BugReportContext.content(screen: 'S', entity: '  Hegemony  ');
       expect(BugReport.subjectFor(ctx), endsWith('|Hegemony'));
       expect(BugReport.bodyFor(ctx, 'n'), contains('ENTITY:   Hegemony  '));
     });
@@ -122,10 +114,7 @@ void main() {
       expect(body, contains('KIND: Content error'));
       expect(body, contains('SCREEN: Quiz'));
       expect(body, contains('ENTITY: Gungeonmaster'));
-      expect(
-        body,
-        contains(RegExp(r'TIME: \d{4}-\d{2}-\d{2}T')),
-      );
+      expect(body, contains(RegExp(r'TIME: \d{4}-\d{2}-\d{2}T')));
     });
 
     test('copyReport format = subject line + blank + body', () async {
@@ -200,8 +189,10 @@ void main() {
         },
       );
       addTearDown(
-        () => tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null),
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
       );
 
       await tester.pumpWidget(wrap());
@@ -229,8 +220,10 @@ void main() {
         },
       );
       addTearDown(
-        () => tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null),
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
       );
 
       await tester.pumpWidget(wrap());
@@ -251,8 +244,11 @@ void main() {
       // way the action must complete without throwing.
       final copied = clip != null && clip!.contains('icon looks wrong');
       final dismissed = find.text('REPORT A BUG').evaluate().isEmpty;
-      expect(copied || dismissed, isTrue,
-          reason: 'send neither copied the report nor dismissed the sheet');
+      expect(
+        copied || dismissed,
+        isTrue,
+        reason: 'send neither copied the report nor dismissed the sheet',
+      );
       if (copied) {
         expect(clip, contains('GM-BUG v$kAppVersion'));
         expect(clip, contains('Content error'));
@@ -274,8 +270,10 @@ void main() {
         },
       );
       addTearDown(
-        () => tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null),
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
       );
 
       await tester.pumpWidget(wrap());
@@ -287,7 +285,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(clip, isNotNull);
-      expect(clip, contains('GM-BUG v$kAppVersion|Content error|Item Detail|Hegemony'));
+      expect(
+        clip,
+        contains('GM-BUG v$kAppVersion|Content error|Item Detail|Hegemony'),
+      );
       expect(clip, contains('typo in description'));
       // Done-state confirmation replaces the form before auto-dismiss.
       expect(find.text('COPIED'), findsOneWidget);
@@ -306,8 +307,10 @@ void main() {
         },
       );
       addTearDown(
-        () => tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null),
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
       );
 
       await tester.pumpWidget(wrap());
@@ -325,9 +328,7 @@ void main() {
       expect(clip, isNotNull);
     });
 
-    testWidgets('kind chips switch the report kind end-to-end', (
-      tester,
-    ) async {
+    testWidgets('kind chips switch the report kind end-to-end', (tester) async {
       String? clip;
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
         SystemChannels.platform,
@@ -339,8 +340,10 @@ void main() {
         },
       );
       addTearDown(
-        () => tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null),
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
       );
 
       await tester.pumpWidget(wrap());
@@ -407,8 +410,10 @@ void main() {
         },
       );
       addTearDown(
-        () => tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null),
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
       );
 
       await tester.pumpWidget(wrap());
