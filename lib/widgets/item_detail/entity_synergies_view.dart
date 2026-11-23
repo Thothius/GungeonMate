@@ -345,7 +345,7 @@ class _SynergyRowState extends State<_SynergyRow> {
                   GoopText(
                     s.prettyEffect.isNotEmpty ? s.prettyEffect : s.effect,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       height: 1.35,
                       color: Colors.white.withValues(alpha: 0.65),
                     ),
@@ -399,7 +399,7 @@ class _OwnerPill extends StatelessWidget {
       child: GoopText(
         label,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: FontSizes.labelSmall,
           fontWeight: FontWeight.w800,
           color: color,
           letterSpacing: 0.4,

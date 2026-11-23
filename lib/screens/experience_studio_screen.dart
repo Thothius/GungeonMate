@@ -280,7 +280,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                     const GoopText(
                       'CUSTOMIZATION IS LOCKED',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: FontSizes.titleSmall,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.4,
                         color: Color(0xFF1F1B16),
@@ -301,7 +301,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       child: const GoopText(
                         'EXIT NEO-SKEUO',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: FontSizes.bodyMedium,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                           color: Color(0xFF1F1B16),
@@ -320,7 +320,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                       child: const GoopText(
                         'BACK',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.2,
                           color: Color(0xFF5C5548),
@@ -1355,7 +1355,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: FontSizes.labelSmall,
                     color: flair.secondary.withValues(alpha: 0.85),
                   ),
                 ),
@@ -1555,7 +1555,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                   title: GoopText(
                     'NAME YOUR PRESET',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: FontSizes.bodyMedium,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
                       color: flair.primary,
@@ -1622,7 +1622,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                         child: GoopText(
                           'NEXT',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: FontSizes.labelMedium,
                             fontWeight: FontWeight.w900,
                             color:
                                 flair.primary.computeLuminance() > 0.5
@@ -1821,7 +1821,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                 GoopText(
                   e.name,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
                   ),
@@ -2446,7 +2446,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: FontSizes.titleSmall,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                           color: Colors.white,
@@ -2458,7 +2458,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: FontSizes.labelSmall,
                           color: Colors.white.withValues(alpha: 0.65),
                         ),
                       ),
@@ -2506,7 +2506,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             title: GoopText(
               'DELETE PRESET',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: FontSizes.bodyMedium,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
                 color: flair.primary,
@@ -2514,7 +2514,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             ),
             content: GoopText(
               '"${t.name}" will be removed from your presets. This cannot be undone.',
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: const TextStyle(fontSize: FontSizes.labelMedium, color: Colors.white70),
             ),
             actions: [
               TextButton(
@@ -2529,7 +2529,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                 child: GoopText(
                   'DELETE',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
                     color: Colors.redAccent,
                   ),
@@ -3259,7 +3259,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                             GoopText(
                               '•',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: FontSizes.labelMedium,
                                 fontWeight: FontWeight.w900,
                                 color: d.bulletColor,
                               ),
@@ -3271,7 +3271,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: FontSizes.labelSmall,
                                   fontWeight: FontWeight.w800,
                                   color: d.primary,
                                 ),
@@ -3389,7 +3389,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               ),
               GoopText(
                 '#${color.toARGB32().toRadixString(16).toUpperCase()}',
-                style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
+                style: const TextStyle(fontSize: FontSizes.labelSmall, color: Color(0x80FFFFFF)),
               ),
             ],
           ),
@@ -3827,7 +3827,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                 wp == null
                     ? 'NONE'
                     : (wp.length >= 5 ? 'WP ${wp.substring(3, 5)}' : wp),
-                style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
+                style: const TextStyle(fontSize: FontSizes.labelSmall, color: Color(0x80FFFFFF)),
               ),
               const SizedBox(width: 6),
               Icon(
@@ -4446,7 +4446,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                 GoopText(
                   'PICK A COLOR',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: FontSizes.labelSmall,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.6,
                     color: Colors.white.withValues(alpha: 0.38),
@@ -4457,7 +4457,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                     GoopText(
                       '#${widget.current.toARGB32().toRadixString(16).toUpperCase().substring(2)}',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w700,
                         color: Colors.white.withValues(alpha: 0.45),
                       ),

@@ -1248,7 +1248,7 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
               decoration: InputDecoration(
                 hintText: 'search guns & items…',
                 hintStyle: TextStyle(
-                  fontSize: 12,
+                  fontSize: FontSizes.labelMedium,
                   color: Colors.white.withValues(alpha: 0.3),
                 ),
                 prefixIcon: Icon(
@@ -1300,7 +1300,7 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
                     GoopText(
                       'NONE — back to shapes',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w800,
                         color: Colors.white.withValues(alpha: 0.6),
                       ),

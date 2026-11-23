@@ -296,7 +296,7 @@ class _EmptyPlayerNote extends StatelessWidget {
       child: GoopText(
         '$label has no items yet.',
         style: TextStyle(
-          fontSize: 12,
+          fontSize: FontSizes.labelMedium,
           color: Colors.white.withValues(alpha: 0.4),
           fontStyle: FontStyle.italic,
         ),
@@ -593,7 +593,7 @@ void _showLebExplainer(BuildContext context) {
                   GoopText(
                     '• $n',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       height: 1.4,
                       color: Colors.white.withValues(alpha: 0.65),
                     ),
@@ -846,7 +846,7 @@ class _GhostSynergyRow extends StatelessWidget {
                       ? synergy.prettyEffect
                       : synergy.effect,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     height: 1.35,
                     color: Colors.white.withValues(alpha: 0.6),
                   ),
@@ -890,7 +890,7 @@ class _LebPill extends StatelessWidget {
       child: GoopText(
         'LEB',
         style: TextStyle(
-          fontSize: 10,
+          fontSize: FontSizes.labelSmall,
           fontWeight: FontWeight.w800,
           color: color,
           letterSpacing: 0.4,
@@ -1045,7 +1045,7 @@ class _LebTogglePill extends StatelessWidget {
               GoopText(
                 'LEB ${on ? 'ON' : 'OFF'}',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.8,
                   color: on ? _purple : Colors.white38,

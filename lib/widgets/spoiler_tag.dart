@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
 import 'skeuo/skeuo_tokens.dart';
+import '../theme/tokens.dart';
 
 /// A collapsible section that hides spoiler content behind a warning
 /// banner. Tapping the banner expands or collapses the content with a
@@ -72,7 +73,7 @@ class _SpoilerTagState extends State<SpoilerTag>
                       child: GoopText(
                         widget.label,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w800,
                           color: Skeuo.inkIf(
                             Colors.amber,

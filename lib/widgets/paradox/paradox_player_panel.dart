@@ -326,7 +326,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
     child: GoopText(
       text,
       style: TextStyle(
-        fontSize: 10,
+        fontSize: FontSizes.labelSmall,
         fontWeight: FontWeight.w900,
         letterSpacing: 1.5,
         color: Colors.white.withValues(alpha: 0.35),

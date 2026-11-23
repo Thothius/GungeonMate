@@ -809,7 +809,7 @@ class _InlineStatStepper extends StatelessWidget {
                       key: ValueKey(value),
                       formatStat(value),
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: FontSizes.titleLarge,
                         fontWeight: FontWeight.w900,
                         color: accent,
                         height: 1,

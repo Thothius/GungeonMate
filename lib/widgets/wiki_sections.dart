@@ -11,6 +11,7 @@ import 'item_detail/leb_view_scope.dart';
 import 'rich_link_text.dart';
 import '../services/goop_talk_engine.dart';
 import 'skeuo/skeuo_tokens.dart';
+import '../theme/tokens.dart';
 
 // =============================================================================
 // Wiki-content slivers — Effects / Item Interactions / Notes / Tips / Trivia
@@ -155,7 +156,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                     GoopText(
                       'REFERENCED BY',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: FontSizes.labelMedium,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
                         color: Colors.white.withValues(alpha: 0.7),
@@ -174,7 +175,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                       child: GoopText(
                         '${widget.referrers.length}',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w700,
                           color: Colors.white.withValues(alpha: 0.5),
                         ),

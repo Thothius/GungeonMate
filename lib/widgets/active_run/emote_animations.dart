@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
 import '../skeuo/skeuo_tokens.dart';
+import '../../theme/tokens.dart';
 
 /// Floating emote overlay shown on the receiver's screen when a peer
 /// sends a kiss or slap. Purely visual — wrapped in `IgnorePointer` by
@@ -258,7 +259,7 @@ class _SlapAnimationState extends State<SlapAnimation>
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: FontSizes.titleSmall,
                                 fontWeight: FontWeight.w900,
                                 color: Skeuo.inkIf(Colors.red.shade300),
                                 letterSpacing: 1.5,

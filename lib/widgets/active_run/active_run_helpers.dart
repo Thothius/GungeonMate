@@ -794,7 +794,7 @@ class SectionHeaderSliver extends StatelessWidget {
               child: GoopText(
                 '$count',
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: FontSizes.labelMedium,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -868,7 +868,7 @@ class SectionHeaderSliver extends StatelessWidget {
                             GoopText(
                               'List View',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: FontSizes.labelMedium,
                                 color:
                                     currentInvView == InvView.list
                                         ? Skeuo.inkIf(Colors.amberAccent)
@@ -898,7 +898,7 @@ class SectionHeaderSliver extends StatelessWidget {
                             GoopText(
                               'Periodic Grid',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: FontSizes.labelMedium,
                                 color:
                                     (currentInvView == InvView.grid &&
                                             currentDisplayMode ==
@@ -930,7 +930,7 @@ class SectionHeaderSliver extends StatelessWidget {
                             GoopText(
                               'Tactical Stats',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: FontSizes.labelMedium,
                                 color:
                                     (currentInvView == InvView.grid &&
                                             currentDisplayMode ==

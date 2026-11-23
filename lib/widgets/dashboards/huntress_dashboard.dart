@@ -61,7 +61,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   GoopText(
                     'HUNTRESS & DOG',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w900,
                       color: Skeuo.inkIf(Colors.lightGreenAccent),
                       letterSpacing: 0.8,
@@ -151,7 +151,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                     child: GoopText(
                       'DIG: ${digChance.toStringAsFixed(1)}%',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.bold,
                         color:
                             hasBabyGoodMimic
@@ -256,7 +256,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
           GoopText(
             value,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: FontSizes.bodyMedium,
               fontWeight: FontWeight.w900,
               color: color,
             ),
@@ -272,13 +272,13 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
         GoopText(
           value,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w900,
             color: color,
           ),
         ),
         const SizedBox(height: 2),
-        GoopText(emoji, style: const TextStyle(fontSize: 14)),
+        GoopText(emoji, style: const TextStyle(fontSize: FontSizes.bodyMedium)),
       ],
     );
   }

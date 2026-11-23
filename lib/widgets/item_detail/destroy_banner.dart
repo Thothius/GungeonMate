@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
 import '../skeuo/skeuo_tokens.dart';
+import '../../theme/tokens.dart';
 
 class DestroyBanner extends StatelessWidget {
   final VoidCallback onDestroy;
@@ -36,7 +37,7 @@ class DestroyBanner extends StatelessWidget {
                   GoopText(
                     'DESTROYED ON USE',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
                       color: Skeuo.inkIf(Colors.redAccent),

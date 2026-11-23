@@ -8,6 +8,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
 import '../scale_button.dart';
 import '../skeuo/skeuo_tokens.dart';
+import '../../theme/tokens.dart';
 
 /// MP surprise composer — opened by tapping your or the peer's avatar.
 /// Preset grid for one-tap sends plus a custom step: pick an animation
@@ -272,11 +273,11 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
             hintText: 'Optional message (≤30 chars)',
             hintStyle: TextStyle(
               color: Colors.white.withValues(alpha: 0.35),
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
             ),
             counterStyle: TextStyle(
               color: Colors.white.withValues(alpha: 0.3),
-              fontSize: 10,
+              fontSize: FontSizes.labelSmall,
             ),
             filled: true,
             fillColor: Colors.white.withValues(alpha: 0.05),

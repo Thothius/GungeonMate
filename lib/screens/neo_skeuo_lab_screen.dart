@@ -15,6 +15,7 @@ import '../widgets/skeuo/skeuo_backdrop.dart';
 import '../widgets/skeuo/skeuo_surface.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 import 'item_detail_screen.dart';
+import '../theme/tokens.dart';
 
 /// Neo-Skeuo component sheet — a replica of the reference kit poster
 /// with every element translated into GungeonMate's skeuo widgets.
@@ -155,7 +156,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
                 child: GoopText(
                   'DRAWN WITH CARE IN THE GUNGEON',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: FontSizes.labelSmall,
                     letterSpacing: 1.6,
                     color: Skeuo.pencil,
                     fontWeight: FontWeight.w700,
@@ -368,7 +369,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
           GoopText(
             title,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: FontSizes.bodyMedium,
               fontWeight: FontWeight.w900,
               letterSpacing: 2,
               color: Skeuo.ink,
@@ -424,7 +425,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
           const SizedBox(height: 4),
           GoopText(
             label,
-            style: const TextStyle(fontSize: 10, color: Skeuo.pencil),
+            style: const TextStyle(fontSize: FontSizes.labelSmall, color: Skeuo.pencil),
           ),
         ],
       ),
@@ -734,7 +735,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
         GoopText(
           'Value Label: ${_slider.toInt()}',
           style: const TextStyle(
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w800,
             color: Skeuo.ink,
           ),
@@ -849,12 +850,12 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
               children: [
                 const GoopText(
                   'Active Step:',
-                  style: TextStyle(fontSize: 10, color: Skeuo.pencil),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, color: Skeuo.pencil),
                 ),
                 const GoopText(
                   'Configure',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w800,
                     color: Skeuo.ink,
                   ),
@@ -889,7 +890,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
         child: GoopText(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w800,
             color: on ? Skeuo.card : Skeuo.ink,
           ),
@@ -914,7 +915,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
         child: GoopText(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w800,
             color: on ? Skeuo.card : Skeuo.ink,
           ),
@@ -988,7 +989,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
                                 child: GoopText(
                                   'Blasphemy',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.w900,
                                     color: Skeuo.ink,
                                   ),
@@ -1044,7 +1045,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: GoopText(
                 'Information here',
-                style: TextStyle(fontSize: 12, color: Skeuo.ink),
+                style: TextStyle(fontSize: FontSizes.labelMedium, color: Skeuo.ink),
               ),
             ),
             SkeuoSurface(
@@ -1117,7 +1118,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
       child: GoopText(
         text,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: FontSizes.labelSmall,
           fontWeight: FontWeight.w800,
           color: fill ? Skeuo.card : Skeuo.ink,
         ),
@@ -1344,14 +1345,14 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
               GoopText(
                 'Notification',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: FontSizes.labelMedium,
                   fontWeight: FontWeight.w800,
                   color: Skeuo.ink,
                 ),
               ),
               GoopText(
                 'Your current notification',
-                style: TextStyle(fontSize: 10, color: Skeuo.pencil),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Skeuo.pencil),
               ),
             ],
           ),
@@ -1401,7 +1402,7 @@ class _SkeuoFieldDemo extends StatelessWidget {
           const GoopText(
             'Label',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w800,
               color: Skeuo.ink,
             ),
@@ -1412,13 +1413,13 @@ class _SkeuoFieldDemo extends StatelessWidget {
             radius: Skeuo.rSm,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             child: TextField(
-              style: const TextStyle(fontSize: 14, color: Skeuo.ink),
+              style: const TextStyle(fontSize: FontSizes.bodyMedium, color: Skeuo.ink),
               cursorColor: Skeuo.ink,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 isDense: true,
                 hintText: 'Placeholder text',
-                hintStyle: TextStyle(color: Skeuo.pencil, fontSize: 14),
+                hintStyle: TextStyle(color: Skeuo.pencil, fontSize: FontSizes.bodyMedium),
                 contentPadding: EdgeInsets.symmetric(vertical: 10),
               ),
             ),
@@ -1428,7 +1429,7 @@ class _SkeuoFieldDemo extends StatelessWidget {
             children: [
               GoopText(
                 'Helper text',
-                style: TextStyle(fontSize: 10, color: Skeuo.pencil),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Skeuo.pencil),
               ),
               SizedBox(width: 8),
               Icon(Icons.turn_left, size: 10, color: Skeuo.pencil),
@@ -1436,7 +1437,7 @@ class _SkeuoFieldDemo extends StatelessWidget {
               GoopText(
                 'Error message',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: FontSizes.labelSmall,
                   color: Skeuo.accent,
                   fontStyle: FontStyle.italic,
                 ),

@@ -3,6 +3,7 @@ import '../../models/gun.dart';
 import '../../models/item.dart';
 import '../../services/goop_talk_engine.dart';
 import '../skeuo/skeuo_tokens.dart';
+import '../../theme/tokens.dart';
 
 enum GunSort { pickup, quality, name, dps }
 
@@ -202,7 +203,7 @@ class SortPickerSheet<T> extends StatelessWidget {
                   GoopText(
                     'Sort $title by',
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: FontSizes.bodyMedium,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
                     ),

@@ -379,7 +379,7 @@ class _SellBadge extends StatelessWidget {
           GoopText(
             price,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w800,
               color: Skeuo.inkIf(Colors.yellowAccent),
             ),

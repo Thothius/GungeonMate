@@ -215,7 +215,7 @@ class _GungeonMeterState extends State<GungeonMeter>
                                     child: GoopText(
                                       '☠',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: FontSizes.bodyMedium,
                                         color: Skeuo.inkIf(Colors.redAccent),
                                         shadows: [
                                           Shadow(
@@ -245,7 +245,7 @@ class _GungeonMeterState extends State<GungeonMeter>
                                           child: GoopText(
                                             '☠',
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: FontSizes.bodyMedium,
                                               color: Skeuo.inkIf(
                                                 Colors.redAccent,
                                               ),

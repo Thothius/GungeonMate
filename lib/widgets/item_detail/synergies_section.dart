@@ -53,7 +53,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                   GoopText(
                     'SYNERGIES',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
                       color: Colors.white.withValues(alpha: 0.7),
@@ -73,7 +73,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                       child: GoopText(
                         '${widget.statuses.length}',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w700,
                           color: Colors.white.withValues(alpha: 0.5),
                         ),
@@ -95,7 +95,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                       child: GoopText(
                         '$activeCount active',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w700,
                           color: Skeuo.inkIf(Colors.amber),
                         ),
@@ -418,7 +418,7 @@ class SynergyChip extends StatelessWidget {
         child: GoopText(
           name.isNotEmpty ? name[0].toUpperCase() : '?',
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: FontSizes.titleSmall,
             fontWeight: FontWeight.bold,
             color: Colors.white38,
           ),

@@ -87,7 +87,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
         title: const GoopText(
           'SPECIAL ITEMS & GUNS',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: FontSizes.bodyMedium,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.2,
           ),
@@ -142,7 +142,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
             label: GoopText(
               allOwned ? 'Remove All' : 'Add All',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.bold,
                 color: Skeuo.inkIf(Colors.greenAccent),
               ),
