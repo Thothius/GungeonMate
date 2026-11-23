@@ -50,7 +50,7 @@
 
 ## Release checklist (version bump = ALL in lockstep)
 `pubspec.yaml` version · `lib/utils/asset_paths.dart` kAppVersion ·
-`assets/data/changelog.json` prepend · `VERSION_HISTORY.md` prepend ·
+`VERSION_HISTORY.md` prepend ·
 `main_menu_screen.dart` ALL `vX.Y.Z` literals (3+ spots).
 `version_lockstep_test` enforces sync. APK build: `flutter build apk
 --release` (non-blocking, poll) → copy to `..\app-releases\gungeon-mate-vX.Y.Z.apk`.
@@ -73,7 +73,7 @@
 - Flutter companion for *Enter the Gungeon* — v3.2.0+160 (Oct 2026).
 - Android-first; Windows/Linux video via media_kit (drop-in, no API change).
 - Offline: all game data ships in `assets/data/*.json` (239 guns, 270 items,
-  395 synergies, shrines, bosses, enemies, gungeoneers, themes, changelog).
+  395 synergies, shrines, bosses, enemies, gungeoneers, themes).
 - `pubspec.yaml` version field is the single version source
   (`version_lockstep_test` enforces sync with `kAppVersion` in
   `lib/utils/asset_paths.dart` + VERSION_HISTORY).
