@@ -41,7 +41,8 @@
   the WIP landed (verified all-pass 2026-10-29).
 - Open deferred: TIERS test regression (test-side, `browse_synergies`),
   synergy-scan recompute-per-build perf, browse row overflow ≤500px,
-  MP first-endpoint mis-pair race, host-gone hint, `�` mojibake in JSONs.
+  MP first-endpoint mis-pair race, host-gone hint.
+  (`�` mojibake re-verified clean 2026-11-23 — zero U+FFFD in assets/.)
 - Feedback plan (`docs/FEEDBACK_PLAN_2026-10-28.md`): items 1–7 triaged.
   Gunderfury DPS + Junkan name-gate + Payday toggles since fixed
   (UI_HEALTH §1). Wakelock shipped. Item `effect`/`ammonomicon_entry`
