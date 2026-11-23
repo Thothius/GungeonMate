@@ -954,6 +954,12 @@ class MpSession extends ChangeNotifier
     onStartRun?.call();
   }
 
+  /// Test-only: feed one recovery-elapsed tick — drives the
+  /// "partner may have left" hint path without waiting on the real
+  /// 10s cadence timer (S4.2).
+  @visibleForTesting
+  void debugFeedRecoveryElapsed(int sec) => _onRecoveryElapsed(sec);
+
   // ── Cleanup ────────────────────────────────────────────────────
 
   @override

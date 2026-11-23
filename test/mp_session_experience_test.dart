@@ -83,6 +83,51 @@ void main() {
     });
   });
 
+  group('Peer-gone hint (S4.2)', () {
+    int hintCount() => session.sessionEvents
+        .where((e) => e.text.contains('may have left'))
+        .length;
+
+    test('elapsed ticks update disconnectElapsedSec every feed', () {
+      session.debugFeedRecoveryElapsed(0);
+      expect(session.disconnectElapsedSec.value, 0);
+      session.debugFeedRecoveryElapsed(45);
+      expect(session.disconnectElapsedSec.value, 45);
+      session.debugFeedRecoveryElapsed(90);
+      expect(session.disconnectElapsedSec.value, 90);
+    });
+
+    test('hint fires once at 120s and latches for the episode', () {
+      session.debugFeedRecoveryElapsed(0);
+      session.debugFeedRecoveryElapsed(119);
+      expect(hintCount(), 0);
+      session.debugFeedRecoveryElapsed(120);
+      expect(hintCount(), 1);
+      expect(
+        session.sessionEvents.last.text,
+        contains('partner may have left'),
+      );
+      // Later ticks must not re-log — the latch is per episode.
+      session.debugFeedRecoveryElapsed(180);
+      session.debugFeedRecoveryElapsed(600);
+      expect(hintCount(), 1);
+    });
+
+    test('cancel() resets the latch — next episode can hint again', () async {
+      session.debugFeedRecoveryElapsed(120);
+      expect(hintCount(), 1);
+      await session.cancel();
+      // cancel() → _resetParadoxState → wipeSessionActivity clears the
+      // event log, so the count restarts at 0 for the new episode.
+      expect(hintCount(), 0);
+      session.debugFeedRecoveryElapsed(0);
+      session.debugFeedRecoveryElapsed(60);
+      expect(hintCount(), 0);
+      session.debugFeedRecoveryElapsed(120);
+      expect(hintCount(), 1);
+    });
+  });
+
   group('Pause / resume', () {
     test('pause sets pausedNotifier and notifies', () async {
       var notified = 0;
