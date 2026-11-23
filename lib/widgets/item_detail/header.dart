@@ -9,6 +9,7 @@ import '../game_icon.dart';
 import '../quality_badge.dart';
 import '../bug_report/bug_report_button.dart';
 import '../../models/bug_report.dart';
+import '../codex/codex_fav_button.dart';
 import '../../utils/responsive.dart';
 import '../skeuo/skeuo_tokens.dart';
 
@@ -142,6 +143,7 @@ class ItemDetailHeader extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    CodexFavButton(section: isGun ? 'guns' : 'items', name: name),
                     BugReportButton.iconButton(
                       context,
                       BugReportContext.content(
@@ -261,6 +263,7 @@ class ItemDetailHeader extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  CodexFavButton(section: 'items', name: name),
                   BugReportButton.iconButton(
                     context,
                     BugReportContext.content(
@@ -606,3 +609,4 @@ class _ChestChip extends StatelessWidget {
     );
   }
 }
+

@@ -5,13 +5,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/ammonomicon_entry.dart';
 import '../services/app_theme.dart';
-import '../services/codex_prefs.dart';
 import '../services/goop_talk_engine.dart';
-import '../services/haptics.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../utils/asset_paths.dart' show npcIdleGifPath;
 import '../utils/responsive.dart';
 import '../widgets/bug_report/bug_report_button.dart';
+import '../widgets/codex/codex_fav_button.dart';
 import '../models/bug_report.dart';
 
 /// Full-page view for a single Ammonomicon entry — large icon, name, category,
@@ -55,27 +54,9 @@ class AmmonomiconDetailScreen extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          // Codex favorite — persists via CodexPrefs, feeds the
-          // overview FAVORITES shelf.
-          ValueListenableBuilder<Set<String>>(
-            valueListenable: CodexPrefs.favorites,
-            builder: (_, favs, _) {
-              final key = CodexPrefs.keyFor(section.name, entry.name);
-              final on = favs.contains(key);
-              return IconButton(
-                tooltip: on ? 'Remove from favorites' : 'Add to favorites',
-                icon: Icon(
-                  on ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                  size: 20,
-                  color: on ? const Color(0xFFFF6E8A) : Colors.white70,
-                ),
-                onPressed: () {
-                  Haptics.selection();
-                  CodexPrefs.toggleFavorite(key);
-                },
-              );
-            },
-          ),
+          // Codex favorite — bookmark icon, persists via CodexPrefs,
+          // feeds the overview FAVORITES shelf.
+          CodexFavButton(section: section.name, name: entry.name),
           BugReportButton.iconButton(
             context,
             BugReportContext.content(

@@ -9,6 +9,7 @@ import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
 import '../services/app_theme.dart';
+import '../services/codex_prefs.dart';
 import '../services/elemental_tagger.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
@@ -71,6 +72,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   // Gun detail bottom tabs — -1 = all closed (default), else index
   // into the SYN/NOTES/REFS spec list. Single-open accordion.
   int _detailTab = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    // Codex favorites shown in the header — idempotent load so the
+    // bookmark reflects persisted state even when this screen is
+    // opened outside the Ammonomicon (browse, loadout, etc.).
+    CodexPrefs.ensureLoaded();
+  }
 
   @override
   void dispose() {

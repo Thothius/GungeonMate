@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 
 import '../models/synergy.dart';
 import '../providers/run_provider.dart';
+import '../services/codex_prefs.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import 'item_detail_screen.dart';
+import '../widgets/codex/codex_fav_button.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
 import '../widgets/bug_report/bug_report_button.dart';
 import '../models/bug_report.dart';
@@ -33,6 +35,9 @@ class SynergyDetailScreen extends StatelessWidget {
       for (final i in p.runState.coop?.items ?? const []) i.name.toLowerCase(),
     };
     final complete = synergy.matchesOwnedSet(owned);
+    // Idempotent — cached future; lets this screen be opened from
+    // browse surfaces without going through the codex first.
+    CodexPrefs.ensureLoaded();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -59,6 +64,7 @@ class SynergyDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      CodexFavButton(section: 'synergies', name: synergy.name),
                       BugReportButton.iconButton(
                         context,
                         BugReportContext.content(
