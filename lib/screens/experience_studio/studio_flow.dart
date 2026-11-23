@@ -131,7 +131,10 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
   // the preview would show live MP chrome and wire dice/emote/gift
   // callbacks into the mock run while a real session is connected.
   late final MpSession _mpShield;
-  final math.Random _rng = math.Random();
+  math.Random _rng = math.Random();
+  // Session seed — re-rolled per preview session, surfaced as a tiny
+  // diagnostic label so a funny loot roll can be reported/reproduced.
+  int _sessionSeed = 0;
   final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
   bool _loaded = false;
   bool _hasProvider = false;
@@ -161,6 +164,8 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
 
   Future<void> _startSession() async {
     final token = ++_sessionToken;
+    _sessionSeed = DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF;
+    _rng = math.Random(_sessionSeed);
     final provider = RunProvider()..persistenceEnabled = false;
     await provider.loadData();
     if (!mounted || token != _sessionToken) {
@@ -369,6 +374,16 @@ class _MockPreviewScreenState extends State<_MockPreviewScreen> {
                           color: flair.primary.withValues(alpha: 0.7),
                         ),
                       ),
+                      if (_sessionSeed != 0)
+                        GoopText(
+                          ' #$_sessionSeed',
+                          style: TextStyle(
+                            fontSize: 8.5,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.4,
+                            color: Colors.white.withValues(alpha: 0.28),
+                          ),
+                        ),
                       const Spacer(),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,

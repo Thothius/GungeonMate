@@ -106,7 +106,8 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
 
         final synergyCount =
             (prefs.showLichEyeBulletsSynergies ? 1 : 0) +
-            (prefs.showSynergyCoopTags ? 1 : 0);
+            (prefs.showSynergyCoopTags ? 1 : 0) +
+            (prefs.browseShowLichEyeBullets ? 1 : 0);
 
         final runPanels = <Widget>[
           _SettingsPanel(
@@ -130,6 +131,14 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   value: prefs.showSynergyCoopTags,
                   flair: flair,
                   onChanged: VisualPrefs.setShowSynergyCoopTags,
+                ),
+                const SizedBox(height: Insets.md),
+                _SettingsToggleRow(
+                  title: 'Browse LEB badges',
+                  subtitle: 'LEB chip in the Browse filter bar + row badges',
+                  value: prefs.browseShowLichEyeBullets,
+                  flair: flair,
+                  onChanged: VisualPrefs.setBrowseShowLichEyeBullets,
                 ),
               ],
             ),
