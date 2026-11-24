@@ -129,7 +129,12 @@ class _InventoryListRowState extends State<InventoryListRow> {
             children: [
               GameIcon(
                 assetPath: _iconPath,
-                fallback: _isGun ? Icons.gps_fixed : Icons.inventory_2_outlined,
+                fallback:
+                    _isGun
+                        ? Icons.gps_fixed
+                        : widget.item!.name == 'Backpack'
+                        ? Icons.backpack_outlined
+                        : Icons.inventory_2_outlined,
                 quality: _quality,
                 size: 38,
                 showRing: false,
@@ -347,5 +352,3 @@ class _TypePill extends StatelessWidget {
     );
   }
 }
-
-

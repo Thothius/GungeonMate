@@ -98,6 +98,38 @@ void main() {
       expect(rp.stashItem(bag), isFalse);
     });
 
+    test('stash rejects gear the slot does not own', () {
+      expect(rp.stashItem(item('Not Owned Item')), isFalse);
+      expect(rp.stashGun(gun('Not Owned Gun')), isFalse);
+      expect(rp.backpackCount(PlayerSlot.main), 0);
+    });
+
+    test('duplicate-named stackables share one slot and one tile', () {
+      // Junk bypasses addItem dedup — real stacks exist in runs.
+      final junk = rp.itemByName('Junk')!;
+      rp.addItem(junk);
+      rp.addItem(junk);
+      rp.addItem(junk);
+      expect(
+        rp.runState.main.items.where((i) => i.name == 'Junk').length,
+        3,
+      );
+
+      expect(rp.stashItem(junk), isTrue);
+      // One key = one slot, regardless of stack depth.
+      expect(rp.backpackCount(PlayerSlot.main), 1);
+      // …and one bag tile — entries must not over-report vs the counter.
+      expect(rp.backpackEntries(PlayerSlot.main).length, 1);
+
+      // Retrieving returns the whole stack (keys are name-based).
+      rp.unstashItem(junk);
+      expect(rp.backpackCount(PlayerSlot.main), 0);
+      expect(
+        rp.runState.main.items.where((i) => i.name == 'Junk').length,
+        3,
+      );
+    });
+
     test('stash is per-slot — coop bag is independent', () {
       rp.startCoopPlayer(Gungeoneer(name: 'The Hunter'));
       final g = gun('Shared Name Gun');

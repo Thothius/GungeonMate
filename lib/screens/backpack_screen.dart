@@ -146,42 +146,53 @@ class BackpackScreen extends StatelessWidget {
             // ── The bag ────────────────────────────────────────────
             _BagPanel(
               freeSlots: free,
-              child: stored == 0
-                  ? _EmptyBagHint()
-                  : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (guns.isNotEmpty) ...[
-                        _BagSectionLabel('GUNS', guns.length),
-                        _BagWrap(
-                          children: [
-                            for (final e in guns)
-                              _BagTile(
-                                gun: e.gun!,
-                                onTap: () => _openDetail(context, e.gun),
-                                onLongPress:
-                                    () => _promptActions(context, e.gun, null),
-                              ),
+              child:
+                  stored == 0
+                      ? _EmptyBagHint()
+                      : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (guns.isNotEmpty) ...[
+                            _BagSectionLabel('GUNS', guns.length),
+                            _BagWrap(
+                              children: [
+                                for (final e in guns)
+                                  _BagTile(
+                                    gun: e.gun!,
+                                    onTap: () => _openDetail(context, e.gun),
+                                    onLongPress:
+                                        () => _promptActions(
+                                          context,
+                                          e.gun,
+                                          null,
+                                        ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
                           ],
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                      if (items.isNotEmpty) ...[
-                        _BagSectionLabel('ITEMS', items.length),
-                        _BagWrap(
-                          children: [
-                            for (final e in items)
-                              _BagTile(
-                                item: e.item!,
-                                onTap: () => _openDetail(context, null, e.item),
-                                onLongPress:
-                                    () => _promptActions(context, null, e.item),
-                              ),
+                          if (items.isNotEmpty) ...[
+                            _BagSectionLabel('ITEMS', items.length),
+                            _BagWrap(
+                              children: [
+                                for (final e in items)
+                                  _BagTile(
+                                    item: e.item!,
+                                    onTap:
+                                        () =>
+                                            _openDetail(context, null, e.item),
+                                    onLongPress:
+                                        () => _promptActions(
+                                          context,
+                                          null,
+                                          e.item,
+                                        ),
+                                  ),
+                              ],
+                            ),
                           ],
-                        ),
-                      ],
-                    ],
-                  ),
+                        ],
+                      ),
             ),
           ],
         ),
@@ -192,9 +203,7 @@ class BackpackScreen extends StatelessWidget {
   void _openDetail(BuildContext context, Gun? gun, [Item? item]) {
     Navigator.push(
       context,
-      fastRoute(
-        ItemDetailScreen(gun: gun, item: item, ownerSlot: slot),
-      ),
+      fastRoute(ItemDetailScreen(gun: gun, item: item, ownerSlot: slot)),
     );
   }
 
@@ -231,47 +240,74 @@ class BackpackScreen extends StatelessWidget {
             ),
             child: StatefulBuilder(
               builder: (_, setArmed) {
-                return Row(
+                final name = gun?.name ?? item?.name ?? '';
+                return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _BagPillBtn(
-                      icon: Icons.inventory_2_outlined,
-                      color: AppTheme.flair.primary,
-                      label: 'TAKE OUT',
-                      onTap: () {
-                        Navigator.pop(dlgCtx);
-                        _takeOut(context, gun, item);
-                      },
-                    ),
-                    if (canTransfer) ...[
-                      const SizedBox(width: 12),
-                      _BagPillBtn(
-                        icon:
-                            armed
-                                ? Icons.check_rounded
-                                : Icons.swap_horiz_rounded,
-                        color:
-                            armed ? Colors.orangeAccent : Colors.white70,
-                        label: armed ? 'SURE?' : 'SEND',
-                        onTap: () {
-                          if (!armed) {
-                            setArmed(() => armed = true);
-                            return;
-                          }
-                          Navigator.pop(dlgCtx);
-                          _sendToPeer(context, gun, item);
-                        },
+                    // Name caption — bag tiles are icon-dense, so the
+                    // pill names the entry before you commit an action.
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      // Fixed width so long names ellipsize instead of
+                      // stretching the pill past narrow viewports.
+                      child: SizedBox(
+                        width: 230,
+                        child: GoopText(
+                          name.toUpperCase(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.8,
+                            color: Colors.white70,
+                          ),
+                        ),
                       ),
-                    ],
-                    const SizedBox(width: 12),
-                    _BagPillBtn(
-                      icon: Icons.delete_outline_rounded,
-                      color: Colors.redAccent,
-                      label: 'DELETE',
-                      onTap: () {
-                        Navigator.pop(dlgCtx);
-                        _deleteWithUndo(context, gun, item);
-                      },
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _BagPillBtn(
+                          icon: Icons.inventory_2_outlined,
+                          color: AppTheme.flair.primary,
+                          label: 'TAKE OUT',
+                          onTap: () {
+                            Navigator.pop(dlgCtx);
+                            _takeOut(context, gun, item);
+                          },
+                        ),
+                        if (canTransfer) ...[
+                          const SizedBox(width: 12),
+                          _BagPillBtn(
+                            icon:
+                                armed
+                                    ? Icons.check_rounded
+                                    : Icons.swap_horiz_rounded,
+                            color: armed ? Colors.orangeAccent : Colors.white70,
+                            label: armed ? 'SURE?' : 'SEND',
+                            onTap: () {
+                              if (!armed) {
+                                setArmed(() => armed = true);
+                                return;
+                              }
+                              Navigator.pop(dlgCtx);
+                              _sendToPeer(context, gun, item);
+                            },
+                          ),
+                        ],
+                        const SizedBox(width: 12),
+                        _BagPillBtn(
+                          icon: Icons.delete_outline_rounded,
+                          color: Colors.redAccent,
+                          label: 'DELETE',
+                          onTap: () {
+                            Navigator.pop(dlgCtx);
+                            _deleteWithUndo(context, gun, item);
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 );
@@ -316,11 +352,12 @@ class BackpackScreen extends StatelessWidget {
       }
     } else {
       final ok =
-          gun != null
-              ? p.transferGun(gun, slot)
-              : p.transferItem(item!, slot);
+          gun != null ? p.transferGun(gun, slot) : p.transferItem(item!, slot);
       if (context.mounted) {
-        _toast(context, ok ? '$name → $peerName' : '$peerName already has $name');
+        _toast(
+          context,
+          ok ? '$name → $peerName' : '$peerName already has $name',
+        );
       }
     }
     Haptics.medium();
@@ -390,7 +427,9 @@ class _BagPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF3A2E28),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF8D6E63).withValues(alpha: 0.7)),
+        border: Border.all(
+          color: const Color(0xFF8D6E63).withValues(alpha: 0.7),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.4),
@@ -436,9 +475,7 @@ class _FreeSlotsRow extends StatelessWidget {
             height: 14,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.18),
-              ),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
             ),
           ),
           if (i < count - 1 && i < 11) const SizedBox(width: 3),
@@ -552,9 +589,7 @@ class _BagTile extends StatelessWidget {
     final path =
         gun != null
             ? (gun!.icon.isNotEmpty ? gun!.icon : localGunIcon(gun!.name))
-            : (item!.icon.isNotEmpty
-                ? item!.icon
-                : localItemIcon(item!.name));
+            : (item!.icon.isNotEmpty ? item!.icon : localItemIcon(item!.name));
     return Tooltip(
       message: name,
       child: ScaleButton(
@@ -624,7 +659,10 @@ class _BagPillBtn extends StatelessWidget {
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.14),
               shape: BoxShape.circle,
-              border: Border.all(color: color.withValues(alpha: 0.65), width: 1.6),
+              border: Border.all(
+                color: color.withValues(alpha: 0.65),
+                width: 1.6,
+              ),
             ),
             child: Icon(icon, color: color, size: 24),
           ),

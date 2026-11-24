@@ -113,10 +113,7 @@ class PlayerPageState extends State<PlayerPage> {
         Navigator.push(context, fastRoute(const AllSynergiesScreen()));
       case DashCapsule.dps:
         Haptics.selection();
-        Navigator.push(
-          context,
-          fastRoute(DamageBreakdownScreen(slot: _slot)),
-        );
+        Navigator.push(context, fastRoute(DamageBreakdownScreen(slot: _slot)));
     }
   }
 
@@ -189,19 +186,24 @@ class PlayerPageState extends State<PlayerPage> {
         // Backpack-stashed gear stays in the player's lists (it still
         // counts for synergies/DPS/coolness) but is filtered out of the
         // open inventory view — the Backpack screen shows it instead.
-        final guns = sortGuns(player.guns, _gunSort)
-            .where((g) => !p.isBackpacked(g, _slot))
-            .toList();
-        final items = sortItems(player.items, _itemSort)
-            .where((i) => !p.isBackpackedItem(i, _slot))
-            .toList();
+        final guns =
+            sortGuns(
+              player.guns,
+              _gunSort,
+            ).where((g) => !p.isBackpacked(g, _slot)).toList();
+        final items =
+            sortItems(
+              player.items,
+              _itemSort,
+            ).where((i) => !p.isBackpackedItem(i, _slot)).toList();
         final stashedCount = p.backpackCount(_slot);
         // Per-section stashed counts for the "all stowed" cards — the
         // bag is a mixed pool, so the header total would mislabel.
-        int stashedOf(bool isGun) => p
-            .backpackEntries(_slot)
-            .where((e) => (e.gun != null) == isGun)
-            .length;
+        int stashedOf(bool isGun) =>
+            p
+                .backpackEntries(_slot)
+                .where((e) => (e.gun != null) == isGun)
+                .length;
 
         // Identify the highest-DPS gun in this player's loadout so both
         // grid and list views can surface it subtly (gold crown tint).
@@ -212,9 +214,7 @@ class PlayerPageState extends State<PlayerPage> {
         final topDps =
             player.guns.isEmpty
                 ? 0.0
-                : player.guns
-                    .map(effectiveDps)
-                    .reduce((a, b) => a > b ? a : b);
+                : player.guns.map(effectiveDps).reduce((a, b) => a > b ? a : b);
 
         final topDpsName =
             player.guns.isEmpty
@@ -258,15 +258,9 @@ class PlayerPageState extends State<PlayerPage> {
                           curse: state.totalCurse,
                           robotDamageBoost: robotDmgBoost,
                           onTapCoolness:
-                              () => CoolCurseSheet.show(
-                                context,
-                                isCool: true,
-                              ),
+                              () => CoolCurseSheet.show(context, isCool: true),
                           onTapCurse:
-                              () => CoolCurseSheet.show(
-                                context,
-                                isCool: false,
-                              ),
+                              () => CoolCurseSheet.show(context, isCool: false),
                           // Long-press opens the full Cool & Curse
                           // explainer — the same screen MP players get
                           // from the Paradox panel — so solo users see
@@ -289,8 +283,7 @@ class PlayerPageState extends State<PlayerPage> {
                           shrinesUsed: state.shrinesUsed,
                           dashCapsules: _capsulePins,
                           topGunDps: topDps,
-                          onDashCapsuleTap:
-                              (cap) => _onDashCapsuleTap(cap, p),
+                          onDashCapsuleTap: (cap) => _onDashCapsuleTap(cap, p),
                           onDashCapsulesEdit: () {
                             Haptics.selection();
                             showDashCapsulePicker(
@@ -569,12 +562,13 @@ class PlayerPageState extends State<PlayerPage> {
             ? p.stashGun(gun, slot: _slot)
             : p.stashItem(item!, slot: _slot);
     if (c.mounted) {
-      _toast(
-        c,
-        ok ? '$name stowed in backpack' : 'Backpack full (12/12)',
-      );
+      _toast(c, ok ? '$name stowed in backpack' : 'Backpack full (12/12)');
     }
-    Haptics.medium();
+    if (ok) {
+      Haptics.medium();
+    } else {
+      Haptics.light();
+    }
   }
 
   /// Direct transfer — no confirm sheet (the floating pill IS the

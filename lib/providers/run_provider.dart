@@ -184,8 +184,7 @@ class RunProvider
   /// round-tripping SharedPreferences (loadData's compute() doesn't
   /// run under the widget-test fake-async zone).
   @visibleForTesting
-  void debugSetRunRestoredFromSave(bool value) =>
-      _runRestoredFromSave = value;
+  void debugSetRunRestoredFromSave(bool value) => _runRestoredFromSave = value;
 
   void _recordAssetFailure(String asset, Object err) {
     _assetLoadFailures.add(asset);
@@ -638,7 +637,9 @@ class RunProvider
     if (char == null) return;
     final fresh =
         (slot == PlayerSlot.coop && _isParadoxMain)
-            ? Player(character: char)
+            // Paradox sidekick stays empty — but keeps the Backpack
+            // tool, same as startCoopPlayer.
+            ? Player(character: char, items: [backpackItem])
             : _buildPlayerFor(char);
     _runState = _replacePlayer(slot, fresh);
     _runState = _runState.copyWith(coolness: 0.0, curse: 0.0, shrinesUsed: []);
@@ -1069,13 +1070,20 @@ class RunProvider
 
   /// Stashed entries in inventory order — guns block then items block.
   /// Capacity is a mixed pool; this is display grouping only.
+  /// Deduped by key: stackable duplicates (e.g. multiple Junk) share
+  /// one key and one slot, so they must show as a single bag tile —
+  /// otherwise entries.length would exceed backpackKeys.length and
+  /// the n/12 counter would lie.
   List<({Gun? gun, Item? item})> backpackEntries(PlayerSlot slot) {
     final p = _playerFor(slot);
+    final seen = <String>{};
     return [
       for (final g in p.guns)
-        if (p.backpackKeys.contains(_gunKey(g))) (gun: g, item: null),
+        if (p.backpackKeys.contains(_gunKey(g)) && seen.add(_gunKey(g)))
+          (gun: g, item: null),
       for (final i in p.items)
-        if (p.backpackKeys.contains(_itemKey(i))) (gun: null, item: i),
+        if (p.backpackKeys.contains(_itemKey(i)) && seen.add(_itemKey(i)))
+          (gun: null, item: i),
     ];
   }
 
@@ -1100,15 +1108,20 @@ class RunProvider
     return true;
   }
 
-  /// Returns false when the backpack is full (12/12) — caller toasts.
+  /// Returns false when the backpack is full (12/12) or the entity
+  /// isn't in this slot's inventory — caller toasts.
   bool stashGun(Gun g, {PlayerSlot slot = PlayerSlot.main}) {
     if (g.name == kBackpackItemName) return false;
-    return _stash(_playerFor(slot), slot, _gunKey(g), g.name);
+    final p = _playerFor(slot);
+    if (!p.guns.any((x) => x.name == g.name)) return false;
+    return _stash(p, slot, _gunKey(g), g.name);
   }
 
   bool stashItem(Item i, {PlayerSlot slot = PlayerSlot.main}) {
     if (i.name == kBackpackItemName) return false;
-    return _stash(_playerFor(slot), slot, _itemKey(i), i.name);
+    final p = _playerFor(slot);
+    if (!p.items.any((x) => x.name == i.name)) return false;
+    return _stash(p, slot, _itemKey(i), i.name);
   }
 
   void _unstash(Player p, PlayerSlot slot, String key, String displayName) {
