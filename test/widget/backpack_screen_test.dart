@@ -242,6 +242,65 @@ void main() {
     expect(p.backpackCount(PlayerSlot.main), 0);
   });
 
+  testWidgets('long-press pill names the entry', (t) async {
+    final it = Item(name: 'Caption Check');
+    p.addItem(it);
+    p.stashItem(it);
+
+    await pumpBag(t);
+    await t.longPress(find.text('CAPTION CHECK'));
+    await t.pumpAndSettle();
+
+    // Tile label + pill caption both render the name.
+    expect(find.text('CAPTION CHECK'), findsNWidgets(2));
+  });
+
+  testWidgets('Backpack item pill hides STASH (bag cannot hold itself)',
+      (t) async {
+    t.view.physicalSize = const Size(900, 1800);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    await pumpPlayerPage(t);
+    await longPressTile(t, 'Backpack');
+
+    expect(find.text('DELETE'), findsOneWidget);
+    expect(find.text('STASH'), findsNothing);
+    // Solo — no SEND either.
+    expect(find.text('SEND'), findsNothing);
+  });
+
+  testWidgets('local co-op SEND moves stashed gear to partner open inventory',
+      (t) async {
+    t.view.physicalSize = const Size(900, 1400);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    p.startCoopPlayer(Gungeoneer(name: 'Hunter'));
+    final it = Item(name: 'Gift Me');
+    p.addItem(it); // main slot
+    p.stashItem(it);
+
+    await pumpBag(t);
+    await t.longPress(find.text('GIFT ME'));
+    await t.pumpAndSettle();
+    expect(find.text('SEND'), findsOneWidget);
+
+    // Arm then confirm.
+    await t.tap(find.text('SEND'));
+    await t.pumpAndSettle();
+    await t.tap(find.text('SURE?'));
+    await t.pumpAndSettle();
+
+    // Left main's bag AND main's inventory; landed in coop's OPEN
+    // inventory (no backpack key on the receiving side).
+    expect(p.runState.main.items.any((i) => i.name == 'Gift Me'), isFalse);
+    expect(p.backpackCount(PlayerSlot.main), 0);
+    final coop = p.runState.coop!;
+    expect(coop.items.any((i) => i.name == 'Gift Me'), isTrue);
+    expect(coop.backpackKeys.contains('i:Gift Me'), isFalse);
+  });
+
   testWidgets('coop backpack is independent', (t) async {
     t.view.physicalSize = const Size(900, 1400);
     t.view.devicePixelRatio = 1.0;
