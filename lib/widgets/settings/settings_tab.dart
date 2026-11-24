@@ -9,7 +9,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../services/mp_session.dart';
 import '../../screens/experience_studio_screen.dart';
-import '../../utils/asset_paths.dart' show kAppVersion;
+import '../../utils/asset_paths.dart' show kAppVersion, themeSplashPath;
 import '../../utils/fast_route.dart';
 import '../../utils/responsive.dart' show ScreenProfile;
 import 'debug_tab.dart';

@@ -74,6 +74,17 @@ void main() {
     expect(find.text('Reset Player 1'), findsNothing);
   });
 
+  testWidgets('Hero header shows theme name, version chip and run state', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    // Run-state chip survives the hero-header rework (the splash
+    // thumb is asset-backed and absent under the test asset bundle).
+    expect(find.text('NO ACTIVE RUN'), findsOneWidget);
+  });
+
   testWidgets('Tapping a panel header expands it', (tester) async {
     await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();

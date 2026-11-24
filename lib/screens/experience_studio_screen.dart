@@ -123,6 +123,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   bool _allowPop = false;
   int _hubTab = 0;
   double _liveLookH = 0.22;
+  // Editor tab strip — single scrolling row; controller scrolls the
+  // active chip into view, keys locate chips for ensureVisible.
+  final ScrollController _tabScrollCtrl = ScrollController();
+  final List<GlobalKey> _tabKeys = List.generate(
+    _hubTabs.length,
+    (_) => GlobalKey(),
+  );
   // Gentle pulse on the hero PREVIEW/APPLY buttons — the dashboard's
   // two primary actions breathe so they read as the main event.
   late final AnimationController _heroPulse = AnimationController(
@@ -166,6 +173,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         final t = p.getInt('studio.lastTab');
         if (t != null && mounted) {
           setState(() => _hubTab = t.clamp(0, _hubTabs.length - 1));
+          _scrollTabIntoView(_hubTab);
         }
       });
     }
@@ -178,6 +186,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     _draft = AppTheme.cachedCustomTheme ?? CustomThemeData.defaultTheme;
     AppTheme.previewNotifier.value = _previewMode;
     _loadQuickSlots();
+    // Deep-linked/restored tab may start off-screen in the strip.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _scrollTabIntoView(_hubTab),
+    );
   }
 
   Future<void> _loadQuickSlots() async {
@@ -204,6 +216,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   @override
   void dispose() {
     _heroPulse.dispose();
+    _tabScrollCtrl.dispose();
     AppTheme.previewNotifier.value = null;
     super.dispose();
   }
@@ -772,6 +785,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           onTap: () {
             Haptics.selection();
             setState(() => _stage = _StudioStage.editor);
+            _scrollTabIntoView(_hubTab);
           },
         ),
         const SizedBox(height: 14),
@@ -796,6 +810,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               _editingPresetId = editable.id;
               _presetName = editable.name;
               setState(() => _stage = _StudioStage.editor);
+              _scrollTabIntoView(_hubTab);
             },
           ),
         ],
@@ -1001,76 +1016,88 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         Insets.lg,
         Insets.sm,
       ),
-      // Two rows of three — six tabs never fit one row at readable
-      // size on a phone ('COLORS & BG' wrapped and made its pill
-      // taller than the rest). 44px min height keeps taps comfy.
-      child: Column(
-        children: [
-          for (var r = 0; r * 3 < _hubTabs.length; r++)
-            Padding(
-              padding: EdgeInsets.only(top: r > 0 ? 6 : 0),
-              child: Row(
-                children: List.generate(3, (c) {
-                  final i = r * 3 + c;
-                  if (i >= _hubTabs.length) {
-                    return const Expanded(child: SizedBox());
-                  }
-                  final active = _hubTab == i;
-                  return Expanded(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        setState(() => _hubTab = i);
-                        Haptics.selection();
-                        SharedPreferences.getInstance().then(
-                          (p) => p.setInt('studio.lastTab', i),
-                        );
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 160),
-                        constraints: const BoxConstraints(minHeight: 44),
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              active
-                                  ? flair.primary.withValues(alpha: 0.18)
-                                  : Colors.white.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color:
-                                active
-                                    ? flair.primary.withValues(alpha: 0.7)
-                                    : Colors.white.withValues(alpha: 0.12),
-                            width: active ? 1.5 : 1.0,
-                          ),
-                        ),
-                        child: Center(
-                          child: GoopText(
-                            _hubTabs[i],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              // U-035: 9px was below the readable floor.
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.6,
-                              color:
-                                  active
-                                      ? flair.primary
-                                      : Colors.white.withValues(alpha: 0.45),
-                            ),
-                          ),
-                        ),
-                      ),
+      // ONE horizontally-scrolling strip — the old 2-row grid ate a
+      // third of the editor's vertical space. Chips size to content;
+      // the active tab auto-scrolls into view.
+      child: SingleChildScrollView(
+        controller: _tabScrollCtrl,
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(_hubTabs.length, (i) {
+            final active = _hubTab == i;
+            return GestureDetector(
+              key: _tabKeys[i],
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                setState(() => _hubTab = i);
+                Haptics.selection();
+                SharedPreferences.getInstance().then(
+                  (p) => p.setInt('studio.lastTab', i),
+                );
+                _scrollTabIntoView(i);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                constraints: const BoxConstraints(minHeight: 44),
+                margin: const EdgeInsets.only(right: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color:
+                      active
+                          ? flair.primary.withValues(alpha: 0.18)
+                          : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color:
+                        active
+                            ? flair.primary.withValues(alpha: 0.7)
+                            : Colors.white.withValues(alpha: 0.12),
+                    width: active ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Center(
+                  child: GoopText(
+                    _hubTabs[i],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      // U-035: 9px was below the readable floor.
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.6,
+                      color:
+                          active
+                              ? flair.primary
+                              : Colors.white.withValues(alpha: 0.45),
                     ),
-                  );
-                }),
+                  ),
+                ),
               ),
-            ),
-        ],
+            );
+          }),
+        ),
       ),
     );
+  }
+
+  /// Keeps the active tab chip visible inside the scrolling strip —
+  /// fires after tab taps and once after the first frame so a
+  /// deep-linked [initialTab] isn't parked off-screen.
+  void _scrollTabIntoView(int index) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _tabKeys[index].currentContext;
+      if (ctx != null) {
+        Scrollable.ensureVisible(
+          ctx,
+          alignment: 0.5,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   /// LIVE LOOK — draggable pane (~1/3 → 75% of screen) rendering a mini

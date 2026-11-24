@@ -1,3 +1,9 @@
+## Unreleased
+
+### Experience Studio & Settings polish
+- **Editor tab strip consolidated to one row** — the customization editor's two-row tab grid is now a single horizontally-scrolling chip strip (DETAILS / COLORS & BG / TYPE / PARTICLES / AMBIANCE / SAVE). The active tab auto-scrolls into view on tap, deep links, and last-used-tab restore, reclaiming a full row of vertical space for the LIVE LOOK pane and options.
+- **Settings hero header** — the status strip is now a hero card: live theme splash art (palette-gradient fallback) + theme name, with version and run-state chips beneath. Panel expand/collapse motion verified (animated cross-fade + chevron rotation, reduced-motion respected).
+
 ## v3.8.1 — Mimic Storage, backpack restore fix & UX declutter
 
 APK: `gungeon-mate-v3.8.1.apk` · build 169 · patch release over v3.8.0+168.

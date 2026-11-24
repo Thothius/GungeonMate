@@ -500,7 +500,9 @@ class _DangerRow extends StatelessWidget {
   }
 }
 
-/// Non-interactive orientation strip: version, active theme, run state.
+/// Hero header strip — theme splash thumb + name, version and run-state
+/// chips. Replaces the old chip-only strip: the splash gives the page
+/// instant theme identity at a glance.
 class _SettingsStatusStrip extends StatelessWidget {
   final String version;
   final String themeLabel;
@@ -518,28 +520,93 @@ class _SettingsStatusStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final splashPath = themeSplashPath(AppTheme.mode.splashSlug);
     return Container(
       decoration: _settingsCardDecoration(flair),
+      clipBehavior: Clip.antiAlias,
       padding: const EdgeInsets.symmetric(
         horizontal: Insets.lg,
         vertical: Insets.md,
       ),
-      child: Wrap(
-        spacing: Insets.sm,
-        runSpacing: Insets.xs,
-        crossAxisAlignment: WrapCrossAlignment.center,
+      child: Row(
         children: [
-          _StatusChip(
-            label: 'v$version',
-            color: flair.secondary,
-            flair: flair,
+          // Splash thumb — real theme art, palette-gradient fallback
+          // for modes without a splash asset.
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: 56,
+              height: 56,
+              child:
+                  splashPath.isNotEmpty
+                      ? Image.asset(
+                        splashPath,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (_, _, _) => DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    flair.scaffold,
+                                    flair.primary.withValues(alpha: 0.35),
+                                  ],
+                                ),
+                              ),
+                            ),
+                      )
+                      : DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              flair.scaffold,
+                              flair.primary.withValues(alpha: 0.35),
+                            ],
+                          ),
+                        ),
+                      ),
+            ),
           ),
-          _StatusChip(
-            label: themeLabel,
-            color: flair.primary,
-            flair: flair,
+          const SizedBox(width: Insets.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  themeLabel,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: FontSizes.titleSmall,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.1,
+                    color: flair.primary.withValues(alpha: 0.92),
+                  ),
+                ),
+                const SizedBox(height: Insets.xs),
+                Wrap(
+                  spacing: Insets.sm,
+                  runSpacing: Insets.xs,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    _StatusChip(
+                      label: 'v$version',
+                      color: flair.secondary,
+                      flair: flair,
+                    ),
+                    _StatusChip(
+                      label: runLabel,
+                      color: runColor,
+                      flair: flair,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          _StatusChip(label: runLabel, color: runColor, flair: flair),
         ],
       ),
     );
