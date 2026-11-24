@@ -5,9 +5,8 @@ import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 
 /// MP experience coverage — the session-level behaviors that sit
-/// above the transport: the unified MpEvent activity log, chat
-/// queue/history, pause/resume state, demo mode, and the message
-/// types not covered by mp_message_test.
+/// above the transport: pause/resume state, demo mode, the recovery
+/// elapsed feed, and the message types not covered by mp_message_test.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late RunProvider provider;
@@ -23,71 +22,7 @@ void main() {
     session.dispose();
   });
 
-  group('MpEvent + sessionEvents log', () {
-    test('logEvent appends and notifies listeners', () {
-      var notified = 0;
-      session.addListener(() => notified++);
-      session.logEvent(
-        MpEvent.event(kind: 'system', from: 'Sys', text: 'hi', mine: false),
-      );
-      expect(session.sessionEvents.length, 1);
-      expect(session.sessionEvents.first.kind, 'system');
-      expect(session.sessionEvents.first.text, 'hi');
-      expect(session.sessionEvents.first.mine, false);
-      expect(notified, greaterThan(0));
-    });
-
-    test('logEvent caps history at 150 entries (oldest evicted)', () {
-      for (var i = 0; i < 160; i++) {
-        session.logEvent(MpEvent.chat(from: 'P', text: 'msg $i', mine: true));
-      }
-      expect(session.sessionEvents.length, 150);
-      // First ten should have been evicted — oldest is 'msg 10'.
-      expect(session.sessionEvents.first.text, 'msg 10');
-      expect(session.sessionEvents.last.text, 'msg 159');
-    });
-
-    test('MpEvent.chat factory produces chat kind with mine flag', () {
-      final e = MpEvent.chat(from: 'Buddy', text: 'hello', mine: false);
-      expect(e.kind, 'chat');
-      expect(e.from, 'Buddy');
-      expect(e.text, 'hello');
-      expect(e.mine, false);
-      expect(e.ts, isNotNull);
-    });
-
-    test('MpEvent.event factory produces arbitrary kinds', () {
-      final e = MpEvent.event(
-        kind: 'transfer',
-        from: 'Me',
-        text: 'Gun → Pal',
-        mine: true,
-      );
-      expect(e.kind, 'transfer');
-      expect(e.mine, true);
-    });
-  });
-
-  group('sendEmote / sendSurprise event logging', () {
-    test('sendEmote logs an emote event even disconnected', () async {
-      await session.sendEmote('kiss');
-      expect(session.sessionEvents.single.kind, 'emote');
-      expect(session.sessionEvents.single.text, 'kiss');
-      expect(session.sessionEvents.single.mine, true);
-    });
-
-    test('sendSurprise early-returns when not connected (no event)', () async {
-      await session.sendSurprise(preset: 'poke', text: 'boop');
-      // Guard: if (!_link.isConnected) return — runs BEFORE logEvent.
-      expect(session.sessionEvents, isEmpty);
-    });
-  });
-
-  group('Peer-gone hint (S4.2)', () {
-    int hintCount() => session.sessionEvents
-        .where((e) => e.text.contains('may have left'))
-        .length;
-
+  group('Peer-gone elapsed feed (S4.2)', () {
     test('elapsed ticks update disconnectElapsedSec every feed', () {
       session.debugFeedRecoveryElapsed(0);
       expect(session.disconnectElapsedSec.value, 0);
@@ -95,36 +30,6 @@ void main() {
       expect(session.disconnectElapsedSec.value, 45);
       session.debugFeedRecoveryElapsed(90);
       expect(session.disconnectElapsedSec.value, 90);
-    });
-
-    test('hint fires once at 120s and latches for the episode', () {
-      session.debugFeedRecoveryElapsed(0);
-      session.debugFeedRecoveryElapsed(119);
-      expect(hintCount(), 0);
-      session.debugFeedRecoveryElapsed(120);
-      expect(hintCount(), 1);
-      expect(
-        session.sessionEvents.last.text,
-        contains('partner may have left'),
-      );
-      // Later ticks must not re-log — the latch is per episode.
-      session.debugFeedRecoveryElapsed(180);
-      session.debugFeedRecoveryElapsed(600);
-      expect(hintCount(), 1);
-    });
-
-    test('cancel() resets the latch — next episode can hint again', () async {
-      session.debugFeedRecoveryElapsed(120);
-      expect(hintCount(), 1);
-      await session.cancel();
-      // cancel() → _resetParadoxState → wipeSessionActivity clears the
-      // event log, so the count restarts at 0 for the new episode.
-      expect(hintCount(), 0);
-      session.debugFeedRecoveryElapsed(0);
-      session.debugFeedRecoveryElapsed(60);
-      expect(hintCount(), 0);
-      session.debugFeedRecoveryElapsed(120);
-      expect(hintCount(), 1);
     });
   });
 

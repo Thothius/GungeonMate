@@ -16,7 +16,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
   set _myRole(MpRole? v);
   set _myNickname(String v);
   set _myCharacterName(String v);
-  String? get _peerNickname;
   set _peerNickname(String? v);
   set _peerCharacterName(String? v);
   set _peerAvatarId(String v);
@@ -33,8 +32,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
   ValueNotifier<bool> get reconnectNotifier;
   ValueNotifier<bool> get reconnectSuccessNotifier;
   ValueNotifier<int> get disconnectElapsedSec;
-  bool get _peerGoneHinted;
-  set _peerGoneHinted(bool v);
   void Function()? get onStartRun;
   set _runStartReceived(bool v);
   void Function(MpSurprise)? get onSurpriseReceived;
@@ -43,7 +40,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
   void _startRunTimer();
   Future<void> _persistSession();
   void _startSaveTimer();
-  void logEvent(MpEvent e);
   Future<void> _onPeerEndRun();
 
   void _wireComponents() {
@@ -83,36 +79,11 @@ mixin _MpSessionHandlers on ChangeNotifier {
   }
 
   void _onPeerSurprise(MpSurprise s) {
-    logEvent(
-      MpEvent.event(
-        kind: 'surprise',
-        from: _peerNickname ?? 'Peer',
-        text: s.text.isEmpty ? s.preset : s.text,
-        mine: false,
-      ),
-    );
     onSurpriseReceived?.call(s);
   }
 
-  /// Elapsed-time feed → notifier + one-shot "may have left" hint.
-  /// Recovery itself never gives up (by design) — the hint is purely
-  /// informational so the user isn't staring at "Reconnecting…"
-  /// forever without context.
   void _onRecoveryElapsed(int sec) {
     disconnectElapsedSec.value = sec;
-    if (sec >= 120 && !_peerGoneHinted) {
-      _peerGoneHinted = true;
-      logEvent(
-        MpEvent.event(
-          kind: 'system',
-          from: _peerNickname ?? 'Peer',
-          text:
-              'Still searching — your partner may have left. '
-              'The session keeps retrying; you can also cancel.',
-          mine: false,
-        ),
-      );
-    }
   }
 
   void _onRunChanged() => _sync.onRunChanged();
@@ -148,14 +119,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
       reconnectNotifier.value = false;
     });
     _recovery.onPeerDisconnected();
-    logEvent(
-      MpEvent.event(
-        kind: 'system',
-        from: _peerNickname ?? 'Peer',
-        text: 'Connection lost — reconnecting…',
-        mine: false,
-      ),
-    );
     if (_runProvider.runState.main.character != null) {
       unawaited(MpStore.saveRunState(_runProvider.runState, force: true));
     }
@@ -174,15 +137,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
     // Hello succeeded — transition to connected.
     _setPhase(MpPhase.connected);
     disconnectElapsedSec.value = 0;
-    _peerGoneHinted = false;
-    logEvent(
-      MpEvent.event(
-        kind: 'system',
-        from: _peerNickname ?? 'Peer',
-        text: 'Connected',
-        mine: false,
-      ),
-    );
     reconnectSuccessNotifier.value = true;
     Future.delayed(const Duration(milliseconds: 100), () {
       reconnectSuccessNotifier.value = false;

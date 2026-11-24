@@ -157,14 +157,6 @@ class _MpConnectScreenState extends State<MpConnectScreen>
       // Delivery failed — revert so READY re-enables and the peer
       // isn't left waiting on a message that never left.
       setState(() => _mainConfirmed = false);
-      _session.logEvent(
-        MpEvent.event(
-          kind: 'system',
-          from: _session.myNickname,
-          text: 'Could not reach your partner — try READY again.',
-          mine: true,
-        ),
-      );
     }
   }
 

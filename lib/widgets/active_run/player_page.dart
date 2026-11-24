@@ -31,7 +31,6 @@ import '../../screens/damage_breakdown_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
 import 'dash_capsules.dart';
 import '../scale_button.dart';
-import '../../models/multiplayer_messages.dart';
 
 part 'player_page/synergy_widgets.dart';
 
@@ -527,25 +526,9 @@ class PlayerPageState extends State<PlayerPage> {
         unawaited(
           session.sendGift(kind: gun != null ? 'gun' : 'item', name: name),
         );
-        session.logEvent(
-          MpEvent.event(
-            kind: 'transfer',
-            from: session.myNickname,
-            text: '$name → $peerName',
-            mine: true,
-          ),
-        );
       } else {
         unawaited(
           session.sendRequest(kind: gun != null ? 'gun' : 'item', name: name),
-        );
-        session.logEvent(
-          MpEvent.event(
-            kind: 'transfer',
-            from: session.myNickname,
-            text: 'Asked $peerName for $name',
-            mine: true,
-          ),
         );
       }
     } else {

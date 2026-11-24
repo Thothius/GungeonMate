@@ -202,24 +202,6 @@ class MpSession extends ChangeNotifier
   /// Connection health 0–100 (RTT-based), straight from the transport.
   ValueListenable<int> get healthListenable => _link.healthListenable;
 
-  /// Unified activity log — surprises, emotes, transfers, and
-  /// connect/disconnect notes all land here for the messages panel.
-  final List<MpEvent> sessionEvents = [];
-  @override
-  void logEvent(MpEvent e) {
-    sessionEvents.add(e);
-    if (sessionEvents.length > 150) sessionEvents.removeAt(0);
-    notifyListeners();
-  }
-
-  /// Wipes all session-scoped activity — chat history, queued sends,
-  /// unread counter, and the unified event log. Called by
-  /// [RunLifecycle.endRun] so the activity log is always cleared when
-  /// the run ends, not just the chat array.
-  void wipeSessionActivity() {
-    sessionEvents.clear();
-  }
-
   /// UI callbacks — set by the run screen / paradox widgets.
   @override
   void Function(MpSurprise surprise)? onSurpriseReceived;
@@ -262,11 +244,6 @@ class MpSession extends ChangeNotifier
   /// Reset to 0 on connect/teardown.
   @override
   final ValueNotifier<int> disconnectElapsedSec = ValueNotifier(0);
-
-  /// One-shot latch so the "may have left" system event logs once per
-  /// disconnect episode, not on every elapsed tick.
-  @override
-  bool _peerGoneHinted = false;
 
   // ── Request/gift state (delegated to MpSync) ───────────────────
   MpRequest? get pendingRequest => _sync.pendingRequest;
@@ -515,14 +492,6 @@ class MpSession extends ChangeNotifier
     String fx = '',
   }) async {
     if (!_link.isConnected) return;
-    logEvent(
-      MpEvent.event(
-        kind: 'surprise',
-        from: _myNickname,
-        text: text.isEmpty ? preset : text,
-        mine: true,
-      ),
-    );
     await _sync.sendSurprise(
       MpSurprise(preset: preset, text: text, spriteKey: spriteKey, fx: fx),
     );
@@ -584,7 +553,6 @@ class MpSession extends ChangeNotifier
     // Reset reconnect-elapsed state so a later session can't inherit
     // a stale "partner may have left" reading.
     disconnectElapsedSec.value = 0;
-    _peerGoneHinted = false;
     try {
       // Notify peer before tearing down the transport.
       if (_link.isConnected) {
@@ -635,7 +603,6 @@ class MpSession extends ChangeNotifier
     _runStartMs = 0;
     _runAccumMs = 0;
     _runStartReceived = false;
-    wipeSessionActivity();
     _sync.setSessionMeta(avatarId: '', runTitle: '', sessionNumber: 0);
   }
 
@@ -647,14 +614,6 @@ class MpSession extends ChangeNotifier
   Future<void> _onPeerEndRun() async {
     if (_tearingDown) return;
     _tearingDown = true;
-    logEvent(
-      MpEvent.event(
-        kind: 'system',
-        from: _peerNickname ?? 'Peer',
-        text: 'Partner ended the run',
-        mine: false,
-      ),
-    );
     try {
       final saved = await MpStore.load();
       final savedSoloBackup = saved?.soloRunBackup;
@@ -743,12 +702,7 @@ class MpSession extends ChangeNotifier
     List<int> dice, {
     int round = 1,
   }) => _sync.sendDiceResult(score, dice, round: round);
-  Future<void> sendEmote(String action) async {
-    logEvent(
-      MpEvent.event(kind: 'emote', from: _myNickname, text: action, mine: true),
-    );
-    await _sync.sendEmote(action);
-  }
+  Future<void> sendEmote(String action) => _sync.sendEmote(action);
 
   // ── App-kill restore ───────────────────────────────────────────
 

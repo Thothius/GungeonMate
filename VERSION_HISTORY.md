@@ -22,6 +22,12 @@ Changes landed after the v3.7.0+167 build; no version bump yet.
 - **Wire compatibility** — `MpSurprise` dual-writes `sprite` + `spriteKey`; shared surprise preset source; `:key:` sprite sender.
 - **Host-gone recovery** — elapsed-feed hint + latch; reconnect UX banner/dialog state tests.
 
+### MP hardening (Android gate + session token)
+- **Multiplayer is now labeled Android-only** — Nearby Connections has no desktop/web backend, so the Main Menu Multiplayer button renders disabled with an "ANDROID ONLY" hint on non-Android builds instead of dropping players into a dead-end lobby.
+- **Reconnect banner gets a real escape hatch** — after ~2 minutes of failed reconnects the persistent banner's leave action strengthens from END to "LEAVE MP" (same teardown path), matching the "partner may have left" escalation copy.
+- **Session token on the wire** — every MP session now generates a random token exchanged in the hello handshake and echoed on state snapshots; mismatched snapshots are dropped and repeated mismatches surface a sync error. Protects against stray/stale senders injecting state (Nearby Connections is plaintext — proximity + the accept prompt remain the real gate). Older builds without the token keep working unchanged.
+- **Dead MP code removed** — `sendPeerRemove`, the write-only `MpEvent`/`sessionEvents`/`logEvent` activity log, `wipeSessionActivity`, and the `_peerGoneHinted` latch excised (~120 lines across session, handlers, connect screen, player page, and models).
+
 ### Polish & a11y
 - **Reduced-motion sweep** — `ThemedNumber` shimmer/sparkle/bullets, inventory top-DPS ticker, and remaining decorative tickers now honor `disableAnimations`; dead `SynergyGlowOverlay` controller machinery removed.
 - **Neo-Skeuo removed** — the alternate cream-paper skin is fully excised; persisted picks migrate to live fonts via `AppFontLabel.migrate`.

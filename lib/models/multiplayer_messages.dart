@@ -622,27 +622,3 @@ final class MpPeerEdit extends MpMessage {
     name: j['name'] as String? ?? '',
   );
 }
-
-/// A logged activity entry for the messages panel — chat, surprise,
-/// emote, transfer, or connect/disconnect note.
-class MpEvent {
-  final String kind; // 'chat' | 'surprise' | 'emote' | 'transfer' | 'system'
-  final String from;
-  final String text;
-  final bool mine;
-  final DateTime ts;
-
-  MpEvent._(this.kind, this.from, this.text, this.mine) : ts = DateTime.now();
-
-  factory MpEvent.chat({
-    required String from,
-    required String text,
-    required bool mine,
-  }) => MpEvent._('chat', from, text, mine);
-  factory MpEvent.event({
-    required String kind,
-    required String from,
-    required String text,
-    required bool mine,
-  }) => MpEvent._(kind, from, text, mine);
-}

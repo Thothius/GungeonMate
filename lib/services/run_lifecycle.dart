@@ -46,7 +46,6 @@ class RunLifecycle {
     if (session.isActive) {
       await session.cancel();
     }
-    session.wipeSessionActivity();
     p.endRun();
   }
 }

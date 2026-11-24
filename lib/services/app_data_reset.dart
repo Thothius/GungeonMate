@@ -30,7 +30,6 @@ Future<void> resetAllAppData({
     if (session.isActive) {
       await session.cancel();
     }
-    session.wipeSessionActivity();
   } catch (e) {
     debugPrint('[AppDataReset] MP teardown error: $e');
   }
