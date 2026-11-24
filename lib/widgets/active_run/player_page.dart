@@ -665,6 +665,15 @@ class PlayerPageState extends State<PlayerPage> {
     final isMpActive = mpSession.phase != MpPhase.idle;
     final canTransfer = hasCoop && (!isMpActive || mpSession.isConnected);
 
+    // The Backpack can't be stashed (it IS the bag) or deleted — with
+    // no co-op partner there's nothing left for the pill to offer.
+    final isBackpackItem =
+        item?.name == RunProvider.kBackpackItemName;
+    if (isBackpackItem && !canTransfer) {
+      _toast(c, 'The Backpack stays with you');
+      return;
+    }
+
     // Floating quick-actions — two circular buttons hovering over the
     // card: transfer + trash. Tap-away dismisses (barrierDismissible).
     _transferArmed = false;
@@ -716,9 +725,9 @@ class PlayerPageState extends State<PlayerPage> {
                           _transferDirect(c, gun: gun, item: item);
                         },
                       ),
-                    // STASH — always available (the Backpack's whole
-                    // point). Hidden for the Backpack item itself: the
-                    // bag can't hold itself.
+                    // STASH + DELETE — hidden for the Backpack item
+                    // itself: the bag can't hold itself and can't be
+                    // deleted (provider also hard-guards removeItem).
                     if (item == null ||
                         item.name != RunProvider.kBackpackItemName) ...[
                       if (canTransfer) const SizedBox(width: 12),
@@ -731,21 +740,21 @@ class PlayerPageState extends State<PlayerPage> {
                           _stashWithFeedback(c, gun: gun, item: item);
                         },
                       ),
+                      const SizedBox(width: 12),
+                      _QuickActionBtn(
+                        icon: Icons.delete_outline_rounded,
+                        color: Colors.redAccent,
+                        label: 'DELETE',
+                        onTap: () {
+                          Navigator.pop(dlgCtx);
+                          if (gun != null) {
+                            _removeGunWithUndo(c, gun);
+                          } else {
+                            _removeItemWithUndo(c, item!);
+                          }
+                        },
+                      ),
                     ],
-                    const SizedBox(width: 12),
-                    _QuickActionBtn(
-                      icon: Icons.delete_outline_rounded,
-                      color: Colors.redAccent,
-                      label: 'DELETE',
-                      onTap: () {
-                        Navigator.pop(dlgCtx);
-                        if (gun != null) {
-                          _removeGunWithUndo(c, gun);
-                        } else {
-                          _removeItemWithUndo(c, item!);
-                        }
-                      },
-                    ),
                   ],
                 );
               },
@@ -789,6 +798,7 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   void _removeItemWithUndo(BuildContext c, Item it) {
+    if (it.name == RunProvider.kBackpackItemName) return;
     final p = c.read<RunProvider>();
     final capturedSlot = _slot;
     p.removeItem(it, slot: capturedSlot);

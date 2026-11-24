@@ -98,6 +98,23 @@ void main() {
       expect(rp.stashItem(bag), isFalse);
     });
 
+    test('the Backpack item cannot be deleted', () {
+      final bag = rp.runState.main.items
+          .firstWhere((i) => i.name == RunProvider.kBackpackItemName);
+      final before = rp.runState.main.items.length;
+
+      rp.removeItem(bag);
+      rp.removeItem(bag, force: true); // MP peer-remove path too
+
+      expect(rp.runState.main.items.length, before);
+      expect(
+        rp.runState.main.items.any(
+          (i) => i.name == RunProvider.kBackpackItemName,
+        ),
+        isTrue,
+      );
+    });
+
     test('stash rejects gear the slot does not own', () {
       expect(rp.stashItem(item('Not Owned Item')), isFalse);
       expect(rp.stashGun(gun('Not Owned Gun')), isFalse);

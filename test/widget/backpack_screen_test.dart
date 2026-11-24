@@ -255,7 +255,7 @@ void main() {
     expect(find.text('CAPTION CHECK'), findsNWidgets(2));
   });
 
-  testWidgets('Backpack item pill hides STASH (bag cannot hold itself)',
+  testWidgets('Backpack item pill hides STASH+DELETE solo (toast instead)',
       (t) async {
     t.view.physicalSize = const Size(900, 1800);
     t.view.devicePixelRatio = 1.0;
@@ -264,10 +264,26 @@ void main() {
     await pumpPlayerPage(t);
     await longPressTile(t, 'Backpack');
 
-    expect(find.text('DELETE'), findsOneWidget);
+    // Solo: no transfer partner → nothing for the pill to offer, so
+    // long-press explains instead of showing an empty pill.
+    expect(find.text('The Backpack stays with you'), findsOneWidget);
+    expect(find.text('DELETE'), findsNothing);
     expect(find.text('STASH'), findsNothing);
-    // Solo — no SEND either.
     expect(find.text('SEND'), findsNothing);
+  });
+
+  testWidgets('Backpack item pill offers only SEND in co-op', (t) async {
+    t.view.physicalSize = const Size(900, 1400);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    p.startCoopPlayer(Gungeoneer(name: 'Hunter'));
+    await pumpPlayerPage(t);
+    await longPressTile(t, 'Backpack');
+
+    expect(find.text('SEND'), findsOneWidget);
+    expect(find.text('STASH'), findsNothing);
+    expect(find.text('DELETE'), findsNothing);
   });
 
   testWidgets('local co-op SEND moves stashed gear to partner open inventory',

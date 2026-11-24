@@ -890,6 +890,10 @@ class RunProvider
     PlayerSlot slot = PlayerSlot.main,
     bool force = false,
   }) {
+    // The app-only Backpack can't be deleted — it's the storage tool
+    // itself. Guard sits before the run-log write so no path (pill,
+    // detail screen, MP peer-remove) can drop it.
+    if (item.name == kBackpackItemName) return;
     final p = _playerFor(slot);
 
     _log(
