@@ -272,7 +272,8 @@ void main() {
     expect(find.text('SEND'), findsNothing);
   });
 
-  testWidgets('Backpack item pill offers only SEND in co-op', (t) async {
+  testWidgets('Backpack item pill toasts in co-op too (unsendable)',
+      (t) async {
     t.view.physicalSize = const Size(900, 1400);
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
@@ -281,7 +282,9 @@ void main() {
     await pumpPlayerPage(t);
     await longPressTile(t, 'Backpack');
 
-    expect(find.text('SEND'), findsOneWidget);
+    // Each player keeps their own bag — no STASH/DELETE/SEND.
+    expect(find.text('The Backpack stays with you'), findsOneWidget);
+    expect(find.text('SEND'), findsNothing);
     expect(find.text('STASH'), findsNothing);
     expect(find.text('DELETE'), findsNothing);
   });

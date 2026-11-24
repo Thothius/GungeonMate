@@ -115,6 +115,40 @@ void main() {
       );
     });
 
+    test('the Backpack item cannot be transferred or duplicated', () {
+      final bag = rp.runState.main.items
+          .firstWhere((i) => i.name == RunProvider.kBackpackItemName);
+      rp.startCoopPlayer(Gungeoneer(name: 'Hunter'));
+
+      // Local co-op SEND path.
+      expect(rp.transferItem(bag, PlayerSlot.main), isFalse);
+      expect(
+        rp.runState.main.items.any(
+          (i) => i.name == RunProvider.kBackpackItemName,
+        ),
+        isTrue,
+      );
+      expect(
+        rp.runState.coop!.items.any(
+          (i) => i.name == RunProvider.kBackpackItemName,
+        ),
+        isTrue,
+        reason: 'coop keeps their own bag — nothing moved',
+      );
+
+      // MP peer-edit 'add' force path must not duplicate the bag.
+      final before = rp.runState.main.items
+          .where((i) => i.name == RunProvider.kBackpackItemName)
+          .length;
+      rp.addItem(bag, force: true);
+      expect(
+        rp.runState.main.items
+            .where((i) => i.name == RunProvider.kBackpackItemName)
+            .length,
+        before,
+      );
+    });
+
     test('stash rejects gear the slot does not own', () {
       expect(rp.stashItem(item('Not Owned Item')), isFalse);
       expect(rp.stashGun(gun('Not Owned Gun')), isFalse);

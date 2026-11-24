@@ -788,6 +788,8 @@ class MpSync {
 
   Future<void> sendGift({required String kind, required String name}) async {
     if (!_link.isConnected) return;
+    // The Backpack is bound to its owner — never giftable.
+    if (name == RunProvider.kBackpackItemName) return;
     final mySlot = _myRole == MpRole.main ? PlayerSlot.main : PlayerSlot.coop;
     Gun? removedGun;
     Item? removedItem;

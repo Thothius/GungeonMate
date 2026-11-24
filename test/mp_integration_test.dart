@@ -169,6 +169,43 @@ void main() {
         reason: 'Session should remain connected after gift send',
       );
     });
+
+    test('Backpack is never giftable — no wire message, bag kept',
+        () async {
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
+      await sidekickSession.startAsSidekick(
+        nickname: 'GuestPlayer',
+        character: cultist,
+      );
+
+      guestLink.simulateDiscovery();
+      await Future.delayed(const Duration(milliseconds: 150));
+
+      hostLink.sentMessages.clear();
+      guestLink.sentMessages.clear();
+
+      await sidekickSession.sendGift(kind: 'item', name: 'Backpack');
+      await Future.delayed(const Duration(milliseconds: 50));
+
+      // The guard must stop the MpGift before it hits the wire.
+      expect(
+        guestLink.sentMessages.whereType<MpGift>(),
+        isEmpty,
+        reason: 'Backpack gift must not be sent',
+      );
+      // And the sender keeps their own bag.
+      final coop = sidekickRp.runState.coop;
+      expect(coop, isNotNull);
+      expect(
+        coop!.items.any((i) => i.name == 'Backpack'),
+        isTrue,
+      );
+      expect(
+        mainSession.phase,
+        MpPhase.connected,
+        reason: 'Session unaffected by the blocked gift',
+      );
+    });
   });
 
   group('I4 — Request flow', () {

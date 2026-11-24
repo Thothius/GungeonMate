@@ -187,9 +187,14 @@ class FakeMpLink implements MpTransport {
 
   // ── Messaging ──────────────────────────────────────────────────
 
+  /// Every message this link has sent — tests use it to assert
+  /// what (if anything) went out on the wire.
+  final List<MpMessage> sentMessages = [];
+
   @override
   Future<void> sendMessage(MpMessage msg) async {
     if (endpointIdValue == null || _peer == null) return;
+    sentMessages.add(msg);
     // Deliver to peer synchronously
     _peer!.onMessage?.call(msg);
   }

@@ -665,11 +665,10 @@ class PlayerPageState extends State<PlayerPage> {
     final isMpActive = mpSession.phase != MpPhase.idle;
     final canTransfer = hasCoop && (!isMpActive || mpSession.isConnected);
 
-    // The Backpack can't be stashed (it IS the bag) or deleted — with
-    // no co-op partner there's nothing left for the pill to offer.
-    final isBackpackItem =
-        item?.name == RunProvider.kBackpackItemName;
-    if (isBackpackItem && !canTransfer) {
+    // The Backpack can't be stashed (it IS the bag), deleted, or sent
+    // to the partner — each player keeps their own. Nothing for the
+    // pill to offer, so explain instead of showing an empty pill.
+    if (item?.name == RunProvider.kBackpackItemName) {
       _toast(c, 'The Backpack stays with you');
       return;
     }

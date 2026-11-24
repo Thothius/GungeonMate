@@ -829,6 +829,12 @@ class RunProvider
   }) {
     final p = _playerFor(slot);
     final isJunk = item.name.toLowerCase() == 'junk';
+    // The Backpack is unique per player — never duplicate it, even
+    // through force paths (MP peer-edit 'add').
+    if (item.name == kBackpackItemName &&
+        p.items.any((i) => i.name == item.name)) {
+      return;
+    }
     if (!force && !isJunk && p.items.any((i) => i.name == item.name)) return;
     final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(items: [...p.items, item]));
@@ -987,6 +993,9 @@ class RunProvider
 
   bool transferItem(Item item, PlayerSlot fromSlot) {
     if (!hasCoop) return false;
+    // The Backpack is bound to its owner — it can't be shipped to the
+    // partner (each player has their own; see _buildPlayerFor).
+    if (item.name == kBackpackItemName) return false;
     final toSlot =
         fromSlot == PlayerSlot.main ? PlayerSlot.coop : PlayerSlot.main;
     final from = _playerFor(fromSlot);
