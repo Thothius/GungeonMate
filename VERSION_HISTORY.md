@@ -1,3 +1,9 @@
+## Unreleased — post-v3.8.0 UX declutter
+
+### UX declutter (user-directed)
+- **Run tools sheet cut to a keep-list** — the gear sheet went from up to 14 rows / 5 groups to 6–8 rows / 3 groups: RUN (Shrines, Dice Roller, Quiz, Pause/Resume — MP sessions only), RESET (Reset Items / P1+P2 in co-op), DANGER (End Run). Ammonomicon stays reachable from the main menu; MP players keep the full action set (Surprise, Leave MP, Customization, Settings, display toggles) in the Paradox panel ⋮ menu; app-level rows live in Settings.
+- **Customization landing rebuilt** — the CHOOSE stage now leads with an **ACTIVE PRESET card** (splash art, palette strip, live preset name — saved presets resolve by gallery name), then PRESETS (browse door), YOUR SLOTS (the 3 quick slots), and NEW PRESET last. Source stage copy now says exactly what it does: **CLONE EXISTING PRESET** vs **START BLANK**. Quick-slot pills scale their labels down instead of ellipsizing, so full preset names stay visible.
+
 ## v3.8.0 — hardening, backpack & MP polish
 
 ### Features

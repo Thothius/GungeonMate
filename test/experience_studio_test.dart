@@ -51,7 +51,7 @@ void main() {
     await tester.enterText(find.byType(TextField), 'Test Look');
     await tester.tap(find.text('NEXT'));
     await tester.pump(const Duration(milliseconds: 300));
-    await tester.tap(find.text('START FROM SCRATCH'));
+    await tester.tap(find.text('START BLANK'));
     await tester.pump(const Duration(milliseconds: 400));
   }
 
@@ -245,6 +245,27 @@ void main() {
       expect(find.text('COLORS & BG'), findsNothing);
       expect(find.text('SAVE'), findsNothing);
     });
+
+    testWidgets('landing order: ACTIVE card → PRESETS → slots → NEW PRESET', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // The live look is surfaced up top with an ACTIVE badge.
+      expect(find.text('ACTIVE'), findsOneWidget);
+      expect(find.text('PRESETS'), findsOneWidget);
+      expect(find.text('YOUR SLOTS'), findsOneWidget);
+      expect(find.text('BROWSE PRESETS'), findsOneWidget);
+      expect(find.text('NEW PRESET'), findsOneWidget);
+
+      double top(String label) => tester.getTopLeft(find.text(label)).dy;
+      expect(top('ACTIVE'), lessThan(top('PRESETS')));
+      expect(top('PRESETS'), lessThan(top('YOUR SLOTS')));
+      expect(top('YOUR SLOTS'), lessThan(top('NEW PRESET')));
+    });
   });
 
   group('Flow — GALLERY', () {
@@ -362,11 +383,11 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.text('START FROM'), findsOneWidget);
-      expect(find.text('COPY EXISTING'), findsOneWidget);
-      expect(find.text('START FROM SCRATCH'), findsOneWidget);
+      expect(find.text('CLONE EXISTING PRESET'), findsOneWidget);
+      expect(find.text('START BLANK'), findsOneWidget);
     });
 
-    testWidgets('COPY EXISTING opens gallery in select mode', (tester) async {
+    testWidgets('CLONE EXISTING PRESET opens gallery in select mode', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: ExperienceStudioScreen()),
       );
@@ -376,7 +397,7 @@ void main() {
       await tester.enterText(find.byType(TextField), 'Copy Cat');
       await tester.tap(find.text('NEXT'));
       await tester.pump(const Duration(milliseconds: 300));
-      await tester.tap(find.text('COPY EXISTING'));
+      await tester.tap(find.text('CLONE EXISTING PRESET'));
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(find.text('COPY FROM'), findsOneWidget);
@@ -384,7 +405,7 @@ void main() {
       expect(find.text('PICK PRESET'), findsNothing);
     });
 
-    testWidgets('COPY EXISTING → USE AS BASE seeds wizard + saves', (
+    testWidgets('CLONE EXISTING PRESET → USE AS BASE seeds wizard + saves', (
       tester,
     ) async {
       final before = AppTheme.mode;
@@ -397,7 +418,7 @@ void main() {
       await tester.enterText(find.byType(TextField), 'Copy Cat');
       await tester.tap(find.text('NEXT'));
       await tester.pump(const Duration(milliseconds: 300));
-      await tester.tap(find.text('COPY EXISTING'));
+      await tester.tap(find.text('CLONE EXISTING PRESET'));
       await tester.pump(const Duration(milliseconds: 400));
 
       // Page 0 = unicorn — copying it applies unicorn curation to prefs.
@@ -428,7 +449,7 @@ void main() {
       await AppTheme.setMode(before);
     });
 
-    testWidgets('COPY EXISTING saved preset keeps the typed name (U-059)', (
+    testWidgets('CLONE EXISTING PRESET saved preset keeps the typed name (U-059)', (
       tester,
     ) async {
       CustomThemeStore.notifier.value = [
@@ -450,7 +471,7 @@ void main() {
       await tester.enterText(find.byType(TextField), 'My Copy');
       await tester.tap(find.text('NEXT'));
       await tester.pump(const Duration(milliseconds: 300));
-      await tester.tap(find.text('COPY EXISTING'));
+      await tester.tap(find.text('CLONE EXISTING PRESET'));
       await tester.pump(const Duration(milliseconds: 400));
 
       // Select the saved preset row, then USE AS BASE.

@@ -197,7 +197,7 @@ void main() {
 
   // ── Run tools sheet grouping (U-031) ─────────────────────────────
 
-  testWidgets('Tools sheet groups actions RUN → RESET → APP → DANGER', (
+  testWidgets('Tools sheet groups actions RUN → RESET → DANGER', (
     tester,
   ) async {
     final p = _LoadedRunProvider();
@@ -211,15 +211,16 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
-    // Group labels in order.
+    // Group labels in order — the APP group was cut in the sheet
+    // declutter; app-level rows live in Settings / the Paradox panel.
     expect(find.text('RUN'), findsOneWidget);
     expect(find.text('RESET'), findsOneWidget);
-    expect(find.text('APP'), findsOneWidget);
+    expect(find.text('APP'), findsNothing);
     expect(find.text('DANGER'), findsOneWidget);
 
-    // Representative actions with subtitles.
-    expect(find.text('Ammonomicon'), findsOneWidget);
-    expect(find.text('Guns, items, synergies & more'), findsOneWidget);
+    // Representative keep-list actions with subtitles.
+    expect(find.text('Shrines'), findsOneWidget);
+    expect(find.text('Spend keys on blessings'), findsOneWidget);
     expect(find.text('End Run'), findsOneWidget);
     expect(find.text('Finish the run and return to menu'), findsOneWidget);
   });

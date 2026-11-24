@@ -153,9 +153,7 @@ void main() {
     expect(find.byType(HeaderMenu), findsOneWidget);
   });
 
-  testWidgets('tools sheet Ammonomicon action pushes the codex screen', (
-    t,
-  ) async {
+  testWidgets('tools sheet shows the keep-list only', (t) async {
     await t.pumpWidget(wrap(const HeaderMenu()));
     await t.pump();
 
@@ -163,15 +161,23 @@ void main() {
     await t.pump();
     await t.pump(const Duration(milliseconds: 500));
 
-    // Sheet groups + Ammonomicon action visible.
-    expect(find.text('RUN'), findsWidgets);
-    expect(find.text('Ammonomicon'), findsOneWidget);
+    // Keep-list rows present (solo run: no Pause, single Reset row).
+    expect(find.text('RUN'), findsOneWidget);
+    expect(find.text('RESET'), findsOneWidget);
+    expect(find.text('DANGER'), findsOneWidget);
     expect(find.text('Shrines'), findsOneWidget);
+    expect(find.text('Dice Roller'), findsOneWidget);
+    expect(find.text('Quiz'), findsOneWidget);
+    expect(find.text('Reset Items'), findsOneWidget);
+    expect(find.text('End Run'), findsOneWidget);
 
-    await t.tap(find.text('Ammonomicon'));
-    await t.pump();
-    await t.pump(const Duration(milliseconds: 600));
-    await t.pump(const Duration(seconds: 2));
-    expect(t.takeException(), isNull);
+    // Cut rows are gone — Ammonomicon lives on the main menu, MP
+    // actions live in the Paradox panel, app rows in Settings.
+    expect(find.text('Ammonomicon'), findsNothing);
+    expect(find.text('Add Co-op'), findsNothing);
+    expect(find.text('Save Run'), findsNothing);
+    expect(find.text('Customization'), findsNothing);
+    expect(find.text('Settings'), findsNothing);
+    expect(find.text('Pause Run'), findsNothing); // MP-only row
   });
 }

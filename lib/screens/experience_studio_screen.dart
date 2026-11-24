@@ -778,7 +778,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         _FlowCard(
           icon: Icons.add_rounded,
           title: 'NEW PRESET',
-          subtitle: 'name it, copy an existing preset or start blank',
+          subtitle: 'clone an existing preset or start blank',
           accent: flair.primary,
           onTap: _onNewPreset,
         ),
@@ -1432,7 +1432,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
   // ── Pick-or-create flow stages ─────────────────────────────
 
-  /// CHOOSE — the two doors: browse ready-made presets or build one.
+  /// CHOOSE — landing: the live ACTIVE preset on top, then the
+  /// preset gallery door, the 3 quick slots, and NEW PRESET last.
   Widget _buildChoose() {
     final flair = AppTheme.flairFor(_previewMode);
     return ListView(
@@ -1454,14 +1455,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         ),
         const SizedBox(height: 6),
         GoopText(
-          'pick a look or build your own',
+          'what\'s live right now, presets & quick slots',
           style: TextStyle(
             fontSize: 11,
             color: Colors.white.withValues(alpha: 0.5),
           ),
         ),
+        const SizedBox(height: 20),
+        _buildActivePresetCard(),
         const SizedBox(height: 22),
-        _buildQuickSlots(),
+        _chooseSectionLabel('PRESETS', flair),
         _FlowCard(
           icon: Icons.auto_awesome_rounded,
           title: 'BROWSE PRESETS',
@@ -1469,15 +1472,186 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           accent: flair.primary,
           onTap: _openGallery,
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 22),
+        _chooseSectionLabel('YOUR SLOTS', flair),
+        _buildQuickSlots(),
+        const SizedBox(height: 8),
         _FlowCard(
           icon: Icons.edit_note_rounded,
           title: 'NEW PRESET',
-          subtitle: 'name it, copy an existing preset or start blank',
+          subtitle: 'clone an existing preset or start blank',
           accent: flair.secondary,
           onTap: _onNewPreset,
         ),
       ],
+    );
+  }
+
+  /// Small caps section label for the CHOOSE stage groups — same
+  /// recipe as the gallery's OFFICIAL/YOURS headers.
+  Widget _chooseSectionLabel(String text, ThemeFlair flair) => Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: GoopText(
+      text,
+      style: TextStyle(
+        fontSize: 9,
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1.6,
+        color: Colors.white.withValues(alpha: 0.4),
+      ),
+    ),
+  );
+
+  /// ACTIVE PRESET card — the look actually applied app-wide right
+  /// now (AppTheme.mode, not the staged preview). Tap opens the live
+  /// mock preview. Resolves the saved-preset name for custom looks so
+  /// a saved preset reads by its gallery name, not "Custom".
+  Widget _buildActivePresetCard() {
+    final m = AppTheme.mode;
+    final isCustom = m == AppThemeMode.custom;
+    final flair = AppTheme.flairFor(m);
+    final data = isCustom ? AppTheme.cachedCustomTheme : null;
+    final colors =
+        isCustom && data != null
+            ? [
+              data.scaffold,
+              data.card,
+              data.primary,
+              data.secondary,
+              data.headlineStat,
+            ]
+            : [
+              flair.scaffold,
+              flair.card,
+              flair.primary,
+              flair.secondary,
+              flair.headlineStat,
+            ];
+    final name =
+        isCustom ? (data?.name ?? 'Custom Look') : m.label;
+    final isSaved = CustomThemeStore.themes.any(
+      (t) => t.name.toLowerCase() == name.toLowerCase(),
+    );
+    final subtitle =
+        isCustom
+            ? (isSaved ? 'SAVED PRESET' : 'CUSTOM THEME')
+            : '${m.vibe} · ${m.elem}';
+    final splash = isCustom ? 'custom' : m.splashSlug;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _openMockPreview,
+      child: Container(
+        height: 92,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: flair.primary.withValues(alpha: 0.4),
+            width: 1.3,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(13),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (splash.isNotEmpty)
+                Image.asset(
+                  themeSplashPath(splash),
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => _themePanelBg(colors),
+                )
+              else
+                _themePanelBg(colors),
+              const Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Color(0xCC000000)],
+                      stops: [0.45, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: flair.primary,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: GoopText(
+                    'ACTIVE',
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0,
+                      color:
+                          flair.primary.computeLuminance() > 0.5
+                              ? Colors.black87
+                              : Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 14,
+                right: 14,
+                bottom: 9,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GoopText(
+                      name.toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    GoopText(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        for (final c in colors)
+                          Expanded(
+                            child: Container(
+                              height: 6,
+                              margin: const EdgeInsets.only(right: 4),
+                              decoration: BoxDecoration(
+                                color: c,
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -1647,7 +1821,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         ),
         const SizedBox(height: 6),
         GoopText(
-          '"$_presetName" — pick a starting point',
+          '"$_presetName" — clone a preset or start blank',
           style: TextStyle(
             fontSize: 11,
             color: Colors.white.withValues(alpha: 0.5),
@@ -1656,8 +1830,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         const SizedBox(height: 22),
         _FlowCard(
           icon: Icons.copy_rounded,
-          title: 'COPY EXISTING',
-          subtitle: 'start from any preset — all settings copied, then tweak',
+          title: 'CLONE EXISTING PRESET',
+          subtitle: 'copy any preset\'s settings — all of it, then tweak',
           accent: flair.primary,
           onTap: () {
             Haptics.selection();
@@ -1672,8 +1846,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         const SizedBox(height: 14),
         _FlowCard(
           icon: Icons.blur_on_rounded,
-          title: 'START FROM SCRATCH',
-          subtitle: 'blank canvas — pick every color, particle and effect',
+          title: 'START BLANK',
+          subtitle: 'new preset from an empty canvas — pick every option',
           accent: flair.secondary,
           onTap: _seedScratch,
         ),
@@ -2179,14 +2353,19 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: GoopText(
-                        e.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white.withValues(alpha: 0.85),
+                      // scaleDown keeps the FULL preset name visible —
+                      // long names shrink instead of ellipsizing away.
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: GoopText(
+                          e.name,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
                         ),
                       ),
                     ),

@@ -7,21 +7,13 @@ import '../../theme/tokens.dart';
 import '../../services/haptics.dart';
 import '../../services/effect_tagger.dart';
 import '../../services/mp_session.dart';
-import '../../models/multiplayer_messages.dart';
 import '../../utils/fast_route.dart';
-import '../../screens/ammonomicon_screen.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/effects_summary_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
-import '../../screens/character_select_screen.dart';
 import 'sort_picker.dart';
 import 'dice_roll.dart';
-import '../paradox/surprise_sheet.dart';
 import '../../services/run_lifecycle.dart';
-import '../../models/bug_report.dart';
-import '../bug_report/bug_report_sheet.dart';
-import '../../screens/settings_screen.dart';
-import '../../screens/experience_studio_screen.dart';
 import '../../screens/quiz/quiz_home_screen.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
@@ -283,9 +275,11 @@ class HeaderMenu extends StatelessWidget {
   }
 }
 
-/// Themed run-tools sheet — the gear menu. Fixed action set per design:
-/// Ammonomicon, Shrines, Dice Roll, Surprise (MP only), Reset items,
-/// End run. Groups: RUN → RESET → APP → DANGER.
+/// Themed run-tools sheet — the gear menu. Minimal keep-list per
+/// user direction: Shrines, Dice, Quiz, Pause (MP only), Reset items,
+/// End run. Ammonomicon lives on the main menu; MP players get the
+/// full action set (surprise, leave, customization…) from the
+/// Paradox panel ⋮ menu. Groups: RUN → RESET → DANGER.
 class _RunToolsSheet extends StatelessWidget {
   /// Context from ABOVE the sheet route — sheet ctx is dead after pop.
   final BuildContext parentContext;
@@ -409,21 +403,6 @@ class _RunToolsSheet extends StatelessWidget {
               _label('RUN', flair),
               _action(
                 sheetCtx,
-                icon: Icons.menu_book_rounded,
-                label: 'Ammonomicon',
-                subtitle: 'Guns, items, synergies & more',
-                iconColor: const Color(0xFF4DD0E1),
-                onTap: () {
-                  if (sheetCtx.mounted) {
-                    Navigator.push(
-                      sheetCtx,
-                      fastRoute(const AmmonomiconScreen()),
-                    );
-                  }
-                },
-              ),
-              _action(
-                sheetCtx,
                 icon: Icons.temple_buddhist,
                 label: 'Shrines',
                 subtitle: 'Spend keys on blessings',
@@ -439,159 +418,47 @@ class _RunToolsSheet extends StatelessWidget {
               ),
               _action(
                 sheetCtx,
-                icon:
-                    hasCoop
-                        ? Icons.remove_circle_outline
-                        : Icons.person_add_alt_1,
-                label: hasCoop ? 'Remove Co-op' : 'Add Co-op',
-                subtitle:
-                    hasCoop
-                        ? 'Remove the co-op player'
-                        : 'Add a second gungeoneer',
-                iconColor: hasCoop ? Colors.redAccent : Colors.pinkAccent,
-                onTap: () {
-                  if (hasCoop) {
-                    showDialog(
-                      context: sheetCtx,
-                      builder:
-                          (c) => AlertDialog(
-                            icon: Icon(
-                              Icons.remove_circle_outline,
-                              color: Colors.redAccent,
-                            ),
-                            title: const GoopText('Remove Co-op Player?'),
-                            content: GoopText(
-                              'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(c),
-                                child: const GoopText('Cancel'),
-                              ),
-                              FilledButton.tonal(
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Colors.red.shade900,
-                                ),
-                                onPressed: () {
-                                  p.endCoopPlayer();
-                                  Navigator.pop(c);
-                                },
-                                child: const GoopText('Remove'),
-                              ),
-                            ],
-                          ),
-                    );
-                  } else {
-                    Navigator.push(
-                      sheetCtx,
-                      fastRoute(
-                        const CharacterSelectScreen(mode: CharSelectMode.coop),
-                      ),
-                    );
-                  }
-                },
-              ),
-              _action(
-                sheetCtx,
-                icon: Icons.save_outlined,
-                label: 'Save Run',
-                subtitle: 'Persist the active run',
-                iconColor: Colors.greenAccent,
-                onTap: () {
-                  p
-                      .saveRun()
-                      .then((_) {
-                        if (sheetCtx.mounted) {
-                          ScaffoldMessenger.of(sheetCtx).showSnackBar(
-                            const SnackBar(
-                              content: GoopText('Run saved'),
-                              duration: Duration(seconds: 2),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        }
-                      })
-                      .catchError((e) {
-                        if (sheetCtx.mounted) {
-                          ScaffoldMessenger.of(sheetCtx).showSnackBar(
-                            SnackBar(
-                              content: GoopText('Failed to save run: $e'),
-                              duration: const Duration(seconds: 3),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        }
-                      });
-                },
-              ),
-              _action(
-                sheetCtx,
                 icon: Icons.casino_rounded,
                 label: 'Dice Roller',
                 subtitle: 'Roll dice for run buffs',
                 iconColor: const Color(0xFFFFD54F),
                 onTap: () => showDiceRollDialog(sheetCtx),
               ),
-              if (mpSession.isActive && kMpSocialEnabled)
-                _action(
-                  sheetCtx,
-                  icon: Icons.auto_awesome_rounded,
-                  label: 'Surprise',
-                  subtitle: 'Send a surprise to your partner',
-                  iconColor: Colors.amberAccent,
-                  onTap:
-                      () => showModalBottomSheet<void>(
-                        context: sheetCtx,
-                        isScrollControlled: true,
-                        backgroundColor: const Color(0xFF140B22),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(18),
-                          ),
-                        ),
-                        builder: (_) => const SurpriseSheet(),
-                      ),
-                ),
-              if (mpSession.isActive && mpSession.myRole == MpRole.sidekick)
-                _action(
-                  sheetCtx,
-                  icon: Icons.bluetooth_disabled,
-                  label: 'Leave MP',
-                  subtitle: 'Disconnect and restore your run',
-                  iconColor: Colors.lightBlueAccent,
-                  onTap: () {
-                    showDialog(
-                      context: sheetCtx,
-                      builder:
-                          (c) => AlertDialog(
-                            icon: Icon(
-                              Icons.bluetooth_disabled,
-                              color: Colors.lightBlueAccent,
-                            ),
-                            title: const GoopText('Leave Multiplayer?'),
-                            content: const GoopText(
-                              'You will disconnect from the host. Your inventory will be restored to your pre-MP state.',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(c),
-                                child: const GoopText('Cancel'),
-                              ),
-                              FilledButton.tonal(
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Colors.lightBlueAccent
-                                      .withValues(alpha: 0.15),
-                                  foregroundColor: Colors.lightBlueAccent,
-                                ),
-                                onPressed: () {
-                                  mpSession.cancel();
-                                  Navigator.pop(c);
-                                },
-                                child: const GoopText('Leave'),
-                              ),
-                            ],
-                          ),
+              _action(
+                sheetCtx,
+                icon: Icons.quiz_rounded,
+                label: 'Quiz',
+                subtitle: 'Gungeonmaster quiz',
+                iconColor: const Color(0xFF66BB6A),
+                onTap: () {
+                  if (sheetCtx.mounted) {
+                    Navigator.push(
+                      sheetCtx,
+                      fastRoute(const QuizHomeScreen(showBackButton: true)),
                     );
+                  }
+                },
+              ),
+              // Pause is an MP-session mechanic (radio cadence + run
+              // timer) — meaningless solo, so it only appears when a
+              // session is live. The Paradox panel ⋮ menu carries the
+              // same toggle for MP players.
+              if (mpSession.isActive)
+                _action(
+                  sheetCtx,
+                  icon:
+                      mpSession.isPaused
+                          ? Icons.play_arrow_rounded
+                          : Icons.pause_rounded,
+                  label: mpSession.isPaused ? 'Resume Run' : 'Pause Run',
+                  subtitle: 'Freeze the run timer & session radios',
+                  iconColor: Colors.orangeAccent,
+                  onTap: () {
+                    if (mpSession.isPaused) {
+                      mpSession.resume();
+                    } else {
+                      mpSession.pause();
+                    }
                   },
                 ),
               Divider(
@@ -629,73 +496,6 @@ class _RunToolsSheet extends StatelessWidget {
                         PlayerSlot.coop,
                       ),
                 ),
-              Divider(
-                height: 1,
-                thickness: 0.5,
-                indent: Insets.lg,
-                endIndent: Insets.lg,
-                color: flair.primary.withValues(alpha: 0.1),
-              ),
-              _label('APP', flair),
-              _action(
-                sheetCtx,
-                icon: Icons.palette_rounded,
-                label: 'Customization',
-                subtitle: 'Theme, particles & studio',
-                iconColor: const Color(0xFFB388FF),
-                onTap: () {
-                  if (!sheetCtx.mounted) return;
-                  Navigator.push(
-                    sheetCtx,
-                    fastRoute(const ExperienceStudioScreen()),
-                  );
-                },
-              ),
-              _action(
-                sheetCtx,
-                icon: Icons.quiz_rounded,
-                label: 'Quiz',
-                subtitle: 'Gungeonmaster quiz',
-                iconColor: const Color(0xFF66BB6A),
-                onTap: () {
-                  if (sheetCtx.mounted) {
-                    Navigator.push(
-                      sheetCtx,
-                      fastRoute(const QuizHomeScreen(showBackButton: true)),
-                    );
-                  }
-                },
-              ),
-              _action(
-                sheetCtx,
-                icon: Icons.bug_report_outlined,
-                label: 'Report a Bug',
-                subtitle: 'Send feedback to the devs',
-                iconColor: Colors.deepOrangeAccent,
-                onTap: () {
-                  if (sheetCtx.mounted) {
-                    BugReportSheet.show(
-                      sheetCtx,
-                      const BugReportContext(
-                        kind: BugReportKind.bug,
-                        screen: 'Active Run',
-                      ),
-                    );
-                  }
-                },
-              ),
-              _action(
-                sheetCtx,
-                icon: Icons.settings_outlined,
-                label: 'Settings',
-                subtitle: 'Gameplay prefs & danger zone',
-                iconColor: flair.primary.withValues(alpha: 0.6),
-                onTap: () {
-                  if (sheetCtx.mounted) {
-                    Navigator.push(sheetCtx, fastRoute(const SettingsScreen()));
-                  }
-                },
-              ),
               Divider(
                 height: 1,
                 thickness: 0.5,
