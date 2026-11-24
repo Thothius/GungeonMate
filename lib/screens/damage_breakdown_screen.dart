@@ -152,7 +152,15 @@ class DamageBreakdownScreen extends StatelessWidget {
               _emptyNote('No guns yet — grab one from a chest or shop.')
             else
               for (var i = 0; i < guns.length; i++)
-                _gunRow(context, guns[i], dpsOf[guns[i].name]!, i == 0, f, sf),
+                _gunRow(
+                  context,
+                  guns[i],
+                  dpsOf[guns[i].name]!,
+                  i == 0,
+                  p.isBackpacked(guns[i], slot),
+                  f,
+                  sf,
+                ),
             const SizedBox(height: 14),
 
             // ── Damage modifiers ───────────────────────────────────
@@ -254,6 +262,7 @@ class DamageBreakdownScreen extends StatelessWidget {
     Gun g,
     double dps,
     bool isTop,
+    bool stashed,
     ThemeFlair f,
     double sf,
   ) {
@@ -305,6 +314,17 @@ class DamageBreakdownScreen extends StatelessWidget {
                         Icons.emoji_events,
                         size: 13,
                         color: Color(0xFFFFD740),
+                      ),
+                    ],
+                    if (stashed) ...[
+                      const SizedBox(width: 5),
+                      Tooltip(
+                        message: 'Stowed in backpack — still counts',
+                        child: const Icon(
+                          Icons.backpack_outlined,
+                          size: 12,
+                          color: Colors.white38,
+                        ),
                       ),
                     ],
                   ],

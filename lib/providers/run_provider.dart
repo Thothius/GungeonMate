@@ -208,8 +208,15 @@ class RunProvider
   Gun? gunByName(String name) => _gunsByLowerName[name.toLowerCase()];
 
   /// Case-insensitive item lookup. Returns null if [name] is unknown.
+  /// The app-only Backpack isn't in items.json — resolve it
+  /// synthetically so snapshots/quick-add/entity lookups see it.
   @override
-  Item? itemByName(String name) => _itemsByLowerName[name.toLowerCase()];
+  Item? itemByName(String name) {
+    if (name.toLowerCase() == kBackpackItemName.toLowerCase()) {
+      return backpackItem;
+    }
+    return _itemsByLowerName[name.toLowerCase()];
+  }
 
   /// Case-insensitive synergy lookup. Returns null if [name] is unknown.
   Synergy? synergyByName(String name) =>
@@ -524,6 +531,12 @@ class RunProvider
         startingItems.add(_allItems[rng.nextInt(_allItems.length)]);
       }
     }
+    // Every player gets the app-only Backpack — pure storage tool,
+    // normal item rules. Deduped defensively in case a character's
+    // starter list ever names it.
+    if (startingItems.every((i) => i.name != kBackpackItemName)) {
+      startingItems.add(backpackItem);
+    }
     return Player(
       character: character,
       guns: startingGuns,
@@ -597,7 +610,9 @@ class RunProvider
     _runState = _runState.copyWith(
       coop:
           _isParadoxMain
-              ? Player(character: character)
+              // Paradox sidekick starts empty — but still gets the
+              // app-only Backpack tool (it's storage, not loadout).
+              ? Player(character: character, items: [backpackItem])
               : _buildPlayerFor(character),
     );
     _paradoxSidekickEmptied = false;
@@ -779,9 +794,17 @@ class RunProvider
     bool force = false,
   }) {
     final p = _playerFor(slot);
+    final newGuns = p.guns.where((g) => g.name != gun.name).toList();
     _runState = _replacePlayer(
       slot,
-      p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()),
+      p.copyWith(
+        guns: newGuns,
+        backpackKeys: _pruneBackpackKeys(
+          guns: newGuns,
+          items: p.items,
+          keys: p.backpackKeys,
+        ),
+      ),
     );
     _log(
       RunLogEntry(
@@ -892,7 +915,17 @@ class RunProvider
       newItems = p.items.where((i) => i.name != item.name).toList();
     }
 
-    _runState = _replacePlayer(slot, p.copyWith(items: newItems));
+    _runState = _replacePlayer(
+      slot,
+      p.copyWith(
+        items: newItems,
+        backpackKeys: _pruneBackpackKeys(
+          guns: p.guns,
+          items: newItems,
+          keys: p.backpackKeys,
+        ),
+      ),
+    );
 
     // Keep the Robot's auto Junk tracking in sync on removal too.
     final charName = p.character?.name.toLowerCase() ?? '';
@@ -918,9 +951,17 @@ class RunProvider
     final to = _playerFor(toSlot);
     if (to.guns.any((g) => g.name == gun.name)) return false;
     final synergyBefore = getActiveSynergiesCombined();
+    final newFromGuns = from.guns.where((g) => g.name != gun.name).toList();
     _runState = _replacePlayer(
       fromSlot,
-      from.copyWith(guns: from.guns.where((g) => g.name != gun.name).toList()),
+      from.copyWith(
+        guns: newFromGuns,
+        backpackKeys: _pruneBackpackKeys(
+          guns: newFromGuns,
+          items: from.items,
+          keys: from.backpackKeys,
+        ),
+      ),
     );
     _runState = _replacePlayer(toSlot, to.copyWith(guns: [...to.guns, gun]));
     _log(
@@ -954,7 +995,17 @@ class RunProvider
     if (index == -1) return false;
     newFrom.removeAt(index);
     final synergyBefore = getActiveSynergiesCombined();
-    _runState = _replacePlayer(fromSlot, from.copyWith(items: newFrom));
+    _runState = _replacePlayer(
+      fromSlot,
+      from.copyWith(
+        items: newFrom,
+        backpackKeys: _pruneBackpackKeys(
+          guns: from.guns,
+          items: newFrom,
+          keys: from.backpackKeys,
+        ),
+      ),
+    );
     _runState = _replacePlayer(toSlot, to.copyWith(items: [...to.items, item]));
     _log(
       RunLogEntry(
@@ -971,6 +1022,136 @@ class RunProvider
     _scheduleSave();
     notifyListeners();
     return true;
+  }
+
+  // --- Backpack ----------------------------------------------------------
+  // Per-player storage that hides gear from the open inventory grid.
+  // Stashed gear stays in guns/items — synergies, passives, DPS,
+  // coolness/curse and dashboards keep counting it. Membership is a
+  // Set<String> of 'g:<name>'/'i:<name>' keys on Player, serialized
+  // with the run and kept local-only across MP snapshots.
+
+  /// Name of the app-only Backpack item granted to every player at run
+  /// start. Not part of items.json — [itemByName] resolves it
+  /// synthetically so MP snapshots can carry the name to peers.
+  static const String kBackpackItemName = 'Backpack';
+
+  /// Mixed capacity — guns and items share the same 12 slots.
+  static const int kBackpackCapacity = 12;
+
+  static String _gunKey(Gun g) => 'g:${g.name}';
+  static String _itemKey(Item i) => 'i:${i.name}';
+
+  /// The synthetic Backpack item. Passive/S-tier so it follows normal
+  /// item rules (deletable, transferable, synergy-inert) while giving
+  /// the bag a tile in the ITEMS grid. Effect text intentionally avoids
+  /// EffectTagger stat keywords.
+  @override
+  Item get backpackItem => Item(
+    name: kBackpackItemName,
+    type: 'Passive',
+    quality: 'S',
+    effect:
+        'Opens a pack with 12 slots for gear you want out of sight. '
+        'Everything inside still counts.',
+  );
+
+  bool ownsBackpack(PlayerSlot slot) =>
+      _playerFor(slot).items.any((i) => i.name == kBackpackItemName);
+
+  bool isBackpacked(Gun g, PlayerSlot slot) =>
+      _playerFor(slot).backpackKeys.contains(_gunKey(g));
+
+  bool isBackpackedItem(Item i, PlayerSlot slot) =>
+      _playerFor(slot).backpackKeys.contains(_itemKey(i));
+
+  int backpackCount(PlayerSlot slot) => _playerFor(slot).backpackKeys.length;
+
+  /// Stashed entries in inventory order — guns block then items block.
+  /// Capacity is a mixed pool; this is display grouping only.
+  List<({Gun? gun, Item? item})> backpackEntries(PlayerSlot slot) {
+    final p = _playerFor(slot);
+    return [
+      for (final g in p.guns)
+        if (p.backpackKeys.contains(_gunKey(g))) (gun: g, item: null),
+      for (final i in p.items)
+        if (p.backpackKeys.contains(_itemKey(i))) (gun: null, item: i),
+    ];
+  }
+
+  bool _stash(Player p, PlayerSlot slot, String key, String displayName) {
+    if (p.backpackKeys.contains(key)) return true;
+    if (p.backpackKeys.length >= kBackpackCapacity) return false;
+    _runState = _replacePlayer(
+      slot,
+      p.copyWith(backpackKeys: {...p.backpackKeys, key}),
+    );
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.backpack,
+        description: 'Stowed $displayName in backpack',
+        entityName: displayName,
+        playerName: p.character?.name,
+      ),
+    );
+    _scheduleSave();
+    notifyListeners();
+    return true;
+  }
+
+  /// Returns false when the backpack is full (12/12) — caller toasts.
+  bool stashGun(Gun g, {PlayerSlot slot = PlayerSlot.main}) {
+    if (g.name == kBackpackItemName) return false;
+    return _stash(_playerFor(slot), slot, _gunKey(g), g.name);
+  }
+
+  bool stashItem(Item i, {PlayerSlot slot = PlayerSlot.main}) {
+    if (i.name == kBackpackItemName) return false;
+    return _stash(_playerFor(slot), slot, _itemKey(i), i.name);
+  }
+
+  void _unstash(Player p, PlayerSlot slot, String key, String displayName) {
+    if (!p.backpackKeys.contains(key)) return;
+    _runState = _replacePlayer(
+      slot,
+      p.copyWith(backpackKeys: {...p.backpackKeys}..remove(key)),
+    );
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.backpack,
+        description: 'Retrieved $displayName from backpack',
+        entityName: displayName,
+        playerName: p.character?.name,
+      ),
+    );
+    _scheduleSave();
+    notifyListeners();
+  }
+
+  void unstashGun(Gun g, {PlayerSlot slot = PlayerSlot.main}) =>
+      _unstash(_playerFor(slot), slot, _gunKey(g), g.name);
+
+  void unstashItem(Item i, {PlayerSlot slot = PlayerSlot.main}) =>
+      _unstash(_playerFor(slot), slot, _itemKey(i), i.name);
+
+  /// Drop backpack keys for entities missing from [guns]/[items] —
+  /// keeps the set clean after deletes/transfers/snapshot rebuilds
+  /// without touching unrelated flags. Shared with peer_snapshots.
+  static Set<String> _pruneBackpackKeys({
+    required List<Gun> guns,
+    required List<Item> items,
+    required Set<String> keys,
+  }) {
+    if (keys.isEmpty) return keys;
+    final gunNames = guns.map((g) => g.name).toSet();
+    final itemNames = items.map((i) => i.name).toSet();
+    return keys.where((k) {
+      if (k.startsWith('g:')) return gunNames.contains(k.substring(2));
+      if (k.startsWith('i:')) return itemNames.contains(k.substring(2));
+      return false;
+    }).toSet();
   }
 
   // --- Coolness / curse --------------------------------------------------

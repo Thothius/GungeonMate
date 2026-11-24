@@ -12,6 +12,7 @@ mixin _PeerSnapshots on ChangeNotifier {
   Item? itemByName(String name);
   Gungeoneer? gungeoneerByName(String name);
   Player _buildPlayerFor(Gungeoneer character);
+  Item get backpackItem;
   Future<void> _saveLastPlayedChar(String name);
   bool get _paradoxSidekickEmptied;
   set _paradoxSidekickEmptied(bool v);
@@ -30,8 +31,20 @@ mixin _PeerSnapshots on ChangeNotifier {
     final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
     final items =
         itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
+    // Backpack placement is local-only: carry the existing slot's stash
+    // flags forward, pruned to gear that still exists after the update.
+    final existing = _runState.coop;
     _runState = _runState.copyWith(
-      coop: Player(character: char, guns: guns, items: items),
+      coop: Player(
+        character: char,
+        guns: guns,
+        items: items,
+        backpackKeys: RunProvider._pruneBackpackKeys(
+          guns: guns,
+          items: items,
+          keys: existing?.backpackKeys ?? const {},
+        ),
+      ),
     );
     _scheduleSave();
     notifyListeners();
@@ -109,6 +122,11 @@ mixin _PeerSnapshots on ChangeNotifier {
           character: existingChar,
           guns: guns,
           items: items,
+          backpackKeys: RunProvider._pruneBackpackKeys(
+            guns: guns,
+            items: items,
+            keys: existing!.backpackKeys,
+          ),
         );
         if (targetMainSlot) {
           _runState = _runState.copyWith(main: player);
@@ -124,7 +142,19 @@ mixin _PeerSnapshots on ChangeNotifier {
       // null character. This maintains backward compatibility.
     }
 
-    final player = Player(character: char, guns: guns, items: items);
+    // Preserve local backpack flags across the rebuild (pruned to
+    // gear that survived the snapshot).
+    final prior = targetMainSlot ? _runState.main : _runState.coop;
+    final player = Player(
+      character: char,
+      guns: guns,
+      items: items,
+      backpackKeys: RunProvider._pruneBackpackKeys(
+        guns: guns,
+        items: items,
+        keys: prior?.backpackKeys ?? const {},
+      ),
+    );
 
     if (targetMainSlot) {
       // Sidekick receiving host's data → main slot.
@@ -137,8 +167,13 @@ mixin _PeerSnapshots on ChangeNotifier {
           !_paradoxSidekickEmptied &&
           _runState.coop != null) {
         _paradoxSidekickEmptied = true;
+        final emptied = _runState.coop!;
         _runState = _runState.copyWith(
-          coop: Player(character: _runState.coop!.character),
+          coop: Player(
+            character: emptied.character,
+            items: [backpackItem],
+            backpackKeys: const {},
+          ),
         );
       }
     } else {

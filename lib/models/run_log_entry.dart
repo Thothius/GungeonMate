@@ -62,6 +62,7 @@ enum RunLogCategory {
   rainbowRun,
   synergy,
   transfer,
+  backpack,
   manual,
 }
 
@@ -90,6 +91,8 @@ Color runLogCategoryColor(RunLogCategory cat) {
       return const Color(0xFFFFD740); // Gold — synergy activation
     case RunLogCategory.transfer:
       return const Color(0xFF40C4FF); // Light blue — co-op transfers
+    case RunLogCategory.backpack:
+      return const Color(0xFF8D6E63); // Brown — backpack stash actions
     case RunLogCategory.manual:
       return const Color(0xFFB0BEC5); // Blue-grey — manual adjustments
   }
@@ -120,6 +123,8 @@ String runLogCategoryLabel(RunLogCategory cat) {
       return 'Synergy';
     case RunLogCategory.transfer:
       return 'Transfer';
+    case RunLogCategory.backpack:
+      return 'Backpack';
     case RunLogCategory.manual:
       return 'Manual';
   }
@@ -150,6 +155,8 @@ IconData runLogCategoryIcon(RunLogCategory cat) {
       return Icons.auto_awesome;
     case RunLogCategory.transfer:
       return Icons.swap_horiz;
+    case RunLogCategory.backpack:
+      return Icons.backpack_outlined;
     case RunLogCategory.manual:
       return Icons.tune;
   }

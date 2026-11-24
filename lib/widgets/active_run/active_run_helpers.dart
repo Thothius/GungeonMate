@@ -738,6 +738,10 @@ class SectionHeaderSliver extends StatelessWidget {
   final InventoryDisplayMode? currentDisplayMode;
   final ValueChanged<Object>? onLayoutChanged;
 
+  /// Optional trailing widget pinned to the right edge of the header
+  /// row (e.g. the backpack shortcut on the ITEMS section).
+  final Widget? trailing;
+
   const SectionHeaderSliver({
     super.key,
     required this.title,
@@ -749,6 +753,7 @@ class SectionHeaderSliver extends StatelessWidget {
     this.currentInvView,
     this.currentDisplayMode,
     this.onLayoutChanged,
+    this.trailing,
   });
 
   @override
@@ -942,6 +947,7 @@ class SectionHeaderSliver extends StatelessWidget {
                     ],
               ),
             ],
+            if (trailing != null) ...[const SizedBox(width: 8), trailing!],
           ],
         ),
       ),

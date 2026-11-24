@@ -376,7 +376,12 @@ class _PeriodicTileState extends State<PeriodicTile>
                         height: 34,
                         child: GameIcon(
                           assetPath: _iconPath,
-                          fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                          fallback:
+                              isGun
+                                  ? Icons.gps_fixed
+                                  : widget.item?.name == 'Backpack'
+                                  ? Icons.backpack_outlined
+                                  : Icons.extension,
                           quality: _quality,
                           size: 39,
                           showRing: false,
@@ -550,6 +555,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                                   fallback:
                                       isGun
                                           ? Icons.gps_fixed
+                                          : widget.item!.name ==
+                                              'Backpack'
+                                          ? Icons.backpack_outlined
                                           : (widget.item!.isActive
                                               ? Icons.flash_on
                                               : Icons.inventory_2_outlined),

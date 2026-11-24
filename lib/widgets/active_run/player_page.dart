@@ -29,6 +29,7 @@ import 'starter_hint.dart';
 import '../../screens/all_synergies_screen.dart';
 import '../../screens/damage_breakdown_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
+import '../../screens/backpack_screen.dart';
 import 'dash_capsules.dart';
 import '../scale_button.dart';
 
@@ -185,8 +186,22 @@ class PlayerPageState extends State<PlayerPage> {
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
         // Apply the active sort modes. Pickup-order is a no-op pass-through.
-        final guns = sortGuns(player.guns, _gunSort);
-        final items = sortItems(player.items, _itemSort);
+        // Backpack-stashed gear stays in the player's lists (it still
+        // counts for synergies/DPS/coolness) but is filtered out of the
+        // open inventory view — the Backpack screen shows it instead.
+        final guns = sortGuns(player.guns, _gunSort)
+            .where((g) => !p.isBackpacked(g, _slot))
+            .toList();
+        final items = sortItems(player.items, _itemSort)
+            .where((i) => !p.isBackpackedItem(i, _slot))
+            .toList();
+        final stashedCount = p.backpackCount(_slot);
+        // Per-section stashed counts for the "all stowed" cards — the
+        // bag is a mixed pool, so the header total would mislabel.
+        int stashedOf(bool isGun) => p
+            .backpackEntries(_slot)
+            .where((e) => (e.gun != null) == isGun)
+            .length;
 
         // Identify the highest-DPS gun in this player's loadout so both
         // grid and list views can surface it subtly (gold crown tint).
@@ -327,14 +342,22 @@ class PlayerPageState extends State<PlayerPage> {
               onLayoutChanged: _changeLayout,
             ),
             if (guns.isEmpty)
-              SliverToBoxAdapter(
-                child: StarterHint(
-                  character: player.character!,
-                  kind: StarterKind.guns,
-                  slot: _slot,
-                  tileGrid: _tileGrid(context),
-                ),
-              )
+              player.guns.isEmpty
+                  ? SliverToBoxAdapter(
+                    child: StarterHint(
+                      character: player.character!,
+                      kind: StarterKind.guns,
+                      slot: _slot,
+                      tileGrid: _tileGrid(context),
+                    ),
+                  )
+                  : SliverToBoxAdapter(
+                    child: _AllStowedCard(
+                      label: 'guns',
+                      stashedCount: stashedOf(true),
+                      onOpen: () => _openBackpack(context),
+                    ),
+                  )
             else if (_invView == InvView.grid)
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: Insets.md),
@@ -420,16 +443,34 @@ class PlayerPageState extends State<PlayerPage> {
               currentDisplayMode:
                   VisualPrefs.notifier.value.inventoryDisplayMode,
               onLayoutChanged: _changeLayout,
+              // Backpack shortcut — always reachable while the player
+              // owns the bag (or has gear stowed), even if the item
+              // itself was deleted mid-run.
+              trailing:
+                  (p.backpackCount(_slot) > 0 || p.ownsBackpack(_slot))
+                      ? _BackpackHeaderBtn(
+                        count: stashedCount,
+                        onTap: () => _openBackpack(context),
+                      )
+                      : null,
             ),
             if (items.isEmpty)
-              SliverToBoxAdapter(
-                child: StarterHint(
-                  character: player.character!,
-                  kind: StarterKind.items,
-                  slot: _slot,
-                  tileGrid: _tileGrid(context),
-                ),
-              )
+              player.items.isEmpty
+                  ? SliverToBoxAdapter(
+                    child: StarterHint(
+                      character: player.character!,
+                      kind: StarterKind.items,
+                      slot: _slot,
+                      tileGrid: _tileGrid(context),
+                    ),
+                  )
+                  : SliverToBoxAdapter(
+                    child: _AllStowedCard(
+                      label: 'items',
+                      stashedCount: stashedOf(false),
+                      onOpen: () => _openBackpack(context),
+                    ),
+                  )
             else if (_invView == InvView.grid)
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 96),
@@ -442,13 +483,7 @@ class PlayerPageState extends State<PlayerPage> {
                       child: PeriodicTile(
                         item: it,
                         synergyGlowColor: glowColors[it.name.toLowerCase()],
-                        onTap:
-                            () => Navigator.push(
-                              c,
-                              fastRoute(
-                                ItemDetailScreen(item: it, ownerSlot: _slot),
-                              ),
-                            ),
+                        onTap: () => _openItem(c, it),
                         onLongPress: () => _promptTileActions(c, item: it),
                       ),
                     );
@@ -490,13 +525,7 @@ class PlayerPageState extends State<PlayerPage> {
                         child: InventoryListRow(
                           item: it,
                           synergyGlowColor: glowColors[it.name.toLowerCase()],
-                          onTap:
-                              () => Navigator.push(
-                                c,
-                                fastRoute(
-                                  ItemDetailScreen(item: it, ownerSlot: _slot),
-                                ),
-                              ),
+                          onTap: () => _openItem(c, it),
                           onLongPress: () => _promptTileActions(c, item: it),
                         ),
                       ),
@@ -510,6 +539,42 @@ class PlayerPageState extends State<PlayerPage> {
         return scrollWidget;
       },
     );
+  }
+
+  /// Tap routing for item tiles — the app-only Backpack opens its
+  /// storage screen instead of the (empty) detail page.
+  void _openItem(BuildContext c, Item it) {
+    if (it.name == RunProvider.kBackpackItemName) {
+      Navigator.push(c, fastRoute(BackpackScreen(slot: _slot)));
+    } else {
+      Navigator.push(
+        c,
+        fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
+      );
+    }
+  }
+
+  void _openBackpack(BuildContext c) {
+    Haptics.selection();
+    Navigator.push(c, fastRoute(BackpackScreen(slot: _slot)));
+  }
+
+  /// Stash [gun]/[item] into this slot's backpack. Returns feedback
+  /// via toast; the pill dialog is already dismissed by the caller.
+  void _stashWithFeedback(BuildContext c, {Gun? gun, Item? item}) {
+    final p = c.read<RunProvider>();
+    final name = gun?.name ?? item?.name ?? '';
+    final ok =
+        gun != null
+            ? p.stashGun(gun, slot: _slot)
+            : p.stashItem(item!, slot: _slot);
+    if (c.mounted) {
+      _toast(
+        c,
+        ok ? '$name stowed in backpack' : 'Backpack full (12/12)',
+      );
+    }
+    Haptics.medium();
   }
 
   /// Direct transfer — no confirm sheet (the floating pill IS the
@@ -647,6 +712,7 @@ class PlayerPageState extends State<PlayerPage> {
                             armed
                                 ? Colors.orangeAccent
                                 : AppTheme.flair.primary,
+                        label: armed ? 'SURE?' : 'SEND',
                         onTap: () {
                           if (!armed) {
                             setArmed(() => _transferArmed = true);
@@ -656,10 +722,27 @@ class PlayerPageState extends State<PlayerPage> {
                           _transferDirect(c, gun: gun, item: item);
                         },
                       ),
-                    if (canTransfer) const SizedBox(width: 14),
+                    // STASH — always available (the Backpack's whole
+                    // point). Hidden for the Backpack item itself: the
+                    // bag can't hold itself.
+                    if (item == null ||
+                        item.name != RunProvider.kBackpackItemName) ...[
+                      if (canTransfer) const SizedBox(width: 12),
+                      _QuickActionBtn(
+                        icon: Icons.backpack_outlined,
+                        color: const Color(0xFF8D6E63),
+                        label: 'STASH',
+                        onTap: () {
+                          Navigator.pop(dlgCtx);
+                          _stashWithFeedback(c, gun: gun, item: item);
+                        },
+                      ),
+                    ],
+                    const SizedBox(width: 12),
                     _QuickActionBtn(
                       icon: Icons.delete_outline_rounded,
                       color: Colors.redAccent,
+                      label: 'DELETE',
                       onTap: () {
                         Navigator.pop(dlgCtx);
                         if (gun != null) {
