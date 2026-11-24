@@ -1,6 +1,4 @@
-## Unreleased — post-v3.7.0 hardening (S3–S5)
-
-Changes landed after the v3.7.0+167 build; no version bump yet.
+## v3.8.0 — hardening, backpack & MP polish
 
 ### Features
 - **Backpack — per-player gear storage** — every player now starts each run with an app-only **Backpack** item (S-tier passive, normal item rules). Long-press any gun/item and hit **STASH** to tuck it away: the open inventory declutters while everything inside keeps counting toward synergies, passives, DPS, coolness/curse and dashboards. The bag holds **12 mixed slots** (guns + items share capacity); full → toast. Tap the Backpack item (or the ITEMS-header shortcut) to open a designed bag view — stored tiles show in compact groups with free-slot pips; **tap opens the full detail view**, long-press offers **TAKE OUT / SEND / DELETE** (SEND ships to your partner's open inventory; DELETE has an undo that re-stashes). Stash placement is per-player, per-run, autosaved, and stays local across MP snapshots — peers still see stashed gear as owned.
