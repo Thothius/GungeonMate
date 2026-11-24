@@ -802,8 +802,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         const SizedBox(height: 14),
         _FlowCard(
           icon: Icons.copy_rounded,
-          title: 'SAVE AS NEW',
-          subtitle: 'keep this look as a separate preset',
+          title:
+              _presetName.isNotEmpty && _editingPresetId == null
+                  ? 'SAVE "$_presetName"'
+                  : 'SAVE AS NEW',
+          subtitle:
+              _presetName.isNotEmpty && _editingPresetId == null
+                  ? 'keep this look as "$_presetName"'
+                  : 'keep this look as a separate preset',
           accent: flair.secondary,
           onTap: _onSaveAsNew,
         ),
@@ -813,10 +819,25 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
 
   /// Duplicate the current look into the preset store under a new
   /// name — does NOT rename the live custom draft or apply/close.
+  /// When NEW PRESET already staged a name, save under it directly —
+  /// re-prompting for the same name read as "APPLY doesn't save".
   Future<void> _onSaveAsNew() async {
     Haptics.selection();
-    final name = await _promptPresetName();
-    if (name == null || !mounted) return;
+    var name = _presetName.trim();
+    final usedStagedName =
+        name.isNotEmpty &&
+        _editingPresetId == null &&
+        !CustomThemeStore.themes.any(
+          (t) => t.name.toLowerCase() == name.toLowerCase(),
+        ) &&
+        !kPickerThemes.any(
+          (t) => t.label.toLowerCase() == name.toLowerCase(),
+        );
+    if (!usedStagedName) {
+      final picked = await _promptPresetName();
+      if (picked == null || !mounted) return;
+      name = picked;
+    }
     final isCustom = _previewMode == AppThemeMode.custom;
     final theme = SavedCustomTheme(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -837,7 +858,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: GoopText('Saved "$name" to your presets')));
-      setState(() {});
+      setState(() {
+        // The staged name is consumed — the card reverts to
+        // SAVE AS NEW and the dashboard title drops the PRESET tag.
+        if (usedStagedName) _presetName = '';
+      });
     }
   }
 
@@ -2377,21 +2402,26 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       });
     } else if (e.saved != null) {
       final s = e.saved!;
-      // Track the source preset so SAVE overwrites it instead of
-      // creating a duplicate — this is the "edit existing" path.
-      _editingPresetId = s.id;
-      _presetName = s.name;
+      // Two callers share this branch:
+      //  - NEW PRESET → COPY EXISTING: _editingPresetId is null and
+      //    _presetName holds the name the user just typed — keep it,
+      //    this stays a NEW preset (overwriting the source's name/id
+      //    used to silently discard the typed name).
+      //  - EDIT PRESET pencil: _onEditPreset pre-sets
+      //    _editingPresetId + _presetName — leave both alone so SAVE
+      //    updates the source in place.
       await VisualPrefs.replaceAndPersist(
         VisualPrefs.preserveAppLevel(s.prefs),
       );
       if (!mounted) return;
       setState(() {
         _draft =
-            s.customData ??
-            _customDataFromFlair(
-              AppTheme.flairFor(s.baseMode),
-              name: _presetName,
-            );
+            (s.customData ??
+                    _customDataFromFlair(
+                      AppTheme.flairFor(s.baseMode),
+                      name: _presetName,
+                    ))
+                .copyWith(name: _presetName);
         _previewMode = AppThemeMode.custom;
         _stage = _StudioStage.wizard;
         _gallerySelect = false;

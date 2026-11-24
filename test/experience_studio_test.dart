@@ -428,6 +428,53 @@ void main() {
       await AppTheme.setMode(before);
     });
 
+    testWidgets('COPY EXISTING saved preset keeps the typed name (U-059)', (
+      tester,
+    ) async {
+      CustomThemeStore.notifier.value = [
+        SavedCustomTheme(
+          id: 'src1',
+          name: 'Base Look',
+          splashSlug: 'custom',
+          baseMode: AppThemeMode.custom,
+          prefs: const VisualPrefs(),
+          customData: CustomThemeData.defaultTheme.copyWith(name: 'Base Look'),
+        ),
+      ];
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('NEW PRESET'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.enterText(find.byType(TextField), 'My Copy');
+      await tester.tap(find.text('NEXT'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('COPY EXISTING'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // Select the saved preset row, then USE AS BASE.
+      await tester.tap(find.text('Base Look'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('USE AS BASE'));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // The typed name wins — this is a NEW preset, not an edit of
+      // the source (regression: source id/name used to be claimed,
+      // discarding 'My Copy' and arming an overwrite of 'Base Look').
+      expect(find.text('PRESET: My Copy'), findsOneWidget);
+      expect(find.text('EDITING: Base Look'), findsNothing);
+
+      // One-tap save under the staged name — source stays untouched.
+      await tester.tap(find.text('SAVE "My Copy"'));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(CustomThemeStore.themes, hasLength(2));
+      expect(
+        CustomThemeStore.themes.map((t) => t.name),
+        containsAll(<String>['Base Look', 'My Copy']),
+      );
+    });
+
     testWidgets('SAVE tab persists preset + applies + closes', (tester) async {
       final before = AppTheme.mode;
       await openWizardViaNewPreset(tester);
@@ -917,18 +964,20 @@ void main() {
   });
 
   group('Dashboard polish', () {
-    testWidgets('SAVE AS NEW stores a preset without closing', (tester) async {
-      await openWizardViaNewPreset(tester);
+    testWidgets('SAVE "<staged name>" stores a preset without closing', (
+      tester,
+    ) async {
+      await openWizardViaNewPreset(tester); // names the preset 'Test Look'
 
-      await tester.tap(find.text('SAVE AS NEW'));
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.enterText(find.byType(TextField), 'Dup Look');
-      await tester.tap(find.text('NEXT'));
+      // The staged name rides on the card — one tap saves directly,
+      // no second name prompt (U-059).
+      await tester.tap(find.text('SAVE "Test Look"'));
       await tester.pump(const Duration(milliseconds: 500));
 
       expect(CustomThemeStore.themes, hasLength(1));
-      expect(CustomThemeStore.themes.single.name, 'Dup Look');
-      // Still on the dashboard — save-as-new doesn't apply or close.
+      expect(CustomThemeStore.themes.single.name, 'Test Look');
+      // Still on the dashboard — save-as-new doesn't apply or close,
+      // and the consumed name reverts the card to SAVE AS NEW.
       expect(find.text('EDIT OPTIONS'), findsOneWidget);
       expect(find.text('SAVE AS NEW'), findsOneWidget);
     });
