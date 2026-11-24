@@ -669,7 +669,7 @@ class PlayerPageState extends State<PlayerPage> {
     // to the partner — each player keeps their own. Nothing for the
     // pill to offer, so explain instead of showing an empty pill.
     if (item?.name == RunProvider.kBackpackItemName) {
-      _toast(c, 'The Backpack stays with you');
+      _toast(c, 'The Mimic Storage stays with you');
       return;
     }
 

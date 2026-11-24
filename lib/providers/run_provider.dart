@@ -207,7 +207,7 @@ class RunProvider
   Gun? gunByName(String name) => _gunsByLowerName[name.toLowerCase()];
 
   /// Case-insensitive item lookup. Returns null if [name] is unknown.
-  /// The app-only Backpack isn't in items.json — resolve it
+  /// The app-only Mimic Storage isn't in items.json — resolve it
   /// synthetically so snapshots/quick-add/entity lookups see it.
   @override
   Item? itemByName(String name) {
@@ -413,7 +413,16 @@ class RunProvider
   RunState _refreshAgainstData(RunState s) {
     Player refreshPlayer(Player p) {
       final freshGuns = p.guns.map((g) => gunByName(g.name) ?? g).toList();
-      final freshItems = p.items.map((i) => itemByName(i.name) ?? i).toList();
+      final freshItems =
+          p.items.map((i) {
+            // Rename migration: saves written before 'Mimic Storage'
+            // serialized the app-only bag as an S-tier 'Backpack' item.
+            // The real in-game Backpack is D-tier, so quality
+            // discriminates them — ours becomes the storage item,
+            // a legitimately-picked real Backpack stays untouched.
+            if (i.name == 'Backpack' && i.quality == 'S') return backpackItem;
+            return itemByName(i.name) ?? i;
+          }).toList();
       // Runs saved before the Backpack shipped get it granted on
       // restore — same rule as _buildPlayerFor at run start, so a
       // continued save isn't missing the storage tool.
@@ -1052,10 +1061,13 @@ class RunProvider
   // Set<String> of 'g:<name>'/'i:<name>' keys on Player, serialized
   // with the run and kept local-only across MP snapshots.
 
-  /// Name of the app-only Backpack item granted to every player at run
-  /// start. Not part of items.json — [itemByName] resolves it
-  /// synthetically so MP snapshots can carry the name to peers.
-  static const String kBackpackItemName = 'Backpack';
+  /// Display name of the app-only storage item granted to every player
+  /// at run start. Renamed 'Backpack' → 'Mimic Storage' — the real
+  /// in-game Backpack item (D-tier, +1 active slot) lives in items.json
+  /// and was being shadowed by the synthetic lookup. Not part of
+  /// items.json — [itemByName] resolves it synthetically so MP
+  /// snapshots can carry the name to peers.
+  static const String kBackpackItemName = 'Mimic Storage';
 
   /// Mixed capacity — guns and items share the same 12 slots.
   static const int kBackpackCapacity = 12;
@@ -1063,18 +1075,20 @@ class RunProvider
   static String _gunKey(Gun g) => 'g:${g.name}';
   static String _itemKey(Item i) => 'i:${i.name}';
 
-  /// The synthetic Backpack item. Passive/S-tier so it follows normal
-  /// item rules (deletable, transferable, synergy-inert) while giving
-  /// the bag a tile in the ITEMS grid. Effect text intentionally avoids
-  /// EffectTagger stat keywords.
+  /// The synthetic Mimic Storage item — a chest that never bites.
+  /// Passive/S-tier so it follows normal item rules while giving the
+  /// bag a tile in the ITEMS grid. Icon is the animated glitched-chest
+  /// GIF (the closest shipped mimic-flavored asset). Effect text
+  /// intentionally avoids EffectTagger stat keywords.
   @override
   Item get backpackItem => Item(
     name: kBackpackItemName,
     type: 'Passive',
     quality: 'S',
+    icon: 'assets/images/objects/glitched_chest.gif',
     effect:
-        'Opens a pack with 12 slots for gear you want out of sight. '
-        'Everything inside still counts.',
+        'A mimic that minds its own business — 12 hidden slots for '
+        'gear you want out of sight. Everything inside still counts.',
   );
 
   bool ownsBackpack(PlayerSlot slot) =>
@@ -1118,7 +1132,7 @@ class RunProvider
       RunLogEntry(
         timestamp: DateTime.now(),
         category: RunLogCategory.backpack,
-        description: 'Stowed $displayName in backpack',
+        description: 'Stowed $displayName in storage',
         entityName: displayName,
         playerName: p.character?.name,
       ),
@@ -1154,7 +1168,7 @@ class RunProvider
       RunLogEntry(
         timestamp: DateTime.now(),
         category: RunLogCategory.backpack,
-        description: 'Retrieved $displayName from backpack',
+        description: 'Retrieved $displayName from storage',
         entityName: displayName,
         playerName: p.character?.name,
       ),

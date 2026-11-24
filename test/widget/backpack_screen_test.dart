@@ -120,7 +120,7 @@ void main() {
     addTearDown(t.view.reset);
 
     await pumpPlayerPage(t);
-    await t.tap(find.text('Backpack'));
+    await t.tap(find.text('Mimic Storage'));
     await t.pump();
     await t.pump(const Duration(milliseconds: 600));
 
@@ -262,11 +262,11 @@ void main() {
     addTearDown(t.view.reset);
 
     await pumpPlayerPage(t);
-    await longPressTile(t, 'Backpack');
+    await longPressTile(t, 'Mimic Storage');
 
     // Solo: no transfer partner → nothing for the pill to offer, so
     // long-press explains instead of showing an empty pill.
-    expect(find.text('The Backpack stays with you'), findsOneWidget);
+    expect(find.text('The Mimic Storage stays with you'), findsOneWidget);
     expect(find.text('DELETE'), findsNothing);
     expect(find.text('STASH'), findsNothing);
     expect(find.text('SEND'), findsNothing);
@@ -280,10 +280,10 @@ void main() {
 
     p.startCoopPlayer(Gungeoneer(name: 'Hunter'));
     await pumpPlayerPage(t);
-    await longPressTile(t, 'Backpack');
+    await longPressTile(t, 'Mimic Storage');
 
     // Each player keeps their own bag — no STASH/DELETE/SEND.
-    expect(find.text('The Backpack stays with you'), findsOneWidget);
+    expect(find.text('The Mimic Storage stays with you'), findsOneWidget);
     expect(find.text('SEND'), findsNothing);
     expect(find.text('STASH'), findsNothing);
     expect(find.text('DELETE'), findsNothing);

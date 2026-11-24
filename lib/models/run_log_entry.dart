@@ -124,7 +124,7 @@ String runLogCategoryLabel(RunLogCategory cat) {
     case RunLogCategory.transfer:
       return 'Transfer';
     case RunLogCategory.backpack:
-      return 'Backpack';
+      return 'Storage';
     case RunLogCategory.manual:
       return 'Manual';
   }

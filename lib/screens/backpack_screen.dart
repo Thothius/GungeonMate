@@ -43,7 +43,7 @@ class BackpackScreen extends StatelessWidget {
     if (player == null) {
       return Scaffold(
         backgroundColor: f.scaffold,
-        appBar: AppBar(title: const GoopText('Backpack')),
+        appBar: AppBar(title: const GoopText('Mimic Storage')),
         body: const Center(child: GoopText('No player')),
       );
     }
@@ -59,7 +59,7 @@ class BackpackScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: f.card,
         title: GoopText(
-          'BACKPACK',
+          'MIMIC STORAGE',
           style: TextStyle(
             fontSize: FontSizes.bodyMedium * sf,
             fontWeight: FontWeight.w900,

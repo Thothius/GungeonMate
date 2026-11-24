@@ -44,7 +44,13 @@ void main() {
           reason: '$slot should own the Backpack item',
         );
       }
-      expect(rp.itemByName('Backpack')?.name, 'Backpack');
+      expect(
+        rp.itemByName(RunProvider.kBackpackItemName)?.name,
+        RunProvider.kBackpackItemName,
+      );
+      // The real in-game Backpack (D-tier, +1 active slot) is
+      // un-shadowed — it resolves from items.json again.
+      expect(rp.itemByName('Backpack')?.quality, 'D');
       expect(rp.itemByName('backpack')?.isPassive, isTrue);
     });
 
@@ -78,6 +84,43 @@ void main() {
         isTrue,
         reason: 'continued runs must not lose the Backpack',
       );
+    });
+
+    test('legacy S-tier Backpack save migrates to Mimic Storage', () async {
+      // Saves written before the rename serialized the app-only bag
+      // as an S-tier item literally named 'Backpack'. The real
+      // in-game Backpack is D-tier, so quality discriminates: ours
+      // migrates, a legitimately-picked real Backpack stays.
+      final src = RunProvider();
+      await src.loadData();
+      src.startNewRun(Gungeoneer(name: 'The Marine'));
+      final legacy = src.runState.copyWith(
+        main: src.runState.main.copyWith(
+          items: [
+            ...src.runState.main.items.where(
+              (i) => i.name != RunProvider.kBackpackItemName,
+            ),
+            Item(name: 'Backpack', type: 'Passive', quality: 'S'),
+            Item(name: 'Backpack', type: 'Passive', quality: 'D'),
+          ],
+        ),
+      );
+      SharedPreferences.setMockInitialValues({
+        'current_run': jsonEncode(legacy.toJson()),
+      });
+
+      final restored = RunProvider();
+      await restored.loadData();
+
+      final items = restored.runState.main.items;
+      expect(
+        items.any((i) => i.name == RunProvider.kBackpackItemName),
+        isTrue,
+        reason: 'legacy S-tier Backpack must become Mimic Storage',
+      );
+      final realBackpacks = items.where((i) => i.name == 'Backpack');
+      expect(realBackpacks, hasLength(1));
+      expect(realBackpacks.single.quality, 'D');
     });
   });
 
@@ -347,11 +390,13 @@ void main() {
       rp.applyPeerSnapshot(
         characterName: 'The Hunter',
         gunNames: const [],
-        itemNames: const ['Backpack'],
+        itemNames: const [RunProvider.kBackpackItemName],
         targetMainSlot: false,
       );
       expect(
-        rp.runState.coop!.items.any((i) => i.name == 'Backpack'),
+        rp.runState.coop!.items.any(
+          (i) => i.name == RunProvider.kBackpackItemName,
+        ),
         isTrue,
       );
     });

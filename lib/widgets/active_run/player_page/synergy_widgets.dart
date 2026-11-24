@@ -102,7 +102,7 @@ class _AllStowedCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: GoopText(
-                    'All $label stowed — $stashedCount in backpack',
+                    'All $label stowed — $stashedCount in storage',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -136,7 +136,7 @@ class _BackpackHeaderBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Open backpack',
+      message: 'Open Mimic Storage',
       child: Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(20),

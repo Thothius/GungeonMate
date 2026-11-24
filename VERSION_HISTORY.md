@@ -1,5 +1,8 @@
 ## Unreleased — post-v3.8.0 UX declutter & backpack restore fix
 
+### Renames
+- **Backpack → Mimic Storage** — the app-only storage item is renamed and re-flavored: animated `glitched_chest.gif` icon, mimic effect text, and "MIMIC STORAGE" on the bag screen. The rename also **un-shadows the real in-game Backpack** (D-tier, +1 active slot) which was unreachable while our synthetic item squatted on the name — it resolves from items.json again. Old saves serialized the bag as an S-tier 'Backpack' item; `_refreshAgainstData` migrates those to Mimic Storage while a legitimately-picked D-tier Backpack stays untouched (quality discriminates). All stash/storage copy updated ("stowed in storage", log category label, tooltips, toast).
+
 ### Fixes
 - **Backpack granted on restored runs & peer snapshots** — the bag was only added in `_buildPlayerFor` at run start, so a continued save from before v3.8.0 (or a snapshot from a peer on an older build) came back without it. `_refreshAgainstData` and both MP snapshot paths now re-grant the Backpack whenever a resolved loadout lacks it — the bound item can't be lost to restore or sync.
 

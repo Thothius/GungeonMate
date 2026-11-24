@@ -319,7 +319,7 @@ class DamageBreakdownScreen extends StatelessWidget {
                     if (stashed) ...[
                       const SizedBox(width: 5),
                       Tooltip(
-                        message: 'Stowed in backpack — still counts',
+                        message: 'Stowed in storage — still counts',
                         child: const Icon(
                           Icons.backpack_outlined,
                           size: 12,

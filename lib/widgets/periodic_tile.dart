@@ -379,7 +379,8 @@ class _PeriodicTileState extends State<PeriodicTile>
                           fallback:
                               isGun
                                   ? Icons.gps_fixed
-                                  : widget.item?.name == 'Backpack'
+                                  : widget.item?.name ==
+                                    RunProvider.kBackpackItemName
                                   ? Icons.backpack_outlined
                                   : Icons.extension,
                           quality: _quality,
@@ -556,7 +557,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                                       isGun
                                           ? Icons.gps_fixed
                                           : widget.item!.name ==
-                                              'Backpack'
+                                              RunProvider.kBackpackItemName
                                           ? Icons.backpack_outlined
                                           : (widget.item!.isActive
                                               ? Icons.flash_on

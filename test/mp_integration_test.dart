@@ -184,7 +184,10 @@ void main() {
       hostLink.sentMessages.clear();
       guestLink.sentMessages.clear();
 
-      await sidekickSession.sendGift(kind: 'item', name: 'Backpack');
+      await sidekickSession.sendGift(
+        kind: 'item',
+        name: RunProvider.kBackpackItemName,
+      );
       await Future.delayed(const Duration(milliseconds: 50));
 
       // The guard must stop the MpGift before it hits the wire.
@@ -197,7 +200,7 @@ void main() {
       final coop = sidekickRp.runState.coop;
       expect(coop, isNotNull);
       expect(
-        coop!.items.any((i) => i.name == 'Backpack'),
+        coop!.items.any((i) => i.name == RunProvider.kBackpackItemName),
         isTrue,
       );
       expect(

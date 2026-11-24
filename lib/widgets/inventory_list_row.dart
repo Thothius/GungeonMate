@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../models/gun.dart';
 import '../models/item.dart';
+import '../providers/run_provider.dart';
 import '../services/elemental_tagger.dart';
 import 'element_badge.dart';
 import 'game_icon.dart';
@@ -132,7 +133,7 @@ class _InventoryListRowState extends State<InventoryListRow> {
                 fallback:
                     _isGun
                         ? Icons.gps_fixed
-                        : widget.item!.name == 'Backpack'
+                        : widget.item!.name == RunProvider.kBackpackItemName
                         ? Icons.backpack_outlined
                         : Icons.inventory_2_outlined,
                 quality: _quality,
