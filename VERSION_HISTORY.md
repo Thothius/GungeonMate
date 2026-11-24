@@ -1,4 +1,7 @@
-## Unreleased — post-v3.8.0 UX declutter
+## Unreleased — post-v3.8.0 UX declutter & backpack restore fix
+
+### Fixes
+- **Backpack granted on restored runs & peer snapshots** — the bag was only added in `_buildPlayerFor` at run start, so a continued save from before v3.8.0 (or a snapshot from a peer on an older build) came back without it. `_refreshAgainstData` and both MP snapshot paths now re-grant the Backpack whenever a resolved loadout lacks it — the bound item can't be lost to restore or sync.
 
 ### UX declutter (user-directed)
 - **Run tools sheet cut to a keep-list** — the gear sheet went from up to 14 rows / 5 groups to 6–8 rows / 3 groups: RUN (Shrines, Dice Roller, Quiz, Pause/Resume — MP sessions only), RESET (Reset Items / P1+P2 in co-op), DANGER (End Run). Ammonomicon stays reachable from the main menu; MP players keep the full action set (Surprise, Leave MP, Customization, Settings, display toggles) in the Paradox panel ⋮ menu; app-level rows live in Settings.

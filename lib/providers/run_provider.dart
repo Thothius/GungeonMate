@@ -414,6 +414,13 @@ class RunProvider
     Player refreshPlayer(Player p) {
       final freshGuns = p.guns.map((g) => gunByName(g.name) ?? g).toList();
       final freshItems = p.items.map((i) => itemByName(i.name) ?? i).toList();
+      // Runs saved before the Backpack shipped get it granted on
+      // restore — same rule as _buildPlayerFor at run start, so a
+      // continued save isn't missing the storage tool.
+      if (p.character != null &&
+          freshItems.every((i) => i.name != kBackpackItemName)) {
+        freshItems.add(backpackItem);
+      }
       Gungeoneer? freshChar = p.character;
       if (freshChar != null) {
         // Characters are few (7), a linear scan stays fine and avoids

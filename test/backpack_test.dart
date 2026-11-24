@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/models/gun.dart';
@@ -44,6 +46,38 @@ void main() {
       }
       expect(rp.itemByName('Backpack')?.name, 'Backpack');
       expect(rp.itemByName('backpack')?.isPassive, isTrue);
+    });
+
+    test('restored pre-backpack save grants the Backpack on load', () async {
+      // Build a run, strip the Backpack from items (a save written
+      // before the feature shipped), persist it, reload through
+      // loadData → _loadSavedRun → _refreshAgainstData.
+      final src = RunProvider();
+      await src.loadData();
+      src.startNewRun(Gungeoneer(name: 'The Marine'));
+      final stripped = src.runState.copyWith(
+        main: src.runState.main.copyWith(
+          items:
+              src.runState.main.items
+                  .where((i) => i.name != RunProvider.kBackpackItemName)
+                  .toList(),
+        ),
+      );
+      SharedPreferences.setMockInitialValues({
+        'current_run': jsonEncode(stripped.toJson()),
+      });
+
+      final restored = RunProvider();
+      await restored.loadData();
+
+      expect(restored.runRestoredFromSave, isTrue);
+      expect(
+        restored.runState.main.items.any(
+          (i) => i.name == RunProvider.kBackpackItemName,
+        ),
+        isTrue,
+        reason: 'continued runs must not lose the Backpack',
+      );
     });
   });
 

@@ -31,6 +31,11 @@ mixin _PeerSnapshots on ChangeNotifier {
     final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
     final items =
         itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
+    // The Backpack is bound to its owner — re-grant it if a peer on an
+    // older build snapshots a loadout that predates the feature.
+    if (char != null && items.every((i) => i.name != RunProvider.kBackpackItemName)) {
+      items.add(backpackItem);
+    }
     // Backpack placement is local-only: carry the existing slot's stash
     // flags forward, pruned to gear that still exists after the update.
     final existing = _runState.coop;
@@ -104,6 +109,11 @@ mixin _PeerSnapshots on ChangeNotifier {
     final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
     final items =
         itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
+    // Same bound-item rule — a snapshot from a pre-Backpack build must
+    // not strip the bag from the receiving slot.
+    if (char != null && items.every((i) => i.name != RunProvider.kBackpackItemName)) {
+      items.add(backpackItem);
+    }
 
     // CRITICAL: If the character can't be found (e.g. data not loaded
     // yet, or character name mismatch between devices), do NOT wipe
