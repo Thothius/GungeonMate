@@ -1,4 +1,6 @@
-## Unreleased — post-v3.8.0 UX declutter & backpack restore fix
+## v3.8.1 — Mimic Storage, backpack restore fix & UX declutter
+
+APK: `gungeon-mate-v3.8.1.apk` · build 169 · patch release over v3.8.0+168.
 
 ### Renames
 - **Backpack → Mimic Storage** — the app-only storage item is renamed and re-flavored: animated `glitched_chest.gif` icon, mimic effect text, and "MIMIC STORAGE" on the bag screen. The rename also **un-shadows the real in-game Backpack** (D-tier, +1 active slot) which was unreachable while our synthetic item squatted on the name — it resolves from items.json again. Old saves serialized the bag as an S-tier 'Backpack' item; `_refreshAgainstData` migrates those to Mimic Storage while a legitimately-picked D-tier Backpack stays untouched (quality discriminates). All stash/storage copy updated ("stowed in storage", log category label, tooltips, toast).
