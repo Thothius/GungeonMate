@@ -43,4 +43,19 @@ void main() {
     await initWith(AppThemeMode.moltenSteel.index);
     expect(AppTheme.mode, AppThemeMode.moltenSteel);
   });
+
+  test('punk trio are visible and survive index persistence', () async {
+    // Appended after minimalist — every pre-existing enum index must be
+    // unchanged or persisted 'theme.mode.v2' values would remap.
+    for (final m in [
+      AppThemeMode.popriot,
+      AppThemeMode.neonRiot,
+      AppThemeMode.toxiRiot,
+    ]) {
+      expect(kVisibleThemes, contains(m));
+      expect(kPickerThemes, contains(m));
+      await initWith(m.index);
+      expect(AppTheme.mode, m);
+    }
+  });
 }

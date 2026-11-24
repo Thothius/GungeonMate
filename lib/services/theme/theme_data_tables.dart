@@ -10,6 +10,10 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.unicorn,
   AppThemeMode.moltenSteel,
   AppThemeMode.custom,
+  // Punk trio (v3.8.2) — appended so no existing index shifts.
+  AppThemeMode.popriot,
+  AppThemeMode.neonRiot,
+  AppThemeMode.toxiRiot,
 ];
 
 /// The curated themes shown in the theme picker — cut to three for
@@ -25,6 +29,10 @@ const List<AppThemeMode> kPickerThemes = <AppThemeMode>[
   AppThemeMode.moonlitChamber,
   AppThemeMode.dragunfire,
   AppThemeMode.lichsDomain,
+  // Punk trio (v3.8.2).
+  AppThemeMode.popriot,
+  AppThemeMode.neonRiot,
+  AppThemeMode.toxiRiot,
 ];
 
 /// Per-theme default particle preset. When a theme is active and the user
@@ -81,6 +89,10 @@ const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
       AppThemeMode.bulletHellFloor: ParticlePreset.bulletHell,
       AppThemeMode.rgDepartment: ParticlePreset.circuitTraces,
       AppThemeMode.custom: ParticlePreset.cosmicStars,
+      // ── Punk trio (v3.8.2) ──
+      AppThemeMode.popriot: ParticlePreset.inkSplatter,
+      AppThemeMode.neonRiot: ParticlePreset.auroraVeil,
+      AppThemeMode.toxiRiot: ParticlePreset.toxicBubbles,
     };
 
 /// Curated visual settings for a premade theme. When a user selects a
@@ -219,6 +231,43 @@ const Map<AppThemeMode, ThemeCuration> kThemeCuration =
         glowColorIndex: 5, // grey
         glowIntensity: 0.15,
         shaderEnabled: false,
+      ),
+      // ── Punk trio (v3.8.2) — loud curated identities ──
+      AppThemeMode.popriot: ThemeCuration(
+        particlePreset: ParticlePreset.inkSplatter,
+        colorSchema: ParticleColorSchema.rainbow,
+        glowEffect: GlowEffect.neon,
+        speed: ParticleSpeed.fast,
+        particleCount: 24,
+        particleOpacity: 0.85,
+        glowColorIndex: 20, // raspberry pink
+        glowIntensity: 0.3,
+        shaderEnabled: true,
+        shaderPreset: ShaderPreset.darkNeonFog,
+      ),
+      AppThemeMode.neonRiot: ThemeCuration(
+        particlePreset: ParticlePreset.auroraVeil,
+        colorSchema: ParticleColorSchema.voidStorm,
+        glowEffect: GlowEffect.plasma,
+        speed: ParticleSpeed.normal,
+        particleCount: 22,
+        particleOpacity: 0.8,
+        glowColorIndex: 10, // magenta pulse
+        glowIntensity: 0.3,
+        shaderEnabled: true,
+        shaderPreset: ShaderPreset.darkNeonFog,
+      ),
+      AppThemeMode.toxiRiot: ThemeCuration(
+        particlePreset: ParticlePreset.toxicBubbles,
+        colorSchema: ParticleColorSchema.toxic,
+        glowEffect: GlowEffect.aurora,
+        speed: ParticleSpeed.normal,
+        particleCount: 20,
+        particleOpacity: 0.85,
+        glowColorIndex: 4, // toxic green
+        glowIntensity: 0.3,
+        shaderEnabled: true,
+        shaderPreset: ShaderPreset.darkNeonFog,
       ),
     };
 

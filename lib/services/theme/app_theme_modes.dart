@@ -1751,6 +1751,128 @@ enum AppThemeMode {
       pageFrame: true,
       font: AppFont.fjallaOne,
     ),
+  ),
+  // ── Punk trio (v3.8.2) — appended AFTER minimalist so every existing
+  // enum index (persisted via 'theme.mode.v2') stays stable.
+  popriot(
+    label: 'Popriot',
+    vibe: 'REBELLIOUS',
+    diff: 'CHAOS',
+    elem: 'LIGHTNING',
+    whimsicalDescription:
+        'Photocopied punk flyers and dry-ice fog. Acid pink and radioactive lime on tar black — loud on purpose.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0B0710),
+      card: Color(0xFF1D1020),
+      primary: Color(0xFFFF2E88), // acid hot pink
+      secondary: Color(0xFFA6FF00), // radioactive lime
+      headlineStat: Color(0xFFFF6EC7),
+      bulletColor: Color(0xFFFF2E88),
+      bulletGlyph: '✖',
+      twinkleBullets: true,
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFFF2E88),
+      tabularFigures: false,
+      numberSizeScale: 1.08,
+      numberWeight: FontWeight.w800,
+      numberStyle: FontStyle.italic,
+      chipRadius: 6,
+      cardRadius: 10,
+      cardBorderColor: Color(0x66A6FF00),
+      cardBorderWidth: 1.2,
+      dividerColor: Color(0x55FF2E88),
+      dividerThickness: 1.4,
+      glowPrimary: Color(0x66FF2E88),
+      glowSecondary: Color(0x44A6FF00),
+      glowStyle: GlowStyle.ember,
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '⚡',
+      headerUnderlineColor: Color(0xAAFF2E88),
+      statGroupCombat: Color(0xFFFF2E88),
+      statGroupHandling: Color(0xFFA6FF00),
+      statGroupMeta: Color(0xFF7DF9FF),
+      font: AppFont.bungee,
+    ),
+  ),
+  neonRiot(
+    label: 'Neon Riot',
+    vibe: 'NEON',
+    diff: 'STEADY',
+    elem: 'CIRCUIT',
+    whimsicalDescription:
+        'A closed arcade at 2AM. Magenta tubes over a cyan grid — smooth, expensive, humming.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0618),
+      card: Color(0xFF171029),
+      primary: Color(0xFFFF2EC4), // magenta tube
+      secondary: Color(0xFF00E5FF), // cyan grid
+      headlineStat: Color(0xFFFF7AD9),
+      bulletColor: Color(0xFF00E5FF),
+      bulletGlyph: '◆',
+      twinkleBullets: true,
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFFF2EC4),
+      tabularFigures: true,
+      numberSizeScale: 1.06,
+      numberWeight: FontWeight.w700,
+      numberStyle: FontStyle.normal,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x5500E5FF),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x4400E5FF),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x66FF2EC4),
+      glowSecondary: Color(0x5500E5FF),
+      glowStyle: GlowStyle.prism,
+      auraStyle: AvatarAuraStyle.cosmicTemporal,
+      headerGlyph: '◈',
+      headerUnderlineColor: Color(0xAA00E5FF),
+      statGroupCombat: Color(0xFFFF2EC4),
+      statGroupHandling: Color(0xFF00E5FF),
+      statGroupMeta: Color(0xFFB388FF),
+      font: AppFont.monoton,
+    ),
+  ),
+  toxiRiot(
+    label: 'Toxi Riot',
+    vibe: 'TOXIC',
+    diff: 'BRUTAL',
+    elem: 'ACID',
+    whimsicalDescription:
+        'A containment breach with commitment issues. Hazard lime and warning orange over sickly violet — handle with care (don\'t).',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0D0F08),
+      card: Color(0xFF1A1F12),
+      primary: Color(0xFF7CFF00), // hazard lime
+      secondary: Color(0xFFFF6B00), // warning orange
+      headlineStat: Color(0xFFA8FF3E),
+      bulletColor: Color(0xFF7CFF00),
+      bulletGlyph: '☣',
+      twinkleBullets: false,
+      sparkleNumbers: false,
+      numberGlowColor: Color(0xFF7CFF00),
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      numberStyle: FontStyle.normal,
+      chipRadius: 3,
+      cardRadius: 4,
+      cardBorderColor: Color(0x557CFF00),
+      cardBorderWidth: 1.4,
+      dividerColor: Color(0x557CFF00),
+      dividerThickness: 1.2,
+      glowPrimary: Color(0x667CFF00),
+      glowSecondary: Color(0x44FF6B00),
+      glowStyle: GlowStyle.drip,
+      auraStyle: AvatarAuraStyle.toxicOoze,
+      headerGlyph: '☣',
+      headerUnderlineColor: Color(0xAA7CFF00),
+      statGroupCombat: Color(0xFFFF6B00),
+      statGroupHandling: Color(0xFF7CFF00),
+      statGroupMeta: Color(0xFF9D7BFF),
+      font: AppFont.wallpoet,
+    ),
   );
 
   final String label;
@@ -2301,6 +2423,12 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Minimalist';
       case AppThemeMode.custom:
         return AppTheme._customThemeName;
+      case AppThemeMode.popriot:
+        return 'Popriot';
+      case AppThemeMode.neonRiot:
+        return 'Neon Riot';
+      case AppThemeMode.toxiRiot:
+        return 'Toxi Riot';
     }
   }
 
@@ -2408,6 +2536,12 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Stripped Back — pure black, clean white, cold grey';
       case AppThemeMode.custom:
         return 'Custom — your personal palette';
+      case AppThemeMode.popriot:
+        return 'Punk Flyer — acid pink, radioactive lime, tar black';
+      case AppThemeMode.neonRiot:
+        return 'Synthwave — magenta tubes, cyan grid, violet dark';
+      case AppThemeMode.toxiRiot:
+        return 'Hazmat — hazard lime, warning orange, sickly violet';
     }
   }
 }

@@ -1,5 +1,11 @@
 ## Unreleased
 
+### New themes — the punk trio
+- **Popriot** — photocopied punk-flyer energy: acid hot pink + radioactive lime on tar black, angular zine chips/cards, Bungee type, ink-splatter particles, ember glow.
+- **Neon Riot** — a closed arcade at 2AM: magenta tubes over a cyan grid, sharp tech edges, Monoton neon type, aurora-veil particles, rotating prism glow.
+- **Toxi Riot** — a containment breach with commitment issues: hazard lime + warning orange over sickly violet, square industrial chrome, Wallpoet poster type, toxic bubbles, dripping glow.
+- All three ship with curated particle presets, glow effects and color schemas; registered in the picker gallery and visible-theme set. Appended after `minimalist` so persisted theme indices never shift.
+
 ### Experience Studio & Settings polish
 - **Editor tab strip consolidated to one row** — the customization editor's two-row tab grid is now a single horizontally-scrolling chip strip (DETAILS / COLORS & BG / TYPE / PARTICLES / AMBIANCE / SAVE). The active tab auto-scrolls into view on tap, deep links, and last-used-tab restore, reclaiming a full row of vertical space for the LIVE LOOK pane and options.
 - **Settings hero header** — the status strip is now a hero card: live theme splash art (palette-gradient fallback) + theme name, with version and run-state chips beneath. Panel expand/collapse motion verified (animated cross-fade + chevron rotation, reduced-motion respected).
