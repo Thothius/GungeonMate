@@ -23,6 +23,7 @@ import 'package:gungeon_mate/widgets/game_icon.dart';
 /// facade (the injected FakeMpLink is disconnected, so the underlying
 /// send early-returns; we only need to prove the UI routed there).
 class _SpyMpSession extends MpSession {
+  // ignore: use_super_parameters — named super ctor can't take super params
   _SpyMpSession(RunProvider rp, MpTransport link) : super.withLink(rp, link);
 
   final List<String> peerAdds = [];

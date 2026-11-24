@@ -95,10 +95,6 @@ Future<void> saveDashCapsules(
   }
 }
 
-/// Capsule picker bottom sheet. [pinned] is the current selection;
-/// [onChanged] receives the new list after each toggle (parent owns
-/// persistence + setState). Tapping a pinned capsule unpins it; tapping
-/// an unpinned one pins it unless [kMaxDashCapsules] is reached.
 /// Capsule picker bottom sheet. Keeps a local copy of [pinned] so
 /// toggles accumulate correctly within one open (the parent's
 /// setState does not rebuild an already-presented modal route);
