@@ -618,9 +618,14 @@ class _ParticlePreview extends StatelessWidget {
             ),
             // The live particle field — same resolution as the app-wide
             // overlay so every option visibly changes the preview.
+            // Honors reduced-motion like the real overlay does.
             Positioned.fill(
               child:
-                  buildBackdropParticleField(AppTheme.displayedMode, prefs) ??
+                  buildBackdropParticleField(
+                    AppTheme.displayedMode,
+                    prefs,
+                    reduceMotion: MediaQuery.disableAnimationsOf(context),
+                  ) ??
                   const SizedBox.shrink(),
             ),
             // Label overlay.

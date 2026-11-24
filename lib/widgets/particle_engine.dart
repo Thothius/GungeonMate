@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'theme_overlay.dart' show ThemeOverlay;
 
@@ -308,9 +309,25 @@ class _ParticleFieldState extends State<ParticleField>
     _ticker = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
-    )..repeat();
+    );
     _sw.start();
+    _syncTicker();
   }
+
+  /// The ticker only earns its vsync when particles can actually show —
+  /// opacity 0 means every frame paints nothing, so the controller
+  /// sleeps instead of burning frames forever.
+  void _syncTicker() {
+    if (widget.opacity <= 0) {
+      if (_ticker.isAnimating) _ticker.stop();
+    } else if (!_ticker.isAnimating) {
+      _ticker.repeat();
+    }
+  }
+
+  /// Test hook — live particle count (bounded by [ParticleField.count]).
+  @visibleForTesting
+  int get debugParticleCount => _particles.length;
 
   @override
   void didUpdateWidget(ParticleField oldWidget) {
@@ -319,10 +336,15 @@ class _ParticleFieldState extends State<ParticleField>
         oldWidget.config != widget.config ||
         oldWidget.count != widget.count ||
         oldWidget.sizeScale != widget.sizeScale ||
-        oldWidget.colorsOverride != widget.colorsOverride) {
+        // colorsOverride is a fresh List on every parent build —
+        // identity compare would clear+respawn the field on EVERY
+        // rebuild for themeMatch/unicorn/schema users. Compare
+        // contents instead.
+        !listEquals(oldWidget.colorsOverride, widget.colorsOverride)) {
       _particles.clear();
       _lastSize = null;
     }
+    if (oldWidget.opacity != widget.opacity) _syncTicker();
     // Clear trails when preset changes (trail config may differ)
     if (oldWidget.preset != widget.preset) {
       for (final p in _particles) {
@@ -599,6 +621,7 @@ class _ParticleFieldState extends State<ParticleField>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.opacity <= 0) return const SizedBox.shrink();
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: _ticker,

@@ -8,10 +8,8 @@ import '../services/run_lifecycle.dart';
 import 'character_select_screen.dart';
 import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
-import 'settings_screen.dart';
 import 'ammonomicon_screen.dart';
 
-import 'asset_viewer_screen.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/contrast.dart';
@@ -23,8 +21,6 @@ import '../utils/asset_paths.dart' show kAppVersion;
 import '../widgets/home/home_backdrop.dart';
 
 import '../widgets/theme_overlay.dart';
-import '../widgets/bug_report/bug_report_sheet.dart';
-import '../models/bug_report.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 ///
@@ -84,9 +80,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   // this screen on any theme/palette/remix change).
   ThemeFlair get _flair => AppTheme.flair;
 
-  /// Translucent panel fill for outline buttons and corner chips.
-  Color get _panel => _flair.card.withValues(alpha: 0.72);
-
   /// Primary accent — borders, icons, glows (was fixed ember).
   Color get _accent => _flair.primary;
 
@@ -141,10 +134,19 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      // ── Logo + subtitle ──
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Stack(
+                                      // ── Logo + subtitle — same side
+                                      // inset as the button column so
+                                      // the whole screen shares one
+                                      // alignment grid.
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: sideInset,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Stack(
                                           alignment: Alignment.center,
                                           children: [
                                             GoopText(
@@ -218,6 +220,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                           ),
                                         ),
                                       ),
+                                      ],
+                                    ),
+                                  ),
                                       const SizedBox(height: 28),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
@@ -368,118 +373,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                   ),
                 ),
               ),
-              // Top-left corner controls — Settings gear + Asset Viewer
-              // + bug report, same circular chrome.
-              Positioned(
-                top: 0,
-                left: 0,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(Insets.md),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _settingsChip(),
-                        const SizedBox(width: 8),
-                        _assetViewerChip(),
-                        const SizedBox(width: 8),
-                        _bugChip(),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         );
       },
-    );
-  }
-
-  /// Settings chip — gear in the same circular chrome as the other
-  /// corner controls; pushes the prefs-only Settings screen.
-  Widget _settingsChip() {
-    return Tooltip(
-      message: 'Settings',
-      child: ScaleButton(
-        onTap: () {
-          Haptics.selection();
-          Navigator.push(context, fastRoute(const SettingsScreen()));
-        },
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: _panel,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: _accent.withValues(alpha: 0.5),
-              width: 1.4,
-            ),
-          ),
-          child: Icon(Icons.settings_outlined, size: 22, color: _accent),
-        ),
-      ),
-    );
-  }
-
-  /// Bug-report chip — same circular chrome as the other corner
-  /// controls; opens the reporter sheet with menu context.
-  Widget _bugChip() {
-    return Tooltip(
-      message: 'Report a bug',
-      child: ScaleButton(
-        onTap: () {
-          Haptics.selection();
-          BugReportSheet.show(
-            context,
-            const BugReportContext(
-              kind: BugReportKind.bug,
-              screen: 'Main Menu',
-            ),
-          );
-        },
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: _panel,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: _accent.withValues(alpha: 0.5),
-              width: 1.4,
-            ),
-          ),
-          child: Icon(Icons.bug_report_outlined, size: 22, color: _accent),
-        ),
-      ),
-    );
-  }
-
-  /// Top-left chip into the Asset Viewer — same circular chrome as the
-  /// other corner controls.
-  Widget _assetViewerChip() {
-    return Tooltip(
-      message: 'Asset Viewer — vote on fonts, backgrounds & avatars',
-      child: ScaleButton(
-        onTap: () {
-          Haptics.selection();
-          Navigator.push(context, fastRoute(const AssetViewerScreen()));
-        },
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: _panel,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: _accent.withValues(alpha: 0.5),
-              width: 1.4,
-            ),
-          ),
-          child: Icon(Icons.photo_library_rounded, size: 22, color: _accent),
-        ),
-      ),
     );
   }
 
@@ -573,7 +470,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         onTap: onTap,
         child: Container(
           width: double.infinity,
-          height: 62 * sf,
+          // ~15% smaller than the original 62px hero rows.
+          height: 53 * sf,
           decoration: BoxDecoration(
             // Ghost = faint accent wash; hero = solid accent fill.
             // (DESIGN.md §components — palette-driven menu spec.)
@@ -605,7 +503,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 24 * sf, color: solid ? fg : _accent),
+              Icon(icon, size: 20 * sf, color: solid ? fg : _accent),
               const SizedBox(width: 10),
               Flexible(
                 child: FittedBox(
@@ -616,7 +514,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                       GoopText(
                         label,
                         style: TextStyle(
-                          fontSize: 16 * sf,
+                          fontSize: 13.5 * sf,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                           color: fg,
@@ -626,7 +524,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                         GoopText(
                           subtitle,
                           style: TextStyle(
-                            fontSize: 8.5 * sf,
+                            fontSize: 7.2 * sf,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 1.6,
                             color: fg.withValues(alpha: 0.75),

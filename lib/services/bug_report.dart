@@ -12,7 +12,7 @@ import '../utils/asset_paths.dart';
 ///
 /// Subject format is pipe-delimited so the Apps Script pipeline can parse
 /// fields positionally:
-///   GM-BUG v3.7.0|Bug|Item Detail · Gun|Hegemony
+///   GM-BUG v3.8.1|Bug|Item Detail · Gun|Hegemony
 /// Body = user notes first, then a --- context block with app/platform
 /// metadata.
 class BugReport {
@@ -22,7 +22,7 @@ class BugReport {
 
   static String _safe(String s) => s.replaceAll('|', '/').trim();
 
-  /// e.g. `GM-BUG v3.7.0|Bug|Item Detail|Hegemony`
+  /// e.g. `GM-BUG v3.8.1|Bug|Item Detail|Hegemony`
   static String subjectFor(BugReportContext ctx) {
     final parts = <String>[
       'GM-BUG v$kAppVersion',

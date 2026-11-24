@@ -135,5 +135,81 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets('skull→neon preset hops keep particle count bounded',
+        (tester) async {
+      // User-reported "memory leak": switching particle looks Skull →
+      // Neon must not grow the live particle list — count is fixed
+      // at spawn and respawns reuse slots.
+      int count() =>
+          (tester.state(find.byType(ParticleField)) as dynamic)
+              .debugParticleCount as int;
+
+      Widget build(ParticlePreset p) => MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                width: 200,
+                height: 200,
+                child: ParticleField(preset: p, count: 10),
+              ),
+            ),
+          );
+
+      await tester.pumpWidget(build(ParticlePreset.cursedSkulls));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(count(), 10);
+
+      // Several neon-ish hops with frames in between — simulates the
+      // studio LOOKS row being tapped repeatedly.
+      for (final p in [
+        ParticlePreset.blankShells,
+        ParticlePreset.cursedSkulls,
+        ParticlePreset.blankShells,
+      ]) {
+        await tester.pumpWidget(build(p));
+        await tester.pump(const Duration(milliseconds: 50));
+        await tester.pump(const Duration(milliseconds: 50));
+        expect(count(), lessThanOrEqualTo(10),
+            reason: 'particle list grew past count on $p');
+      }
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('same-content colorsOverride does not respawn particles',
+        (tester) async {
+      // Regression: colorsOverride was compared by list identity — a
+      // fresh equal list on every parent build cleared + respawned
+      // the field each rebuild (themeMatch/unicorn/schema users).
+      int count() =>
+          (tester.state(find.byType(ParticleField)) as dynamic)
+              .debugParticleCount as int;
+
+      Widget build(List<Color> colors) => MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                width: 200,
+                height: 200,
+                child: ParticleField(
+                  preset: ParticlePreset.gungeonDust,
+                  count: 10,
+                  colorsOverride: colors,
+                ),
+              ),
+            ),
+          );
+
+      const colors = [Color(0xFFFF0000), Color(0xFF00FF00)];
+      await tester.pumpWidget(build(colors));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(count(), 10);
+
+      // Rebuild with a NEW list instance, same contents — particles
+      // must NOT be cleared (would drop to 0 until next frame's
+      // _ensureParticles; here we assert the list stays populated).
+      await tester.pumpWidget(build(const [Color(0xFFFF0000), Color(0xFF00FF00)]));
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(count(), 10);
+      expect(tester.takeException(), isNull);
+    });
   });
 }

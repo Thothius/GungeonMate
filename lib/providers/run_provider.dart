@@ -134,6 +134,11 @@ class RunProvider
   // feature). Reset by startNewRun/endRun.
   bool _runRestoredFromSave = false;
 
+  // One-shot flag set when a fresh run begins (startNewRun /
+  // startCoopPlayer) so the run screen can surface the Mimic Storage
+  // intro tooltip exactly once. Consumed by ActiveRunScreen.
+  bool _mimicStorageTooltipPending = false;
+
   RunState get runState => _runState;
   List<Gun> get allGuns => _allGuns;
   List<Item> get allItems => _allItems;
@@ -185,6 +190,9 @@ class RunProvider
   /// run under the widget-test fake-async zone).
   @visibleForTesting
   void debugSetRunRestoredFromSave(bool value) => _runRestoredFromSave = value;
+
+  bool get mimicStorageTooltipPending => _mimicStorageTooltipPending;
+  void consumeMimicStorageTooltip() => _mimicStorageTooltipPending = false;
 
   void _recordAssetFailure(String asset, Object err) {
     _assetLoadFailures.add(asset);
@@ -420,7 +428,12 @@ class RunProvider
             // The real in-game Backpack is D-tier, so quality
             // discriminates them — ours becomes the storage item,
             // a legitimately-picked real Backpack stays untouched.
-            if (i.name == 'Backpack' && i.quality == 'S') return backpackItem;
+            // Case-insensitive: JSON hand-edits and older writers
+            // may have produced 'backpack'/'s'.
+            if (i.name.toLowerCase() == 'backpack' &&
+                i.quality.toUpperCase() == 'S') {
+              return backpackItem;
+            }
             return itemByName(i.name) ?? i;
           }).toList();
       // Runs saved before the Backpack shipped get it granted on
@@ -562,6 +575,7 @@ class RunProvider
   void startNewRun(Gungeoneer character) {
     _runState = RunState(main: _buildPlayerFor(character));
     _runRestoredFromSave = false;
+    _mimicStorageTooltipPending = true;
     _lebViewsAutoEnabled = false;
     _saveLastPlayedChar(character.name);
     _autoEnableLebViewsIfHeld();
@@ -630,6 +644,7 @@ class RunProvider
               ? Player(character: character, items: [backpackItem])
               : _buildPlayerFor(character),
     );
+    _mimicStorageTooltipPending = true;
     _paradoxSidekickEmptied = false;
     _autoEnableLebViewsIfHeld();
     _scheduleSave();

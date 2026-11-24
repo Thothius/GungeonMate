@@ -12,7 +12,7 @@ import '../../screens/experience_studio_screen.dart';
 import '../../utils/asset_paths.dart' show kAppVersion, themeSplashPath;
 import '../../utils/fast_route.dart';
 import '../../utils/responsive.dart' show ScreenProfile;
-import 'debug_tab.dart';
+import 'special_items_grid.dart';
 import '../active_run/dice_roll.dart';
 import 'swipe_picker.dart';
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../theme/tokens.dart';
@@ -139,6 +140,40 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
     final bool mpSession = isMpActive;
     Widget wrapOverlays(Widget w) =>
         mpSession ? PauseOverlay(child: SurpriseOverlayHost(child: w)) : w;
+
+    // One-shot Mimic Storage intro on fresh runs (solo, co-op join, MP).
+    // Shows once ever — persisted so returning players aren't re-told.
+    if (p.mimicStorageTooltipPending) {
+      p.consumeMimicStorageTooltip();
+      final messenger = ScaffoldMessenger.of(context);
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        final prefs = await SharedPreferences.getInstance();
+        if (!mounted ||
+            prefs.getBool('mimic_storage_tooltip_seen') == true) {
+          return;
+        }
+        await prefs.setBool('mimic_storage_tooltip_seen', true);
+        if (!mounted) return;
+        messenger.showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.inventory_2_outlined, size: 18),
+                SizedBox(width: 8),
+                Expanded(
+                  child: GoopText(
+                    'Mimic Storage now available — long-press it in ITEMS to stash gear',
+                  ),
+                ),
+              ],
+            ),
+            duration: const Duration(seconds: 4),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      });
+    }
 
     return Scaffold(
       backgroundColor: Colors.transparent,

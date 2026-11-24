@@ -1,5 +1,12 @@
 ## Unreleased
 
+### Polish & fixes
+- **Main menu decluttered** — title block and subtitle pill now share a centered column aligned with the button stack; menu buttons scaled down ~15%; the top-left corner chips (Settings / Bug Report / Asset Viewer) are hidden for now — all three remain reachable elsewhere.
+- **Particle engine leak fix** — `colorsOverride` was compared by list identity, so every rebuild respawned the whole particle field (the Skull→Neon "leak" in the studio preview). Overrides now deep-compare, and the ticker only runs while particles are alive *and* the field is visible — no more respawn storms or invisible vsync wakeups.
+- **Mimic Storage intro tooltip** — starting a fresh run (solo, co-op join, or MP) shows a one-time snackbar: "Mimic Storage now available — long-press it in ITEMS to stash gear". Persisted so it only ever appears once.
+- **Rename-migration hardening** — the 'Backpack'→Mimic Storage save migration is now case-insensitive on both name and quality, covering hand-edited or older-writer saves.
+- **File rename** — `widgets/settings/debug_tab.dart` → `special_items_grid.dart` (it contains SpecialItemsGridScreen, not a debug tab). No behavior change.
+
 ### New themes — the punk trio
 - **Popriot** — photocopied punk-flyer energy: acid hot pink + radioactive lime on tar black, angular zine chips/cards, Bungee type, ink-splatter particles, ember glow.
 - **Neon Riot** — a closed arcade at 2AM: magenta tubes over a cyan grid, sharp tech edges, Monoton neon type, aurora-veil particles, rotating prism glow.

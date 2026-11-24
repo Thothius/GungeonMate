@@ -396,8 +396,8 @@ void main() {
   });
 
   group('Theme list integrity', () {
-    test('kPickerThemes is the six presets', () {
-      // 3 core + 3 added presets (cool/warm/dark variety, all curated).
+    test('kPickerThemes is the nine presets', () {
+      // 6 core presets + punk trio (Popriot, Neon Riot, Toxi Riot).
       expect(
         kPickerThemes,
         equals([
@@ -407,6 +407,9 @@ void main() {
           AppThemeMode.moonlitChamber,
           AppThemeMode.dragunfire,
           AppThemeMode.lichsDomain,
+          AppThemeMode.popriot,
+          AppThemeMode.neonRiot,
+          AppThemeMode.toxiRiot,
         ]),
       );
     });
